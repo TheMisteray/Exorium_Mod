@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using ExoriumMod.Dusts;
 
 namespace ExoriumMod.Items.Weapons.Magic
 {
@@ -28,7 +29,7 @@ namespace ExoriumMod.Items.Weapons.Magic
             item.value = Item.sellPrice(silver: 68); ;
             item.rare = 2;
             item.UseSound = SoundID.Item42;
-            item.shoot = ProjectileType<Projectiles.BlightHail>();
+            item.shoot = ProjectileType<BlightHail>();
             item.shootSpeed = 20;
             item.autoReuse = true;
             item.scale = 0.9f;
@@ -42,6 +43,48 @@ namespace ExoriumMod.Items.Weapons.Magic
             recipe.AddTile(TileID.Bookcases);
             recipe.SetResult(this);
             recipe.AddRecipe();
+        }
+    }
+    class BlightHail : ModProjectile
+    {
+        public override void SetDefaults()
+        {
+            projectile.width = 80;
+            projectile.height = 80;
+            projectile.alpha = 255;
+            projectile.timeLeft = 30;
+            projectile.penetrate = -1;
+            projectile.friendly = true;
+            projectile.magic = true;
+            projectile.tileCollide = false;
+            projectile.ignoreWater = true;
+        }
+
+        public override void AI()
+        {
+            if (Main.rand.NextBool(1))
+            {
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
+            }
+            if (Main.rand.NextBool(2))
+            {
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
+            }
+            if (Main.rand.NextBool(3))
+            {
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), 0, 0);
+            }
+            if (Main.rand.NextBool(4))
+            {
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+            }
+            if (projectile.ai[0] == 2)
+            {
+                projectile.timeLeft -= 2;
+                projectile.position = projectile.Center;
+                projectile.scale *= 1.08f;
+                projectile.Center = projectile.position;
+            }
         }
     }
 }

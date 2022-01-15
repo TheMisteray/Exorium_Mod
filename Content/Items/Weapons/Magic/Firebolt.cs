@@ -29,6 +29,7 @@ namespace ExoriumMod.Items.Weapons.Magic
             item.value = 50000;
         }
     }
+
     class FireboltProj : ModProjectile
     {
         public override string Texture => "ExoriumMod/Projectiles/BlightShot";
