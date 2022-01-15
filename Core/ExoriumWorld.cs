@@ -15,9 +15,9 @@ using Terraria.World.Generation;
 using static Terraria.ModLoader.ModContent;
 using System;
 
-namespace ExoriumMod
+namespace ExoriumMod.Core
 {
-    public class ExoriumWorld : ModWorld
+    public partial class ExoriumWorld : ModWorld
     {
         public static bool downedShadowmancer = false;
         public static bool downedBlightslime = false;
