@@ -1,0 +1,19 @@
+Exorium Mod is an in-development mod somewhat based upon a Dungeons & Dragons campaign. This mod currently only contains pre-hardmode content.
+
+This mod currently adds
+- 1 Biome
+- 1 Structure
+- 2 Bosses
+- 30+ Weapons
+- 4 Armor Sets
+- 1 Town NPC
+- And a few more odds and ends
+
+Please excuse my spritework. I am not the best at it.
+
+If you find any bugs or issues I would love to hear some feedback.
+I am Mr A#4490 on Discord
+
+CREDITS
+Music by grapetape64								Check him out at https://soundcloud.com/user-105369860
+Some spritework by grapetape64 and Potato_Land

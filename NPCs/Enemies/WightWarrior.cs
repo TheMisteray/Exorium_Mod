@@ -1,0 +1,47 @@
+﻿using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using ExoriumMod.Items.Materials;
+
+namespace ExoriumMod.NPCs.Enemies
+{
+    class WightWarrior : ModNPC
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Wight Warrior");
+            Main.npcFrameCount[npc.type] = Main.npcFrameCount[NPCID.ArmoredSkeleton];
+        }
+
+        public override void SetDefaults()
+        {
+            npc.width = 23;
+            npc.height = 40;
+            npc.damage = 20;
+            npc.defense = 10;
+            npc.lifeMax = 100;
+            npc.HitSound = SoundID.NPCHit1;
+            npc.DeathSound = SoundID.NPCDeath2;
+            npc.value = 160f;
+            npc.knockBackResist = .2f;
+            npc.aiStyle = 3;
+            aiType = NPCID.ArmoredSkeleton;
+            npc.buffImmune[BuffID.Confused] = false;
+            animationType = NPCID.ArmoredSkeleton;
+        }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            return spawnInfo.player.GetModPlayer<ExoriumPlayer>().ZoneDeadlands ? .1f : 0f;
+        }
+
+        public override void NPCLoot()
+        {
+            if (Main.rand.NextBool(3))
+                Item.NewItem(npc.getRect(), ItemType<WightBone>());
+            if (Main.rand.NextBool(40))
+                Item.NewItem(npc.getRect(), ItemType<Items.Accessories.BlightedManacle>());
+        }
+    }
+}

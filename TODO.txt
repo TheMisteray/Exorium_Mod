@@ -1,0 +1,35 @@
+﻿Worldgen Rewrite - Done
+Scroll sprites - Done
+Fix deadlands lighting when entered - Done
+Fixed Shadow Altar Coordinates not saving - Done
+Fix Blightslime staff - Done (for the most part)
+Pre-Blightslime summon weapon - Done
+Add Blightslime dusts and spike bugfix - Done
+Resprite Rimestone? - Done
+Fix Fravrick sprite - Done
+Make blighted pins a debuff so it doesn't reduce defense to 0 lol - Changed to new effect - Done
+Also make it hit without procing i frames - Done
+Finish Misty Step - Done
+ScrollCooldown Sprite - Done
+Other Rime Sprites - Done
+Codebase reorginization
+Change Mordite to darksteel?
+More D&D items
+	Molotov vest
+	Throwing rapiers
+Smooth out deadlands (generate sporadically placed ashen dust so it is not an obvious line where it generated)
+Remove Boss Test dialouge
+Make Scroll Cooldown unremovable
+Github Release
+Mod release
+
+
+Future:
+Remove Mordite
+Gemsparkling Hive
+Caravene
+
+Deadlands Overhaul
+Smithing
+Warlock Class
+Shrine of Light
