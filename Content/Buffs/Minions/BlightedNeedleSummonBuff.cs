@@ -54,7 +54,7 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<NPCs.ExoriumGlobalNPC>().stuckByNeedles = true;
+            npc.GetGlobalNPC<ExoriumGlobalNPC>().stuckByNeedles = true;
         }
     }
 }

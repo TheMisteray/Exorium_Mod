@@ -5,7 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Content.Items.Weapons.Magic.Scrolls
+namespace ExoriumMod.Content.Items.Consumables.Scrolls
 {
     class SpellScrollDelayedBlastFireball : ModItem
     {

@@ -1,19 +1,8 @@
-﻿using ExoriumMod.Tiles;
-using ExoriumMod.Walls;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
+using ExoriumMod.Content.NPCs.Enemies;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent.Generation;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Terraria.World.Generation;
 using static Terraria.ModLoader.ModContent;
-using System;
 
 namespace ExoriumMod.Core
 {
@@ -24,9 +13,9 @@ namespace ExoriumMod.Core
             if (Main.LocalPlayer.GetModPlayer<ExoriumPlayer>().ZoneDeadlands)
             {
                 pool.Clear();
-                pool.Add(NPCType<NPCs.Enemies.WightArcher>(), .1f);
-                pool.Add(NPCType<NPCs.Enemies.WightWarrior>(), .1f);
-                pool.Add(NPCType<NPCs.Enemies.Poltergeist>(), .02f);
+                pool.Add(NPCType<WightArcher>(), .1f);
+                pool.Add(NPCType<WightWarrior>(), .1f);
+                pool.Add(NPCType<Poltergeist>(), .02f);
             }
         }
     }

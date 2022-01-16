@@ -49,7 +49,7 @@ namespace ExoriumMod.Content.Tiles
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Containers };
             chest = "Dark Chest";
-            chestDrop = ItemType<Items.Tiles.DarkChest>();
+            chestDrop = ItemType<Items.TileItems.DarkChest>();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].frameX / 36);
@@ -206,7 +206,7 @@ namespace ExoriumMod.Content.Tiles
                 player.showItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : "Dark Chest";
                 if (player.showItemIconText == "Dark Chest")
                 {
-                    player.showItemIcon2 = ItemType<Items.Tiles.DarkChest>();
+                    player.showItemIcon2 = ItemType<Items.TileItems.DarkChest>();
                     if (Main.tile[left, top].frameX / 36 == 1)
                         player.showItemIcon2 = ItemType<Items.Consumables.DarkKey>();
                     player.showItemIconText = "";

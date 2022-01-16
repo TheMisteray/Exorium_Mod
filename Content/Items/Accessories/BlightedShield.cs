@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 
-
 namespace ExoriumMod.Content.Items.Accessories
 {
     [AutoloadEquip(EquipType.Shield)]

@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.Projectiles
         public override void AI()
         {
             projectile.rotation -= .2f;
-            Dust.NewDust(projectile.position, 1, 1, 6, 0f, 0f, 0, default(Color), 1f);
+            Dust.NewDust(projectile.Center, 0, 0, 6, 0f, 0f, 0, default(Color), 1f);
         }
 
         public override void Kill(int timeLeft)

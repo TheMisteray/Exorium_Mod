@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Tiles
 {
     class DarkbrickDoor
     {
-        class DarkbrickDoorClosed : ModTile
+        public class DarkbrickDoorClosed : ModTile
         {
             public override bool Autoload(ref string name, ref string texture)
             {
@@ -67,7 +67,7 @@ namespace ExoriumMod.Content.Tiles
 
             public override void KillMultiTile(int i, int j, int frameX, int frameY)
             {
-                Item.NewItem(i * 16, j * 16, 16, 48, ItemType<Items.Tiles.DarkbrickDoor>());
+                Item.NewItem(i * 16, j * 16, 16, 48, ItemType<Items.TileItems.DarkbrickDoor>());
             }
 
             public override void MouseOver(int i, int j)
@@ -75,7 +75,7 @@ namespace ExoriumMod.Content.Tiles
                 Player player = Main.LocalPlayer;
                 player.noThrow = 2;
                 player.showItemIcon = true;
-                player.showItemIcon2 = ItemType<Items.Tiles.DarkbrickDoor>();
+                player.showItemIcon2 = ItemType<Items.TileItems.DarkbrickDoor>();
             }
 
             public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex)
@@ -90,7 +90,7 @@ namespace ExoriumMod.Content.Tiles
             }
         }
 
-        class DarkbrickDoorOpen : ModTile
+        public class DarkbrickDoorOpen : ModTile
         {
             public override bool Autoload(ref string name, ref string texture)
             {
@@ -169,7 +169,7 @@ namespace ExoriumMod.Content.Tiles
 
             public override void KillMultiTile(int i, int j, int frameX, int frameY)
             {
-                Item.NewItem(i * 16, j * 16, 32, 48, ItemType<Items.Tiles.DarkbrickDoor>());
+                Item.NewItem(i * 16, j * 16, 32, 48, ItemType<Items.TileItems.DarkbrickDoor>());
             }
 
             public override void MouseOver(int i, int j)
@@ -177,7 +177,7 @@ namespace ExoriumMod.Content.Tiles
                 Player player = Main.LocalPlayer;
                 player.noThrow = 2;
                 player.showItemIcon = true;
-                player.showItemIcon2 = ItemType<Items.Tiles.DarkbrickDoor>();
+                player.showItemIcon2 = ItemType<Items.TileItems.DarkbrickDoor>();
             }
 
             public override void NearbyEffects(int i, int j, bool closer)

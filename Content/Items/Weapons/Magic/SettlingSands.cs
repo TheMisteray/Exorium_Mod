@@ -13,7 +13,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Launches bouncing sand balls");
+            Tooltip.SetDefault("Launches bouncing sand balls \n" +
+                "\"This is a horrible idea\"");
         }
 
         public override void SetDefaults()

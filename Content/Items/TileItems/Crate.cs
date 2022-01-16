@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Content.Items.Tiles
+namespace ExoriumMod.Content.Items.TileItems
 {
     class Crate : ModItem
     {

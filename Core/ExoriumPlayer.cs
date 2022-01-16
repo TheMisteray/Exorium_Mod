@@ -1,18 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Projectiles;
-using ExoriumMod.Dusts;
 
 namespace ExoriumMod.Core
 {
@@ -104,7 +94,7 @@ namespace ExoriumMod.Core
             if (proj.melee == true && frostStone)
                 target.AddBuff(BuffID.Frostburn, 120);
             if (proj.type == ProjectileID.WoodenArrowFriendly && acidArrows)
-                target.AddBuff(BuffType<Buffs.CausticAcid>(), 300);
+                target.AddBuff(BuffType<Content.Buffs.CausticAcid>(), 300);
         }
 
         public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)

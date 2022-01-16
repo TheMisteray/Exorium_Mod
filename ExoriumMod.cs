@@ -14,7 +14,7 @@ namespace ExoriumMod
         public override void AddRecipeGroups()
         {
             RecipeGroup woodGroup = RecipeGroup.recipeGroups[RecipeGroup.recipeGroupIDs["Wood"]];
-            woodGroup.ValidItems.Add(ModContent.ItemType<Content.Items.Tiles.Deadwood>());
+            woodGroup.ValidItems.Add(ModContent.ItemType<Content.Items.TileItems.Deadwood>());
         }
 
         public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)

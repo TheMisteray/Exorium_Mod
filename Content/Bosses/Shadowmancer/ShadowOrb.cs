@@ -5,7 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
-using ExoriumMod.Dusts;
+using ExoriumMod.Content.Dusts;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {

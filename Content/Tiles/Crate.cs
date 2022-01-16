@@ -1,4 +1,4 @@
-﻿using ExorimMod.Dusts;
+﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -43,7 +43,7 @@ namespace ExoriumMod.Content.Tiles
             AddMapEntry(new Color(200, 200, 200), name);
             disableSmartCursor = true;
             dresser = "Crate";
-            dresserDrop = ModContent.ItemType<Items.Placeables.Crate>();
+            dresserDrop = ModContent.ItemType<Items.TileItems.Crate>();
         }
 
         public override bool HasSmartInteract()
@@ -152,7 +152,7 @@ namespace ExoriumMod.Content.Tiles
             }
             if (player.showItemIconText == chest)
             {
-                player.showItemIcon2 = ModContent.ItemType<Items.Placeables.Crate>();
+                player.showItemIcon2 = ModContent.ItemType<Items.TileItems.Crate>();
                 player.showItemIconText = "";
             }
             player.noThrow = 2;
@@ -187,7 +187,7 @@ namespace ExoriumMod.Content.Tiles
             }
             if (player.showItemIconText == chest)
             {
-                player.showItemIcon2 = ModContent.ItemType<Items.Placeables.Crate>();
+                player.showItemIcon2 = ModContent.ItemType<Items.TileItems.Crate>();
                 player.showItemIconText = "";
             }
             player.noThrow = 2;

@@ -1,19 +1,16 @@
-﻿using ExoriumMod.Tiles;
-using ExoriumMod.Walls;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.World.Generation;
 using static Terraria.ModLoader.ModContent;
 using System;
+using ExoriumMod.Content.Tiles;
+using ExoriumMod.Content.Walls;
 
 namespace ExoriumMod.Core
 {
@@ -485,7 +482,7 @@ namespace ExoriumMod.Core
                             shadowAltarCoordsY = l;
                             break;
                         case 4:
-                            WorldGen.PlaceObject(k, l, (ushort)TileType<DarkbrickDoorClosed>());
+                            WorldGen.PlaceObject(k, l, (ushort)TileType<DarkbrickDoor.DarkbrickDoorClosed>());
                             break;
                     }
                 }
@@ -509,12 +506,12 @@ namespace ExoriumMod.Core
         {
             ShadowHouse();
             int[,] rareCrateItem = { //add items to crates
-                {ItemType<Items.Weapons.Summoner.ShadowOrb>(), 178 /*ruby*/, ItemType<Items.Weapons.Magic.Scrolls.ScrollOfCloudOfDaggers>(), }, // item types
+                {ItemType<Content.Items.Weapons.Summoner.ShadowOrb>(), 178 /*ruby*/, ItemType<Content.Items.Consumables.Scrolls.ScrollOfCloudOfDaggers>(), }, // item types
                 {4, 8, 1}, // min amount
                 {4, 7, 2} // variance
             };
             int[,] commonCrateItem = {
-                {ItemType<Items.Weapons.Ranger.AcidOrb>(), ItemType<Items.Weapons.Ranger.AcidOrb>(), 21/*silver*/, 181/*ametheyst*/, 279/*throwing knife*/, 19/*gold*/, 188/*healing potion*/, 297/*invisibility potion*/, 299/*night owl potion*/},
+                {ItemType<Content.Items.Weapons.Ranger.AcidOrb>(), ItemType<Content.Items.Weapons.Ranger.AcidOrb>(), 21/*silver*/, 181/*ametheyst*/, 279/*throwing knife*/, 19/*gold*/, 188/*healing potion*/, 297/*invisibility potion*/, 299/*night owl potion*/},
                 {28, 28, 12, 12, 40, 6, 6, 4, 6},
                 {20, 20, 10, 9, 30, 5, 5, 4, 8}
             };
@@ -530,9 +527,9 @@ namespace ExoriumMod.Core
                     chest.item[1].SetDefaults(commonCrateItem[0, item]);
                     chest.item[1].stack = Main.rand.Next(commonCrateItem[2, item]) + commonCrateItem[1, item];
                     if (Main.rand.NextBool())
-                        chest.item[2].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.ScrollOfMagicMissiles>());
+                        chest.item[2].SetDefaults(ItemType<Content.Items.Consumables.Scrolls.ScrollOfMagicMissiles>());
                     else
-                        chest.item[2].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.SpellScrollShield>());
+                        chest.item[2].SetDefaults(ItemType<Content.Items.Consumables.Scrolls.SpellScrollShield>());
                     chest.item[2].stack = Main.rand.Next(3) + 1;
                     for (int i = 3; i<Main.rand.Next(4) + 6; i++)
                     {

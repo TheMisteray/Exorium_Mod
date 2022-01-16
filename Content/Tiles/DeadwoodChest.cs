@@ -46,7 +46,7 @@ namespace ExoriumMod.Content.Tiles
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Containers };
             chest = "Deadwood Chest";
-            chestDrop = ItemType<Items.Tiles.DeadwoodChest>();
+            chestDrop = ItemType<Items.TileItems.DeadwoodChest>();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].frameX / 36);
@@ -189,7 +189,7 @@ namespace ExoriumMod.Content.Tiles
                 player.showItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : "Deadwood Chest";
                 if (player.showItemIconText == "Deadwood Chest")
                 {
-                    player.showItemIcon2 = ItemType<Items.Tiles.DeadwoodChest>();
+                    player.showItemIcon2 = ItemType<Items.TileItems.DeadwoodChest>();
                 }
             }
             player.noThrow = 2;

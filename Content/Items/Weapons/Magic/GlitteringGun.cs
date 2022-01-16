@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Or was it the glimmering gun...");
+            Tooltip.SetDefault("\"Or was it the glimmering gun...\"");
         }
 
         public override void SetDefaults()

@@ -75,7 +75,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
             Texture2D tex = GetTexture(Texture);
             Color[] colors = new Color[] {Color.Red, Color.Orange, Color.Yellow, Color.Blue, Color.Violet, Color.Pink};
             //spriteBatch.Draw(tex, projectile.position, tex.Frame(), colors[Main.rand.Next(colors.Length)], projectile.rotation, Vector2.Zero, projectile.scale, 0, 0);
-            spriteBatch.Draw(tex, (projectile.position - Main.screenPosition) + new Vector2(0, Main.player[projectile.owner].gfxOffY), new Rectangle(0, projectile.height * projectile.frame, projectile.width, projectile.height), colors[color], projectile.rotation, Vector2.Zero, projectile.scale, 0, 0);
+            spriteBatch.Draw(tex, (projectile.position - Main.screenPosition) + new Vector2(0, Main.player[projectile.owner].gfxOffY), new Rectangle(0, projectile.height * projectile.frame, projectile.width, projectile.height), colors[(int)color], projectile.rotation, Vector2.Zero, projectile.scale, 0, 0);
             base.PostDraw(spriteBatch, lightColor);
         }
     }

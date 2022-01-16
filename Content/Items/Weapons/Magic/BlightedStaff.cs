@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Microsoft.Xna.Framework;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
@@ -63,7 +64,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             projectile.rotation += .5f;
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), 0, 0);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), 0, 0);
             }
         }
 
@@ -77,7 +78,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.oldVelocity.X, projectile.oldVelocity.Y);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.oldVelocity.X, projectile.oldVelocity.Y);
             }
             Projectile.NewProjectile(projectile.position.X, projectile.position.Y, projectile.oldVelocity.X, projectile.oldVelocity.Y, mod.ProjectileType("BlightHail"), projectile.damage, projectile.knockBack, projectile.owner, 2);
             Main.PlaySound(SoundID.Item10, projectile.position);

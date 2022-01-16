@@ -154,33 +154,33 @@ namespace ExoriumMod.Content.NPCs.Town
             shop.item[nextSlot].SetDefaults(ItemType<Items.Accessories.RitualBone>());
             Item.buyPrice(0, 0, 50, 0);
             nextSlot++;
-            shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.ScrollOfMagicMissiles>());
+            shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>());
             Item.buyPrice(0, 0, 70, 0);
             nextSlot++;
-            shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.SpellScrollShield>());
+            shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.SpellScrollShield>());
             Item.buyPrice(0, 1, 50, 0);
             nextSlot++;
             if (NPC.downedBoss1)
             {
-                shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.ScrollOfCloudOfDaggers>());
+                shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.ScrollOfCloudOfDaggers>());
                 Item.buyPrice(0, 1, 0, 0);
                 nextSlot++;
-                shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.SpellScrollAcidArrow>());
+                shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.SpellScrollAcidArrow>());
                 Item.buyPrice(0, 1, 7, 0);
                 nextSlot++;
-                shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.SpellScrollMistyStep>());
+                shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.SpellScrollMistyStep>());
                 Item.buyPrice(0, 3, 0, 0);
                 nextSlot++;
             }
             if (NPC.downedBoss3)
             {
-                shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.SpellScrollFireball>());
+                shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.SpellScrollFireball>());
                 Item.buyPrice(0, 3, 0, 0);
                 nextSlot++;
             }
             if (NPC.downedAncientCultist)
             {
-                shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Scrolls.SpellScrollDelayedBlastFireball>());
+                shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.SpellScrollDelayedBlastFireball>());
                 Item.buyPrice(0, 18, 0, 0);
                 nextSlot++;
             }

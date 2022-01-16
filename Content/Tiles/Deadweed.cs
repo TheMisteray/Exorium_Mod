@@ -57,7 +57,7 @@ namespace ExoriumMod.Content.Tiles
 
             if (stage == PlantStage.Grown)
             {
-                Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.Tiles.DeadweedSeeds>(), 2);
+                Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.TileItems.DeadweedSeeds>(), 2);
                 Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.Materials.Deadweed>());
             }
             return false;

@@ -20,8 +20,8 @@ namespace ExoriumMod
                 ModContent.ItemType<Content.Items.Weapons.Melee.NineLivesStealer>(),
                 ModContent.ItemType<Content.Items.Weapons.Ranger.AcidOrb>(),
                 ModContent.ItemType<Content.Items.Weapons.Summoner.ShadowOrb>(),
-                ModContent.ItemType<Content.Items.Weapons.Magic.Scrolls.SpellScrollShield>(),
-                ModContent.ItemType<Content.Items.Weapons.Magic.Scrolls.ScrollOfMagicMissiles>(),
+                ModContent.ItemType<Content.Items.Consumables.Scrolls.SpellScrollShield>(),
+                ModContent.ItemType<Content.Items.Consumables.Scrolls.ScrollOfMagicMissiles>(),
                 28
             };
             List<int> ShadowmancerLootCollection = new List<int>();

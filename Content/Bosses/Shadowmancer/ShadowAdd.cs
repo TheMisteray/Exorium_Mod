@@ -1,5 +1,4 @@
-﻿using ExoriumMod.Core;
-using ExoriumMod.Dusts;
+﻿using ExoriumMod.Content.Dusts;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

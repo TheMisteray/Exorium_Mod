@@ -2,17 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Projectiles;
-using ExoriumMod.Dusts;
 
 namespace ExoriumMod.Core
 {
@@ -24,7 +17,7 @@ namespace ExoriumMod.Core
             {
                 if (Main.rand.NextBool(4) && drawInfo.shadow == 0f)
                 {
-                    int dust = Dust.NewDust(drawInfo.position - new Vector2(2f, 2f), player.width + 4, player.height + 4, DustType<Shadow>(), player.velocity.X * 0.4f, player.velocity.Y * 0.4f, 100, default(Color), 2f);
+                    int dust = Dust.NewDust(drawInfo.position - new Vector2(2f, 2f), player.width + 4, player.height + 4, DustType<Content.Dusts.Shadow>(), player.velocity.X * 0.4f, player.velocity.Y * 0.4f, 100, default(Color), 2f);
                     Main.dust[dust].noGravity = true;
                     Main.playerDrawDust.Add(dust);
                 }

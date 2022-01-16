@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Tiles.Trees
 
         public override int DropWood()
         {
-            return ItemType<Items.Tiles.Deadwood>();
+            return ItemType<Items.TileItems.Deadwood>();
         }
 
         public override Texture2D GetTexture()

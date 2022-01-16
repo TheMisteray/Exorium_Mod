@@ -36,7 +36,7 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
             AddMapEntry(new Color(40, 40, 40));
-            drop = ItemType<Items.Tiles.DeadwoodPlatform>();
+            drop = ItemType<Items.TileItems.DeadwoodPlatform>();
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Platforms };
             dustType = 1;

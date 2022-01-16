@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using ExoriumMod.Dusts;
-using ExoriumMod.Projectiles.Bosses.BlightSlime;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExoriumMod.Core;
+using ExoriumMod.Content.Dusts;
 
 namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
@@ -40,7 +39,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             npc.scale = 2f;
             npc.timeLeft = NPC.activeTime * 30;
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/SlimyGrime");
-            bossBag = ModContent.ItemType<Items.Consumables.Bosses.BlightedSlimeBag>();
+            bossBag = ItemType<BlightedSlimeBag>();
         }
          
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -579,7 +578,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             else
             {
                 Item.NewItem(npc.getRect(), ItemType<Items.Materials.TaintedGel>(), Main.rand.Next(50, 66));
-                Item.NewItem(npc.getRect(), ItemType<Items.Placeables.BlightedOre>(), Main.rand.Next(80, 121));
+                Item.NewItem(npc.getRect(), ItemType<Items.Materials.Metals.BlightedOre>(), Main.rand.Next(80, 121));
             }
         }
 

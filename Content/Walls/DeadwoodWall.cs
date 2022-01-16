@@ -17,7 +17,7 @@ namespace ExoriumMod.Content.Walls
         public override void SetDefaults()
         {
             Main.wallHouse[Type] = true;
-            drop = ItemType<Items.Walls.DeadwoodWall>();
+            drop = ItemType<Items.WallItems.DeadwoodWall>();
             AddMapEntry(new Color(140, 140, 140));
         }
     }

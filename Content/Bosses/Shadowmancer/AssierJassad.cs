@@ -1,8 +1,8 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using System;
-using ExoriumMod.Dusts;
-using ExoriumMod.Buffs;
+using ExoriumMod.Content.Dusts;
+using ExoriumMod.Content.Buffs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

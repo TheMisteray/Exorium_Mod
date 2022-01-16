@@ -32,13 +32,13 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override bool CanUseItem(Player player)
         {
-            return Main.LocalPlayer.GetModPlayer<ExoriumPlayer>().ZoneDeadlands && !NPC.AnyNPCs(NPCType<NPCs.Bosses.BlightedSlime.BlightedSlime>());
+            return Main.LocalPlayer.GetModPlayer<ExoriumPlayer>().ZoneDeadlands && !NPC.AnyNPCs(NPCType<BlightedSlime>());
         }
 
         public override bool UseItem(Player player)
         {
             Main.PlaySound(SoundID.Roar, player.position, 0);
-            NPC.SpawnOnPlayer(player.whoAmI, NPCType<NPCs.Bosses.BlightedSlime.BlightedSlime>());
+            NPC.SpawnOnPlayer(player.whoAmI, NPCType<BlightedSlime>());
             return true;
         }
 
@@ -46,7 +46,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Gel, 30);
-            recipe.AddIngredient(ItemType<Materials.WightBone>(), 15);
+            recipe.AddIngredient(ItemType<Items.Materials.WightBone>(), 15);
             recipe.AddTile(TileID.DemonAltar);
             recipe.SetResult(this);
             recipe.AddRecipe();
