@@ -11,11 +11,13 @@ using Terraria.ObjectData;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class Crate : ModTile
+    class CrateTile : ModTile
     {
+        public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
+
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 

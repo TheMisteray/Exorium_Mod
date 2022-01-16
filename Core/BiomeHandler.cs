@@ -1,19 +1,25 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using System;
+using Microsoft.Xna.Framework;
 
 namespace ExoriumMod.Core
 {
-    partial class ExoriumPlayer
+    public class BiomeHandler : ModPlayer
     {
+        public bool ZoneDeadlands = false;
+
         public override void UpdateBiomes()
         {
-            ZoneDeadlands = ExoriumWorld.deadlandTiles > 800;
+            ZoneDeadlands = ExoriumWorld.deadlandTiles > 500;
         }
 
         public override bool CustomBiomesMatch(Player other)
         {
-            ExoriumPlayer modOther = other.GetModPlayer<ExoriumPlayer>();
+            BiomeHandler modOther = other.GetModPlayer<BiomeHandler>();
             return ZoneDeadlands == modOther.ZoneDeadlands;
         }
 
@@ -34,9 +40,55 @@ namespace ExoriumMod.Core
         {
             if (ZoneDeadlands)
             {
-                return mod.GetTexture(AssetDirectory.MapBackground + "DeadlandsMapBackground");
+                return mod.GetTexture("Assets/Backgrounds/Map/DeadlandsMapBackground" /*AssetDirectory.MapBackground + "DeadlandsMapBackground"*/);
             }
             return null;
+        }
+    }
+
+    public partial class ExoriumWorld : ModWorld
+    {
+        public static int deadlandTiles;
+
+        public override void TileCountsAvailable(int[] tileCounts)
+        {
+            deadlandTiles = tileCounts[TileType<Content.Tiles.AshenDustTile>()];
+        }
+
+        public override void ResetNearbyTileEffects()
+        {
+            BiomeHandler modPlayer = Main.LocalPlayer.GetModPlayer<BiomeHandler>();
+            deadlandTiles = 0;
+        }
+    }
+}
+
+namespace ExoriumMod
+{
+    public partial class ExoriumMod : Mod
+    {
+        public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
+        {
+            if (Core.ExoriumWorld.deadlandTiles <= 250)
+            {
+                return;
+            }
+
+            float deadlandStrength = Core.ExoriumWorld.deadlandTiles / 1200f;
+            deadlandStrength = Math.Min(deadlandStrength, 1f);
+
+            int sunR = backgroundColor.R;
+            int sunG = backgroundColor.G;
+            int sunB = backgroundColor.B;
+            sunB -= (int)(90f * deadlandStrength * (backgroundColor.R / 255f)); //backgroundColor.R On purpose to change how the lighting looks
+            sunR -= (int)(180f * deadlandStrength * (backgroundColor.R / 255f));
+            sunG -= (int)(90f * deadlandStrength * (backgroundColor.G / 255f));
+            sunR = Utils.Clamp(sunR, 10, 255);
+            sunG = Utils.Clamp(sunG, 10, 255);
+            sunB = Utils.Clamp(sunB, 10, 255);
+            backgroundColor.R = (byte)sunB;
+            backgroundColor.G = (byte)sunB;
+            backgroundColor.B = (byte)sunB;
         }
     }
 }

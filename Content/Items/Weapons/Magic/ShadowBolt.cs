@@ -40,7 +40,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
     class ShadowBoltSpell : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/BlightHail";
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetDefaults()
         {

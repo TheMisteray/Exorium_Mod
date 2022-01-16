@@ -8,7 +8,7 @@ namespace ExoriumMod.Content.Dusts
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Dust + Name;
+            texture = AssetDirectory.Dust + name;
             return base.Autoload(ref name, ref texture);
         }
 

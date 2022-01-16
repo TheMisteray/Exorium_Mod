@@ -43,9 +43,11 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
     class RimeBoomerang : ModProjectile
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + "FrostedBoomerang";
+
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Frosted Boomerang");
+            DisplayName.SetDefault("Frosted Chackram");
         }
 
         public override void SetDefaults()

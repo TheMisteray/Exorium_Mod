@@ -21,7 +21,7 @@ namespace ExoriumMod.Content.Items.TileItems
             item.consumable = true;
             item.value = 500;
             item.scale = .8f;
-            item.createTile = TileType<Tiles.Crate>();
+            item.createTile = TileType<Tiles.CrateTile>();
         }
     }
 }

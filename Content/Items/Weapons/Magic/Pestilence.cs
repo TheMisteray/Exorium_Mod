@@ -49,6 +49,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
     }
     class BlightHail : ModProjectile
     {
+        public override string Texture => AssetDirectory.Invisible;
+
         public override void SetDefaults()
         {
             projectile.width = 80;

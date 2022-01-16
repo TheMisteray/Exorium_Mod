@@ -50,6 +50,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
     class BlightShot : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 16;

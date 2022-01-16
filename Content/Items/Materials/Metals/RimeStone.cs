@@ -20,7 +20,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             item.useAnimation = 15;
             item.useTime = 15;
             item.autoReuse = true;
-            item.createTile = TileType<Tiles.RimeStone>();
+            item.createTile = TileType<Tiles.RimeStoneTile>();
         }
     }
 }

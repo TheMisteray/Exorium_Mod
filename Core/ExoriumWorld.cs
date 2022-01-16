@@ -22,8 +22,6 @@ namespace ExoriumMod.Core
         public static int shadowAltarCoordsX;
         public static int shadowAltarCoordsY;
 
-        public static int deadlandTiles;
-
         public override TagCompound Save()
         {
             var downed = new List<string>();
@@ -120,7 +118,7 @@ namespace ExoriumMod.Core
                 Tile tile = Framing.GetTileSafely(x, y);
                 if (tile.active() && tile.type == TileID.Stone)
                 {
-                    WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(2, 3), WorldGen.genRand.Next(1, 3), TileType<BlightedOre>(), false, 0f, 0f, false, true);
+                    WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(2, 3), WorldGen.genRand.Next(1, 3), TileType<BlightedOreTile>(), false, 0f, 0f, false, true);
                 }
             }
             //RimeStone spawn
@@ -131,7 +129,7 @@ namespace ExoriumMod.Core
                 Tile tile = Framing.GetTileSafely(x, y);
                 if (tile.active() && tile.type == TileID.IceBlock || tile.type == TileID.SnowBlock)
                 {
-                    WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(6, 7), WorldGen.genRand.Next(3, 5), TileType<RimeStone>(), false, 0f, 0f, false, true);
+                    WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(6, 7), WorldGen.genRand.Next(3, 5), TileType<RimeStoneTile>(), false, 0f, 0f, false, true);
                 }
             }
             //DuneStone spawn
@@ -142,7 +140,7 @@ namespace ExoriumMod.Core
                 Tile tile = Framing.GetTileSafely(x, y);
                 if (tile.active() && (tile.type == TileID.Sandstone || tile.type == TileID.Sand || tile.type == TileID.HardenedSand))
                 {
-                    WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(6, 7), WorldGen.genRand.Next(3, 5), TileType<DuneStone>(), false, 0f, 0f, false, true);
+                    WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(6, 7), WorldGen.genRand.Next(3, 5), TileType<DuneStoneTile>(), false, 0f, 0f, false, true);
                 }
             }
         }
@@ -228,7 +226,7 @@ namespace ExoriumMod.Core
                                 case TileID.Platinum:
                                 case TileID.Crimtane:
                                 case TileID.Demonite:
-                                    Framing.GetTileSafely(m, n).type = (ushort)TileType<BlightedOre>();
+                                    Framing.GetTileSafely(m, n).type = (ushort)TileType<BlightedOreTile>();
                                     break;
                                 case TileID.BlueDungeonBrick:
                                 case TileID.GreenDungeonBrick:
@@ -236,7 +234,7 @@ namespace ExoriumMod.Core
                                 case TileID.LivingWood:
                                     break;
                                 default:
-                                    Framing.GetTileSafely(m, n).type = (ushort)TileType<AshenDust>();
+                                    Framing.GetTileSafely(m, n).type = (ushort)TileType<AshenDustTile>();
                                     break;
                             }
                             if (Framing.GetTileSafely(m, n).wall != 0 && Framing.GetTileSafely(m, n).wall != 7 && Framing.GetTileSafely(m, n).wall != 8 && Framing.GetTileSafely(m, n).wall != 9 && 
@@ -442,17 +440,17 @@ namespace ExoriumMod.Core
                             break;
                         case 1:
                             WorldGen.KillTile(k, l);
-                            WorldGen.PlaceTile(k, l, TileType<DarkBrick>());
+                            WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
                             tile.slope(0);
                             break;
                         case 2:
                             WorldGen.KillTile(k, l);
-                            WorldGen.PlaceTile(k, l, TileType<DarkBrick>());
+                            WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
                             tile.slope(2);
                             break;
                         case 3:
                             WorldGen.KillTile(k, l);
-                            WorldGen.PlaceTile(k, l, TileType<DarkBrick>());
+                            WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
                             tile.slope(1);
                             break;
                     }
@@ -474,10 +472,10 @@ namespace ExoriumMod.Core
                     switch (_shadowhouseFurniture[y, x])
                     {
                         case 2:
-                            WorldGen.PlaceDresserDirect(k, l, (ushort)TileType<Crate>(), 0, -1);
+                            WorldGen.PlaceDresserDirect(k, l, (ushort)TileType<CrateTile>(), 0, -1);
                             break;
                         case 3:
-                            WorldGen.Place4x2(k, l, (ushort)TileType<ShadowAltar>(), -1, 0);
+                            WorldGen.Place4x2(k, l, (ushort)TileType<ShadowAltarTile>(), -1, 0);
                             shadowAltarCoordsX = k + 1;
                             shadowAltarCoordsY = l;
                             break;
@@ -489,17 +487,6 @@ namespace ExoriumMod.Core
             }
             //Protect from other generation
             WorldGen.structures.AddStructure(new Rectangle(i, j, _shadowhouseShape.GetLength(1), _shadowhouseShape.GetLength(0)), 50);
-        }
-
-        public override void ResetNearbyTileEffects()
-        {
-            ExoriumPlayer modPlayer = Main.LocalPlayer.GetModPlayer<ExoriumPlayer>();
-            deadlandTiles = 0;
-        }
-
-        public override void TileCountsAvailable(int[] tileCounts)
-        {
-            deadlandTiles = tileCounts[TileType<AshenDust>()];
         }
 
         public override void PostWorldGen()
@@ -518,7 +505,7 @@ namespace ExoriumMod.Core
             for (int chestIndex = 0; chestIndex < 1000; chestIndex++)
             {
                 Chest chest = Main.chest[chestIndex];
-                if (chest != null && Framing.GetTileSafely(chest.x, chest.y).type == TileType<Crate>())
+                if (chest != null && Framing.GetTileSafely(chest.x, chest.y).type == TileType<CrateTile>())
                 {
                     int item = Main.rand.Next(rareCrateItem.GetLength(1));
                     chest.item[0].SetDefaults(rareCrateItem[0, item]);

@@ -58,6 +58,8 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
     class DaggerCloud : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 32;
@@ -112,7 +114,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
     class DaggerCloudDagger : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/DaggerCloud";
+        public override string Texture => AssetDirectory.Projectile + "DaggerCloud";
 
         public override void SetDefaults()
         {

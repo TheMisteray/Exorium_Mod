@@ -11,11 +11,11 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class DeadwoodSapling : ModTile
+    class DeadwoodSaplingTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 
@@ -32,7 +32,7 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
-            TileObjectData.newTile.AnchorValidTiles = new[] { TileType<AshenDust>() };
+            TileObjectData.newTile.AnchorValidTiles = new[] { TileType<AshenDustTile>() };
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.DrawFlipHorizontal = true;
             TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;

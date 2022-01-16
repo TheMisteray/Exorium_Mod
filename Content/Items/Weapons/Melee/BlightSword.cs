@@ -61,7 +61,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
     public class SwungBlightedSword : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/BlightedSwordSwing";
+        public override string Texture => AssetDirectory.Projectile + "BlightedSwordSwing";
 
         private const float AimResponsiveness = 0.06f;
 
@@ -200,8 +200,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             player.ChangeDir(projectile.direction);
 
             player.heldProj = projectile.whoAmI;
-            player.itemTime = 2;
-            player.itemAnimation = 2;
+            player.itemTime = 15;
+            player.itemAnimation = 15;
 
             //Hand direction
             player.itemRotation = (projectile.velocity * projectile.direction).ToRotation();

@@ -61,6 +61,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
     }
     class BlightedPikeProj : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
 
         public override void SetDefaults()
         {
@@ -134,6 +135,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
     class BlightHailMelee : ModProjectile
     {
+        public override string Texture => AssetDirectory.Invisible;
+
         public override void SetDefaults()
         {
             projectile.width = 40;

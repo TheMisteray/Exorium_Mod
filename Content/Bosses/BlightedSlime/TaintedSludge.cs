@@ -32,7 +32,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override bool CanUseItem(Player player)
         {
-            return Main.LocalPlayer.GetModPlayer<ExoriumPlayer>().ZoneDeadlands && !NPC.AnyNPCs(NPCType<BlightedSlime>());
+            return Main.LocalPlayer.GetModPlayer<BiomeHandler>().ZoneDeadlands && !NPC.AnyNPCs(NPCType<BlightedSlime>());
         }
 
         public override bool UseItem(Player player)

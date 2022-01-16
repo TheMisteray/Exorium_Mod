@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
     class FireboltProj : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/BlightShot";
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetDefaults()
         {

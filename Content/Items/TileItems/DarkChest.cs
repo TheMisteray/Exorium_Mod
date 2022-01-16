@@ -20,7 +20,7 @@ namespace ExoriumMod.Content.Items.TileItems
             item.useStyle = 1;
             item.consumable = true;
             item.value = 500;
-            item.createTile = TileType<Tiles.DarkChest>();
+            item.createTile = TileType<Tiles.DarkChestTile>();
         }
     }
 }

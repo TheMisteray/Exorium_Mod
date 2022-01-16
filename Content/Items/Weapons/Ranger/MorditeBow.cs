@@ -62,6 +62,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
     class MorditeArrow : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetDefaults()
         {
             projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);

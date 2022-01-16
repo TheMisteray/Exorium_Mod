@@ -21,8 +21,6 @@ namespace ExoriumMod.Core
         public bool ritualArrow;
         public bool reverseHandOut;
 
-        public bool ZoneDeadlands;
-
         public int cloakHP = 40;
 
         public override void ResetEffects()

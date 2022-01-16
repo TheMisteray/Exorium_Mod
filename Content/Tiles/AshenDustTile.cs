@@ -7,11 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class AshenDust : ModTile
+    class AshenDustTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 
@@ -29,7 +29,7 @@ namespace ExoriumMod.Content.Tiles
         public override int SaplingGrowthType(ref int style)
         {
             style = 0;
-            return TileType<DeadwoodSapling>();
+            return TileType<DeadwoodSaplingTile>();
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)

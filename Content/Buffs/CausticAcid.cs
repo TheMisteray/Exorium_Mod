@@ -8,7 +8,7 @@ namespace ExoriumMod.Content.Buffs
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Buff + Name;
+            texture = AssetDirectory.Buff + name;
             return base.Autoload(ref name, ref texture);
         }
 

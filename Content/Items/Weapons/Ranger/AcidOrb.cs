@@ -43,6 +43,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
     class AcidOrbProj : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + "AcidOrb";
+
         public override void SetDefaults()
         {
             projectile.width = 12;
@@ -54,7 +56,12 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         }
 
         private const int MAX_TICKS = 25;
-        private int ticks = 0;
+
+        public float ticks
+        {
+            get => projectile.ai[0];
+            set => projectile.ai[0] = value;
+        }
 
         public override void AI()
         {

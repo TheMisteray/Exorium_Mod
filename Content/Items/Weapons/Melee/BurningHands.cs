@@ -101,6 +101,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
     class BurningHand : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 50;
@@ -109,9 +111,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             projectile.magic = true;
             projectile.timeLeft = 25;
         }
-        Dust dust81;
-        int num2475;
-        //ref float reference();
+
         public override void AI()
         {
             if (Main.rand.Next(3) == 0)
@@ -168,6 +168,10 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         private void FireDust()
         {
+            //These were moved in from outside
+            Dust dust81;
+            int num2475;
+
             //ai for dust taken from flamethrower
             if (projectile.type == 188 && projectile.ai[0] < 8f)
             {

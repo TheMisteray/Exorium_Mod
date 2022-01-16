@@ -58,7 +58,7 @@ namespace ExoriumMod.Core
 
         public const string NPCs = Assets + "NPCs/";
         public const string TownNPC = NPCs + "Town/";
-        public const string EnemyNPC = NPCs + "Town/";
+        public const string EnemyNPC = NPCs + "Enemy/";
 
         public const string Projectile = Assets + "Projectiles/";
         public const string Minion = Projectile + "Minions/";

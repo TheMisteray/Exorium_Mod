@@ -123,6 +123,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
     class RimeBladeProj : ModProjectile
     {
+        public override string Texture => AssetDirectory.Invisible;
+
         public override void SetDefaults()
         {
             projectile.timeLeft = 300;

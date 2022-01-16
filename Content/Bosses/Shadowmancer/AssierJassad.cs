@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
     class AssierJassad : ModNPC
     {
         public override string Texture => AssetDirectory.Shadowmancer + Name;
-        public override string BossHeadTexture => AssetDirectory.Shadowmancer + Name + "_Head";
+        public override string BossHeadTexture => AssetDirectory.Shadowmancer + Name + "_Head_Boss";
 
         public override void SetStaticDefaults()
         {

@@ -49,7 +49,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
     }
     class SandShot : ModProjectile
     {
-        int projectileBounce = 3;
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bouncing Sand");
@@ -60,13 +61,20 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             projectile.CloneDefaults(ProjectileID.SandBallGun);
             aiType = ProjectileID.SandBallGun;
             projectile.aiStyle = 1;
+            projectile.ai[1] = 0;
+        }
+
+        public float projectileBounce
+        {
+            get => projectile.ai[1];
+            set => projectile.ai[1] = value;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Player player = Main.player[projectile.owner];
-            projectileBounce--;
-            if (projectileBounce <= 0)
+            projectileBounce++;
+            if (projectileBounce >= 3)
             {
                 Projectile.NewProjectile(projectile.position.X, projectile.position.Y, 0, 0, ProjectileID.SandBallFalling, 5, 5, player.whoAmI);
                 projectile.Kill();

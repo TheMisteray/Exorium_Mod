@@ -8,11 +8,11 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class DeadwoodPlatform : ModTile
+    class DeadwoodPlatformTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 

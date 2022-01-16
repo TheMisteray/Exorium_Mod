@@ -26,7 +26,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             item.rare = 2;
             item.maxStack = 999;
             item.value = 200;
-            item.createTile = TileType<Tiles.BlightedOre>();
+            item.createTile = TileType<Tiles.BlightedOreTile>();
         }
     }
 

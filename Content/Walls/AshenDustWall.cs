@@ -8,7 +8,7 @@ namespace ExoriumMod.Content.Walls
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Wall + Name;
+            texture = AssetDirectory.Wall + name;
             return base.Autoload(ref name, ref texture);
         }
 

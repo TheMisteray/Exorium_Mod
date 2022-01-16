@@ -10,14 +10,14 @@ namespace ExoriumMod.Content.Liquids
     {
         public override bool Autoload(ref string name, ref string texture, ref string blockTexture)
         {
-            texture = AssetDirectory.Liquid + Name;
+            texture = AssetDirectory.Liquid + name;
             blockTexture = texture + "Block";
             return base.Autoload(ref name, ref texture, ref blockTexture);
         }
 
         public override bool ChooseWaterStyle()
         {
-            ExoriumPlayer modPlayer = Main.LocalPlayer.GetModPlayer<ExoriumPlayer>();
+            BiomeHandler modPlayer = Main.LocalPlayer.GetModPlayer<BiomeHandler>();
             return modPlayer.ZoneDeadlands;
         }
 

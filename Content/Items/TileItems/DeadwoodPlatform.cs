@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Items.TileItems
             item.useTime = 5;
             item.useStyle = 1;
             item.consumable = true;
-            item.createTile = TileType<Tiles.DeadwoodPlatform>();
+            item.createTile = TileType<Tiles.DeadwoodPlatformTile>();
         }
 
         public override void AddRecipes()

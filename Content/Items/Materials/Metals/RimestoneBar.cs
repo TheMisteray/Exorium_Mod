@@ -26,7 +26,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             item.useTime = 10;
             item.autoReuse = true;
             item.consumable = true;
-            item.createTile = TileType<Tiles.RimestoneBar>();
+            item.createTile = TileType<Tiles.RimestoneBarTile>();
             item.placeStyle = 0;
         }
 

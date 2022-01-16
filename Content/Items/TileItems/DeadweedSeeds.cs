@@ -21,7 +21,7 @@ namespace ExoriumMod.Content.Items.TileItems
             item.width = 12;
             item.height = 14;
             item.value = 80;
-            item.createTile = TileType<Tiles.Deadweed>();
+            item.createTile = TileType<Tiles.DeadweedTile>();
         }
     }
 }

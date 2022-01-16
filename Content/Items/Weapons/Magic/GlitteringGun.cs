@@ -79,6 +79,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
     class SparkleShot : ModProjectile
     {
+        public override string Texture => AssetDirectory.Invisible;
+
         public override void SetDefaults()
         {
             projectile.width = 8;

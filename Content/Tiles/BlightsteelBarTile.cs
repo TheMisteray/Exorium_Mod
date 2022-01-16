@@ -8,11 +8,11 @@ using Microsoft.Xna.Framework;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class MorditeBar : ModTile
+    class BlightsteelBarTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 
@@ -23,14 +23,16 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile(Type);
+            soundType = 21;
+            soundStyle = 1;
 
-            AddMapEntry(new Color(0, 0, 0), Language.GetText("MapObject.MetalBar")); // localized text for "Metal Bar"
+            AddMapEntry(new Color(75, 75, 0), Language.GetText("MapObject.MetalBar")); // localized text for "Metal Bar"
         }
 
         public override bool Drop(int i, int j)
         {
             Tile t = Main.tile[i, j];
-            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.MorditeBar>());
+            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.BlightsteelBar>());
             return base.Drop(i, j);
         }
     }

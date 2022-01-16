@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
     class BlightedSlime : ModNPC
     {
         public override string Texture => AssetDirectory.BlightedSlime + Name;
-        public override string BossHeadTexture => AssetDirectory.BlightedSlime + Name + "_Head";
+        public override string BossHeadTexture => AssetDirectory.BlightedSlime + Name + "_Head_Boss";
 
         public override void SetStaticDefaults()
         {

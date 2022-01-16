@@ -8,11 +8,11 @@ using Microsoft.Xna.Framework;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class RimestoneBar : ModTile
+    class DunestoneBarTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 
@@ -26,13 +26,13 @@ namespace ExoriumMod.Content.Tiles
             soundType = 21;
             soundStyle = 1;
 
-            AddMapEntry(new Color(194, 248, 255), Language.GetText("MapObject.MetalBar")); // localized text for "Metal Bar"
+            AddMapEntry(new Color(196, 188, 22), Language.GetText("MapObject.MetalBar")); // localized text for "Metal Bar"
         }
 
         public override bool Drop(int i, int j)
         {
             Tile t = Main.tile[i, j];
-            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.RimestoneBar>());
+            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.DunestoneBar>());
             return base.Drop(i, j);
         }
     }

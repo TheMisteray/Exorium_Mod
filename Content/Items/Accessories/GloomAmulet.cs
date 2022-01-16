@@ -44,7 +44,7 @@ namespace ExoriumMod.Content.Items.Accessories
             recipe.AddIngredient(ItemType<Weapons.Summoner.ShadowOrb>(), 7);
             recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 4);
             recipe.AddIngredient(ItemID.Ruby);
-            recipe.AddTile(TileType<Tiles.ShadowAltar>());
+            recipe.AddTile(TileType<Tiles.ShadowAltarTile>());
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

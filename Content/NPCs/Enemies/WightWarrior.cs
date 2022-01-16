@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return spawnInfo.player.GetModPlayer<ExoriumPlayer>().ZoneDeadlands ? .1f : 0f;
+            return spawnInfo.player.GetModPlayer<BiomeHandler>().ZoneDeadlands ? .1f : 0f;
         }
 
         public override void NPCLoot()

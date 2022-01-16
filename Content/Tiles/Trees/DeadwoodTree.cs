@@ -21,17 +21,17 @@ namespace ExoriumMod.Content.Tiles.Trees
 
         public override Texture2D GetTexture()
         {
-            return mod.GetTexture(AssetDirectory.Tree + "DeadwoodTree");
+            return mod.GetTexture("Assets/Tiles/Trees/DeadwoodTree" /*AssetDirectory.Tree + "DeadwoodTree"*/);
         }
 
         public override Texture2D GetTopTextures(int i, int j, ref int frame, ref int frameWidth, ref int frameHeight, ref int xOffsetLeft, ref int yOffset)
         {
-            return mod.GetTexture(AssetDirectory.Tree + "DeadwoodTree_Tops");
+            return mod.GetTexture("Assets/Tiles/Trees/DeadwoodTree" + "_Tops");
         }
 
         public override Texture2D GetBranchTextures(int i, int j, int trunkOffset, ref int frame)
         {
-            return mod.GetTexture(AssetDirectory.Tree + "DeadwoodTree_Branches");
+            return mod.GetTexture("Assets/Tiles/Trees/DeadwoodTree" + "_Branches");
         }
     }
 }

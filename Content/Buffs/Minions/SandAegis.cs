@@ -9,7 +9,7 @@ namespace ExoriumMod.Content.Buffs.Minions
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.MinionBuff + Name;
+            texture = AssetDirectory.MinionBuff + name;
             return base.Autoload(ref name, ref texture);
         }
 

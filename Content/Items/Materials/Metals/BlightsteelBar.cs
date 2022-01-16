@@ -27,7 +27,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             item.useTime = 10;
             item.autoReuse = true;
             item.consumable = true;
-            item.createTile = TileType<Tiles.BlightsteelBar>();
+            item.createTile = TileType<Tiles.BlightsteelBarTile>();
             item.placeStyle = 0;
         }
         public override void AddRecipes()

@@ -94,6 +94,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
     }
     class DuneBall : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 8;
@@ -102,9 +104,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             projectile.magic = true;
             projectile.timeLeft = 400;
             projectile.penetrate = 3;
-        }
 
-        private float stopper = 0;
+        }
 
         public override void AI()
         {
@@ -127,7 +128,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             }
             else
             {
-                if (projectile.ai[0] == 1 && stopper == 0)
+                if (projectile.ai[0] == 1)
                 {
                     //Find cursor and shoot at
                     float maxDistance = 15f; // Speed
@@ -150,7 +151,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                     projectile.velocity = vectorToCursor;
                     projectile.penetrate = 1;
                     projectile.timeLeft = 400;
-                    stopper++;
+                    projectile.ai[0]++;
                 }
                 if (projectile.timeLeft == 390)
                     projectile.tileCollide = true;

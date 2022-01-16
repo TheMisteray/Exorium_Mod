@@ -12,11 +12,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class DarkChest : ModTile
+    class DeadwoodChestTile : ModTile
     {
+        public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
+
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 
@@ -41,22 +43,25 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Dark Chest");
-            AddMapEntry(new Color(240, 240, 240), name, MapChestName);
-            name = CreateMapEntryName(Name + "_Locked"); // With multiple map entries, you need unique translation keys.
-            name.SetDefault("Locked Dark Chest");
-            AddMapEntry(new Color(240, 240, 240), name, MapChestName);
+            name.SetDefault("Deadwood Chest");
+            AddMapEntry(new Color(90, 90, 90), name, MapChestName);
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Containers };
-            chest = "Dark Chest";
-            chestDrop = ItemType<Items.TileItems.DarkChest>();
+            chest = "Deadwood Chest";
+            chestDrop = ItemType<Items.TileItems.DeadwoodChest>();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].frameX / 36);
 
         public override bool HasSmartInteract() => true;
 
-        public override bool IsLockedChest(int i, int j) => Main.tile[i, j].frameX / 36 == 1;
+        public override bool IsLockedChest(int i, int j) => false;
+
+        public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual)
+        {
+            //dustType = this.dustType;
+            return true;
+        }
 
         public string MapChestName(string name, int i, int j)
         {
@@ -80,11 +85,6 @@ namespace ExoriumMod.Content.Tiles
             {
                 return name + ": " + Main.chest[chest].name;
             }
-        }
-
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = 1;
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
@@ -126,8 +126,7 @@ namespace ExoriumMod.Content.Tiles
                 NetMessage.SendData(33, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f, 0f, 0f, 0, 0, 0);
                 player.editedChestName = false;
             }
-            bool isLocked = IsLockedChest(left, top);
-            if (Main.netMode == 1 && !isLocked)
+            if (Main.netMode == 1)
             {
                 if (left == player.chestX && top == player.chestY && player.chest >= 0)
                 {
@@ -143,39 +142,25 @@ namespace ExoriumMod.Content.Tiles
             }
             else
             {
-                if (isLocked)
+                int chest = Chest.FindChest(left, top);
+                if (chest >= 0)
                 {
-                    int key = ItemType<Items.Consumables.DarkKey>();
-                    if (player.ConsumeItem(key) && Chest.Unlock(left, top))
+                    Main.stackSplit = 600;
+                    if (chest == player.chest)
                     {
-                        if (Main.netMode == 1)
-                        {
-                            NetMessage.SendData(MessageID.Unlock, -1, -1, null, player.whoAmI, 1f, (float)left, (float)top);
-                        }
+                        player.chest = -1;
+                        Main.PlaySound(SoundID.MenuClose);
                     }
-                }
-                else
-                {
-                    int chest = Chest.FindChest(left, top);
-                    if (chest >= 0)
+                    else
                     {
-                        Main.stackSplit = 600;
-                        if (chest == player.chest)
-                        {
-                            player.chest = -1;
-                            Main.PlaySound(SoundID.MenuClose);
-                        }
-                        else
-                        {
-                            player.chest = chest;
-                            Main.playerInventory = true;
-                            Main.recBigList = false;
-                            player.chestX = left;
-                            player.chestY = top;
-                            Main.PlaySound(player.chest < 0 ? SoundID.MenuOpen : SoundID.MenuTick);
-                        }
-                        Recipe.FindRecipes();
+                        player.chest = chest;
+                        Main.playerInventory = true;
+                        Main.recBigList = false;
+                        player.chestX = left;
+                        player.chestY = top;
+                        Main.PlaySound(player.chest < 0 ? SoundID.MenuOpen : SoundID.MenuTick);
                     }
+                    Recipe.FindRecipes();
                 }
             }
             return true;
@@ -203,13 +188,10 @@ namespace ExoriumMod.Content.Tiles
             }
             else
             {
-                player.showItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : "Dark Chest";
-                if (player.showItemIconText == "Dark Chest")
+                player.showItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : "Deadwood Chest";
+                if (player.showItemIconText == "Deadwood Chest")
                 {
-                    player.showItemIcon2 = ItemType<Items.TileItems.DarkChest>();
-                    if (Main.tile[left, top].frameX / 36 == 1)
-                        player.showItemIcon2 = ItemType<Items.Consumables.DarkKey>();
-                    player.showItemIconText = "";
+                    player.showItemIcon2 = ItemType<Items.TileItems.DeadwoodChest>();
                 }
             }
             player.noThrow = 2;

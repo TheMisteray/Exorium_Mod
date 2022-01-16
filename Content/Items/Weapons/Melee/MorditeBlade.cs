@@ -59,6 +59,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
     class MorditeSkullMelee : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + "MorditeSkull";
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.Homing[projectile.type] = true;

@@ -54,7 +54,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
     class DelayedBlastFireball : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/BlightShot";
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetDefaults()
         {

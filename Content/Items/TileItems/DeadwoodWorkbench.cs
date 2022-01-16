@@ -20,7 +20,7 @@ namespace ExoriumMod.Content.Items.TileItems
             item.useStyle = 1;
             item.consumable = true;
             item.value = 30;
-            item.createTile = TileType<Tiles.DeadwoodWorkbench>();
+            item.createTile = TileType<Tiles.DeadwoodWorkbenchTile>();
         }
 
         public override void AddRecipes()

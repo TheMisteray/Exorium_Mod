@@ -16,11 +16,11 @@ namespace ExoriumMod.Content.Tiles
         Grown
     }
 
-    class Deadweed : ModTile
+    class DeadweedTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = AssetDirectory.Tile + Name;
+            texture = AssetDirectory.Tile + name;
             return base.Autoload(ref name, ref texture);
         }
 
@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);
             TileObjectData.newTile.AnchorValidTiles = new int[]
             {
-				ModContent.TileType<AshenDust>()
+				ModContent.TileType<AshenDustTile>()
             };
             TileObjectData.newTile.AnchorAlternateTiles = new int[]
             {

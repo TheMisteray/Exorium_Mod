@@ -86,6 +86,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
     class ColorKnife : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 7;

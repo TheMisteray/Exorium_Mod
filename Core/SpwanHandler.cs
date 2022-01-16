@@ -10,7 +10,7 @@ namespace ExoriumMod.Core
     {
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
-            if (Main.LocalPlayer.GetModPlayer<ExoriumPlayer>().ZoneDeadlands)
+            if (Main.LocalPlayer.GetModPlayer<BiomeHandler>().ZoneDeadlands)
             {
                 pool.Clear();
                 pool.Add(NPCType<WightArcher>(), .1f);
