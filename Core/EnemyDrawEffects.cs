@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
+using ExoriumMod.Content.Dusts;
 
 namespace ExoriumMod.Core
 {
@@ -15,7 +14,7 @@ namespace ExoriumMod.Core
             {
                 if (Main.rand.Next(4) < 3)
                 {
-                    int dust = Dust.NewDust(npc.position - new Vector2(2f, 2f), npc.width + 4, npc.height + 4, ModContent.DustType<Dusts.Shadow>(), npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 100);
+                    int dust = Dust.NewDust(npc.position - new Vector2(2f, 2f), npc.width + 4, npc.height + 4, ModContent.DustType<Shadow>(), npc.velocity.X * 0.4f, npc.velocity.Y * 0.4f, 100);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity *= 1.8f;
                     Main.dust[dust].velocity.Y -= 0.5f;

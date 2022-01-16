@@ -38,7 +38,7 @@ namespace ExoriumMod.Content.Items.Tools
         {
             if (Main.rand.Next(0, 11) == 1)
             {
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustType<BlightDust>(), 0f, 0f, 50, default(Color), 1);
+                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustType<Dusts.BlightDust>(), 0f, 0f, 50, default(Color), 1);
             }
         }
 

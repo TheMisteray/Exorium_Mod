@@ -558,9 +558,9 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             {
                 Item.NewItem(npc.getRect(), ItemType<Items.Weapons.Ranger.AcidOrb>(), Main.rand.Next(21, 43));
                 if (Main.rand.NextBool(1))
-                    Item.NewItem(npc.getRect(), ItemType<Items.Weapons.Magic.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
+                    Item.NewItem(npc.getRect(), ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
                 else
-                    Item.NewItem(npc.getRect(), ItemType<Items.Weapons.Magic.Scrolls.SpellScrollShield>(), Main.rand.Next(1, 3));
+                    Item.NewItem(npc.getRect(), ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), Main.rand.Next(1, 3));
                 switch (Main.rand.Next(3))
                 {
                     case 0:

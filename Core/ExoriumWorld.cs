@@ -482,7 +482,7 @@ namespace ExoriumMod.Core
                             shadowAltarCoordsY = l;
                             break;
                         case 4:
-                            WorldGen.PlaceObject(k, l, (ushort)TileType<DarkbrickDoor.DarkbrickDoorClosed>());
+                            WorldGen.PlaceObject(k, l, (ushort)TileType<DarkbrickDoorClosed>());
                             break;
                     }
                 }
