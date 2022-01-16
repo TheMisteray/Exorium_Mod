@@ -1,13 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     public class BlightedOre : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             TileID.Sets.Ore[Type] = true;
@@ -23,7 +30,7 @@ namespace ExoriumMod.Tiles
             name.SetDefault("Blightsteel Ore");
             AddMapEntry(new Color(75,75,0), name);
 
-            drop = ItemType<Items.Placeables.BlightedOre>();
+            drop = ItemType<Items.Materials.Metals.BlightedOre>();
             soundType = 21;
             soundStyle = 1;
             mineResist = 3f;

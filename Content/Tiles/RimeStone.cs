@@ -1,16 +1,20 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.ObjectData;
-using Terraria.Enums;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     public class RimeStone : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             TileID.Sets.Ore[Type] = true;
@@ -25,7 +29,7 @@ namespace ExoriumMod.Tiles
             name.SetDefault("RimeStone");
             AddMapEntry(new Color(194, 248, 255), name);
 
-            drop = ItemType<Items.Placeables.RimeStone>();
+            drop = ItemType<Items.Materials.Metals.RimeStone>();
             soundType = 21;
             soundStyle = 1;
             mineResist = 1f;

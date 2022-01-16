@@ -1,14 +1,13 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Accessories
+namespace ExoriumMod.Content.Items.Accessories
 {
     class RitualBone : ModItem
     {
+        public override string Texture => AssetDirectory.Accessory + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("It seems that it is trying to lead you somewhere.");

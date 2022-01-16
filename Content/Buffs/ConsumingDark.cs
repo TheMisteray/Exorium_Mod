@@ -1,11 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Buffs
+namespace ExoriumMod.Content.Buffs
 {
     class ConsumingDark : ModBuff
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Buff + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Consuming Dark");
@@ -18,7 +24,7 @@ namespace ExoriumMod.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<NPCs.ExoriumGlobalNPC>().cDark = true;
+            npc.GetGlobalNPC<ExoriumGlobalNPC>().cDark = true;
         }
     }
 }

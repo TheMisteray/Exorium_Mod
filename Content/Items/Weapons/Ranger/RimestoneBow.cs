@@ -1,12 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.Items.Weapons.Ranger
+namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
     class RimestoneBow : ModItem
     {
+        public override string Texture => AssetDirectory.RangerWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Has a chance to shoot additional frostburn arrows");

@@ -1,12 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Dusts
+namespace ExoriumMod.Content.Dusts
 {
     class DeadlandWaterDust : ModDust
     {
-		public override void SetDefaults()
+        public override bool Autoload(ref string name, ref string texture)
+        {
+			texture = AssetDirectory.Dust + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
+        public override void SetDefaults()
 		{
 			updateType = 33;
 		}

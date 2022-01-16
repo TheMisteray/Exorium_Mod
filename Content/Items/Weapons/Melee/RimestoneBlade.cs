@@ -1,14 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using System;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
     class RimestoneBlade : ModItem
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Inflicts Frostburn \n" +
@@ -136,7 +139,7 @@ namespace ExoriumMod.Items.Weapons.Melee
         {
             projectile.rotation += .04f;
             for (int i = 0; i <= Math.Pow(projectile.ai[0], 2); i++)
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), projectile.oldVelocity.X, projectile.oldVelocity.Y, 0, Color.LightBlue);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Rainbow>(), projectile.oldVelocity.X, projectile.oldVelocity.Y, 0, Color.LightBlue);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

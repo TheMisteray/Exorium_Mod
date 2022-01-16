@@ -1,15 +1,21 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Localization;
 using Terraria.ObjectData;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class MorditeBar : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -24,7 +30,7 @@ namespace ExoriumMod.Tiles
         public override bool Drop(int i, int j)
         {
             Tile t = Main.tile[i, j];
-            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Placeables.MorditeBar>());
+            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.MorditeBar>());
             return base.Drop(i, j);
         }
     }

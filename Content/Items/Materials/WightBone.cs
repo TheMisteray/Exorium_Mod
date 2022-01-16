@@ -1,11 +1,12 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using ExoriumMod.Core;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Items.Materials
+namespace ExoriumMod.Content.Items.Materials
 {
     class WightBone : ModItem
     {
+        public override string Texture => AssetDirectory.Materials + Name;
+
         public override void SetDefaults()
         {
             item.value = 2;

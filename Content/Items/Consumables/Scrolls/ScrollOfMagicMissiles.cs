@@ -1,16 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Buffs;
 
-namespace ExoriumMod.Items.Weapons.Magic.Scrolls
+namespace ExoriumMod.Content.Items.Weapons.Magic.Scrolls
 {
     class ScrollOfMagicMissiles : ModItem
     {
+        public override string Texture => AssetDirectory.SpellScroll + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Casts Magic Missiles");
@@ -47,7 +47,7 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
         public override bool CanUseItem(Player player)
         {
             firstShot = 0;
-            return !player.HasBuff(BuffType<ScrollCooldown>());
+            return !player.HasBuff(BuffType<Buffs.ScrollCooldown>());
         }
 
         public override bool ConsumeItem(Player player)
@@ -57,7 +57,7 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<ScrollCooldown>(), 3600);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 3600);
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

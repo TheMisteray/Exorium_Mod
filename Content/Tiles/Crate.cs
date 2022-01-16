@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExorimMod.Dusts;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -7,12 +8,17 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class Crate : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileSolidTop[Type] = true;

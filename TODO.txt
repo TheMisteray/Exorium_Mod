@@ -14,6 +14,10 @@ ScrollCooldown Sprite - Done
 Other Rime Sprites - Done
 Codebase reorginization
 Change Mordite to darksteel?
+Shadowmancer Rewrite: variables to AI or syncing
+make Shadow cloak not use local variable
+Move Minions to their weapons and minion shots
+Rewrite recipies to be neater
 More D&D items
 	Molotov vest
 	Throwing rapiers

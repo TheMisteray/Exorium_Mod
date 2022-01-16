@@ -2,10 +2,12 @@
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Consumables.Bosses
+namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
     class BlightedSlimeBag : ModItem
-    {        
+    {
+        public override string Texture => Core.AssetDirectory.BlightedSlime + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Treasure Bag");

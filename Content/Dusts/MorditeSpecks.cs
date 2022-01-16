@@ -1,10 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Dusts
+namespace ExoriumMod.Content.Dusts
 {
     class MorditeSpecks : ModDust
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Dust + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void OnSpawn(Dust dust)
         {
             dust.velocity.Y *= 0.2f;

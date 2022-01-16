@@ -1,11 +1,18 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Buffs.Minions
+namespace ExoriumMod.Content.Buffs.Minions
 {
     class ShadowSummon : ModBuff
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.MinionBuff + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Shadow");

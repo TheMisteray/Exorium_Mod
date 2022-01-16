@@ -13,9 +13,4 @@
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Items\Consumables\Bosses\" />
-    <Folder Include="Content\Projectiles\Bosses\AssierJassad\" />
-    <Folder Include="Content\Projectiles\Bosses\BlightSlime\" />
-  </ItemGroup>
 </Project>

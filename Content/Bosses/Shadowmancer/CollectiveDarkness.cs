@@ -1,20 +1,20 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using ExoriumMod.Dusts;
-using ExoriumMod.NPCs.Bosses.Shadowmancer;
 
-namespace ExoriumMod.Projectiles.Bosses.AssierJassad
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     class CollectiveDarkness : ModProjectile
     {
+        public override string Texture => AssetDirectory.Shadowmancer + Name;
+
         public override void SetDefaults()
         {
-            //TODO: set width and height accordingly
             projectile.width = 90;
             projectile.height = 90;
             projectile.penetrate = -1;
@@ -25,12 +25,10 @@ namespace ExoriumMod.Projectiles.Bosses.AssierJassad
             projectile.alpha = 30;
         }
 
-        private int mirrors = 0;
-        private Vector2 trajectory = Vector2.Zero;
-
         private float PlayerTarget
         {
-            get { return projectile.localAI[0]; }
+            get => projectile.ai[1];
+            set => projectile.ai[1] = value;
         }
 
         private float power
@@ -56,18 +54,20 @@ namespace ExoriumMod.Projectiles.Bosses.AssierJassad
 
             if (projectile.timeLeft == 240)
             {
-                Player playerTarget = Main.player[(int)projectile.localAI[0]];
+                Vector2 trajectory = Vector2.Zero;
+                Player playerTarget = Main.player[(int)PlayerTarget];
                 trajectory = playerTarget.Center - projectile.Center;
                 float magnitude = (float)Math.Sqrt(trajectory.X * trajectory.X + trajectory.Y * trajectory.Y);
                 if (magnitude > 0)
                     trajectory *= 5f / magnitude;
                 else
                     trajectory = new Vector2(0f, 5f);
+
+                projectile.velocity = trajectory;
             }
 
             //Movement
-            projectile.velocity = trajectory;
-            trajectory *= 0.99f;
+            projectile.velocity *= 0.99f;
             projectile.rotation += 2;
 
             Resize();
@@ -153,20 +153,19 @@ namespace ExoriumMod.Projectiles.Bosses.AssierJassad
         {
             for (int i = 0; i < Main.npc.Length; i++)
             {
-                if (Main.npc[i].active && Main.npc[i].type == NPCType<NPCs.Bosses.Shadowmancer.ShadowAdd>() && Main.rand.NextFloat(1) <= percent)
+                if (Main.npc[i].active && Main.npc[i].type == NPCType<ShadowAdd>() && Main.rand.NextFloat(1) <= percent)
                 {
                     Main.NewText("Shadow", 100, 100, 100);
                     Main.npc[i].ai[2] = -1;
                     Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2, projectile.owner, projectile.whoAmI, 1);
                     //power++ created proj increases power by 1
                 }
-                else if (Main.npc[i].active && Main.npc[i].type == NPCType<NPCs.Bosses.Shadowmancer.MirrorEntity>() && Main.rand.NextFloat(1) <= percent)
+                else if (Main.npc[i].active && Main.npc[i].type == NPCType<ShadowAdd>() && Main.rand.NextFloat(1) <= percent)
                 {
                     Main.NewText("Mirror", 100, 100, 100);
                     Main.npc[i].ai[2] = -1;
                     Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2,  projectile.owner, projectile.whoAmI, 2);
                     //power += created proj increases power by 2
-                    mirrors++;
                 }
             }
         }
@@ -182,9 +181,10 @@ namespace ExoriumMod.Projectiles.Bosses.AssierJassad
             projectile.Center = projectile.position;
         }
     }
+
     internal class CollectiveFragment : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/Bosses/AssierJassad/DarkFragment";
+        public override string Texture => AssetDirectory.Shadowmancer + Name;
 
         public override void SetStaticDefaults()
         {
@@ -352,7 +352,7 @@ namespace ExoriumMod.Projectiles.Bosses.AssierJassad
     }
     internal class AbsorbedShadow : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/Bosses/AssierJassad/ShadowOrb";
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetStaticDefaults()
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -9,10 +10,16 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class ShadowAltar : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2);
@@ -55,9 +62,9 @@ namespace ExoriumMod.Tiles
         public override bool NewRightClick(int i, int j)
         {
             Player player = Main.LocalPlayer;
-            if (!NPC.AnyNPCs(NPCType<NPCs.Bosses.Shadowmancer.AssierJassad>()))
+            if (!NPC.AnyNPCs(NPCType<Bosses.Shadowmancer.AssierJassad>()))
             {
-                NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 100, NPCType<NPCs.Bosses.Shadowmancer.AssierJassad>(), 0, 0, 1, 100, 180);
+                NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 100, NPCType<Bosses.Shadowmancer.AssierJassad>(), 0, 0, 1, 100, 180);
                 return true;
             }
             return false;

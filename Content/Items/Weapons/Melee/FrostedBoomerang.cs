@@ -1,12 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
     class FrostedBoomerang : ModItem
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Frosted Chackram");

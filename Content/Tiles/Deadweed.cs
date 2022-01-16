@@ -1,11 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     //An enum on the 3 stages of herb growth.
     public enum PlantStage : byte
@@ -17,6 +18,12 @@ namespace ExoriumMod.Tiles
 
     class Deadweed : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         private const int FrameWidth = 16; //a field for readibilty and to kick out those magic numbers
 
         public override void SetDefaults()
@@ -50,7 +57,7 @@ namespace ExoriumMod.Tiles
 
             if (stage == PlantStage.Grown)
             {
-                Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.Placeables.DeadweedSeeds>(), 2);
+                Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.Tiles.DeadweedSeeds>(), 2);
                 Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.Materials.Deadweed>());
             }
             return false;

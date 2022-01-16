@@ -1,16 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Liquids
+namespace ExoriumMod.Content.Liquids
 {
     class DeadlandsWater : ModWaterStyle
     {
         public override bool Autoload(ref string name, ref string texture, ref string blockTexture)
         {
-            texture = "ExoriumMod/Liquids/DeadlandsWater";
-            blockTexture = "ExoriumMod/Liquids/DeadlandsWaterBlock";
+            texture = AssetDirectory.Liquid + Name;
+            blockTexture = texture + "Block";
             return base.Autoload(ref name, ref texture, ref blockTexture);
         }
 
@@ -42,7 +43,7 @@ namespace ExoriumMod.Liquids
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            texture = "ExoriumMod/Liquids/DeadlandsWaterfall";
+            texture = AssetDirectory.Liquid + "DeadlandsWaterfall";
             return base.Autoload(ref name, ref texture);
         }
     }

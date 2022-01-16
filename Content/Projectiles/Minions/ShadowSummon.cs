@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
 
-namespace ExoriumMod.Projectiles.Minions
+namespace ExoriumMod.Content.Projectiles.Minions
 {
     class ShadowSummon : ModProjectile
     {

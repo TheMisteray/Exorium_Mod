@@ -1,15 +1,18 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-namespace ExoriumMod.NPCs.Town
+
+namespace ExoriumMod.Content.NPCs.Town
 {
     [AutoloadHead]
     class Lunatic : ModNPC
     {
+        public override string Texture => AssetDirectory.TownNPC + Name;
+        public override string HeadTexture => Texture + "_Head";
+
         public override bool Autoload(ref string name)
         {
             name = "Lunatic";

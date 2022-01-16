@@ -1,15 +1,15 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ExoriumMod.Dusts;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
-using System;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
     public class BlightSword : ModItem
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blighted Greatsword");
@@ -42,7 +42,7 @@ namespace ExoriumMod.Items.Weapons.Melee
         {
             if (Main.rand.Next(0, 6) == 1)
             {
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustType<BlightDust>(), 0f, 0f, 50, default(Color), 1);
+                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustType<Dusts.BlightDust>(), 0f, 0f, 50, default(Color), 1);
             }
         }
 
@@ -123,7 +123,7 @@ namespace ExoriumMod.Items.Weapons.Melee
                         for (int i = 0; i < 360; i += (10 - (int)strength))
                         {
                             Vector2 rotatedDist = distance.RotatedBy(MathHelper.ToRadians(i));
-                            Dust.NewDust(player.Center, 0, 0, DustType<BlightDust>(), rotatedDist.X, rotatedDist.Y, 0, default, Main.rand.NextFloat(1f + (.2f * strength)));
+                            Dust.NewDust(player.Center, 0, 0, DustType<Dusts.BlightDust>(), rotatedDist.X, rotatedDist.Y, 0, default, Main.rand.NextFloat(1f + (.2f * strength)));
                         }
                         Main.PlaySound(SoundID.MaxMana, projectile.Center);
                     }
@@ -147,7 +147,7 @@ namespace ExoriumMod.Items.Weapons.Melee
                     Vector2 blade = bladeLength.RotatedBy(projectile.rotation + MathHelper.PiOver2);
                     blade *= Main.rand.NextFloat(projectile.width / 2 - 30) + 30;
                     //dust along it
-                    Dust.NewDust(player.Center + blade, 0, 0, DustType<BlightDust>(), Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-2, 2), 0, default, Main.rand.NextFloat(.5f + (.3f * strength)));
+                    Dust.NewDust(player.Center + blade, 0, 0, DustType<Dusts.BlightDust>(), Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-2, 2), 0, default, Main.rand.NextFloat(.5f + (.3f * strength)));
                 }
             }
             else if (state == 1f)
@@ -169,7 +169,7 @@ namespace ExoriumMod.Items.Weapons.Melee
                             //Dust burst at hit location, more dust, larger dust, and greater spread at high strength
                             Vector2 dustSpeed = new Vector2(0, Main.rand.NextFloat(8 + strength * 2));
                             Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
-                            Dust.NewDust(player.Center + hitSpot, 0, 0, DustType<BlightDust>(), perturbedDustSpeed.X, perturbedDustSpeed.Y, 0, default, Main.rand.NextFloat(1f + (.2f * strength)));
+                            Dust.NewDust(player.Center + hitSpot, 0, 0, DustType<Dusts.BlightDust>(), perturbedDustSpeed.X, perturbedDustSpeed.Y, 0, default, Main.rand.NextFloat(1f + (.2f * strength)));
                         }
                         //ending
                         Main.PlaySound(SoundID.Item89, projectile.Center);

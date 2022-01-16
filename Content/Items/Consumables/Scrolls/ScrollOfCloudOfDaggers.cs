@@ -1,16 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Buffs;
-using ExoriumMod.Projectiles;
 using System;
 
-namespace ExoriumMod.Items.Weapons.Magic.Scrolls
+namespace ExoriumMod.Content.Items.Weapons.Magic.Scrolls
 {
     class ScrollOfCloudOfDaggers : ModItem
     {
+        public override string Texture => AssetDirectory.SpellScroll + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Casts Cloud of Daggers");
@@ -41,7 +42,7 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
 
         public override bool CanUseItem(Player player)
         {
-            return !player.HasBuff(BuffType<ScrollCooldown>());
+            return !player.HasBuff(BuffType<Buffs.ScrollCooldown>());
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -51,7 +52,7 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<ScrollCooldown>(), 5400);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 5400);
         }
     }
 

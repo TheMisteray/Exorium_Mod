@@ -1,17 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
-using ExoriumMod.Dusts;
 
 
-namespace ExoriumMod.Projectiles.Minions
+namespace ExoriumMod.Content.Projectiles.Minions
 {
     class ShadowOrbSummon : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/Bosses/AssierJassad/ShadowOrb";
+        public override string Texture => AssetDirectory.Shadowmancer + "ShadowOrb";
 
         public override void SetDefaults()
         {
@@ -47,7 +46,7 @@ namespace ExoriumMod.Projectiles.Minions
         {
             for (int k = 0; k < 12; k++)
             {
-                int dust = Dust.NewDust(projectile.position - projectile.velocity, projectile.width, projectile.height, DustType<Shadow>(), projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
+                int dust = Dust.NewDust(projectile.position - projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Shadow>(), projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
             }
             Main.PlaySound(SoundID.Item27, projectile.position);
             Main.player[projectile.owner].AddBuff(BuffType<Buffs.Minions.ShadowSummon>(), 1);

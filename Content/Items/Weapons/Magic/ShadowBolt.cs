@@ -1,13 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Weapons.Magic
+namespace ExoriumMod.Content.Items.Weapons.Magic
 {
     class ShadowBolt : ModItem
     {
+        public override string Texture => AssetDirectory.MagicWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Shoots shadowbolts that split apart on impact");
@@ -57,7 +60,7 @@ namespace ExoriumMod.Items.Weapons.Magic
             if (projectile.ai[0] == 0)
             {
                 for (int i = 0; i < 6; i++)
-                    Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>());
+                    Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Shadow>());
             }
             else
             {
@@ -66,7 +69,7 @@ namespace ExoriumMod.Items.Weapons.Magic
                 projectile.height = (int)(projectile.height * projectile.scale);
                 projectile.velocity.Y += .5f;
                 for (int i = 0; i < 2; i++)
-                    Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>());
+                    Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Shadow>());
                 if (projectile.scale <= .01)
                     projectile.Kill();
             }

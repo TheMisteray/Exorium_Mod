@@ -1,15 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
 
-namespace ExoriumMod.Projectiles.Bosses.BlightSlime
+namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
     class SpikePlacer : ModProjectile
     {
-        float spikeCounter = 0;
-        int placeTimer = 1;
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetDefaults()
         {
@@ -21,6 +21,20 @@ namespace ExoriumMod.Projectiles.Bosses.BlightSlime
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
             projectile.alpha = 255;
+            projectile.ai[0] = 0;
+            projectile.ai[1] = 1;
+        }
+
+        public float spikeCounter
+        {
+            get => projectile.ai[0];
+            set => projectile.ai[0] = value;
+        }
+
+        public float placeTimer
+        {
+            get => projectile.ai[1];
+            set => projectile.ai[1] = value;
         }
 
         public override void AI()

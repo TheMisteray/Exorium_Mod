@@ -1,4 +1,5 @@
-﻿using ExoriumMod.Dusts;
+﻿using ExoriumMod.Core;
+using ExoriumMod.Dusts;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,7 +7,7 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.NPCs.Bosses.Shadowmancer
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     class ShadowAdd : ModNPC
     {

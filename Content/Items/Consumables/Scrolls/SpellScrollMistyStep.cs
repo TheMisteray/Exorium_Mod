@@ -1,15 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
-using ExoriumMod.Buffs;
 
-namespace ExoriumMod.Items.Weapons.Magic.Scrolls
+namespace ExoriumMod.Content.Items.Weapons.Magic.Scrolls
 {
     class SpellScrollMistyStep : ModItem
     {
+        public override string Texture => AssetDirectory.SpellScroll + Name;
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Casts Misty Step \n" +
@@ -39,12 +39,12 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
 
         public override bool CanUseItem(Player player)
         {
-            return !player.HasBuff(BuffType<ScrollCooldown>());
+            return !player.HasBuff(BuffType<Buffs.ScrollCooldown>());
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<ScrollCooldown>(), 10);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 10);
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

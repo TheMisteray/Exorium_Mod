@@ -1,12 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Accessories
+namespace ExoriumMod.Content.Items.Accessories
 {
     class GloomAmulet : ModItem
     {
+        public override string Texture => AssetDirectory.Accessory + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("20% reduced magic, melee and ranged damage \n" +

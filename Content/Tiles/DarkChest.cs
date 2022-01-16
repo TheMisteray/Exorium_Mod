@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -9,10 +10,16 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class DarkChest : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileSpelunker[Type] = true;
@@ -42,7 +49,7 @@ namespace ExoriumMod.Tiles
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Containers };
             chest = "Dark Chest";
-            chestDrop = ItemType<Items.Placeables.DarkChest>();
+            chestDrop = ItemType<Items.Tiles.DarkChest>();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].frameX / 36);
@@ -199,7 +206,7 @@ namespace ExoriumMod.Tiles
                 player.showItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : "Dark Chest";
                 if (player.showItemIconText == "Dark Chest")
                 {
-                    player.showItemIcon2 = ItemType<Items.Placeables.DarkChest>();
+                    player.showItemIcon2 = ItemType<Items.Tiles.DarkChest>();
                     if (Main.tile[left, top].frameX / 36 == 1)
                         player.showItemIcon2 = ItemType<Items.Consumables.DarkKey>();
                     player.showItemIconText = "";

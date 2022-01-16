@@ -1,15 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod;
 
-namespace ExoriumMod.Items.Consumables.Bosses
+namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
     class TaintedSludge : ModItem
     {
+        public override string Texture => AssetDirectory.BlightedSlime + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Summons the Blighted Slime");

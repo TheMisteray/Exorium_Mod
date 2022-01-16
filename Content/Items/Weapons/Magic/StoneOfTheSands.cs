@@ -1,15 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
-using ExoriumMod.Projectiles;
 
-namespace ExoriumMod.Items.Weapons.Magic
+namespace ExoriumMod.Content.Items.Weapons.Magic
 {
     class StoneOfTheSands : ModItem
     {
+        public override string Texture => AssetDirectory.MagicWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Stone of the Sands");

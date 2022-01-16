@@ -1,17 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
-using Terraria.Graphics.Shaders;
-using ExoriumMod.Dusts;
+using Terraria.ID;
 
-namespace ExoriumMod.Projectiles.Minions
+namespace ExoriumMod.Content.Projectiles.Minions
 {
     class BlightSlime : ModProjectile
     {
-		private static int ID = 266;
+		public override string Texture => AssetDirectory.Minion + Name;
 
         public override void SetStaticDefaults()
         {
@@ -78,16 +77,16 @@ namespace ExoriumMod.Projectiles.Minions
 				flag6 = false;
 				flag7 = false;
 				int num113 = 85;
-				flag9 = (ID >= 191 && ID <= 194);
-				if (ID == 324)
+				flag9 = (projectile.type >= 191 && projectile.type <= 194);
+				if (projectile.type == 324)
 				{
 					num113 = 120;
 				}
-				if (ID == 112)
+				if (projectile.type == 112)
 				{
 					num113 = 100;
 				}
-				if (ID == 127)
+				if (projectile.type == 127)
 				{
 					num113 = 50;
 				}
@@ -104,7 +103,7 @@ namespace ExoriumMod.Projectiles.Minions
 				{
 					num113 = 60 + 30 * projectile.minionPos;
 				}
-				if (ID == 111)
+				if (projectile.type == 111)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -115,7 +114,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 112)
+				if (projectile.type == 112)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -126,7 +125,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 334)
+				if (projectile.type == 334)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -137,7 +136,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 353)
+				if (projectile.type == 353)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -148,7 +147,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 127)
+				if (projectile.type == 127)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -159,7 +158,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 175)
+				if (projectile.type == 175)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -170,7 +169,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 197)
+				if (projectile.type == 197)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -181,7 +180,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 198)
+				if (projectile.type == 198)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -192,7 +191,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 199)
+				if (projectile.type == 199)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -203,7 +202,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 200)
+				if (projectile.type == 200)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -214,7 +213,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 208)
+				if (projectile.type == 208)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -225,7 +224,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 209)
+				if (projectile.type == 209)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -236,7 +235,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 210)
+				if (projectile.type == 210)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -247,7 +246,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 324)
+				if (projectile.type == 324)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -258,7 +257,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 313)
+				if (projectile.type == 313)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -269,7 +268,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 314)
+				if (projectile.type == 314)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -280,7 +279,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 211)
+				if (projectile.type == 211)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -291,7 +290,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 236)
+				if (projectile.type == 236)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -302,7 +301,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 499)
+				if (projectile.type == 499)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -313,7 +312,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 268)
+				if (projectile.type == 268)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -324,7 +323,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 269)
+				if (projectile.type == 269)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -335,7 +334,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 319)
+				if (projectile.type == 319)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -346,7 +345,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 380)
+				if (projectile.type == 380)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -368,7 +367,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = Main.rand.Next(2, 10);
 					}
 				}
-				if (ID >= 390 && ID <= 392)
+				if (projectile.type >= 390 && projectile.type <= 392)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -379,7 +378,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (ID == 398)
+				if (projectile.type == 398)
 				{
 					if (Main.player[projectile.owner].dead)
 					{
@@ -390,7 +389,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.timeLeft = 2;
 					}
 				}
-				if (flag9 || true || (ID >= 390 && ID <= 392))
+				if (flag9 || true || (projectile.type >= 390 && projectile.type <= 392))
 				{
 					num113 = 10;
 					int num170 = 40 * (projectile.minionPos + 1) * Main.player[projectile.owner].direction;
@@ -411,7 +410,7 @@ namespace ExoriumMod.Projectiles.Minions
 				{
 					flag2 = true;
 				}
-				if (ID == 175)
+				if (projectile.type == 175)
 				{
 					float num169 = 0.1f;
 					projectile.tileCollide = false;
@@ -419,7 +418,7 @@ namespace ExoriumMod.Projectiles.Minions
 					Vector2 vector15 = new Vector2(projectile.position.X + (float)projectile.width * 0.5f, projectile.position.Y + (float)projectile.height * 0.5f);
 					float num167 = Main.player[projectile.owner].position.X + (float)(Main.player[projectile.owner].width / 2) - vector15.X;
 					float num166 = Main.player[projectile.owner].position.Y + (float)(Main.player[projectile.owner].height / 2) - vector15.Y;
-					if (ID == 127)
+					if (projectile.type == 127)
 					{
 						num166 = Main.player[projectile.owner].position.Y - vector15.Y;
 					}
@@ -517,7 +516,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.frame = 0;
 					}
 				}
-				else if (ID == 197)
+				else if (projectile.type == 197)
 				{
 					float num162 = 0.1f;
 					projectile.tileCollide = false;
@@ -525,7 +524,7 @@ namespace ExoriumMod.Projectiles.Minions
 					Vector2 vector14 = new Vector2(projectile.position.X + (float)projectile.width * 0.5f, projectile.position.Y + (float)projectile.height * 0.5f);
 					float num160 = Main.player[projectile.owner].position.X + (float)(Main.player[projectile.owner].width / 2) - vector14.X;
 					float num159 = Main.player[projectile.owner].position.Y + (float)(Main.player[projectile.owner].height / 2) - vector14.Y;
-					if (ID == 127)
+					if (projectile.type == 127)
 					{
 						num159 = Main.player[projectile.owner].position.Y - vector14.Y;
 					}
@@ -665,9 +664,9 @@ namespace ExoriumMod.Projectiles.Minions
 				}
 				else
 				{
-					if (ID != 198 && ID != 380)
+					if (projectile.type != 198 && projectile.type != 380)
 					{
-						if (ID == 211)
+						if (projectile.type == 211)
 						{
 							float num154 = 0.2f;
 							float num153 = 5f;
@@ -834,7 +833,7 @@ namespace ExoriumMod.Projectiles.Minions
 							}
 							return;
 						}
-						if (ID == 199)
+						if (projectile.type == 199)
 						{
 							float num142 = 0.1f;
 							projectile.tileCollide = false;
@@ -844,7 +843,7 @@ namespace ExoriumMod.Projectiles.Minions
 							float num139 = Main.player[projectile.owner].position.Y + (float)(Main.player[projectile.owner].height / 2) - vector11.Y;
 							num139 -= 60f;
 							num140 -= 2f;
-							if (ID == 127)
+							if (projectile.type == 127)
 							{
 								num139 = Main.player[projectile.owner].position.Y - vector11.Y;
 							}
@@ -963,15 +962,15 @@ namespace ExoriumMod.Projectiles.Minions
 						if (projectile.ai[1] == 0f)
 						{
 							int num133 = 500;
-							if (ID == 127)
+							if (projectile.type == 127)
 							{
 								num133 = 200;
 							}
-							if (ID == 208)
+							if (projectile.type == 208)
 							{
 								num133 = 300;
 							}
-							if (flag9 || true || (ID >= 390 && ID <= 392))
+							if (flag9 || true || (projectile.type >= 390 && projectile.type <= 392))
 							{
 								num133 += 40 * projectile.minionPos;
 								if (projectile.localAI[0] > 0f)
@@ -982,7 +981,7 @@ namespace ExoriumMod.Projectiles.Minions
 								{
 									num133 += 100;
 								}
-								if (ID >= 390 && ID <= 392 && projectile.localAI[0] > 0f)
+								if (projectile.type >= 390 && projectile.type <= 392 && projectile.localAI[0] > 0f)
 								{
 									num133 += 400;
 								}
@@ -1005,7 +1004,7 @@ namespace ExoriumMod.Projectiles.Minions
 							{
 								if (Math.Abs(num132) > 300f)
 								{
-									if (!flag9 && false && (ID < 390 || ID > 392))
+									if (!flag9 && false && (projectile.type < 390 || projectile.type > 392))
 									{
 										goto IL_282c;
 									}
@@ -1021,7 +1020,7 @@ namespace ExoriumMod.Projectiles.Minions
 						goto IL_289c;
 					}
 					float num33 = 0.4f;
-					if (ID == 380)
+					if (projectile.type == 380)
 					{
 						num33 = 0.3f;
 					}
@@ -1034,13 +1033,13 @@ namespace ExoriumMod.Projectiles.Minions
 					num31 += (float)Main.rand.Next(-10, 21);
 					num31 += 60f * (0f - (float)Main.player[projectile.owner].direction);
 					num30 -= 60f;
-					if (ID == 127)
+					if (projectile.type == 127)
 					{
 						num30 = Main.player[projectile.owner].position.Y - vector3.Y;
 					}
 					float num25 = (float)Math.Sqrt((double)(num31 * num31 + num30 * num30));
 					float num24 = 14f;
-					if (ID == 380)
+					if (projectile.type == 380)
 					{
 						num24 = 6f;
 					}
@@ -1062,7 +1061,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					else
 					{
-						if (ID == 380)
+						if (projectile.type == 380)
 						{
 							if (num25 < 100f)
 							{
@@ -1073,7 +1072,7 @@ namespace ExoriumMod.Projectiles.Minions
 								num33 = 0.4f;
 							}
 						}
-						else if (ID == 198)
+						else if (projectile.type == 198)
 						{
 							if (num25 < 100f)
 							{
@@ -1132,7 +1131,7 @@ namespace ExoriumMod.Projectiles.Minions
 					projectile.rotation = projectile.velocity.X * 0.05f;
 					projectile.frameCounter++;
 					int num22 = 2;
-					if (ID == 380)
+					if (projectile.type == 380)
 					{
 						num22 = 5;
 					}
@@ -1149,7 +1148,7 @@ namespace ExoriumMod.Projectiles.Minions
 			}
 			return;
 		IL_282c:
-			if (ID != 324)
+			if (projectile.type != 324)
 			{
 				if (num132 > 0f && projectile.velocity.Y < 0f)
 				{
@@ -1163,7 +1162,7 @@ namespace ExoriumMod.Projectiles.Minions
 			projectile.ai[0] = 1f;
 			goto IL_289c;
 		IL_289c:
-			if (ID == 209 && projectile.ai[0] != 0f)
+			if (projectile.type == 209 && projectile.ai[0] != 0f)
 			{
 				if (Main.player[projectile.owner].velocity.Y == 0f && projectile.alpha >= 100)
 				{
@@ -1186,7 +1185,7 @@ namespace ExoriumMod.Projectiles.Minions
 			{
 				float num130 = 0.2f;
 				int num129 = 200;
-				if (ID == 127)
+				if (projectile.type == 127)
 				{
 					num129 = 100;
 				}
@@ -1198,7 +1197,7 @@ namespace ExoriumMod.Projectiles.Minions
 				projectile.tileCollide = false;
 				Vector2 vector9 = new Vector2(projectile.position.X + (float)projectile.width * 0.5f, projectile.position.Y + (float)projectile.height * 0.5f);
 				float num128 = Main.player[projectile.owner].position.X + (float)(Main.player[projectile.owner].width / 2) - vector9.X;
-				if (flag9 || true || (ID >= 390 && ID <= 392))
+				if (flag9 || true || (projectile.type >= 390 && projectile.type <= 392))
 				{
 					num128 -= (float)(40 * Main.player[projectile.owner].direction);
 					float num127 = 700f;
@@ -1235,22 +1234,22 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 				}
 				float num123 = Main.player[projectile.owner].position.Y + (float)(Main.player[projectile.owner].height / 2) - vector9.Y;
-				if (ID == 127)
+				if (projectile.type == 127)
 				{
 					num123 = Main.player[projectile.owner].position.Y - vector9.Y;
 				}
 				float num122 = (float)Math.Sqrt((double)(num128 * num128 + num123 * num123));
 				float num121 = 10f;
 				float num120 = num122;
-				if (ID == 111)
+				if (projectile.type == 111)
 				{
 					num121 = 11f;
 				}
-				if (ID == 127)
+				if (projectile.type == 127)
 				{
 					num121 = 9f;
 				}
-				if (ID == 324)
+				if (projectile.type == 324)
 				{
 					num121 = 20f;
 				}
@@ -1263,7 +1262,7 @@ namespace ExoriumMod.Projectiles.Minions
 						num121 = Math.Abs(Main.player[projectile.owner].velocity.X) + Math.Abs(Main.player[projectile.owner].velocity.Y);
 					}
 				}
-				if (ID == 208 && Math.Abs(Main.player[projectile.owner].velocity.X) + Math.Abs(Main.player[projectile.owner].velocity.Y) > 4f)
+				if (projectile.type == 208 && Math.Abs(Main.player[projectile.owner].velocity.X) + Math.Abs(Main.player[projectile.owner].velocity.Y) > 4f)
 				{
 					num129 = -1;
 				}
@@ -1286,7 +1285,7 @@ namespace ExoriumMod.Projectiles.Minions
 					num128 *= num122;
 					num123 *= num122;
 				}
-				if (ID == 324)
+				if (projectile.type == 324)
 				{
 					if (num120 > 1000f)
 					{
@@ -1370,11 +1369,11 @@ namespace ExoriumMod.Projectiles.Minions
 						}
 					}
 				}
-				if (ID == 111)
+				if (projectile.type == 111)
 				{
 					projectile.frame = 7;
 				}
-				if (ID == 112)
+				if (projectile.type == 112)
 				{
 					projectile.frame = 2;
 				}
@@ -1383,7 +1382,7 @@ namespace ExoriumMod.Projectiles.Minions
 					projectile.frame = Main.rand.Next(12, 18);
 					projectile.frameCounter = 0;
 				}
-				if (ID != 313)
+				if (projectile.type != 313)
 				{
 					if ((double)projectile.velocity.X > 0.5)
 					{
@@ -1394,7 +1393,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.spriteDirection = 1;
 					}
 				}
-				if (ID == 398)
+				if (projectile.type == 398)
 				{
 					if ((double)projectile.velocity.X > 0.5)
 					{
@@ -1405,7 +1404,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.spriteDirection = -1;
 					}
 				}
-				if (ID == 112)
+				if (projectile.type == 112)
 				{
 					if (projectile.spriteDirection == -1)
 					{
@@ -1416,7 +1415,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.57f;
 					}
 				}
-				else if (ID >= 390 && ID <= 392)
+				else if (projectile.type >= 390 && projectile.type <= 392)
 				{
 					int num116 = (int)(projectile.Center.X / 16f);
 					int num115 = (int)(projectile.Center.Y / 16f);
@@ -1453,7 +1452,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.rotation = projectile.velocity.X * 0.1f;
 					}
 				}
-				else if (ID == 334)
+				else if (projectile.type == 334)
 				{
 					projectile.frameCounter++;
 					if (projectile.frameCounter > 1)
@@ -1467,7 +1466,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					projectile.rotation = projectile.velocity.X * 0.1f;
 				}
-				else if (ID == 353)
+				else if (projectile.type == 353)
 				{
 					projectile.frameCounter++;
 					if (projectile.frameCounter > 6)
@@ -1481,7 +1480,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					projectile.rotation = projectile.velocity.X * 0.05f;
 				}
-				else if (ID == 127)
+				else if (projectile.type == 127)
 				{
 					projectile.frameCounter += 3;
 					if (projectile.frameCounter > 6)
@@ -1495,7 +1494,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					projectile.rotation = projectile.velocity.X * 0.1f;
 				}
-				else if (ID == 269)
+				else if (projectile.type == 269)
 				{
 					if (projectile.frame == 6)
 					{
@@ -1531,7 +1530,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					projectile.rotation = projectile.velocity.X * 0.1f;
 				}
-				else if (ID == 324)
+				else if (projectile.type == 324)
 				{
 					projectile.frameCounter++;
 					if (projectile.frameCounter > 1)
@@ -1549,7 +1548,7 @@ namespace ExoriumMod.Projectiles.Minions
 					{
 					}
 				}
-				else if (ID == 268)
+				else if (projectile.type == 268)
 				{
 					projectile.frameCounter++;
 					if (projectile.frameCounter > 4)
@@ -1563,7 +1562,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.58f;
 				}
-				else if (ID == 200)
+				else if (projectile.type == 200)
 				{
 					projectile.frameCounter += 3;
 					if (projectile.frameCounter > 6)
@@ -1577,7 +1576,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					projectile.rotation = projectile.velocity.X * 0.1f;
 				}
-				else if (ID == 208)
+				else if (projectile.type == 208)
 				{
 					projectile.rotation = projectile.velocity.X * 0.075f;
 					projectile.frameCounter++;
@@ -1595,7 +1594,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.frame = 1;
 					}
 				}
-				else if (ID == 236)
+				else if (projectile.type == 236)
 				{
 					projectile.rotation = projectile.velocity.Y * 0.05f * (float)projectile.direction;
 					if (projectile.velocity.Y < 0f)
@@ -1620,7 +1619,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.frame = 9;
 					}
 				}
-				else if (ID == 499)
+				else if (projectile.type == 499)
 				{
 					projectile.rotation = projectile.velocity.Y * 0.05f * (float)projectile.direction;
 					if (projectile.velocity.Y < 0f)
@@ -1645,7 +1644,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.frame = 8;
 					}
 				}
-				else if (ID == 314)
+				else if (projectile.type == 314)
 				{
 					projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.58f;
 					projectile.frameCounter++;
@@ -1663,7 +1662,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.frame = 7;
 					}
 				}
-				else if (ID == 319)
+				else if (projectile.type == 319)
 				{
 					projectile.rotation = projectile.velocity.X * 0.05f;
 					projectile.frameCounter++;
@@ -1681,7 +1680,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.frame = 6;
 					}
 				}
-				else if (ID == 210)
+				else if (projectile.type == 210)
 				{
 					projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.58f;
 					projectile.frameCounter += 3;
@@ -1699,7 +1698,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.frame = 7;
 					}
 				}
-				else if (ID == 313)
+				else if (projectile.type == 313)
 				{
 					projectile.position.Y = projectile.position.Y + (float)projectile.height;
 					projectile.height = 54;
@@ -1711,7 +1710,7 @@ namespace ExoriumMod.Projectiles.Minions
 					projectile.frameCounter = 0;
 					projectile.frame = 11;
 				}
-				else if (ID == 398)
+				else if (projectile.type == 398)
 				{
 					projectile.frameCounter++;
 					if (projectile.frameCounter > 1)
@@ -1880,7 +1879,7 @@ namespace ExoriumMod.Projectiles.Minions
 				bool flag5 = false;
 				Vector2 vector6 = Vector2.Zero;
 				bool flag4 = false;
-				if (true || (ID >= 390 && ID <= 392))
+				if (true || (projectile.type >= 390 && projectile.type <= 392))
 				{
 					float num81 = (float)(40 * projectile.minionPos);
 					int num80 = 60;
@@ -1951,7 +1950,7 @@ namespace ExoriumMod.Projectiles.Minions
 								}
 							}
 						}
-						if (ID >= 390 && ID <= 392 && !Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
+						if (projectile.type >= 390 && projectile.type <= 392 && !Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
 						{
 							projectile.tileCollide = true;
 						}
@@ -1963,7 +1962,7 @@ namespace ExoriumMod.Projectiles.Minions
 						{
 							flag5 = true;
 							vector6 = new Vector2(num79, num78) - projectile.Center;
-							if (ID >= 390 && ID <= 392)
+							if (projectile.type >= 390 && projectile.type <= 392)
 							{
 								if (Main.npc[num75].position.Y > projectile.position.Y + (float)projectile.height)
 								{
@@ -2047,7 +2046,7 @@ namespace ExoriumMod.Projectiles.Minions
 						{
 							num66 = 150f;
 						}
-						if (ID >= 390 && ID <= 392)
+						if (projectile.type >= 390 && projectile.type <= 392)
 						{
 							num66 = 500f;
 							if ((double)projectile.position.Y > Main.worldSurface * 16.0)
@@ -2070,7 +2069,7 @@ namespace ExoriumMod.Projectiles.Minions
 							}
 						}
 						bool flag3 = false;
-						if (ID >= 390 && ID <= 392 && projectile.localAI[1] > 0f)
+						if (projectile.type >= 390 && projectile.type <= 392 && projectile.localAI[1] > 0f)
 						{
 							flag3 = true;
 							projectile.localAI[1] -= 1f;
@@ -2142,7 +2141,7 @@ namespace ExoriumMod.Projectiles.Minions
 				{
 					projectile.direction = Main.player[projectile.owner].direction;
 				}
-				else if (ID >= 390 && ID <= 392)
+				else if (projectile.type >= 390 && projectile.type <= 392)
 				{
 					int num62 = (int)(projectile.Center.X / 16f);
 					int num61 = (int)(projectile.Center.Y / 16f);
@@ -2151,7 +2150,7 @@ namespace ExoriumMod.Projectiles.Minions
 						flag2 = (flag = false);
 					}
 				}
-				if (ID == 127)
+				if (projectile.type == 127)
 				{
 					if ((double)projectile.rotation > -0.1 && (double)projectile.rotation < 0.1)
 					{
@@ -2166,42 +2165,42 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.rotation -= 0.1f;
 					}
 				}
-				else if (ID != 313 && !flag4)
+				else if (projectile.type != 313 && !flag4)
 				{
 					projectile.rotation = 0f;
 				}
-				if (ID < 390 || ID > 392)
+				if (projectile.type < 390 || projectile.type > 392)
 				{
 					projectile.tileCollide = true;
 				}
 				float num60 = 0.08f;
 				float num59 = 6.5f;
-				if (ID == 127)
+				if (projectile.type == 127)
 				{
 					num59 = 2f;
 					num60 = 0.04f;
 				}
-				if (ID == 112)
+				if (projectile.type == 112)
 				{
 					num59 = 6f;
 					num60 = 0.06f;
 				}
-				if (ID == 334)
+				if (projectile.type == 334)
 				{
 					num59 = 8f;
 					num60 = 0.08f;
 				}
-				if (ID == 268)
+				if (projectile.type == 268)
 				{
 					num59 = 8f;
 					num60 = 0.4f;
 				}
-				if (ID == 324)
+				if (projectile.type == 324)
 				{
 					num60 = 0.1f;
 					num59 = 3f;
 				}
-				if (flag9 || true || (ID >= 390 && ID <= 392))
+				if (flag9 || true || (projectile.type >= 390 && projectile.type <= 392))
 				{
 					num59 = 6f;
 					num60 = 0.2f;
@@ -2211,7 +2210,7 @@ namespace ExoriumMod.Projectiles.Minions
 						num60 = 0.3f;
 					}
 				}
-				if (ID >= 390 && ID <= 392)
+				if (projectile.type >= 390 && projectile.type <= 392)
 				{
 					num60 *= 2f;
 				}
@@ -2245,7 +2244,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.X = 0f;
 					}
 				}
-				if (ID == 208)
+				if (projectile.type == 208)
 				{
 					projectile.velocity.X = projectile.velocity.X * 0.95f;
 					if ((double)projectile.velocity.X > -0.1 && (double)projectile.velocity.X < 0.1)
@@ -2259,7 +2258,7 @@ namespace ExoriumMod.Projectiles.Minions
 				{
 					int num58 = (int)(projectile.position.X + (float)(projectile.width / 2)) / 16;
 					int j4 = (int)(projectile.position.Y + (float)(projectile.height / 2)) / 16;
-					if (ID == 236)
+					if (projectile.type == 236)
 					{
 						num58 += projectile.direction;
 					}
@@ -2281,12 +2280,12 @@ namespace ExoriumMod.Projectiles.Minions
 				{
 					flag6 = true;
 				}
-				if (ID == 268 && projectile.frameCounter < 10)
+				if (projectile.type == 268 && projectile.frameCounter < 10)
 				{
 					flag7 = false;
 				}
 				Collision.StepUp(ref projectile.position, ref projectile.velocity, projectile.width, projectile.height, ref projectile.stepSpeed, ref projectile.gfxOffY, 1, false, 0);
-				if (projectile.velocity.Y == 0f || ID == 200)
+				if (projectile.velocity.Y == 0f || projectile.type == 200)
 				{
 					if (!flag6 && (projectile.velocity.X < 0f || projectile.velocity.X > 0f))
 					{
@@ -2306,9 +2305,9 @@ namespace ExoriumMod.Projectiles.Minions
 					{
 						int num55 = (int)(projectile.position.X + (float)(projectile.width / 2)) / 16;
 						int num54 = (int)(projectile.position.Y + (float)projectile.height) / 16 + 1;
-						if (WorldGen.SolidTile(num55, num54) || Main.tile[num55, num54].halfBrick() || Main.tile[num55, num54].slope() > 0 || ID == 200)
+						if (WorldGen.SolidTile(num55, num54) || Main.tile[num55, num54].halfBrick() || Main.tile[num55, num54].slope() > 0 || projectile.type == 200)
 						{
-							if (ID == 200)
+							if (projectile.type == 200)
 							{
 								projectile.velocity.Y = -3.1f;
 							}
@@ -2353,7 +2352,7 @@ namespace ExoriumMod.Projectiles.Minions
 									projectile.velocity.Y = -9.1f;
 								}
 							}
-							if (ID == 127)
+							if (projectile.type == 127)
 							{
 								projectile.ai[0] = 1f;
 							}
@@ -2388,7 +2387,7 @@ namespace ExoriumMod.Projectiles.Minions
 				{
 					projectile.direction = -1;
 				}
-				if (ID != 313)
+				if (projectile.type != 313)
 				{
 					if (projectile.direction == -1)
 					{
@@ -2399,7 +2398,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.spriteDirection = -1;
 					}
 				}
-				if (ID == 398)
+				if (projectile.type == 398)
 				{
 					projectile.spriteDirection = projectile.direction;
 				}
@@ -2475,7 +2474,7 @@ namespace ExoriumMod.Projectiles.Minions
 					}
 					Vector2 velocity = projectile.velocity;
 				}
-				else if (ID == 268)
+				else if (projectile.type == 268)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -2554,7 +2553,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 269)
+				else if (projectile.type == 269)
 				{
 					if (projectile.velocity.Y >= 0f && (double)projectile.velocity.Y <= 0.8)
 					{
@@ -2592,7 +2591,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 313)
+				else if (projectile.type == 313)
 				{
 					int num45 = (int)(projectile.Center.X / 16f);
 					int num44 = (int)(projectile.Center.Y / 16f);
@@ -2701,7 +2700,7 @@ namespace ExoriumMod.Projectiles.Minions
 						}
 					}
 				}
-				else if (ID >= 390 && ID <= 392)
+				else if (projectile.type >= 390 && projectile.type <= 392)
 				{
 					int num37 = (int)(projectile.Center.X / 16f);
 					int num36 = (int)(projectile.Center.Y / 16f);
@@ -2873,7 +2872,7 @@ namespace ExoriumMod.Projectiles.Minions
 						}
 					}
 				}
-				else if (ID == 314)
+				else if (projectile.type == 314)
 				{
 					if (projectile.velocity.Y >= 0f && (double)projectile.velocity.Y <= 0.8)
 					{
@@ -2913,7 +2912,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 319)
+				else if (projectile.type == 319)
 				{
 					if (projectile.velocity.Y >= 0f && (double)projectile.velocity.Y <= 0.8)
 					{
@@ -2953,7 +2952,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 236)
+				else if (projectile.type == 236)
 				{
 					if (projectile.velocity.Y >= 0f && (double)projectile.velocity.Y <= 0.8)
 					{
@@ -2997,7 +2996,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 499)
+				else if (projectile.type == 499)
 				{
 					if (projectile.velocity.Y >= 0f && (double)projectile.velocity.Y <= 0.8)
 					{
@@ -3087,7 +3086,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 334)
+				else if (projectile.type == 334)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3161,7 +3160,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 353)
+				else if (projectile.type == 353)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3206,7 +3205,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 111)
+				else if (projectile.type == 111)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3251,7 +3250,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 112)
+				else if (projectile.type == 112)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3296,7 +3295,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 127)
+				else if (projectile.type == 127)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3336,7 +3335,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 200)
+				else if (projectile.type == 200)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3393,7 +3392,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 4f;
 					}
 				}
-				else if (ID == 208)
+				else if (projectile.type == 208)
 				{
 					if (projectile.velocity.Y == 0f && projectile.velocity.X == 0f)
 					{
@@ -3432,7 +3431,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 4f;
 					}
 				}
-				else if (ID == 209)
+				else if (projectile.type == 209)
 				{
 					if (projectile.alpha > 0)
 					{
@@ -3485,7 +3484,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 324)
+				else if (projectile.type == 324)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3524,7 +3523,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 14f;
 					}
 				}
-				else if (ID == 210)
+				else if (projectile.type == 210)
 				{
 					if (projectile.velocity.Y == 0f)
 					{
@@ -3572,7 +3571,7 @@ namespace ExoriumMod.Projectiles.Minions
 						projectile.velocity.Y = 10f;
 					}
 				}
-				else if (ID == 398)
+				else if (projectile.type == 398)
 				{
 					if (projectile.velocity.Y == 0f)
 					{

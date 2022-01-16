@@ -1,14 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ExoriumMod.Dusts;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Tools
+namespace ExoriumMod.Content.Items.Tools
 {
     class BlightedHamaxe : ModItem
     {
+        public override string Texture => AssetDirectory.Tool + Name;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Frayed Hamaxe");

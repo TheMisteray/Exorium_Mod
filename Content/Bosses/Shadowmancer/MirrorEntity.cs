@@ -1,18 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using System;
 using ExoriumMod.Dusts;
-using ExoriumMod.Buffs;
-using ExoriumMod.Projectiles.Bosses.AssierJassad;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.NPCs.Bosses.Shadowmancer
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     class MirrorEntity : ModNPC
     {
-        public override string Texture => "ExoriumMod/NPCs/Bosses/Shadowmancer/AssierJassad";
+        public override string Texture => AssetDirectory.Shadowmancer + "AssierJassad";
 
         public override void SetStaticDefaults()
         {

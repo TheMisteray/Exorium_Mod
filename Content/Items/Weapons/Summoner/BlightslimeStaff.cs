@@ -1,13 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Weapons.Summoner
+namespace ExoriumMod.Content.Items.Weapons.Summoner
 {
     class BlightslimeStaff : ModItem
     {
+        public override string Texture => AssetDirectory.SummonerWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Summons a tiny blight slime to fight for you");

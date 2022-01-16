@@ -1,15 +1,14 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Projectiles.Bosses.BlightSlime
+namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
     class BlightedSpike : ModProjectile
     {
-        bool hasTouchedGround = false;
-        bool hasTouchedAir = false;
+        public override string Texture => AssetDirectory.BlightedSlime + Name;
 
         public override void SetStaticDefaults()
         {
@@ -27,6 +26,20 @@ namespace ExoriumMod.Projectiles.Bosses.BlightSlime
             projectile.tileCollide = true;
             projectile.extraUpdates = 99;
             projectile.alpha = 255;
+            projectile.ai[0] = 0; //false
+            projectile.ai[1] = 0; //false
+        }
+
+        public bool hasTouchedGround
+        {
+            get => projectile.ai[0] == 1f;
+            set => projectile.ai[0] = value ? 1f : 0f;
+        }
+
+        public bool hasTouchedAir
+        {
+            get => projectile.ai[1] == 1f;
+            set => projectile.ai[1] = value ? 1f : 0f;
         }
 
         public override void AI()

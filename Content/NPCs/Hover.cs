@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.NPCs
+namespace ExoriumMod.Content.NPCs
 {
     public abstract class Hover : ModNPC // Abstract Hover AI
     {

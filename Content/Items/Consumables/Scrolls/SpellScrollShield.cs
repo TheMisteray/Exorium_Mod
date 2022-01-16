@@ -1,14 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Buffs;
 
-namespace ExoriumMod.Items.Weapons.Magic.Scrolls
+namespace ExoriumMod.Content.Items.Weapons.Magic.Scrolls
 {
     class SpellScrollShield : ModItem
     {
+        public override string Texture => AssetDirectory.SpellScroll + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Casts Shield \n" +
@@ -36,13 +38,13 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
 
         public override bool CanUseItem(Player player)
         {
-            return !player.HasBuff(BuffType<ScrollCooldown>());
+            return !player.HasBuff(BuffType<Buffs.ScrollCooldown>());
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<Shield>(), 1600);
-            player.AddBuff(BuffType<ScrollCooldown>(), 7200);
+            player.AddBuff(BuffType<Buffs.Shield>(), 1600);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 7200);
         }
 
         //For some reason needed to have the item be consumed

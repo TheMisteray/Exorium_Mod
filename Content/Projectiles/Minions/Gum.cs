@@ -1,19 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
-using ExoriumMod.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ExoriumMod.Projectiles.Minions
+namespace ExoriumMod.Content.Projectiles.Minions
 {
     class Gum : ModProjectile
     {
-        private int color;
+        public override string Texture => AssetDirectory.Minion + Name;
+
         private const int MAX_TICKS = 25;
-        private int ticks = 0;
 
         public override void SetStaticDefaults()
         {
@@ -31,7 +30,19 @@ namespace ExoriumMod.Projectiles.Minions
             projectile.tileCollide = true;
             projectile.ignoreWater = false;
             projectile.alpha = 0;
-            color = Main.rand.Next(6);
+            projectile.ai[0] = Main.rand.Next(6);
+        }
+
+        public float color
+        {
+            get => projectile.ai[0];
+            set => projectile.ai[0] = value;
+        }
+
+        public float ticks
+        {
+            get => projectile.ai[1];
+            set => projectile.ai[1] = value;
         }
 
         public override void AI()

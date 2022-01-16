@@ -1,15 +1,16 @@
-﻿using ExoriumMod.Projectiles;
+﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
-using System;
 
-namespace ExoriumMod.Items.Weapons.Ranger
+namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
     class AcidOrb : ModItem
     {
+        public override string Texture => AssetDirectory.RangerWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A glass sphere filled with an acidic substance" +

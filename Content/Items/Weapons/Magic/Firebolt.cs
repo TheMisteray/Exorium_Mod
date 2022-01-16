@@ -1,13 +1,16 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.Items.Weapons.Magic
+namespace ExoriumMod.Content.Items.Weapons.Magic
 {
     class Firebolt : ModItem
     {
+        public override string Texture => AssetDirectory.MagicWeapon + Name;
+
         public override void SetDefaults()
         {
             item.autoReuse = true;

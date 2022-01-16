@@ -1,18 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
-using ExoriumMod.Dusts;
 using System;
-using Terraria.Enums;
-using Terraria.ObjectData;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace ExoriumMod.Items.Weapons.Magic
+namespace ExoriumMod.Content.Items.Weapons.Magic
 {
     class MorditeScepter : ModItem
     {
+        public override string Texture => AssetDirectory.MagicWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Item.staff[item.type] = true;
@@ -130,7 +129,7 @@ namespace ExoriumMod.Items.Weapons.Magic
             {
                 int offset = Main.rand.Next(-4, 4);
                 new Vector2(projectile.position.X + offset, projectile.position.Y + offset);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -147,7 +146,7 @@ namespace ExoriumMod.Items.Weapons.Magic
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<MorditeSpecks>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
             }
             Main.PlaySound(SoundID.NPCDeath6);
         }

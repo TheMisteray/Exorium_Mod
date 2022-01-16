@@ -1,16 +1,16 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Items.Accessories;
-using ExoriumMod.Items.Materials;
 using System;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.NPCs.Enemies
+namespace ExoriumMod.Content.NPCs.Enemies
 {
     class Poltergeist : Hover
     {
+        public override string Texture => AssetDirectory.EnemyNPC + Name;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[npc.type] = Main.npcFrameCount[NPCID.Ghost];

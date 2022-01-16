@@ -1,12 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
+using ExoriumMod.Content.Items;
 
-namespace ExoriumMod.Items.Consumables.Bosses
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     class ShadowmancerBag : ModItem
     {
+        public override string Texture => AssetDirectory.Shadowmancer + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Treasure Bag");
@@ -32,9 +35,9 @@ namespace ExoriumMod.Items.Consumables.Bosses
         {
             player.TryGettingDevArmor();
             if (Main.rand.NextBool(1))
-                player.QuickSpawnItem(ItemType<Weapons.Magic.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
+                player.QuickSpawnItem(ItemType<Consumables.Magic.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
             else
-                player.QuickSpawnItem(ItemType<Weapons.Magic.Scrolls.SpellScrollShield>(), Main.rand.Next(1, 3));
+                player.QuickSpawnItem(ItemType<Consumables.Scrolls.SpellScrollShield>(), Main.rand.Next(1, 3));
             player.QuickSpawnItem(ItemType<Weapons.Ranger.AcidOrb>(), Main.rand.Next(21, 43));
             switch (Main.rand.Next(3))
             {
@@ -51,6 +54,6 @@ namespace ExoriumMod.Items.Consumables.Bosses
             player.QuickSpawnItem(ItemType<Accessories.ShadowmancerCloak>());
         }
 
-        public override int BossBagNPC => NPCType<NPCs.Bosses.Shadowmancer.AssierJassad>();
+        public override int BossBagNPC => NPCType<AssierJassad>();
     }
 }

@@ -1,14 +1,17 @@
-﻿using ExoriumMod.Dusts;
+﻿using ExoriumMod.Core;
+using ExoriumMod.Dusts;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 
-namespace ExoriumMod.Projectiles.Bosses.AssierJassad
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     class ShadowFist : ModProjectile
     {
+        public override string Texture => AssetDirectory.Shadowmancer + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 40;

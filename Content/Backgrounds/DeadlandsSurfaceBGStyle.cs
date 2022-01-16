@@ -1,13 +1,13 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Backgrounds
+namespace ExoriumMod.Content.Backgrounds
 {
     class DeadlandsSurfaceBGStyle : ModSurfaceBgStyle
     {
         public override bool ChooseBgStyle()
         {
-            return !Main.gameMenu && Main.LocalPlayer.GetModPlayer<ExoriumPlayer>().ZoneDeadlands;
+            return !Main.gameMenu && Main.LocalPlayer.GetModPlayer<Core.ExoriumPlayer>().ZoneDeadlands;
         }
 
         // Use this to keep far Backgrounds like the mountains.
@@ -36,17 +36,17 @@ namespace ExoriumMod.Backgrounds
 
         public override int ChooseFarTexture()
         {
-            return mod.GetBackgroundSlot("Backgrounds/DeadlandsSurfaceFar");
+            return mod.GetBackgroundSlot(Core.AssetDirectory.Background + "DeadlandsSurfaceFar");
         }
 
         public override int ChooseMiddleTexture()
         {
-            return mod.GetBackgroundSlot("Backgrounds/DeadlandsSurfaceMiddle");
+            return mod.GetBackgroundSlot(Core.AssetDirectory.Background + "DeadlandsSurfaceMiddle");
         }
 
         public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
         {
-            return mod.GetBackgroundSlot("Backgrounds/DeadlandsSurfaceClose");
+            return mod.GetBackgroundSlot(Core.AssetDirectory.Background + "DeadlandsSurfaceClose");
         }
     }
 }

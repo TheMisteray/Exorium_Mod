@@ -6,12 +6,15 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using ExoriumMod.Core;
 
-namespace ExoriumMod.NPCs.Bosses.BlightedSlime
+namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
     [AutoloadBossHead]
     class BlightedSlime : ModNPC
     {
+        public override string Texture => AssetDirectory.BlightedSlime + Name;
+        public override string BossHeadTexture => AssetDirectory.BlightedSlime + Name + "_Head";
 
         public override void SetStaticDefaults()
         {

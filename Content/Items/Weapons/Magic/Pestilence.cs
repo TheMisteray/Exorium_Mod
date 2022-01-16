@@ -1,13 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Dusts;
 
-namespace ExoriumMod.Items.Weapons.Magic
+namespace ExoriumMod.Content.Items.Weapons.Magic
 {
     class Pestilence : ModItem
     {
+        public override string Texture => AssetDirectory.MagicWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tome of Pestilence");
@@ -64,19 +66,19 @@ namespace ExoriumMod.Items.Weapons.Magic
         {
             if (Main.rand.NextBool(1))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
             }
             if (Main.rand.NextBool(2))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
             }
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), 0, 0);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), 0, 0);
             }
             if (Main.rand.NextBool(4))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
             if (projectile.ai[0] == 2)
             {

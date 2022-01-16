@@ -1,11 +1,12 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using ExoriumMod.Core;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Items.Materials
+namespace ExoriumMod.Content.Items.Materials
 {
     class TaintedGel : ModItem
     {
+        public override string Texture => AssetDirectory.Materials + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("The ooze of deadlands");

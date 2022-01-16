@@ -1,25 +1,29 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
-using ExoriumMod.Dusts;
-using Terraria.ID;
-using Terraria.ObjectData;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class AshenDust : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
-            drop = ItemType<Items.Placeables.AshenDust>();
+            drop = ItemType<Items.Tiles.AshenDust>();
             AddMapEntry(new Color(90, 90, 90));
-            SetModTree(new DeadwoodTree());
-            dustType = DustType<DeadDust>();
+            SetModTree(new Trees.DeadwoodTree());
+            dustType = DustType<Dusts.DeadDust>();
         }
 
         public override int SaplingGrowthType(ref int style)
@@ -37,7 +41,7 @@ namespace ExoriumMod.Tiles
         {
             if (Main.rand.NextBool(700))
             {
-                Dust.NewDust(new Vector2(i, j).ToWorldCoordinates(), 32, 48, DustType<DeadDust>(), 0f, 0f, 100, default(Color), 1f);
+                Dust.NewDust(new Vector2(i, j).ToWorldCoordinates(), 32, 48, DustType<Dusts.DeadDust>(), 0f, 0f, 100, default(Color), 1f);
             }
         }
 

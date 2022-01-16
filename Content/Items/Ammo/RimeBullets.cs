@@ -1,12 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Ammo
+namespace ExoriumMod.Content.Items.Ammo
 {
     class RimeBullets : ModItem
     {
+        public override string Texture => AssetDirectory.Ammo + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Chance to inflict Frostburn");
@@ -41,6 +44,8 @@ namespace ExoriumMod.Items.Ammo
 
     class RimeBullet : ModProjectile
     {
+        public override string Texture => AssetDirectory.Projectile + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Rimestone Bullet");

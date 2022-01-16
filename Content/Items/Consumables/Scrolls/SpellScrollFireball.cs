@@ -1,16 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Buffs;
 
-namespace ExoriumMod.Items.Weapons.Magic.Scrolls
+namespace ExoriumMod.Content.Items.Weapons.Magic.Scrolls
 {
     class SpellScrollFireball : ModItem
     {
+        public override string Texture => AssetDirectory.SpellScroll + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Casts Fireball");
@@ -43,12 +42,12 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
 
         public override bool CanUseItem(Player player)
         {
-            return !player.HasBuff(BuffType<ScrollCooldown>());
+            return !player.HasBuff(BuffType<Buffs.ScrollCooldown>());
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<ScrollCooldown>(), 9000);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 9000);
         }
     }
 }

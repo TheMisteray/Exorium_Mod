@@ -1,12 +1,14 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Weapons.Ranger
+namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
     public class BlightBow : ModItem
     {
+        public override string Texture => AssetDirectory.RangerWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blightsteel Bow");

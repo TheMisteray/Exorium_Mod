@@ -1,16 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Items.Accessories;
-using ExoriumMod.Items.Materials;
 using System;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.NPCs.Enemies
+namespace ExoriumMod.Content.NPCs.Enemies
 {
     class WightArcher : ModNPC
     {
+        public override string Texture => AssetDirectory.EnemyNPC + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Wight Archer");
@@ -4049,9 +4050,9 @@ namespace ExoriumMod.NPCs.Enemies
         public override void NPCLoot()
         {
             if (Main.rand.NextBool(40))
-                Item.NewItem(npc.getRect(), ItemType<WightQuiver>());
+                Item.NewItem(npc.getRect(), ItemType<Items.Accessories.WightQuiver>());
             if (Main.rand.NextBool(3))
-                Item.NewItem(npc.getRect(), ItemType<WightBone>());
+                Item.NewItem(npc.getRect(), ItemType<Items.Materials.WightBone>());
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

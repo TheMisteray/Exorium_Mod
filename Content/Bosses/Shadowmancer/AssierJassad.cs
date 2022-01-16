@@ -1,18 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using System;
 using ExoriumMod.Dusts;
 using ExoriumMod.Buffs;
-using ExoriumMod.Projectiles.Bosses.AssierJassad;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.NPCs.Bosses.Shadowmancer
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     [AutoloadBossHead]
     class AssierJassad : ModNPC
     {
+        public override string Texture => AssetDirectory.Shadowmancer + Name;
+        public override string BossHeadTexture => AssetDirectory.Shadowmancer + Name + "_Head";
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Shadowmancer");
@@ -41,7 +44,7 @@ namespace ExoriumMod.NPCs.Bosses.Shadowmancer
             npc.noGravity = true;
             npc.noTileCollide = true;
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/BathrobeMan");
-            bossBag = ModContent.ItemType<Items.Consumables.Bosses.ShadowmancerBag>();
+            bossBag = ItemType<ShadowmancerBag>();
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -80,10 +83,8 @@ namespace ExoriumMod.NPCs.Bosses.Shadowmancer
         private float attackLength;
         private float attackProgress;
         private bool showHP = true;
-        private bool faceTarget = true;
         private float target;
         private Vector2 moveTo;
-        public readonly int currentTarget;
 
         public override bool PreAI()
         {
@@ -458,7 +459,7 @@ namespace ExoriumMod.NPCs.Bosses.Shadowmancer
                         npc.aiAction = 1;
                         if (attackProgress == 0)
                         {
-                            Projectile.NewProjectile(npc.Center.X + npc.direction * -50, npc.Center.Y, 0, 0, ProjectileType<CollectiveDarkness>(), damage, 2, Main.myPlayer);
+                            Projectile.NewProjectile(npc.Center.X + npc.direction * -50, npc.Center.Y, 0, 0, ProjectileType<CollectiveDarkness>(), damage, 2, Main.myPlayer, 1, npc.target);
                             npc.netUpdate = true;
                         }
                         break;

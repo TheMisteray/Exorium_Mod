@@ -1,12 +1,13 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System;
-namespace ExoriumMod.Items.Tools
+
+namespace ExoriumMod.Content.Items.Tools
 {
     class DeadwoodHammer : ModItem
     {
+        public override string Texture => AssetDirectory.Tool + Name;
+
         public override void SetDefaults()
         {
             item.damage = 3;

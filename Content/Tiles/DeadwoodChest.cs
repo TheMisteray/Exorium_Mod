@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -8,10 +9,17 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-namespace ExoriumMod.Tiles
+
+namespace ExoriumMod.Content.Tiles
 {
     class DeadwoodChest : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileSpelunker[Type] = true;
@@ -38,7 +46,7 @@ namespace ExoriumMod.Tiles
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Containers };
             chest = "Deadwood Chest";
-            chestDrop = ItemType<Items.Placeables.DeadwoodChest>();
+            chestDrop = ItemType<Items.Tiles.DeadwoodChest>();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].frameX / 36);
@@ -181,7 +189,7 @@ namespace ExoriumMod.Tiles
                 player.showItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : "Deadwood Chest";
                 if (player.showItemIconText == "Deadwood Chest")
                 {
-                    player.showItemIcon2 = ItemType<Items.Placeables.DeadwoodChest>();
+                    player.showItemIcon2 = ItemType<Items.Tiles.DeadwoodChest>();
                 }
             }
             player.noThrow = 2;

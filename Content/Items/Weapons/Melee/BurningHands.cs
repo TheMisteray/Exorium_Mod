@@ -1,14 +1,16 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ExoriumMod.Dusts;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
     class BurningHands : ModItem
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Unleash fists of flame\n" +
@@ -32,7 +34,7 @@ namespace ExoriumMod.Items.Weapons.Melee
             item.knockBack = 7;
             item.autoReuse = true;
             item.UseSound = SoundID.Item109;
-            item.shoot = ProjectileType<Projectiles.BurningHand>();
+            item.shoot = ProjectileType<BurningHand>();
             item.shootSpeed = 29;
             item.useTurn = true;
             item.noUseGraphic = true;

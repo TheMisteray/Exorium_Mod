@@ -1,12 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Items.Tools
+namespace ExoriumMod.Content.Items.Tools
 {
     class RimestonePickaxe : ModItem
     {
+        public override string Texture => AssetDirectory.Tool + Name;
+
         public override void SetDefaults()
         {
             item.damage = 4;

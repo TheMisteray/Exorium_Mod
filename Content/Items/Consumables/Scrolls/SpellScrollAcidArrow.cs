@@ -1,14 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Buffs;
 
-namespace ExoriumMod.Items.Weapons.Magic.Scrolls
+namespace ExoriumMod.Content.Items.Weapons.Magic.Scrolls
 {
     class SpellScrollAcidArrow : ModItem
     {
+        public override string Texture => AssetDirectory.SpellScroll + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Casts Acid Arrows \n" +
@@ -35,13 +37,13 @@ namespace ExoriumMod.Items.Weapons.Magic.Scrolls
 
         public override bool CanUseItem(Player player)
         {
-            return !player.HasBuff(BuffType<ScrollCooldown>());
+            return !player.HasBuff(BuffType<Buffs.ScrollCooldown>());
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<AcidArrows>(), 1800);
-            player.AddBuff(BuffType<ScrollCooldown>(), 7200);
+            player.AddBuff(BuffType<Buffs.AcidArrows>(), 1800);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 7200);
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

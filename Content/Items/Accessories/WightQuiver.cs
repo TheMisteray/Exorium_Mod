@@ -1,12 +1,13 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
-using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Accessories
+namespace ExoriumMod.Content.Items.Accessories
 {
     class WightQuiver : ModItem
     {
+        public override string Texture => AssetDirectory.Accessory + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Reduced regeneration \n10% chance not to consume ammo\n6% increased arrow damage");

@@ -1,14 +1,16 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Projectiles;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
     class BlightedPike : ModItem
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Mildew");
@@ -123,7 +125,7 @@ namespace ExoriumMod.Items.Weapons.Melee
 
             if (Main.rand.NextBool(3))
             {
-                Dust dust = Dust.NewDustDirect(projectile.position, projectile.height, projectile.width, DustType<BlightDust>(), projectile.velocity.X * 0.1f, projectile.velocity.Y * 0.1f, 200, Scale: 1.1f);
+                Dust dust = Dust.NewDustDirect(projectile.position, projectile.height, projectile.width, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.1f, projectile.velocity.Y * 0.1f, 200, Scale: 1.1f);
                 dust.velocity += projectile.velocity * 0.2f;
                 dust.velocity *= 0.2f;
             }
@@ -151,19 +153,19 @@ namespace ExoriumMod.Items.Weapons.Melee
             projectile.velocity.Y += projectile.ai[0];
             if (Main.rand.NextBool(1))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
             if (Main.rand.NextBool(2))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
             if (Main.rand.NextBool(4))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
         }
     }

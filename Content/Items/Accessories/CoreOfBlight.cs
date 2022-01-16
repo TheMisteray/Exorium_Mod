@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Accessories
+namespace ExoriumMod.Content.Items.Accessories
 {
     class CoreOfBlight : ModItem
     {
+        public override string Texture => AssetDirectory.Accessory + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Core of Blight");

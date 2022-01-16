@@ -1,10 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Buffs
+namespace ExoriumMod.Content.Buffs
 {
     class Blightskin : ModBuff
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Buff + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Blightskin");

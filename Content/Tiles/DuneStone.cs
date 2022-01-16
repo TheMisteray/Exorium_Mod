@@ -1,14 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     public class DuneStone : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             TileID.Sets.Ore[Type] = true;
@@ -22,7 +29,7 @@ namespace ExoriumMod.Tiles
             name.SetDefault("DuneStone");
             AddMapEntry(new Color(196, 188, 22), name);
 
-            drop = ItemType<Items.Placeables.DuneStone>();
+            drop = ItemType<Items.Materials.Metals.DuneStone>();
             soundType = 21;
             soundStyle = 1;
             mineResist = 1f;

@@ -1,15 +1,14 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Dusts;
 
-namespace ExoriumMod.Projectiles.Minions
+namespace ExoriumMod.Content.Projectiles.Minions
 {
     class SkullShot : ModProjectile
     {
-        public override string Texture => "ExoriumMod/Projectiles/DaggerCloud";
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetStaticDefaults()
         {
@@ -31,7 +30,7 @@ namespace ExoriumMod.Projectiles.Minions
 
         public override void AI()
         {
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
         }
     }
 }

@@ -1,14 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class DeadwoodWorkbench : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileSolidTop[Type] = true;
@@ -28,7 +35,7 @@ namespace ExoriumMod.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 32, 16, ItemType<Items.Placeables.DeadwoodWorkbench>());
+            Item.NewItem(i * 16, j * 16, 32, 16, ItemType<Items.Tiles.DeadwoodWorkbench>());
         }
     }
 }

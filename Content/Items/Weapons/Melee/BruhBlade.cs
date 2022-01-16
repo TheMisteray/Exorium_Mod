@@ -1,10 +1,13 @@
+using ExoriumMod.Core;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
 	public class BruhBlade : ModItem
 	{
+		public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
 		public override void SetStaticDefaults() 
 		{
 			DisplayName.SetDefault("BruhBlade"); //Bruh

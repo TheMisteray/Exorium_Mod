@@ -1,15 +1,16 @@
-﻿using ExoriumMod.Dusts;
+﻿using ExoriumMod.Core;
+using ExoriumMod.Dusts;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 
-namespace ExoriumMod.Projectiles.Bosses.BlightSlime
+namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
     class BlightSlimeShot : ModProjectile
     {
+        public override string Texture => AssetDirectory.BlightedSlime + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 32;

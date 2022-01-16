@@ -1,17 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Items.Placeables;
-using ExoriumMod.Items.Accessories;
 
-namespace ExoriumMod.NPCs.Enemies
+namespace ExoriumMod.Content.NPCs.Enemies
 {
     internal class FrostBiterHead : FrostBiter
     {
+        public override string Texture => AssetDirectory.EnemyNPC + Name;
 
         public override void Init()
         {
@@ -78,6 +77,7 @@ namespace ExoriumMod.NPCs.Enemies
 
     internal class FrostBiterBody : FrostBiter
     {
+        public override string Texture => AssetDirectory.EnemyNPC + Name;
         public override void SetDefaults()
         {
             npc.width = 30;
@@ -126,6 +126,7 @@ namespace ExoriumMod.NPCs.Enemies
 
     internal class FrostBiterTail : FrostBiter
     {
+        public override string Texture => AssetDirectory.EnemyNPC + Name;
         public override void SetDefaults()
         {
             npc.width = 30;
@@ -696,10 +697,10 @@ namespace ExoriumMod.NPCs.Enemies
 
         public override void NPCLoot()
         {
-            Item.NewItem(npc.getRect(), ItemType<RimeStone>(), Main.rand.Next(7, 14));
+            Item.NewItem(npc.getRect(), ItemType<Items.Materials.Metals.RimeStone>(), Main.rand.Next(7, 14));
             if (Main.rand.NextBool(50))
             {
-                Item.NewItem(npc.getRect(), ItemType<FrostStone>());
+                Item.NewItem(npc.getRect(), ItemType<Items.Accessories.FrostStone>());
             }
         }
     }

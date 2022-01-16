@@ -1,11 +1,18 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Buffs.Minions
+namespace ExoriumMod.Content.Buffs.Minions
 {
     class BlightedNeedleSummonBuff : ModBuff
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.MinionBuff + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Blightsteel Needle");
@@ -32,8 +39,7 @@ namespace ExoriumMod.Buffs.Minions
     {
         public override bool Autoload(ref string name, ref string texture)
         {
-            // NPC only buff so we'll just assign it a useless buff icon.
-            texture = "ExoriumMod/Buffs/Minions/BlightedNeedleSummonBuff";
+            texture = AssetDirectory.MinionBuff + "BlightedNeedleSummonBuff";
             return base.Autoload(ref name, ref texture);
         }
 

@@ -1,11 +1,12 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using ExoriumMod.Core;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Items.Materials
+namespace ExoriumMod.Content.Items.Materials
 {
     class Deadweed : ModItem
     {
+        public override string Texture => AssetDirectory.Plant + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A withered plant");

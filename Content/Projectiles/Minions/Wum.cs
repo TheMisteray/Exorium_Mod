@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,12 +7,11 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using Terraria.Graphics.Shaders;
 
-namespace ExoriumMod.Projectiles.Minions
+namespace ExoriumMod.Content.Projectiles.Minions
 {
     class Wum : ModProjectile
     {
-		private int shoot = 0;
-		private int tick = 0;
+		public override string Texture => AssetDirectory.Minion + Name;
 
         public override void SetStaticDefaults()
         {
@@ -78,11 +78,6 @@ namespace ExoriumMod.Projectiles.Minions
 			{
 				projectile.timeLeft = 2;
 			}
-
-			//Ticker for 1/4 second
-			tick++;
-			if (tick == 15)
-				tick = 0;
 
 			//Shoot if enabled
 			/*

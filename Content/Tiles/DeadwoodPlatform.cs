@@ -1,14 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class DeadwoodPlatform : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileFrameImportant[Type] = true;
@@ -29,7 +36,7 @@ namespace ExoriumMod.Tiles
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
             AddMapEntry(new Color(40, 40, 40));
-            drop = ItemType<Items.Placeables.DeadwoodPlatform>();
+            drop = ItemType<Items.Tiles.DeadwoodPlatform>();
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Platforms };
             dustType = 1;

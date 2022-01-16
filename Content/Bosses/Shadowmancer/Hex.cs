@@ -1,14 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ExoriumMod.Projectiles.Bosses.AssierJassad
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     class Hex : ModProjectile
     {
+        public override string Texture => AssetDirectory.Shadowmancer + Name;
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 9;

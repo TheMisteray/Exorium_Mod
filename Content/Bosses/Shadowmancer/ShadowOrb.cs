@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,10 +7,12 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using ExoriumMod.Dusts;
 
-namespace ExoriumMod.Projectiles.Bosses.AssierJassad
+namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
     class ShadowOrb : ModProjectile
     {
+        public override string Texture => AssetDirectory.Shadowmancer + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 12;
@@ -46,7 +49,7 @@ namespace ExoriumMod.Projectiles.Bosses.AssierJassad
                 Main.dust[dust].color = new Color(255, 110, 0);
             }
             Main.PlaySound(SoundID.Item27, projectile.position);
-            NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y, NPCType<NPCs.Bosses.Shadowmancer.ShadowAdd>());
+            NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y, NPCType<ShadowAdd>());
         }
     }
 }

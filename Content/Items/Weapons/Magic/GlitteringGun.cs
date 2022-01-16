@@ -1,13 +1,16 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Weapons.Magic
+namespace ExoriumMod.Content.Items.Weapons.Magic
 {
     class GlitteringGun : ModItem
     {
+        public override string Texture => AssetDirectory.MagicWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Or was it the glimmering gun...");
@@ -96,7 +99,7 @@ namespace ExoriumMod.Items.Weapons.Magic
             {
                 float newx = projectile.position.X - projectile.velocity.X / 10f * i;
                 float newy = projectile.position.Y - projectile.velocity.Y / 10f * i;
-                int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 0, default(Color), 0.5f);
+                int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Rainbow>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 0, default(Color), 0.5f);
                 Main.dust[dust0].position.X = newx;
                 Main.dust[dust0].position.Y = newy;
                 switch (projectile.localAI[1])

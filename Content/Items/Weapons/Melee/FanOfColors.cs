@@ -1,14 +1,17 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using System;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
     class FanOfColors : ModItem
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Fan of Colors");
@@ -30,7 +33,7 @@ namespace ExoriumMod.Items.Weapons.Melee
             item.rare = 2;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
-            item.shoot = ProjectileType<Projectiles.ColorKnife>();
+            item.shoot = ProjectileType<ColorKnife>();
             item.shootSpeed = 48f;
             item.useTurn = true;
             item.noUseGraphic = true;

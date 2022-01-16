@@ -1,10 +1,13 @@
-﻿using Terraria.ID;
+﻿using ExoriumMod.Core;
+using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Items.Weapons.Melee
+namespace ExoriumMod.Content.Items.Weapons.Melee
 {
     class DeadwoodSword : ModItem
     {
+        public override string Texture => AssetDirectory.MeleeWeapon + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Incredibly light");

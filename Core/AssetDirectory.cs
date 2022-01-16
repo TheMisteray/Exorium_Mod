@@ -26,9 +26,6 @@ namespace ExoriumMod.Core
 
         public const string Effect = Assets + "Effects/";
 
-        public const string Gore = Assets + "Gores/";
-        public const string TreeGore = Gore + "Trees/";
-
         public const string Items = Assets + "Items/";
 
         //Items -------------------------------
@@ -73,5 +70,8 @@ namespace ExoriumMod.Core
 
         public const string Wall = Assets + "Walls/";
         public const string WallItem = Wall + "Item/";
+
+        //Gores
+        public const string TreeGores = "ExoriumMod/Content/Gores/Trees";
     }
 }

@@ -1,12 +1,15 @@
-﻿using Terraria;
+﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Consumables.Potions
+namespace ExoriumMod.Content.Items.Consumables.Potions
 {
     class BlightskinPotion : ModItem
     {
+        public override string Texture => AssetDirectory.Potion + Name;
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("12 defense \nGreatly reduced life regeneration");

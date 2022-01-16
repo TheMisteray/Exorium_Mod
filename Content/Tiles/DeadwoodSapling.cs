@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
@@ -7,12 +8,17 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Dusts;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles
 {
     class DeadwoodSapling : ModTile
     {
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            texture = AssetDirectory.Tile + Name;
+            return base.Autoload(ref name, ref texture);
+        }
+
         public override void SetDefaults()
         {
             Main.tileFrameImportant[Type] = true;
@@ -37,7 +43,7 @@ namespace ExoriumMod.Tiles
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Sapling");
             AddMapEntry(new Color(200, 200, 200), name);
-            dustType = DustType<DeadDust>();
+            dustType = DustType<Dusts.DeadDust>();
             adjTiles = new int[] { TileID.Saplings };
         }
 

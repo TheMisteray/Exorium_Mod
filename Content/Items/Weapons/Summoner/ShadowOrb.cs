@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Items.Weapons.Summoner
+namespace ExoriumMod.Content.Items.Weapons.Summoner
 {
     class ShadowOrb : ModItem
     {
-        public override string Texture => "ExoriumMod/Projectiles/Bosses/AssierJassad/ShadowOrb";
+        public override string Texture => AssetDirectory.Shadowmancer +  "ShadowOrb";
 
         public override void SetStaticDefaults()
         {
@@ -24,8 +24,8 @@ namespace ExoriumMod.Items.Weapons.Summoner
             item.knockBack = 0f;
             item.width = 32;
             item.height = 32;
-            item.useTime = 36;
-            item.useAnimation = 36;
+            item.useTime = 60;
+            item.useAnimation = 60;
             item.useStyle = ItemUseStyleID.SwingThrow;
             item.value = Item.buyPrice(0, 0, 7, 0);
             item.rare = 1;

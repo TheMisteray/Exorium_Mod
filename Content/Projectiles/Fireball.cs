@@ -2,10 +2,8 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Dusts;
 
-namespace ExoriumMod.Projectiles
+namespace ExoriumMod.Content.Projectiles
 {
     class Fireball : ModProjectile
     {

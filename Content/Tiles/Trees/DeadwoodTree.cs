@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Dusts;
 
-namespace ExoriumMod.Tiles
+namespace ExoriumMod.Content.Tiles.Trees
 {
     class DeadwoodTree : ModTree
     {
@@ -11,27 +11,27 @@ namespace ExoriumMod.Tiles
 
         public override int GrowthFXGore()
         {
-            return mod.GetGoreSlot("Gores/DeadwoodTreeFX");
+            return mod.GetGoreSlot(AssetDirectory.TreeGores + "DeadwoodTreeFX");
         }
 
         public override int DropWood()
         {
-            return ItemType<Items.Placeables.Deadwood>();
+            return ItemType<Items.Tiles.Deadwood>();
         }
 
         public override Texture2D GetTexture()
         {
-            return mod.GetTexture("Tiles/DeadwoodTree");
+            return mod.GetTexture(AssetDirectory.Tree + "DeadwoodTree");
         }
 
         public override Texture2D GetTopTextures(int i, int j, ref int frame, ref int frameWidth, ref int frameHeight, ref int xOffsetLeft, ref int yOffset)
         {
-            return mod.GetTexture("Tiles/DeadwoodTree_Tops");
+            return mod.GetTexture(AssetDirectory.Tree + "DeadwoodTree_Tops");
         }
 
         public override Texture2D GetBranchTextures(int i, int j, int trunkOffset, ref int frame)
         {
-            return mod.GetTexture("Tiles/DeadwoodTree_Branches");
+            return mod.GetTexture(AssetDirectory.Tree + "DeadwoodTree_Branches");
         }
     }
 }
