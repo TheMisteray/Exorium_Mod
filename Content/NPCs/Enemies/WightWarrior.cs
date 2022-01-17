@@ -20,9 +20,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             npc.width = 23;
             npc.height = 40;
-            npc.damage = 20;
+            npc.damage = 32;
             npc.defense = 10;
-            npc.lifeMax = 100;
+            npc.lifeMax = 210;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath2;
             npc.value = 160f;

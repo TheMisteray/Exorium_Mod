@@ -21,9 +21,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override void SetDefaults()
         {
             npc.CloneDefaults(NPCID.SkeletonArcher);
-            npc.damage = 17;
+            npc.damage = 28;
             npc.defense = 3;
-            npc.lifeMax = 60;
+            npc.lifeMax = 90;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath2;
             npc.value = 160f;

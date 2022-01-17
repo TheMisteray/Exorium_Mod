@@ -21,9 +21,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             npc.CloneDefaults(NPCID.Ghost);
             animationType = NPCID.Ghost;
-            npc.damage = 23;
+            npc.damage = 44;
             npc.defense = 3;
-            npc.lifeMax = 66;
+            npc.lifeMax = 99;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath6;
             npc.value = 200f;
