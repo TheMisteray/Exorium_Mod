@@ -155,14 +155,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             {
                 if (Main.npc[i].active && Main.npc[i].type == NPCType<ShadowAdd>() && Main.rand.NextFloat(1) <= percent)
                 {
-                    Main.NewText("Shadow", 100, 100, 100);
                     Main.npc[i].ai[2] = -1;
                     Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2, projectile.owner, projectile.whoAmI, 1);
                     //power++ created proj increases power by 1
                 }
                 else if (Main.npc[i].active && Main.npc[i].type == NPCType<ShadowAdd>() && Main.rand.NextFloat(1) <= percent)
                 {
-                    Main.NewText("Mirror", 100, 100, 100);
                     Main.npc[i].ai[2] = -1;
                     Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2,  projectile.owner, projectile.whoAmI, 2);
                     //power += created proj increases power by 2
@@ -417,7 +415,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Vector2 darkToThis = darkOwner.Center - projectile.Center;
                 angle = (float)Math.Atan2(darkToThis.Y, darkToThis.X);
                 angle += (float)Math.PI;
-                Main.NewText("" + angle, 100, 100, 100);
                 distance = Math.Sqrt(Math.Pow(projectile.Center.X - darkOwner.Center.X,2) + Math.Pow(projectile.Center.Y - darkOwner.Center.Y,2)); //r for purposes of spiral
                 fraction = (float)distance / 120f;
             }

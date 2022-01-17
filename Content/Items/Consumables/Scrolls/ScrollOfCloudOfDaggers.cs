@@ -52,7 +52,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 5400);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 3600);
         }
     }
 

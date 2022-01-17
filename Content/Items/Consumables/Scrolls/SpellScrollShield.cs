@@ -44,7 +44,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
         public override void OnConsumeItem(Player player)
         {
             player.AddBuff(BuffType<Buffs.Shield>(), 1600);
-            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 7200);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 5400);
         }
 
         //For some reason needed to have the item be consumed

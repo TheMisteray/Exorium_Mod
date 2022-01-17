@@ -228,52 +228,43 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             moveTime = 120;
                             actionCool = 90;
                             attackLength = 90;
-                        Main.NewText("Shadowbolt", 100, 100, 100);
                         break;
                     case 1: //Adds
                             moveTime = 120;
                             actionCool = 120;
                             attackLength = 100;
-                        Main.NewText("Adds", 100, 100, 100);
                         break;
                     case 2: //Dash
                             actionCool = 30;
                             attackLength = 420;
-                        Main.NewText("Dash", 100, 100, 100);
                         break;
                     case 3: //waves
                             moveTime = 150;
                             actionCool = 90;
                             attackLength = 240;
-                        Main.NewText("waves", 100, 100, 100);
                         break;
                     case 4: //Swipe
                             actionCool = 90;
                             attackLength = 360;
-                        Main.NewText("Swipe", 100, 100, 100);
                         break;
                     case 5: //Mirror Image
                             moveTime = 90;
                             actionCool = 90;
                             attackLength = 120;
-                        Main.NewText("Mirror Image", 100, 100, 100);
                         break;
                     case 6: //Blade
                             actionCool = 50;
                             attackLength = 400;
-                        Main.NewText("Blade", 100, 100, 100);
                         break;
                     case 7: //Magic Missiles
                             moveTime = 90;
                             actionCool = 10;
                             attackLength = 240;
-                        Main.NewText("Magic Missiles", 100, 100, 100);
                         break;
                     case 8: //Hex
                             moveTime = 90;
                             actionCool = 10;
                             attackLength = 360;
-                        Main.NewText("Hex", 100, 100, 100);
                         break;
                 }
                 attackProgress = 0;

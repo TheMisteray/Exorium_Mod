@@ -57,7 +57,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 3600);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 2700);
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

@@ -23,7 +23,7 @@ More D&D items - Done
 	Throwing rapiers
 Smooth out deadlands (generate sporadically placed ashen dust so it is not an obvious line where it generated) - Done
 Make blightslime spikes only check the tile at their bottom - Done
-Remove Boss Test dialouge
+Remove Boss Test dialouge - Done
 Make Scroll Cooldown unremovable and have priority like potion cooldown
 Makes deadweed grow?
 Make icecream obtainable

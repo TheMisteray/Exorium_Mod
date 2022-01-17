@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            item.damage = 120;
+            item.damage = 125;
             item.useStyle = 4;
             item.useTime = 42;
             item.useAnimation = 42;
@@ -47,7 +47,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 9000);
+            player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 7200);
         }
     }
 }
