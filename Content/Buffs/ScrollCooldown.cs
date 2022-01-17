@@ -19,7 +19,7 @@ namespace ExoriumMod.Content.Buffs
             Main.pvpBuff[Type] = false;
             Main.buffNoSave[Type] = false;
             canBeCleared = false;
-            //Main.debuff[Type] = true;
+            Main.debuff[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)

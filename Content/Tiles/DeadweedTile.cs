@@ -60,6 +60,8 @@ namespace ExoriumMod.Content.Tiles
                 Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.TileItems.DeadweedSeeds>(), 2);
                 Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.Materials.Deadweed>());
             }
+            else if (stage == PlantStage.Growing)
+                Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.TileItems.DeadweedSeeds>());
             return false;
         }
 

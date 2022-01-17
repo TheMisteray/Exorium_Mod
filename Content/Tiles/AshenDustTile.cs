@@ -54,5 +54,11 @@ namespace ExoriumMod.Content.Tiles
         {
             Main.dust[dustType].alpha = 220;
         }
+
+        public override void RandomUpdate(int i, int j)
+        {
+            if (!Main.tile[i, j - 1].active() && Main.rand.Next(15) == 0)
+                WorldGen.PlaceTile(i, j - 1, TileType<DeadweedTile>(), true, false);
+        }
     }
 }
