@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Tiles
             return base.Autoload(ref name, ref texture);
         }
 
-        private const int FrameWidth = 16; //a field for readibilty and to kick out those magic numbers
+        private const int FrameWidth = 18; //a field for readibilty and to kick out those magic numbers
 
         public override void SetDefaults()
         {
