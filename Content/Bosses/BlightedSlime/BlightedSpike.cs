@@ -44,47 +44,10 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void AI()
         {
-            /**Point pointBottom = projectile.Bottom.ToTileCoordinates();
-            projectile.velocity.Y = 0;
-            if (!(Main.tile[pointBottom.X, pointBottom.Y].nactive() && (Main.tile[pointBottom.X, pointBottom.Y].collisionType >= 2 || Main.tile[pointBottom.X, pointBottom.Y].collisionType == -1)))
-            {
-                if (hasTouchedGround)
-                {
-                    projectile.position.Y += 1;
-                    hasTouchedAir = true;
-                }
-                else
-                {
-                    projectile.position.Y += 14;
-                    hasTouchedAir = true;
-                }
-            }
-            else
-            {
-                if (hasTouchedAir)
-                {
-                    projectile.position.Y -= 1;
-                    hasTouchedGround = true;
-                }
-                else
-                {
-                    projectile.position.Y -= 14;
-                    hasTouchedGround = true;
-                }
-            }
-            if (hasTouchedGround)
-            {
-                projectile.position.Y += 1;
-                hasTouchedAir = true;
-            }
-            else
-            {
-                projectile.position.Y += 7;
-            }
-            **/
             if (!hasTouchedGround)
                 projectile.velocity.Y = 1;
-            if (projectile.frame != 7)
+
+                if (projectile.frame != 7)
                 projectile.hostile = false;
             else
                 projectile.hostile = true;
@@ -110,10 +73,14 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             }
         }
 
+        //Checks only bottom tile for collision
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
         {
             fallThrough = false;
-            return true;
+            Vector2 tileBottom = new Vector2(projectile.position.X + projectile.width/2, projectile.position.Y + projectile.height);
+            if (!Main.tile[tileBottom.ToTileCoordinates().X, tileBottom.ToTileCoordinates().Y].inActive())
+                return true;
+            return false;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -123,6 +90,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                 projectile.position.Y -= 1;*/
             hasTouchedGround = true;
             projectile.velocity = Vector2.Zero;
+
             projectile.position.Y += 1;
             return false;
         }

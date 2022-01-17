@@ -48,7 +48,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                 num3 = 5 / num3;
                 num1 *= num3;
                 num2 *= num3;
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 300, num1, num2, ProjectileType<BlightedSpike>(), projectile.damage, 1, Main.myPlayer, 0, 0);
+                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 150, num1, num2, ProjectileType<BlightedSpike>(), projectile.damage, 1, Main.myPlayer, 0, 0);
                 spikeCounter++;
             }
             if (spikeCounter >= 5)

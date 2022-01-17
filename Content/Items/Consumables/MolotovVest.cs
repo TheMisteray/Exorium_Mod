@@ -41,14 +41,13 @@ namespace ExoriumMod.Content.Items.Consumables
             player.statLife = 1;
             int d = Projectile.NewProjectile(player.Center, Vector2.Zero, ProjectileID.Dynamite, 1000, 20, player.whoAmI);
             Main.projectile[d].friendly = false;
-            Main.projectile[d].hostile = true;
             Main.projectile[d].timeLeft = 2;
             Vector2 throwUp = new Vector2(0, -10);
             int bombs = Main.rand.Next(3, 6);
             for (int i = 0; i < bombs; i++)
             {
                 Vector2 perturbedThrow = throwUp.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-30, 30)));
-                Projectile.NewProjectile(player.Center, perturbedThrow, ProjectileID.MolotovCocktail, item.damage, item.knockBack);
+                Projectile.NewProjectile(player.Center, perturbedThrow, ProjectileID.MolotovCocktail, item.damage, item.knockBack, player.whoAmI);
             }
             base.OnConsumeItem(player);
         }

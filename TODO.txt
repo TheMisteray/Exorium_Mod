@@ -21,7 +21,8 @@ Rewrite recipies to be neater - Done
 More D&D items - Done
 	Molotov vest
 	Throwing rapiers
-Smooth out deadlands (generate sporadically placed ashen dust so it is not an obvious line where it generated)
+Smooth out deadlands (generate sporadically placed ashen dust so it is not an obvious line where it generated) - Done
+Make blightslime spikes only check the tile at their bottom - Done
 Remove Boss Test dialouge
 Make Scroll Cooldown unremovable and have priority like potion cooldown
 Makes deadweed grow?

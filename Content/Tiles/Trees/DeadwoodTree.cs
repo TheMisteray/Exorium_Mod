@@ -33,5 +33,7 @@ namespace ExoriumMod.Content.Tiles.Trees
         {
             return mod.GetTexture("Assets/Tiles/Trees/DeadwoodTree" + "_Branches");
         }
+
+        public override int CreateDust() => DustType<Dusts.DeadwoodTreeDust>();
     }
 }

@@ -55,7 +55,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             recipe.AddRecipeGroup(RecipeGroupID.IronBar, 10);
             recipe.AddIngredient(ItemID.FallenStar);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this, 100);
+            recipe.SetResult(this, 200);
             recipe.AddRecipe();
         }
     }
@@ -66,8 +66,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            projectile.width = 52;
-            projectile.height = 42;
+            projectile.width = 62;
+            projectile.height = 62;
             projectile.friendly = true;
             projectile.ranged = true;
             projectile.penetrate = 3;
@@ -194,6 +194,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 projectile.velocity *= -1;
                 Vector2 wildBounce = projectile.velocity.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-20, 20)));
                 projectile.velocity = wildBounce;
+                rotationSpeed *= Main.rand.NextFloat(.7f, 1.3f);
             }
         }
 
@@ -235,6 +236,13 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 // Remember that the X value in our point array was equal to the index of that javelin, so it's used here to kill it.
                 Main.projectile[_sticking[oldJavelinIndex].X].Kill();
             }
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        {
+            width = projectile.width / 2;
+            height = projectile.height / 2;
+            return true;
         }
     }
 }

@@ -176,13 +176,13 @@ namespace ExoriumMod.Core
                         {
                             for (int n = Math.Min(j,l) - Main.maxTilesX / 30; n <= Math.Max(j,l) + Main.maxTilesX / 30; n++)
                             {
+                                if (!WorldGen.InWorld(m, n, 50))
+                                {
+                                    placementOK = false;
+                                    break;
+                                }
                                 if (Framing.GetTileSafely(m, n).active())
                                 {
-                                    if (!WorldGen.InWorld(m, n, 50))
-                                    {
-                                        placementOK = false;
-                                        break;
-                                    }
                                     int type = Framing.GetTileSafely(m, n).type;
                                     if (type == TileID.BlueDungeonBrick || type == TileID.GreenDungeonBrick || type == TileID.PinkDungeonBrick || type == TileID.Cloud || type == TileID.RainCloud || type == TileID.WoodBlock || type == TileID.LivingWood || type == TileID.Ebonstone || type == TileID.Crimstone || type == TileID.SandstoneBrick)
                                     {
@@ -210,7 +210,12 @@ namespace ExoriumMod.Core
             {
                 for (int n = Math.Min(j, l) - Main.maxTilesX / 20; n <= Math.Max(j, l) + Main.maxTilesX / 20; n++)
                 {
-                    if (sizeScale >= (Math.Sqrt(Math.Pow(i - m, 2) + Math.Pow(j - n, 2))) + (Math.Sqrt(Math.Pow(k - m, 2) + Math.Pow(l - n, 2))))
+                    double sumDist = (Math.Sqrt(Math.Pow(i - m, 2) + Math.Pow(j - n, 2))) + (Math.Sqrt(Math.Pow(k - m, 2) + Math.Pow(l - n, 2)));
+                    int smoothSpread = Main.maxTilesX / 60;
+                    if (sizeScale >= sumDist ||
+                        (sizeScale + smoothSpread >= sumDist  //This and the lines that follow check out a little further for a more smooth transition
+                        && smoothSpread - ((int)sumDist - (int)sizeScale) > 0 //Avoid divide by 0
+                        && WorldGen.genRand.Next((smoothSpread + smoothSpread) / (smoothSpread - ((int)sumDist - (int)sizeScale))) == 1)) //Lower and lower chance to still place a tile up to smoothspread distance
                     {
                         if (WorldGen.InWorld(m, n, 30)) //Don't think this is actually necessary
                         {
