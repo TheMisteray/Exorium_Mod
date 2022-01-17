@@ -2011,7 +2011,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 								num89 *= num88;
 								int num84 = projectile.damage;
 								int num83 = 195;
-								int num82 = Projectile.NewProjectile(vector7.X, vector7.Y, num92, num89, ProjectileType<Gum>(), projectile.damage, projectile.knockBack, Main.myPlayer, 0f, 0f);
+								int num82 = Projectile.NewProjectile(vector7.X, vector7.Y, num92, num89, ProjectileType<Gum>(), projectile.damage, projectile.knockBack, Main.myPlayer, Main.rand.Next(6), 0f);
 								if (num92 < 0f)
 								{
 									projectile.direction = -1;
@@ -3805,7 +3805,6 @@ namespace ExoriumMod.Content.Projectiles.Minions
 			projectile.tileCollide = true;
 			projectile.ignoreWater = false;
 			projectile.alpha = 0;
-			projectile.ai[0] = Main.rand.Next(6);
 		}
 
 		public float color
