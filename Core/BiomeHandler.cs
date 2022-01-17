@@ -83,9 +83,9 @@ namespace ExoriumMod
             sunB -= (int)(90f * deadlandStrength * (backgroundColor.R / 255f)); //backgroundColor.R On purpose to change how the lighting looks
             sunR -= (int)(180f * deadlandStrength * (backgroundColor.R / 255f));
             sunG -= (int)(90f * deadlandStrength * (backgroundColor.G / 255f));
-            sunR = Utils.Clamp(sunR, 10, 255);
-            sunG = Utils.Clamp(sunG, 10, 255);
-            sunB = Utils.Clamp(sunB, 10, 255);
+            sunR = Utils.Clamp(sunR, 0, 255);
+            sunG = Utils.Clamp(sunG, 0, 255);
+            sunB = Utils.Clamp(sunB, 0, 255);
             backgroundColor.R = (byte)sunB;
             backgroundColor.G = (byte)sunB;
             backgroundColor.B = (byte)sunB;
