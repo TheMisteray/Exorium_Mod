@@ -688,9 +688,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (NPC.downedBoss1 && spawnInfo.player.ZoneSnow && spawnInfo.player.ZoneRockLayerHeight)
+            if (spawnInfo.player.ZoneSnow && spawnInfo.player.ZoneRockLayerHeight)
             {
-                return .08f;
+                return .04f;
             }
             return 0;
         }

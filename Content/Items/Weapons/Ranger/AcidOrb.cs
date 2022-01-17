@@ -50,7 +50,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             projectile.width = 12;
             projectile.height = 12;
             projectile.friendly = true;
-            projectile.magic = true;
+            projectile.ranged = true;
             projectile.penetrate = 3;
             projectile.timeLeft = 600;
         }
@@ -84,8 +84,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             for (int k = 0; k < 12; k++)
             {
-                int dust = Dust.NewDust(projectile.position - projectile.velocity, projectile.width, projectile.height, 33, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
-                Main.dust[dust].color = new Color(255, 110, 0);
+                int dust = Dust.NewDust(projectile.position - projectile.velocity, projectile.width, projectile.height, 33, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f, 0, new Color(255, 110, 0));
             }
             Main.PlaySound(SoundID.Item27, projectile.position);
         }

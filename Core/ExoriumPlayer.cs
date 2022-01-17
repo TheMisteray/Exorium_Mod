@@ -22,6 +22,7 @@ namespace ExoriumMod.Core
         public bool reverseHandOut;
 
         public int cloakHP = 40;
+        public int cloakTimer = 0;
 
         public override void ResetEffects()
         {
@@ -36,6 +37,20 @@ namespace ExoriumMod.Core
             acidArrows = false;
             ritualArrow = false;
             reverseHandOut = false;
+        }
+
+        public override void PostUpdateEquips()
+        {
+            if (cloakTimer % 60 == 0 && shadowCloak)
+            {
+                cloakTimer++;
+                cloakHP++;
+            }
+            else if (shadowCloak)
+                cloakTimer++;
+            else
+                cloakTimer = 0;
+            base.PostUpdateEquips();
         }
 
         public override void OnHitByProjectile(Projectile proj, int damage, bool crit)

@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -58,7 +59,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("RimestoneBar"), 8);
+            recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>(), 8);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

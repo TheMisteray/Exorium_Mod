@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -32,7 +33,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("Deadwood"), 7);
+            recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 7);
             recipe.AddTile(TileID.WorkBenches);
             recipe.SetResult(this);
             recipe.AddRecipe();

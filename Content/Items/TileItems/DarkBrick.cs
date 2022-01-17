@@ -21,5 +21,13 @@ namespace ExoriumMod.Content.Items.TileItems
             item.consumable = true;
             item.createTile = TileType<Tiles.DarkBrickTile>();
         }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemType<WallItems.DarkBrickWall>(), 4);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 }

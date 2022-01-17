@@ -147,7 +147,7 @@ namespace ExoriumMod.Content.Tiles
             {
                 if (isLocked)
                 {
-                    int key = ItemType<Items.Consumables.DarkKey>();
+                    int key = ItemType<Items.Misc.DarkKey>();
                     if (player.ConsumeItem(key) && Chest.Unlock(left, top))
                     {
                         if (Main.netMode == 1)
@@ -210,7 +210,7 @@ namespace ExoriumMod.Content.Tiles
                 {
                     player.showItemIcon2 = ItemType<Items.TileItems.DarkChest>();
                     if (Main.tile[left, top].frameX / 36 == 1)
-                        player.showItemIcon2 = ItemType<Items.Consumables.DarkKey>();
+                        player.showItemIcon2 = ItemType<Items.Misc.DarkKey>();
                     player.showItemIconText = "";
                 }
             }

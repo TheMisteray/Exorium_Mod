@@ -8,7 +8,7 @@ using System;
 
 namespace ExoriumMod.Content.Projectiles
 {
-    class MorditeSkull : ModProjectile
+    class DarksteelSkull : ModProjectile
     {
         public override string Texture => AssetDirectory.Projectile + Name;
 
@@ -82,7 +82,7 @@ namespace ExoriumMod.Content.Projectiles
             {
                 int offset = Main.rand.Next(-4, 4);
                 new Vector2(projectile.position.X + offset, projectile.position.Y + offset);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -99,7 +99,7 @@ namespace ExoriumMod.Content.Projectiles
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
             }
             Main.PlaySound(SoundID.NPCDeath6);
         }

@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Tools
 {
@@ -29,7 +30,7 @@ namespace ExoriumMod.Content.Items.Tools
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("Deadwood"), 8);
+            recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 8);
             recipe.AddTile(TileID.WorkBenches);
             recipe.SetResult(this);
             recipe.AddRecipe();

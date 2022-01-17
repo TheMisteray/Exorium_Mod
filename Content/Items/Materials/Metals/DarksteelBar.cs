@@ -5,14 +5,14 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Materials.Metals
 {
-    class MorditeBar : ModItem
+    class DarksteelBar : ModItem
     {
         public override string Texture => AssetDirectory.Metal + Name;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mordite Alloy");
-            Tooltip.SetDefault("Not the real stuff... But It'll do");
+            DisplayName.SetDefault("Darksteel Alloy");
+            Tooltip.SetDefault("Not the real stuff, but It'll do for now");
         }
         public override void SetDefaults()
         {
@@ -26,14 +26,14 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             item.useTime = 10;
             item.autoReuse = true;
             item.consumable = true;
-            item.createTile = TileType<Tiles.MorditeBarTile>();
+            item.createTile = TileType<Tiles.DarksteelBarTile>();
             item.placeStyle = 0;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("BlightsteelBar"));
+            recipe.AddIngredient(ItemType<BlightsteelBar>());
             recipe.AddIngredient(ItemID.HellstoneBar);
             recipe.AddIngredient(ItemID.CrimtaneBar);
             recipe.AddIngredient(ItemID.Bone, 4);
@@ -41,7 +41,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             recipe.SetResult(this, 2);
             recipe.AddRecipe();
             ModRecipe recipeAlt = new ModRecipe(mod);
-            recipeAlt.AddIngredient(mod.GetItem("BlightsteelBar"));
+            recipeAlt.AddIngredient(ItemType<BlightsteelBar>());
             recipeAlt.AddIngredient(ItemID.HellstoneBar);
             recipeAlt.AddIngredient(ItemID.DemoniteBar);
             recipeAlt.AddIngredient(ItemID.Bone, 4);

@@ -40,8 +40,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 12);
-            recipe.AddIngredient(mod.GetItem("TaintedGel"), 6);
+            recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
+            recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 6);
             recipe.AddTile(TileID.Bookcases);
             recipe.SetResult(this);
             recipe.AddRecipe();

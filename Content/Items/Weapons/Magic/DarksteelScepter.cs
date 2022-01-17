@@ -8,14 +8,14 @@ using System;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
-    class MorditeScepter : ModItem
+    class DarksteelScepter : ModItem
     {
         public override string Texture => AssetDirectory.MagicWeapon + Name;
 
         public override void SetStaticDefaults()
         {
             Item.staff[item.type] = true;
-            Tooltip.SetDefault("Shoot's bursts of homing skulls");
+            Tooltip.SetDefault("Shoots bursts of homing skulls");
         }
 
         public override void SetDefaults()
@@ -33,7 +33,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             item.shootSpeed = 14f;
             item.autoReuse = true;
             item.damage = 38;
-            item.shoot = ProjectileType<MorditeSkullMagic>();
+            item.shoot = ProjectileType<DarksteelSkullMagic>();
             item.UseSound = SoundID.Item20;
         }
 
@@ -54,15 +54,15 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("MorditeBar"), 10);
+            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }
-    class MorditeSkullMagic : ModProjectile
+    class DarksteelSkullMagic : ModProjectile
     {
-        public override string Texture => AssetDirectory.Projectile + "MorditeSkull";
+        public override string Texture => AssetDirectory.Projectile + "DarksteelSkull";
 
         public override void SetStaticDefaults()
         {
@@ -131,7 +131,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             {
                 int offset = Main.rand.Next(-4, 4);
                 new Vector2(projectile.position.X + offset, projectile.position.Y + offset);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -148,7 +148,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
             }
             Main.PlaySound(SoundID.NPCDeath6);
         }

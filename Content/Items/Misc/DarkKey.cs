@@ -1,7 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria.ModLoader;
 
-namespace ExoriumMod.Content.Items.Consumables
+namespace ExoriumMod.Content.Items.Misc
 {
     class DarkKey : ModItem
     {

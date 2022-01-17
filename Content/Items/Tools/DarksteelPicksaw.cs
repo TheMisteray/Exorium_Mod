@@ -7,7 +7,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Tools
 {
-    class MorditePicksaw : ModItem
+    class DarksteelPicksaw : ModItem
     {
         public override string Texture => AssetDirectory.Tool + Name;
 
@@ -34,14 +34,14 @@ namespace ExoriumMod.Content.Items.Tools
         {
             if (Main.rand.Next(0, 11) == 1)
             {
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustType<Dusts.MorditeSpecks>(), 0f, 0f, 50, default(Color), 1);
+                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustType<Dusts.DarksteelDust>(), 0f, 0f, 50, default(Color), 1);
             }
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("MorditeBar"), 12);
+            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 12);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -27,7 +27,6 @@ namespace ExoriumMod.Content.Items.TileItems
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chest);
             recipe.AddIngredient(ItemType<Deadwood>(), 8);
             recipe.AddRecipeGroup("IronBar", 2);
             recipe.AddTile(TileID.WorkBenches);

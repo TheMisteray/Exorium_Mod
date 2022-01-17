@@ -86,7 +86,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("DunestoneBar"), 10);
+            recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

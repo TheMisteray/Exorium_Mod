@@ -8,7 +8,7 @@ using System;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
-    public class MorditeBlade : ModItem
+    public class DarksteelBlade : ModItem
     {
         public override string Texture => AssetDirectory.MeleeWeapon + Name;
         public override void SetStaticDefaults()
@@ -31,7 +31,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             item.UseSound = SoundID.Item8;
             item.autoReuse = true;
             item.scale = 1.3f;
-            item.shoot = ProjectileType<MorditeSkullMelee>();
+            item.shoot = ProjectileType<DarksteelSkullMelee>();
             item.shootSpeed = 12f;
             item.useTurn = true;
         }
@@ -39,7 +39,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("MorditeBar"), 10);
+            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
@@ -57,9 +57,9 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         }
     }
 
-    class MorditeSkullMelee : ModProjectile
+    class DarksteelSkullMelee : ModProjectile
     {
-        public override string Texture => AssetDirectory.Projectile + "MorditeSkull";
+        public override string Texture => AssetDirectory.Projectile + "DarksteelSkull";
 
         public override void SetStaticDefaults()
         {
@@ -128,7 +128,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             {
                 int offset = Main.rand.Next(-4, 4);
                 new Vector2(projectile.position.X + offset, projectile.position.Y + offset);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -145,7 +145,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
             }
             Main.PlaySound(SoundID.NPCDeath6);
         }

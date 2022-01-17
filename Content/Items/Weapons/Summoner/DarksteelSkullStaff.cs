@@ -7,13 +7,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Weapons.Summoner
 {
-    class MorditeSkullStaff : ModItem
+    class DarksteelSkullStaff : ModItem
     {
         public override string Texture => AssetDirectory.SummonerWeapon + Name;
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Summons a mordite skull to fight for you \n" +
+            Tooltip.SetDefault("Summons a Darksteel skull to fight for you \n" +
                 "Each skull grants +3% summon damage");
             ItemID.Sets.GamepadWholeScreenUseRange[item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[item.type] = true;
@@ -36,9 +36,9 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
             // These below are needed for a minion weapon
             item.noMelee = true;
             item.summon = true;
-            item.buffType = BuffType<Buffs.Minions.MorditeSkull>();
+            item.buffType = BuffType<Buffs.Minions.DarksteelSkull>();
             // No buffTime because otherwise the item tooltip would say something like "1 minute duration"
-            item.shoot = ProjectileType<Projectiles.Minions.MorditeSkullSummon>();
+            item.shoot = ProjectileType<Projectiles.Minions.DarksteelSkullSummon>();
         }
 
         public override bool AltFunctionUse(Player player)
@@ -68,7 +68,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("MorditeBar"), 10);
+            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

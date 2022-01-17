@@ -7,13 +7,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
-    public class MorditeBow : ModItem
+    public class DarksteelBow : ModItem
     {
         public override string Texture => AssetDirectory.RangerWeapon + Name;
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Has a chance to fire a Mordite arrow, dealing double damage");
+            Tooltip.SetDefault("Has a chance to fire a Darksteel arrow, dealing double damage");
         }
 
         public override void SetDefaults()
@@ -41,7 +41,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             int spShoot = Main.rand.Next(0,6);
             if (spShoot == 5)
             {
-                Projectile.NewProjectile(position.X, position.Y, speedX, speedY, mod.ProjectileType("MorditeArrow"), damage, knockBack, player.whoAmI);
+                Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ProjectileType<DarksteelArrow>(), damage, knockBack, player.whoAmI);
                 return false;
             }
             else
@@ -53,14 +53,14 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemType<Materials.Metals.MorditeBar>(), 10);
+            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }
 
-    class MorditeArrow : ModProjectile
+    class DarksteelArrow : ModProjectile
     {
         public override string Texture => AssetDirectory.Projectile + Name;
 
@@ -81,7 +81,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             {
                 int offset = Main.rand.Next(-4, 4);
                 new Vector2(projectile.position.X + offset, projectile.position.Y + offset);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -90,7 +90,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             for (int i = 0; i < 15; i++)
             {
                 int offset = Main.rand.Next(-4, 4);
-                Dust.NewDust(new Vector2(projectile.position.X + offset, projectile.position.Y + offset), projectile.width, projectile.height, DustType<Dusts.MorditeSpecks>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
+                Dust.NewDust(new Vector2(projectile.position.X + offset, projectile.position.Y + offset), projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
             }
         }
     }

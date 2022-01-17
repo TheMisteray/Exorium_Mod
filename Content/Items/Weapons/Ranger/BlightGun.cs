@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -67,7 +68,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 for (int i = 0; i < numberProjectiles; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(30)); // 32 degree spread.
-                    float scale = (1f - Main.rand.NextFloat() * .5f);
+                    float scale = (1.5f - Main.rand.NextFloat() * 1.2f);
                     perturbedSpeed = perturbedSpeed * scale; 
                     Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
                 }
@@ -79,8 +80,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 12);
-            recipe.AddIngredient(mod.GetItem("TaintedGel"), 6);
+            recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
+            recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 6);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

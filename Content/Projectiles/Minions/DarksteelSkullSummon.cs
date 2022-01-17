@@ -8,13 +8,13 @@ using System;
 
 namespace ExoriumMod.Content.Projectiles.Minions
 {
-    class MorditeSkullSummon : ModProjectile
+    class DarksteelSkullSummon : ModProjectile
     {
-        public override string Texture => AssetDirectory.Projectile + "MorditeSkull";
+        public override string Texture => AssetDirectory.Projectile + "DarksteelSkull";
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mordite Skull");
+            DisplayName.SetDefault("Darksteel Skull");
             // This is necessary for right-click targeting
             ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
             // These below are needed for a minion
@@ -65,9 +65,9 @@ namespace ExoriumMod.Content.Projectiles.Minions
             // This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
             if (player.dead || !player.active)
             {
-                player.ClearBuff(BuffType<Buffs.Minions.MorditeSkull>());
+                player.ClearBuff(BuffType<Buffs.Minions.DarksteelSkull>());
             }
-            if (player.HasBuff(BuffType<Buffs.Minions.MorditeSkull>()))
+            if (player.HasBuff(BuffType<Buffs.Minions.DarksteelSkull>()))
             {
                 projectile.timeLeft = 2;
             }
@@ -80,12 +80,12 @@ namespace ExoriumMod.Content.Projectiles.Minions
             // The index is projectile.minionPos
             for (int i = 0; i <= Main.maxProjectiles; i++)
             {
-                if (Main.projectile[i].type == ProjectileType<MorditeSkullSummon>() && Main.projectile[i].owner == projectile.owner)
+                if (Main.projectile[i].type == ProjectileType<DarksteelSkullSummon>() && Main.projectile[i].owner == projectile.owner)
                     numbskull++;
                 if (i == projectile.whoAmI)
                     i = Main.maxProjectiles + 1;
             }
-            idlePosition.X += (projectile.width*2) * ((numbskull-1) - (float)(player.ownedProjectileCounts[ProjectileType<MorditeSkullSummon>()]-1)/2);
+            idlePosition.X += (projectile.width*2) * ((numbskull-1) - (float)(player.ownedProjectileCounts[ProjectileType<DarksteelSkullSummon>()]-1)/2);
             projectile.position.X = idlePosition.X - projectile.width/2;
             projectile.position.Y = idlePosition.Y - projectile.height * 1.5f;
             projectile.netUpdate = true;
@@ -164,6 +164,34 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 projectile.rotation = 0;
             }
             #endregion
+        }
+    }
+
+    class SkullShot : ModProjectile
+    {
+        public override string Texture => AssetDirectory.Invisible;
+
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.Homing[projectile.type] = true;
+            ProjectileID.Sets.MinionShot[projectile.type] = true;
+        }
+
+        public override void SetDefaults()
+        {
+            projectile.width = 16;
+            projectile.height = 16;
+            projectile.alpha = 255;
+            projectile.timeLeft = 300;
+            projectile.penetrate = 2;
+            projectile.friendly = true;
+            projectile.tileCollide = true;
+            projectile.ignoreWater = false;
+        }
+
+        public override void AI()
+        {
+            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
         }
     }
 }

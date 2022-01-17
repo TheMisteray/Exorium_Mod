@@ -41,7 +41,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("DunestoneBar"), 8);
+            recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 8);
             recipe.AddTile(TileID.Bookcases);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -114,7 +114,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("RimestoneBar"), 8);
+            recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>(), 8);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

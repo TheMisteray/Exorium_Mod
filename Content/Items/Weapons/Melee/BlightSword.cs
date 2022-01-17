@@ -36,7 +36,6 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             item.shoot = ProjectileType<SwungBlightedSword>();
             item.shootSpeed = 10f;
             item.noUseGraphic = true;
-            //item.useTurn = true;
         }
 
         public override void MeleeEffects(Player player, Rectangle hitbox)
@@ -52,7 +51,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 16);
+            recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 16);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

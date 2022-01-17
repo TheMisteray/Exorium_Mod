@@ -33,7 +33,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("BlightedOre"), 4);
+            recipe.AddIngredient(ItemType<BlightedOre>(), 4);
             recipe.AddTile(TileID.Furnaces);
             recipe.SetResult(this);
             recipe.AddRecipe();

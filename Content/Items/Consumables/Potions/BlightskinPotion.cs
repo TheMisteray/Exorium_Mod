@@ -36,8 +36,8 @@ namespace ExoriumMod.Content.Items.Consumables.Potions
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.BottledWater);
-            recipe.AddIngredient(mod.GetItem("BlightedOre"));
-            recipe.AddIngredient(mod.GetItem("Deadweed"));
+            recipe.AddIngredient(ItemType<Materials.Metals.BlightedOre>());
+            recipe.AddIngredient(ItemType<Materials.Deadweed>());
             recipe.AddIngredient(ItemType<Materials.WightBone>());
             recipe.AddTile(TileID.Bottles);
             recipe.SetResult(this);

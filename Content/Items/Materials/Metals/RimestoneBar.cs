@@ -33,7 +33,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("RimeStone"), 3);
+            recipe.AddIngredient(ItemType<RimeStone>(), 3);
             recipe.AddTile(TileID.Furnaces);
             recipe.SetResult(this);
             recipe.AddRecipe();

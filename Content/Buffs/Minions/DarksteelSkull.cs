@@ -5,7 +5,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Buffs.Minions
 {
-    class MorditeSkull : ModBuff
+    class DarksteelSkull : ModBuff
     {
         public override bool Autoload(ref string name, ref string texture)
         {
@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Buffs.Minions
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Mordite Skull");
-            Description.SetDefault("The mordite skull will fight for you \n" +
+            Description.SetDefault("The Darksteel skull will fight for you \n" +
                 "Each skull gives +3% summon damage");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
@@ -24,10 +24,10 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.ownedProjectileCounts[ProjectileType<Projectiles.Minions.MorditeSkullSummon>()] > 0)
+            if (player.ownedProjectileCounts[ProjectileType<Projectiles.Minions.DarksteelSkullSummon>()] > 0)
             {
                 player.buffTime[buffIndex] = 18000;
-                player.minionDamage += player.ownedProjectileCounts[ProjectileType<Projectiles.Minions.MorditeSkullSummon>()] * .03f;
+                player.minionDamage += player.ownedProjectileCounts[ProjectileType<Projectiles.Minions.DarksteelSkullSummon>()] * .03f;
             }
             else
             {

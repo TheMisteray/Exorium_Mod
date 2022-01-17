@@ -28,13 +28,8 @@ namespace ExoriumMod.Content.Items.Accessories
             item.expert = true;
         }
 
-        private int healTimer = 0;
-
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            healTimer++;
-            if (healTimer % 60 == 0)
-                player.GetModPlayer<ExoriumPlayer>().cloakHP++;
             player.GetModPlayer<ExoriumPlayer>().shadowCloak = true;
             if (player.GetModPlayer<ExoriumPlayer>().cloakHP > 0 && !player.GetModPlayer<ExoriumPlayer>().deadCloak)
             {

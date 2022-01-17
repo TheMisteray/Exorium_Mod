@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace ExoriumMod.Content.Tiles
 {
-    class MorditeBarTile : ModTile
+    class DarksteelBarTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
@@ -30,7 +30,7 @@ namespace ExoriumMod.Content.Tiles
         public override bool Drop(int i, int j)
         {
             Tile t = Main.tile[i, j];
-            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.MorditeBar>());
+            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.DarksteelBar>());
             return base.Drop(i, j);
         }
     }

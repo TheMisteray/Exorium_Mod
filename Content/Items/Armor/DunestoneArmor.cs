@@ -47,7 +47,7 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("DunestoneBar"), 15);
+                recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 15);
                 recipe.AddTile(TileID.Anvils);
                 recipe.SetResult(this);
                 recipe.AddRecipe();
@@ -83,7 +83,7 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("DunestoneBar"), 25);
+                recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 25);
                 recipe.AddTile(TileID.Anvils);
                 recipe.SetResult(this);
                 recipe.AddRecipe();
@@ -107,7 +107,7 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("DunestoneBar"), 20);
+                recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 20);
                 recipe.AddTile(TileID.Anvils);
                 recipe.SetResult(this);
                 recipe.AddRecipe();

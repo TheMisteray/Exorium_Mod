@@ -78,13 +78,41 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         }
 
         private int phase = 1;
-        private float pastAction1 = -1;
-        private float pastAction2 = -1;
-        private float attackLength;
-        private float attackProgress;
+        private int pastAction1 = -1;
+        private int pastAction2 = -1;
+        private int attackLength;
+        private int attackProgress;
         private bool showHP = true;
-        private float target;
-        private Vector2 moveTo;
+        private int target = 0;
+        private Vector2 moveTo = Vector2.Zero;
+
+        #region Networking
+        //TODO: Check if all of this is even necessary, it might work just fine without sending past actions etc.
+        public override void SendExtraAI(System.IO.BinaryWriter writer)
+        {
+            writer.Write(phase);
+            writer.Write(pastAction1);
+            writer.Write(pastAction2);
+            writer.Write(attackLength);
+            writer.Write(attackProgress);
+            writer.Write(showHP);
+            writer.Write(target);
+            writer.Write(moveTo.X);
+            writer.Write(moveTo.Y);
+        }
+
+        public override void ReceiveExtraAI(System.IO.BinaryReader reader)
+        {
+            phase = reader.ReadInt32();
+            pastAction1 = reader.ReadInt32();
+            pastAction2 = reader.ReadInt32();
+            attackLength = reader.ReadInt32();
+            attackProgress = reader.ReadInt32();
+            showHP = reader.ReadBoolean();
+            target = reader.ReadInt32();
+            moveTo = new Vector2(reader.ReadInt32(), reader.ReadInt32());
+        }
+        #endregion Networking
 
         public override bool PreAI()
         {
@@ -193,7 +221,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 }
                 //Store past actions
                 pastAction2 = pastAction1;
-                pastAction1 = actionCycle;
+                pastAction1 = (int)actionCycle;
                 switch (actionCycle)
                 {
                     case 0: //Shadowbolt

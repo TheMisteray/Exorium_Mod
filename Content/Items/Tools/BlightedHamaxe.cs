@@ -45,7 +45,7 @@ namespace ExoriumMod.Content.Items.Tools
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 10);
+            recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

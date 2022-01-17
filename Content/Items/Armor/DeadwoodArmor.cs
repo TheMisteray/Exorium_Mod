@@ -36,7 +36,7 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("Deadwood"), 20);
+                recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 20);
                 recipe.AddTile(TileID.WorkBenches);
                 recipe.SetResult(this);
                 recipe.AddRecipe();
@@ -59,7 +59,7 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("Deadwood"), 20);
+                recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 20);
                 recipe.AddTile(TileID.WorkBenches);
                 recipe.SetResult(this);
                 recipe.AddRecipe();
@@ -82,7 +82,7 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("Deadwood"), 25);
+                recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 25);
                 recipe.AddTile(TileID.WorkBenches);
                 recipe.SetResult(this);
                 recipe.AddRecipe();

@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -33,7 +34,7 @@ namespace ExoriumMod.Content.Items.Accessories
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Shackle);
-            recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 2);
+            recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 2);
             recipe.AddTile(TileID.TinkerersWorkbench);
             recipe.SetResult(this);
             recipe.AddRecipe();

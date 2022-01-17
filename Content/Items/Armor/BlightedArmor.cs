@@ -52,8 +52,8 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 15);
-                recipe.AddIngredient(mod.GetItem("TaintedGel"), 10);
+                recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 15);
+                recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 10);
                 recipe.AddTile(TileID.Anvils);
                 recipe.SetResult(this);
                 recipe.AddRecipe();
@@ -92,8 +92,8 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 25);
-                recipe.AddIngredient(mod.GetItem("TaintedGel"), 20);
+                recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 25);
+                recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 20);
                 recipe.AddTile(TileID.Anvils);
                 recipe.SetResult(this);
                 recipe.AddRecipe();
@@ -131,8 +131,8 @@ namespace ExoriumMod.Content.Items.Armor
             public override void AddRecipes()
             {
                 ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(mod.GetItem("BlightsteelBar"), 20);
-                recipe.AddIngredient(mod.GetItem("TaintedGel"), 15);
+                recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 20);
+                recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 15);
                 recipe.AddTile(TileID.Anvils);
                 recipe.SetResult(this);
                 recipe.AddRecipe();

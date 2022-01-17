@@ -4098,11 +4098,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (NPC.downedBoss1)
-            {
-                return SpawnCondition.DesertCave.Chance * .08f;
-            }
-            return 0;
+            return SpawnCondition.DesertCave.Chance * .04f;
         }
     }
 
@@ -4357,18 +4353,6 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override void NPCLoot()
         {
             Item.NewItem(npc.getRect(), ItemType<Items.Materials.Metals.DuneStone>(), Main.rand.Next(7, 14));
-        }
-
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            if (NPC.downedBoss1)
-            {
-                return SpawnCondition.DesertCave.Chance * .1f;
-            }
-            else
-            {
-                return 0f;
-            }
         }
     }
 }

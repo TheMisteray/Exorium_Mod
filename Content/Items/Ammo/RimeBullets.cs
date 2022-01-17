@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.Items.Ammo
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("RimestoneBar"));
+            recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>());
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this, 70);
             recipe.AddRecipe();

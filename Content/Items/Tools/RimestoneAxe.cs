@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Tools
 {
@@ -47,7 +48,7 @@ namespace ExoriumMod.Content.Items.Tools
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("RimestoneBar"), 9);
+            recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>(), 9);
             recipe.AddRecipeGroup("Wood", 3);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);

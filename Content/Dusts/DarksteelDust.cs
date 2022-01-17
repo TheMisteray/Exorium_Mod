@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace ExoriumMod.Content.Dusts
 {
-    class MorditeSpecks : ModDust
+    class DarksteelDust : ModDust
     {
         public override bool Autoload(ref string name, ref string texture)
         {

@@ -12,19 +12,21 @@ Also make it hit without procing i frames - Done
 Finish Misty Step - Done
 ScrollCooldown Sprite - Done
 Other Rime Sprites - Done
-Codebase reorginization
-Change Mordite to darksteel?
-Shadowmancer Rewrite: variables to AI or syncing
-make Shadow cloak not use local variable
-Move Minions to their weapons and minion shots
-Rewrite recipies to be neater
-More D&D items
+Codebase reorginization - Done
+Change Mordite to darksteel? - Done
+Shadowmancer Rewrite: variables to AI or syncing - Done
+make Shadow cloak not use local variable - Done
+Move minion shots into the minions - Done
+Rewrite recipies to be neater - Done
+More D&D items - Done
 	Molotov vest
 	Throwing rapiers
 Smooth out deadlands (generate sporadically placed ashen dust so it is not an obvious line where it generated)
 Remove Boss Test dialouge
-Make Scroll Cooldown unremovable
-Github Release
+Make Scroll Cooldown unremovable and have priority like potion cooldown
+Makes deadweed grow?
+Make icecream obtainable
+Github Release - Done
 Mod release
 
 
