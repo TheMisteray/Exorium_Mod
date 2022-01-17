@@ -25,7 +25,7 @@ Smooth out deadlands (generate sporadically placed ashen dust so it is not an ob
 Make blightslime spikes only check the tile at their bottom - Done
 Remove Boss Test dialouge - Done
 Make Scroll Cooldown unremovable - Done
-Makes deadweed grow?
+Makes deadweed grow? - Done
 Make icecream obtainable - Done
 Github Release - Done
 Mod release
