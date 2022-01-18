@@ -37,7 +37,7 @@ namespace ExoriumMod.Content.Items.Armor
                 player.setBonus = "10% increased movement speed"
                     + "\n5% increased critcal strike chance"
                     + "\nIncreased regeneration"
-                    + "\nChance to fire Mordite Skulls upon getting hit";
+                    + "\nChance to fire Darksteel Skulls upon getting hit";
                 player.lifeRegen += 1;
                 player.moveSpeed += 0.1f;
                 player.meleeCrit += 5;
