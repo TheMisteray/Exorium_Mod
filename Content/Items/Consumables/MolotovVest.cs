@@ -33,14 +33,14 @@ namespace ExoriumMod.Content.Items.Consumables
             item.consumable = true;
             item.rare = -1;
             item.value = 0;
-            item.buffType = BuffType<Buffs.Blightskin>();
+            item.noMelee = true;
+            item.shoot = 1;
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.statLife = 1;
             int d = Projectile.NewProjectile(player.Center, Vector2.Zero, ProjectileID.Dynamite, 1000, 20, player.whoAmI);
-            Main.projectile[d].friendly = false;
+            Main.projectile[d].hostile = true;
             Main.projectile[d].timeLeft = 2;
             Vector2 throwUp = new Vector2(0, -10);
             int bombs = Main.rand.Next(3, 6);
@@ -56,11 +56,16 @@ namespace ExoriumMod.Content.Items.Consumables
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.WoodBreastplate);
-            recipe.AddIngredient(ItemID.MolotovCocktail, 7);
+            recipe.AddIngredient(ItemID.MolotovCocktail, 3);
             recipe.AddIngredient(ItemID.RopeCoil);
             recipe.AddTile(TileID.WorkBenches);
             recipe.SetResult(this);
             recipe.AddRecipe();
+        }
+
+        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+            return false;
         }
     }
 }

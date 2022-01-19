@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using ExoriumMod.Helpers;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -36,14 +37,6 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             item.shoot = ProjectileType<SwungBlightedSword>();
             item.shootSpeed = 10f;
             item.noUseGraphic = true;
-        }
-
-        public override void MeleeEffects(Player player, Rectangle hitbox)
-        {
-            if (Main.rand.Next(0, 6) == 1)
-            {
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustType<Dusts.BlightDust>(), 0f, 0f, 50, default(Color), 1);
-            }
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ProjectileType<SwungBlightedSword>()] <= 0;
@@ -120,11 +113,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                     {
                         strength++;
                         Vector2 distance = new Vector2(0, 5);
-                        for (int i = 0; i < 360; i += (10 - (int)strength))
-                        {
-                            Vector2 rotatedDist = distance.RotatedBy(MathHelper.ToRadians(i));
-                            Dust.NewDust(player.Center, 0, 0, DustType<Dusts.BlightDust>(), rotatedDist.X, rotatedDist.Y, 0, default, Main.rand.NextFloat(1f + (.2f * strength)));
-                        }
+                        DustHelper.DustRing(player.Center, DustType<Dusts.BlightDust>(), 5, 0, MathHelper.ToRadians(10 - (int)strength), .5f + .1f * strength, .5f + .1f * strength, 0, 0, default, true);
                         Main.PlaySound(SoundID.MaxMana, projectile.Center);
                     }
                 }
@@ -164,13 +153,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         //Get vector to end of sword
                         Vector2 SwordTip = new Vector2(0, projectile.width/2);
                         Vector2 hitSpot = SwordTip.RotatedBy(projectile.rotation - MathHelper.PiOver2);
-                        for (int i = 0; i < (strength + 1) * 20; i++)
-                        {
-                            //Dust burst at hit location, more dust, larger dust, and greater spread at high strength
-                            Vector2 dustSpeed = new Vector2(0, Main.rand.NextFloat(8 + strength * 2));
-                            Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
-                            Dust.NewDust(player.Center + hitSpot, 0, 0, DustType<Dusts.BlightDust>(), perturbedDustSpeed.X, perturbedDustSpeed.Y, 0, default, Main.rand.NextFloat(1f + (.2f * strength)));
-                        }
+                        DustHelper.DustCircle(player.Center + hitSpot, DustType<Dusts.BlightDust>(), 8 + strength * 2, (strength + 1) * 20, .5f + .1f * strength, .5f + .1f * strength, 0, 0, default, true);
+
                         //ending
                         Main.PlaySound(SoundID.Item89, projectile.Center);
                         state = 2f;
@@ -189,14 +173,14 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             projectile.Center = playerHandPos;
             projectile.rotation = projectile.velocity.ToRotation();
 
-            /*
             //Continuous holdout
-            if (state == 0)
+            if (state == 0 || strength == 0)
                 player.ChangeDir(-projectile.direction);
             else //Flip player after swing
                 player.ChangeDir(projectile.direction);
-            */
-            player.ChangeDir(projectile.direction);
+            
+            
+            //player.ChangeDir(projectile.direction);
 
             player.heldProj = projectile.whoAmI;
             player.itemTime = 15;
