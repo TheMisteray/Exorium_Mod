@@ -5,3 +5,4 @@ hideCode = true
 hideResources = true
 includeSource = false
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
+includePDB = false;
