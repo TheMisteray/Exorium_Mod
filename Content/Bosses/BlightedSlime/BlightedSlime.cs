@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExoriumMod.Core;
 using ExoriumMod.Content.Dusts;
+using ExoriumMod.Helpers;
 
 namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
@@ -550,14 +551,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                 }
             }
             //dust
-            for (int i = 0; i < 150; i++)
-            {
-                Vector2 dustPos = new Vector2(0, Main.rand.NextFloat(28));
-                Vector2 perturbedDustPos = dustPos.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
-                int deathDust = Dust.NewDust(npc.Center + perturbedDustPos, 0, 0, DustType<BlightDust>(), 0, 0, 0, default, Main.rand.NextFloat(1, 4));
-                Main.dust[deathDust].velocity = (Main.dust[deathDust].position - npc.Center);
-            }
-
+            DustHelper.DustCircle(npc.Center, DustType<BlightDust>(), 28, 150, 2.5f, 1.5f, 0, 0, default, true);
             return true;
         }
 

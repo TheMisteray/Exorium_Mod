@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using ExoriumMod.Helpers;
 using Microsoft.Xna.Framework;
 using System;
 using ExoriumMod.Content.Dusts;
@@ -123,11 +124,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 preFight--;
                 if (preFight == 0)
                 {
-                    for (int i = 0; i<36; i++)
-                    {
-                        Vector2 circle = new Vector2(0, 5).RotatedByRandom(10 * i);
-                        Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustType<Rainbow>(), circle.X, circle.Y, 0, new Color(200, 0, 0));
-                    }
+                    DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 20, 0, .1f, 1, 0, 0, 0, Color.Red, true);
                 }
                 return false;
             }

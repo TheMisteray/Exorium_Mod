@@ -33,7 +33,7 @@ namespace ExoriumMod.Helpers
         /// <summary>
         /// Creates a ring of dust
         /// </summary>
-        public static void DustRing(Vector2 center, int dustType, float radius, float randomness, float density, float dustCount, float dustSize, float sizeVariance, int alpha, int alphaVariance, Color color, bool burstOutward)
+        public static void DustRing(Vector2 center, int dustType, float radius, float randomness, float density, float dustSize, float sizeVariance, int alpha, int alphaVariance, Color color, bool burstOutward)
         {
             Vector2 rad = new Vector2(0, radius);
 
