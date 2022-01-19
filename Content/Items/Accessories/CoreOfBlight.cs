@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using System;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -33,7 +34,7 @@ namespace ExoriumMod.Content.Items.Accessories
             player.lifeRegen -= 2;
             if (player.lifeRegen <=0)
             {
-                player.allDamage += -0.03f * player.lifeRegen;
+                player.allDamage += Math.Min(-0.03f * player.lifeRegen, .25f);
             }
             if (player.lifeRegen > 0)
             {
