@@ -1,3 +1,7 @@
 displayName = Exorium Mod
 author = Mr. A
 version = 0.1.101
+hideCode = true
+hideResources = true
+includeSource = false
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
