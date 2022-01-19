@@ -63,7 +63,7 @@ namespace ExoriumMod.Core
                     Vector2 perturbedSpeed = new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-4, 4)).RotatedByRandom(MathHelper.ToRadians(360)); // 360 degree spread.
                     // Stagger difference
                     float scale = 1f - (Main.rand.NextFloat() * .3f);
-                    Projectile.NewProjectile(player.position.X, player.position.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("MorditeSkull"), 50, 2, player.whoAmI);
+                    Projectile.NewProjectile(player.position.X, player.position.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<Content.Projectiles.DarksteelSkull>(), 50, 2, player.whoAmI);
                 }
             }
             if (shadowCloak && !deadCloak)
@@ -80,7 +80,7 @@ namespace ExoriumMod.Core
                     Vector2 perturbedSpeed = new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-4, 4)).RotatedByRandom(MathHelper.ToRadians(360)); // 360 degree spread.
                     // Stagger difference
                     float scale = 1f - (Main.rand.NextFloat() * .3f);
-                    Projectile.NewProjectile(player.position.X, player.position.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("MorditeSkull"), 50, 2, player.whoAmI);
+                    Projectile.NewProjectile(player.position.X, player.position.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<Content.Projectiles.DarksteelSkull>(), 50, 2, player.whoAmI);
                 }
             }
             if (shadowCloak && !deadCloak)

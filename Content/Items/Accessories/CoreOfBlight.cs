@@ -34,7 +34,7 @@ namespace ExoriumMod.Content.Items.Accessories
             player.lifeRegen -= 2;
             if (player.lifeRegen <=0)
             {
-                player.allDamage += Math.Min(-0.03f * player.lifeRegen, .25f);
+                player.allDamage += Math.Min(-0.03f * player.lifeRegen, .3f);
             }
             if (player.lifeRegen > 0)
             {
