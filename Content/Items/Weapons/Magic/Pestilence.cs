@@ -66,7 +66,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void AI()
         {
-            if (Main.rand.NextBool(1))
+            for (int i = 0; i < 4; i++)
             {
                 Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
             }

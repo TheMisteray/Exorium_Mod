@@ -82,7 +82,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             {
                 Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.oldVelocity.X, projectile.oldVelocity.Y);
             }
-            Projectile.NewProjectile(projectile.position.X, projectile.position.Y, projectile.oldVelocity.X, projectile.oldVelocity.Y, mod.ProjectileType("BlightHail"), projectile.damage, projectile.knockBack, projectile.owner, 2);
+            Projectile.NewProjectile(projectile.position.X, projectile.position.Y, projectile.oldVelocity.X, projectile.oldVelocity.Y, ProjectileType<BlightHail>(), projectile.damage, projectile.knockBack, projectile.owner, 2);
             Main.PlaySound(SoundID.Item10, projectile.position);
         }
     }

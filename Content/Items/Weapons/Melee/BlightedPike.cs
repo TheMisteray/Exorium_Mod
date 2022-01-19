@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
+using ExoriumMod.Helpers;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -153,20 +154,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void AI()
         {
-            projectile.velocity.Y += projectile.ai[0];
-            if (Main.rand.NextBool(1))
-            {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
-            }
-            if (Main.rand.NextBool(2))
-            {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
-            }
-            if (Main.rand.NextBool(3))
-            {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
-            }
-            if (Main.rand.NextBool(4))
+            //projectile.velocity.Y += projectile.ai[0];
+            for (int i = 0; i < 4; i++)
             {
                 Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
             }
