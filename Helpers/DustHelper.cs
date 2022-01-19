@@ -10,22 +10,22 @@ namespace ExoriumMod.Helpers
         /// </summary>
         public static void DustCircle(Vector2 position, int dustType, float radius, float dustCount, float dustSize, float sizeVariance, int alpha, int alphaVariance, Color color, bool burstOutward)
         {
-            Vector2 rad = new Vector2(0, Main.rand.NextFloat(radius));
-
             if (burstOutward)
             {
                 for (int i = 0; i < dustCount; i++)
                 {
-                    Vector2 shootPoint = rad.RotatedBy(MathHelper.TwoPi);
-                    Dust.NewDustPerfect(position, dustType, shootPoint, alpha + Main.rand.Next(alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(sizeVariance, sizeVariance));
+                    Vector2 rad = new Vector2(0, Main.rand.NextFloat(radius));
+                    Vector2 shootPoint = rad.RotatedBy(Main.rand.NextFloat(0,MathHelper.TwoPi));
+                    Dust.NewDustPerfect(position, dustType, shootPoint, alpha + Main.rand.Next(-alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(-sizeVariance, sizeVariance));
                 }
             }
             else
             {
                 for (int i = 0; i < dustCount; i++)
                 {
-                    Vector2 placePoint = rad.RotatedBy(MathHelper.TwoPi);
-                    Dust.NewDustPerfect(position + placePoint, dustType, null, alpha + Main.rand.Next(alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(sizeVariance, sizeVariance));
+                    Vector2 rad = new Vector2(0, Main.rand.NextFloat(radius));
+                    Vector2 placePoint = rad.RotatedBy(Main.rand.NextFloat(0, MathHelper.TwoPi));
+                    Dust.NewDustPerfect(position + placePoint, dustType, null, alpha + Main.rand.Next(-alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(-sizeVariance, sizeVariance));
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace ExoriumMod.Helpers
                     if (randomness > 0) rand += randomness * Main.rand.NextFloat(-.01f, .01f);
 
                     Vector2 shootPoint = rad.RotatedBy(i + rand);
-                    Dust.NewDustPerfect(center, dustType, shootPoint, alpha + Main.rand.Next(alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(sizeVariance, sizeVariance));
+                    Dust.NewDustPerfect(center, dustType, shootPoint, alpha + Main.rand.Next(-alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(-sizeVariance, sizeVariance));
                 }
             }
             else
@@ -56,7 +56,7 @@ namespace ExoriumMod.Helpers
                     if (randomness > 0) rand += randomness * Main.rand.NextFloat(-.01f, .01f);
 
                     Vector2 placePoint = rad.RotatedBy(i + rand);
-                    Dust.NewDustPerfect(center + placePoint, dustType, null, alpha + Main.rand.Next(alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(sizeVariance, sizeVariance));
+                    Dust.NewDustPerfect(center + placePoint, dustType, null, alpha + Main.rand.Next(-alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(-sizeVariance, sizeVariance));
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using ExoriumMod.Helpers;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -139,9 +140,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void AI()
         {
-            projectile.rotation += .04f;
-            for (int i = 0; i <= Math.Pow(projectile.ai[0], 2); i++)
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Rainbow>(), projectile.oldVelocity.X, projectile.oldVelocity.Y, 0, Color.LightBlue);
+            DustHelper.DustCircle(projectile.Center, DustType<Dusts.Rainbow>(), projectile.width / 2, (float)Math.Pow(projectile.ai[0], 2), 1, 0, 0, 0, Color.LightBlue, false);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -152,7 +151,19 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void Kill(int timeLeft)
         {
             for (int i = 0; i <= projectile.ai[0] * 10; i++)
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width * (int)projectile.ai[0], projectile.height * (int)projectile.ai[0], 67, 0, 0);
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 67, 0, 0);
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        {
+            //Make hitbox smaller than dust
+            //pythagorean
+            float radius = (float)Math.Pow(width/2 * projectile.scale, 2);
+            radius /= 2;
+            radius = (float)Math.Sqrt(radius);
+            width = (int)radius;
+            height = (int)radius;
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough);
         }
     }
 }
