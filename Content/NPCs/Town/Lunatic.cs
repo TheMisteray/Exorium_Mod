@@ -76,7 +76,7 @@ namespace ExoriumMod.Content.NPCs.Town
                     case 1:
                         return "I hate bright colors.";
                     default:
-                        return "Waiting... Just, waiting...";
+                        return "Do you smell that?";
                 }
             }
             if (ExoriumWorld.deadlandTiles >= 50 && Main.rand.NextBool(4))
@@ -85,7 +85,7 @@ namespace ExoriumMod.Content.NPCs.Town
             }
             if (Wizard >= 0 && Main.rand.NextBool(7))
             {
-                return Main.npc[Wizard].GivenName + " wont let me look at any of his magical trinkets.";
+                return "Tell " + Main.npc[Wizard].GivenName + " that his crystal ball isn't worth as much as he thinks it is.";
             }
             if (Clothier >=0 && Main.rand.NextBool(7))
             {
@@ -93,7 +93,7 @@ namespace ExoriumMod.Content.NPCs.Town
             }
             if (Guide >= 0 && Main.rand.NextBool(7))
             {
-                return Main.npc[Guide].GivenName + " always refuses to talk to me.";
+                return Main.npc[Guide].GivenName + " always refuses to talk to me. Look, it's not my fault I keep forgetting all the recipies.";
             }
             if (Main.rand.Next(3) >= 1)
             {
@@ -193,8 +193,8 @@ namespace ExoriumMod.Content.NPCs.Town
 
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
-            damage = 8;
-            knockback = 1f;
+            damage = 12;
+            knockback = 3f;
         }
 
         public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
