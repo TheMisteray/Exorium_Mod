@@ -134,15 +134,10 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             base.Kill(timeLeft);
         }
 
-        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            //Hitbox no larger than sprite at any point
-            Vector2 radius = new Vector2(0, projectile.width / 2);
-            Vector2 diagRadius = radius.RotatedBy(MathHelper.ToRadians(45));
-            hitbox.Width = (int)(Math.Abs(diagRadius.X) * 2 * projectile.scale);
-            hitbox.Height = (int)(Math.Abs(diagRadius.Y) * 2 * projectile.scale);
-            hitbox.X = (int)(projectile.Center.X - Math.Abs(diagRadius.X) * projectile.scale);
-            hitbox.Y = (int)(projectile.Center.Y - Math.Abs(diagRadius.Y) * projectile.scale);
+            Vector2 dist = new Vector2(projHitbox.Center.X - targetHitbox.Center.X, projHitbox.Center.Y - targetHitbox.Center.Y);
+            return dist.Length() < (projectile.width/2 * projectile.scale) + targetHitbox.Width;
         }
 
         /// <summary>
