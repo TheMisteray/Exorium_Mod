@@ -56,7 +56,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                     if (project.type == ProjectileType<DuneBall>() && project.owner == player.whoAmI)
                     {
                         Main.projectile[proj[i]].ai[0] = 1;
-                        Main.projectile[proj[i]].damage /= 2;
+                        Main.projectile[proj[i]].damage = (Main.projectile[proj[i]].damage/3) * 2;
                     }
                 }
                 item.mana = 0;
