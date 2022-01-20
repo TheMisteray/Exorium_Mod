@@ -21,7 +21,7 @@ namespace ExoriumMod.Content.Items.Accessories
             item.rare = 2;
             item.maxStack = 1;
             item.accessory = true;
-            item.value = 0;
+            item.value = 1;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
