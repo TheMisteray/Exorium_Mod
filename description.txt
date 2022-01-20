@@ -10,8 +10,28 @@ This mod currently adds
 
 Please excuse my spritework. I am not the best at it.
 
+Join the Discord server if you want to give me some feedback, I would love to hear it!
+
 NOTICE: There was an issue where a crash was caused upon generating a new world. To my knowledge it was fixed, but it was rare in the first place so there is a slight chance it slipped under the radar. In the case of this occuring just generate another world.
 
 CREDITS
-Music by grapetape64
+Music by grapetape64 - Check him out! https://www.youtube.com/channel/UCcd_I7-qCv6KEwDdgoQDJlQ/featured
 Some spritework by grapetape64 and Potato_Land
+
+
+
+
+Recent Patch Notes
+
+ - 0.1.103
+ I'm gonna start leaving these here and may or may not keep up with them
+
+ - Changes to how several weapons create dusts to be more visible
+ - Shadowmancer's Collective Darkness attck now has a circular hitbox
+ - Molotov Vest no longer sets you to 1 hp for some reason
+ - Also fixed it having melee damage for some reason
+ - Fixed Darksteel armor set bonus not working
+ - Made homepage a Discord server for feedback
+ - 
+
+ This mod has updated 3 times in the last 3 days, there may be one more after I do a playtest run but after that there should be less spam
