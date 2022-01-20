@@ -23,15 +23,18 @@ Some spritework by grapetape64 and Potato_Land
 
 Recent Patch Notes
 
+ - 0.1.104
+ - Mod wasn't downloadable apparently? Should be fixed.
+
  - 0.1.103
  I'm gonna start leaving these here and may or may not keep up with them
 
  - Changes to how several weapons create dusts to be more visible
- - Shadowmancer's Collective Darkness attck now has a circular hitbox
+ - Shadowmancer's Collective Darkness attcak now has a circular hitbox
  - Molotov Vest no longer sets you to 1 hp for some reason
  - Also fixed it having melee damage for some reason
  - Fixed Darksteel armor set bonus not working
  - Made homepage a Discord server for feedback
- - 
+ - Added link to music
 
  This mod has updated 3 times in the last 3 days, there may be one more after I do a playtest run but after that there should be less spam
