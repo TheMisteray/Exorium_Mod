@@ -23,7 +23,7 @@ Some spritework by grapetape64 and Potato_Land
 
 Recent Patch Notes
 
- - 0.1.103
+ - 0.1.104
  I'm gonna start leaving these here and may or may not keep up with them
 
  - Changes to how several weapons create dusts to be more visible
