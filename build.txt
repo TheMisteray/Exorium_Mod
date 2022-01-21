@@ -1,6 +1,6 @@
 displayName = Exorium Mod
 author = Mr. A
-version = 0.1.104
+version = 0.1.105
 hideCode = true
 hideResources = true
 includeSource = false

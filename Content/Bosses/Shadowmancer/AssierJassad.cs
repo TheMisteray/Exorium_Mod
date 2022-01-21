@@ -26,7 +26,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void SetDefaults()
         {
             npc.aiStyle = -1;
-            npc.lifeMax = 3100;
+            npc.lifeMax = 2600;
             npc.damage = 29;
             npc.defense = 11;
             npc.knockBackResist = 0f;
@@ -219,26 +219,26 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 {
                     case 0: //Shadowbolt
                             moveTime = 120;
-                            actionCool = 90;
+                            actionCool = 30;
                             attackLength = 90;
                         break;
                     case 1: //Adds
                             moveTime = 120;
-                            actionCool = 120;
+                            actionCool = 60;
                             attackLength = 100;
                         break;
                     case 2: //Dash
-                            actionCool = 30;
+                            actionCool = 20;
                             attackLength = 420;
                         break;
                     case 3: //waves
                             moveTime = 150;
-                            actionCool = 90;
+                            actionCool = 30;
                             attackLength = 240;
                         break;
                     case 4: //Swipe
-                            actionCool = 90;
-                            attackLength = 360;
+                            actionCool = 30;
+                            attackLength = 180;
                         break;
                     case 5: //Mirror Image
                             moveTime = 90;
@@ -246,8 +246,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             attackLength = 120;
                         break;
                     case 6: //Blade
-                            actionCool = 50;
-                            attackLength = 400;
+                            actionCool = 10;
+                            attackLength = 340;
                         break;
                     case 7: //Magic Missiles
                             moveTime = 90;
@@ -255,9 +255,9 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             attackLength = 240;
                         break;
                     case 8: //Hex
-                            moveTime = 90;
+                            moveTime = 10;
                             actionCool = 10;
-                            attackLength = 360;
+                            attackLength = 180;
                         break;
                 }
                 attackProgress = 0;
@@ -305,19 +305,19 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         }
                         break;
                     case 2:
-                        if (attackProgress < 300)
+                        if (attackProgress < 200)
                         {
                             npc.TargetClosest(false);
                             moveTo = player.Center;
                             moveTo.X += 500 * npc.direction;
                             npc.velocity = (moveTo - npc.Center) / 60;
                         }
-                        else if (attackProgress == 300)
+                        else if (attackProgress == 200)
                         {
                             npc.velocity.Y = 0;
                             npc.velocity.X = -10 * npc.direction;
                         }
-                        else if (attackProgress < 440)
+                        else if (attackProgress < 340)
                         {
                             Vector2 delta = npc.Center - new Vector2(npc.Center.X + Main.rand.NextFloat(5) * npc.direction, npc.Center.Y + Main.rand.NextFloat(-4, 5));
                             if (Main.rand.NextBool(1))
@@ -366,7 +366,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         }
                         break;
                     case 4:
-                        if (attackProgress <= 240)
+                        if (attackProgress <= 120)
                         {
                             npc.TargetClosest(false);
                             player = Main.player[npc.target];
@@ -374,13 +374,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             moveTo.X += 500 * npc.direction;
                             npc.velocity = (moveTo - npc.Center) / 60;
                         }
-                        else if (attackProgress > 240 && attackProgress < 360)
+                        else if (attackProgress > 120 && attackProgress < 150)
                         {
                             npc.velocity.X = 0;
                             npc.velocity.Y = 0;
                             npc.aiAction = 1;
                         }
-                        if (attackProgress == 280)
+                        if (attackProgress == 150)
                         {
                             if (phase == 1)
                             {
@@ -437,7 +437,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             npc.alpha += 3;
                         break;
                     case 6:
-                        if (attackProgress < 120)
+                        if (attackProgress < 60)
                         {
                             Vector2 moveTo = player.Center;
                             npc.aiAction = 0;
@@ -453,11 +453,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             npc.aiAction = 2;
                             npc.velocity.Y = (float)Math.Sin((attackProgress)/60) * 1.5f;
                         }
-                        if (attackProgress == 120)
+                        if (attackProgress == 60)
                         {
                             npc.velocity.X = 4 * -npc.direction;
                         }
-                        if (attackProgress % 60 == 0 && attackProgress > 120)
+                        if (attackProgress % 60 == 0 && attackProgress > 60)
                         {
                             Main.PlaySound(SoundID.Item1, npc.position);
                             Projectile.NewProjectile(npc.Center.X, npc.Center.Y -20, 0, 5, ProjectileType<ShadowBlade>(), damage, 2, Main.myPlayer);
@@ -475,7 +475,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                     case 8:
                         npc.velocity = Vector2.Zero;
                         npc.aiAction = 1;
-                        if (attackProgress%120==0 && attackProgress != 0)
+                        if (attackProgress%60==0 && attackProgress != 0)
                         {
                             Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 0, ProjectileType<Hex>(), damage * 2, 2, Main.myPlayer);
                         }
