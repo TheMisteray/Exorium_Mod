@@ -20,9 +20,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             npc.width = 23;
             npc.height = 40;
-            npc.damage = 32;
+            npc.damage = 26;
             npc.defense = 10;
-            npc.lifeMax = 210;
+            npc.lifeMax = 180;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath2;
             npc.value = 160f;
@@ -31,11 +31,6 @@ namespace ExoriumMod.Content.NPCs.Enemies
             aiType = NPCID.ArmoredSkeleton;
             npc.buffImmune[BuffID.Confused] = false;
             animationType = NPCID.ArmoredSkeleton;
-        }
-
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            return spawnInfo.player.GetModPlayer<BiomeHandler>().ZoneDeadlands ? .1f : 0f;
         }
 
         public override void NPCLoot()

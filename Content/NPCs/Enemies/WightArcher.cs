@@ -21,7 +21,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override void SetDefaults()
         {
             npc.CloneDefaults(NPCID.SkeletonArcher);
-            npc.damage = 28;
+            npc.damage = 18;
             npc.defense = 3;
             npc.lifeMax = 90;
             npc.HitSound = SoundID.NPCHit1;
@@ -4053,11 +4053,6 @@ namespace ExoriumMod.Content.NPCs.Enemies
                 Item.NewItem(npc.getRect(), ItemType<Items.Accessories.WightQuiver>());
             if (Main.rand.NextBool(3))
                 Item.NewItem(npc.getRect(), ItemType<Items.Materials.WightBone>());
-        }
-
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            return spawnInfo.player.GetModPlayer<BiomeHandler>().ZoneDeadlands ? .1f : 0f;
         }
     }
 }

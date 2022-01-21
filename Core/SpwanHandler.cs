@@ -13,9 +13,9 @@ namespace ExoriumMod.Core
             if (Main.LocalPlayer.GetModPlayer<BiomeHandler>().ZoneDeadlands)
             {
                 pool.Clear();
-                pool.Add(NPCType<WightArcher>(), .1f);
+                pool.Add(NPCType<WightArcher>(), .07f);
                 pool.Add(NPCType<WightWarrior>(), .1f);
-                pool.Add(NPCType<Poltergeist>(), .02f);
+                pool.Add(NPCType<Poltergeist>(), .03f);
             }
         }
     }

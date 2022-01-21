@@ -47,11 +47,6 @@ namespace ExoriumMod.Content.NPCs.Enemies
             return true;
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            return spawnInfo.player.GetModPlayer<BiomeHandler>().ZoneDeadlands ? .1f : 0f;
-        }
-
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
         {
             npc.alpha = 60;
