@@ -39,7 +39,7 @@ namespace ExoriumMod.Content.Tiles
             drop = ItemType<Items.TileItems.DeadwoodPlatform>();
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.Platforms };
-            dustType = 1;
+            dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
             Main.dust[dustType].color = new Color(40, 40, 40);
         }
     }

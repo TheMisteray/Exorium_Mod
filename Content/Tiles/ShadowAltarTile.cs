@@ -67,6 +67,7 @@ namespace ExoriumMod.Content.Tiles
             if (!NPC.AnyNPCs(NPCType<Bosses.Shadowmancer.AssierJassad>()))
             {
                 NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 100, NPCType<Bosses.Shadowmancer.AssierJassad>(), 0, 0, 1, 100, 180);
+                NetMessage.SendData(MessageID.SyncNPC);
                 return true;
             }
             return false;

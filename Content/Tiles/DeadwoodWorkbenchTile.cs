@@ -28,9 +28,10 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
             ModTranslation name = CreateMapEntryName();
-            AddMapEntry(new Color(200, 200, 200), name);
+            AddMapEntry(new Color(90, 90, 90), name);
             disableSmartCursor = true;
             adjTiles = new int[] { TileID.WorkBenches };
+            dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

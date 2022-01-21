@@ -21,7 +21,7 @@ namespace ExoriumMod.Content.Tiles
             Main.tileBlockLight[Type] = true;
             drop = ItemType<Items.TileItems.Deadwood>();
             AddMapEntry(new Color(40, 40, 40));
-            dustType = 1;
+            dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
             Main.dust[dustType].color = new Color(40, 40, 40);
         }
     }

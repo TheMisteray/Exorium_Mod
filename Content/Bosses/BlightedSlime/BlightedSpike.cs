@@ -3,6 +3,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
@@ -46,6 +47,8 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
             if (!hasTouchedGround)
                 projectile.velocity.Y = 1;
+            else if (projectile.frame <= 1)
+                Dust.NewDust(projectile.BottomLeft, projectile.width, 1, DustType<Dusts.BlightDust>(), 0, -10, 0, default, Main.rand.NextFloat(1, 2));
 
                 if (projectile.frame != 7)
                 projectile.hostile = false;

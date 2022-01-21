@@ -49,6 +49,7 @@ namespace ExoriumMod.Content.Tiles
             adjTiles = new int[] { TileID.Containers };
             chest = "Deadwood Chest";
             chestDrop = ItemType<Items.TileItems.DeadwoodChest>();
+            dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].frameX / 36);

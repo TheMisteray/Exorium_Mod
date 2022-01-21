@@ -41,7 +41,7 @@ namespace ExoriumMod.Content.Items.Armor
             public override void UpdateEquip(Player player)
             {
                 player.maxMinions += 1;
-                player.statManaMax += 40;
+                player.statManaMax2 += 40;
             }
 
             public override void AddRecipes()
