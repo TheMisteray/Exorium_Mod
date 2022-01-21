@@ -38,6 +38,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 target.life = 1;
                 target.checkDead();
                 target.StrikeNPC(Main.expertMode ? 100 : 50, 0, 0, true);
+                target.netUpdate = true;
                 player.HealEffect(Main.expertMode ? 2 : 1, true);
                 Main.PlaySound(SoundID.Item20, player.position);
             }

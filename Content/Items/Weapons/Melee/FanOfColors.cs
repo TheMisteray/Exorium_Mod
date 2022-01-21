@@ -107,6 +107,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.57f;
             projectile.active = true;
             projectile.alpha = 0;
+            if (projectile.timeLeft == 360)
+                projectile.netUpdate = true;
             if (projectile.localAI[0] > 0)
             {
                 projectile.alpha = 255;

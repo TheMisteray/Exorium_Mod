@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             item.useAnimation = 32;
             item.useTime = 32;
             item.shootSpeed = 13f;
-            item.knockBack = 6.5f;
+            item.knockBack = 0.5f;
             item.width = 32;
             item.height = 32;
             item.scale = 1f;

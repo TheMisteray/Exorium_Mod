@@ -99,7 +99,12 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             projectile.penetrate = 1;
         }
 
-        private bool retargeted = false;
+        private bool retargeted
+        {
+            get => projectile.ai[0] == 1f;
+            set => projectile.ai[0] = value ? 1f : 0f;
+        }
+
 
         public override void AI()
         {
@@ -111,6 +116,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             {
                 retargeted = true;
                 projectile.velocity = projectile.velocity.RotatedBy((float)(Math.Atan2(projectile.velocity.X, projectile.velocity.Y) - (float)(Math.Atan2(vectorToCursor.X, vectorToCursor.Y))));
+                projectile.netUpdate = true;
             }
             projectile.alpha = 225;
             for (int i = 0; i < 10; i++)

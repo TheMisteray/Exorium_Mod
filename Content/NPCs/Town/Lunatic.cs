@@ -149,13 +149,13 @@ namespace ExoriumMod.Content.NPCs.Town
             Item.buyPrice(0, 0, 50, 0);
             nextSlot++;
             shop.item[nextSlot].SetDefaults(ItemType<Items.Weapons.Magic.Firebolt>());
-            Item.buyPrice(0, 3, 5, 0);
+            Item.buyPrice(0, 1, 5, 0);
             nextSlot++;
             shop.item[nextSlot].SetDefaults(ItemType<Items.Accessories.RitualBone>());
             Item.buyPrice(0, 0, 50, 0);
             nextSlot++;
             shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>());
-            Item.buyPrice(0, 0, 70, 0);
+            Item.buyPrice(0, 0, 30, 0);
             nextSlot++;
             shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.SpellScrollShield>());
             Item.buyPrice(0, 1, 50, 0);

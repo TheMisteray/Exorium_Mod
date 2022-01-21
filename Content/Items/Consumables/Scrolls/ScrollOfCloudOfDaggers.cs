@@ -72,13 +72,23 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             projectile.tileCollide = false;
         }
 
-        private int areaSize = 180;
-        private int variance = 110;
+        private int areaSize
+        {
+            get => (int)projectile.ai[0];
+            set => projectile.ai[0] = value;
+        }
+        private int variance
+        {
+            get => (int) projectile.ai[0];
+            set => projectile.ai[0] = value;
+        }
 
-        public override void AI()
+    public override void AI()
         {
             if (projectile.timeLeft == 360)
             {
+                areaSize = 180;
+                variance = 110;
                 Player player = Main.player[projectile.owner];
                 projectile.position = player.Center - (player.Center - Main.MouseWorld);
                 projectile.netUpdate = true;

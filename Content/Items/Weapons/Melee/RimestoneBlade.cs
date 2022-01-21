@@ -29,12 +29,12 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             item.useTime = 26;
             item.useAnimation = 26;
             item.useStyle = 1;
-            item.knockBack = 4;
+            item.knockBack = 6;
             item.value = Item.sellPrice(silver: 14);
             item.rare = 1;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
-            item.scale = 1.5f;
+            item.scale = 2f;
             item.useTurn = true;
             item.shoot = ProjectileType<RimeBladeProj>();
             item.shootSpeed = 10;

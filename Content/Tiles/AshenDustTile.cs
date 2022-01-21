@@ -57,7 +57,7 @@ namespace ExoriumMod.Content.Tiles
 
         public override void RandomUpdate(int i, int j)
         {
-            if (!Main.tile[i, j - 1].active() && Main.rand.Next(75) == 0)
+            if (!Main.tile[i, j - 1].active() && Main.rand.Next(1400) == 0)
                 WorldGen.PlaceTile(i, j - 1, TileType<DeadweedTile>(), true, false);
         }
     }

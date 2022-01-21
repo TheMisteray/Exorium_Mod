@@ -40,8 +40,6 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             item.noUseGraphic = true;
         }
 
-        int[] proj = new int[5];
-
         public override bool AltFunctionUse(Player player)
         {
             return true;
