@@ -592,14 +592,18 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
         {
+            bool net = !showHP; //Less packets
             showHP = true;
-            //npc.netUpdate = true;
+            if (Main.netMode == NetmodeID.Server && net)
+                npc.netUpdate = true;
         }
 
         public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
         {
+            bool net = !showHP;
             showHP = true;
-            //npc.netUpdate = true;
+            if (Main.netMode == NetmodeID.Server && net)
+                npc.netUpdate = true;
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)

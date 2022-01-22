@@ -5,6 +5,11 @@ using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.Graphics.Effects;
+using System.Collections.Generic;
+using System;
+using ExoriumMod.Helpers;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {

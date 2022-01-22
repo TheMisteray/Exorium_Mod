@@ -32,7 +32,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void OpenBossBag(Player player)
         {
-            player.TryGettingDevArmor();
             if (Main.rand.NextBool(1))
                 player.QuickSpawnItem(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
             else

@@ -31,9 +31,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void OpenBossBag(Player player)
         {
-            player.TryGettingDevArmor();
             player.QuickSpawnItem(ItemType<Items.Materials.TaintedGel>(), Main.rand.Next(50, 66));
             player.QuickSpawnItem(ItemType<Items.Materials.Metals.BlightedOre>(), Main.rand.Next(80, 121));
+            player.QuickSpawnItem(ItemType<Items.Accessories.CoreOfBlight>());
         }
 
         public override int BossBagNPC => NPCType<BlightedSlime>();
