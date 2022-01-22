@@ -52,7 +52,6 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             projectile.ignoreWater = false;
             projectile.tileCollide = true;
             projectile.alpha = 255;
-            projectile.ai[0] = 0;
         }
 
         public override void AI()
@@ -63,9 +62,9 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void Kill(int timeLeft)
         {
-            if (projectile.ai[0] == 0)
+            Main.PlaySound(SoundID.Item14, projectile.position);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Main.PlaySound(SoundID.Item14, projectile.position);
                 for (int i = 0; i <= Main.rand.Next(3, 5); i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(projectile.velocity.X, projectile.velocity.Y).RotatedByRandom(MathHelper.ToRadians(360)) / 2;

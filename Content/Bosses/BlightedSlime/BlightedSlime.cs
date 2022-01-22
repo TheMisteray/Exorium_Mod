@@ -179,7 +179,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                     {
                         npc.ai[0] += 2f;
                     }
-                    if (flag3)
+                    if (flag3 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Vector2 vector3 = new Vector2(npc.position.X + (float)(npc.width / 2), npc.position.Y);
                         float num17 = (float)(npc.position.X + (float)(npc.width / 2) + vector3.X);
@@ -212,7 +212,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                             {
                                 flag3 = true;
                             }
-                            if (Main.expertMode && (npc.life < npc.lifeMax * 0.35))
+                            if (Main.expertMode && (npc.life < npc.lifeMax * 0.35) && Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 for (int i = 1; i < Main.rand.Next(10, 17); i++)
                                 {
@@ -256,7 +256,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                             {
                                 flag3 = true;
                             }
-                            if ((double)npc.life < (double)npc.lifeMax * 0.75 || Main.expertMode)
+                            if ((double)npc.life < (double)npc.lifeMax * 0.75 || Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 for (int i = 1; i < Main.rand.Next(10, 17); i++)
                                 {

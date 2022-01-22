@@ -3,14 +3,27 @@ using ExoriumMod.Core;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using System.IO;
 
 namespace ExoriumMod
 {
 	public partial class ExoriumMod : Mod
 	{
-		public ExoriumMod()
+        internal static ExoriumMod instance;
+
+        public ExoriumMod()
 		{
 		}
+
+        public override void Load()
+        {
+            instance = this;
+        }
+
+        public override void Unload()
+        {
+            instance = null;
+        }
 
         public override void AddRecipeGroups()
         {
@@ -40,5 +53,23 @@ namespace ExoriumMod
 
             base.PostSetupContent();
         }
+
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            ExoriumPacketType msgType = (ExoriumPacketType)reader.ReadByte();
+            switch (msgType)
+            {
+                case ExoriumPacketType.ShadowmancerSpawn:
+                    int npcType = reader.ReadInt32();
+                    int netID = reader.ReadInt32();
+                    Content.Tiles.ShadowAltarTile.HandleNPC(npcType, netID, true, whoAmI);
+                    break;
+            }
+        }
+    }
+
+    internal enum ExoriumPacketType : byte
+    {
+        ShadowmancerSpawn
     }
 }

@@ -41,8 +41,14 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override bool PreAI()
         {
-            if (npc.ai[2] == -1) //Killed by collective Darkness
-                npc.life = 0;
+            if (npc.ai[2] == -1 && Main.netMode != NetmodeID.MultiplayerClient) //Killed by collective Darkness
+            {
+                npc.StrikeNPC(333, 0, 0, true);
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 333, 0, 0, 1);
+                npc.active = false;
+                npc.life = -1;
+            }
             if (wait > 0)
             {
                 if (Main.rand.NextBool(1))
@@ -87,6 +93,17 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         private Vector2 moveTo;
 
+        public override void SendExtraAI(System.IO.BinaryWriter writer)
+        {
+            writer.Write((double)moveTo.X);
+            writer.Write((double)moveTo.Y);
+        }
+
+        public override void ReceiveExtraAI(System.IO.BinaryReader reader)
+        {
+            moveTo = new Vector2((float)reader.ReadDouble(), (float)reader.ReadDouble());
+        }
+
 
         public override void AI()
         {
@@ -99,29 +116,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 npc.netUpdate = true;
             }
 
-            if (Main.player[npc.target].dead)
+            Player player = Main.player[npc.target];
+            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (npc.position - player.position).Length() > 2000)
             {
                 npc.TargetClosest(true);
-                if (Main.player[npc.target].dead)
-                {
-                    npc.timeLeft = 0;
-                    if (Main.player[npc.target].Center.X < npc.Center.X)
-                    {
-                        npc.direction = 1;
-                    }
-                    else
-                    {
-                        npc.direction = -1;
-                    }
-                }
-            }
-
-            Player player = Main.player[npc.target];
-            if (!player.active || player.dead)
-            {
-                npc.TargetClosest(false);
+                npc.netUpdate = true;
                 player = Main.player[npc.target];
-                if (!player.active || player.dead)
+                if (!player.active || player.dead || (npc.position - player.position).Length() > 2000)
                 {
                     npc.velocity = new Vector2(0f, 10f);
                     if (npc.timeLeft > 10)

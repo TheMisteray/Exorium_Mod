@@ -39,7 +39,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         }
 
         private int counter = 0;
-        private float accelX = Main.rand.NextFloat(-4, 5);
+        public float AccelX = Main.rand.NextFloat(-4, 5);
 
         public override void AI()
         {
@@ -48,11 +48,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             if (counter < 90)
             {
                 npc.velocity.Y = npc.ai[3];
-                npc.velocity.X = accelX;
+                npc.velocity.X = AccelX;
                 npc.ai[3] *= .99f;
-                accelX *= .99f;
+                AccelX *= .99f;
                 if (Math.Abs(npc.velocity.Y) < 1)
                     counter = 90;
+                if (Main.netMode == NetmodeID.Server)
+                    npc.netUpdate = true;
             }
         }
 
@@ -68,8 +70,14 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override bool PreAI()
         {
-            if (npc.ai[2] == -1)
-                npc.life = 0;
+            if (npc.ai[2] == -1 && Main.netMode != NetmodeID.MultiplayerClient) //Killed by collective Darkness
+            {
+                npc.StrikeNPC(333, 0, 0, true);
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 333, 0, 0, 1);
+                npc.active = false;
+                npc.life = -1;
+            }
             return true;
         }
     }

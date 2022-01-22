@@ -14,6 +14,8 @@ namespace ExoriumMod.Content.Tiles
 {
     class ShadowAltarTile : ModTile
     {
+        public int netID = 0;
+
         public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
 
         public override bool Autoload(ref string name, ref string texture)
@@ -66,8 +68,7 @@ namespace ExoriumMod.Content.Tiles
             Player player = Main.LocalPlayer;
             if (!NPC.AnyNPCs(NPCType<Bosses.Shadowmancer.AssierJassad>()))
             {
-                NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 100, NPCType<Bosses.Shadowmancer.AssierJassad>(), 0, 0, 1, 100, 180);
-                NetMessage.SendData(MessageID.SyncNPC);
+                HandleNPC(NPCType<Content.Bosses.Shadowmancer.AssierJassad>(), netID, false);
                 return true;
             }
             return false;
@@ -112,6 +113,50 @@ namespace ExoriumMod.Content.Tiles
         public override bool CanExplode(int i, int j)
         {
             return false;
+        }
+
+        public static void HandleNPC(int type, int syncID = 0, bool forceHandle = false, int whoAmI = 0)
+        {
+            bool syncData = forceHandle || Main.netMode == 0;
+            if (syncData)
+            {
+                SpawnNPC(type, forceHandle, syncID, whoAmI);
+            }
+            else
+            {
+                SyncNPC(type, syncID);
+            }
+        }
+
+        private static void SyncNPC(int type, int syncID = 0)
+        {
+            var netMessage = ExoriumMod.instance.GetPacket();
+            netMessage.Write((byte)ExoriumPacketType.ShadowmancerSpawn);
+            netMessage.Write(type);
+            netMessage.Write(syncID);
+            netMessage.Send();
+        }
+
+        private static void SpawnNPC(int type, bool syncData = false, int syncID = 0, int whoAmI = 0)
+        {
+            Player player;
+            if (!syncData)
+            {
+                player = Main.LocalPlayer;
+            }
+            else
+            {
+                player = Main.player[whoAmI];
+            }
+            int x = (int)player.Center.X;
+            int y = (int)player.Bottom.Y - 200;
+            int index = NPC.NewNPC(x, y, type, 0, 0, 0, 0, 180);
+            if (syncID < 0)
+            {
+                //NPC refNPC = new NPC();
+                //refNPC.netDefaults(syncID);
+                Main.npc[index].SetDefaults(syncID);
+            }
         }
     }
 }

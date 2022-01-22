@@ -39,31 +39,38 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void AI()
         {
-            if (projectile.timeLeft == 450)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Absorb(.33f); //1 in 3             
-            }
-            else if (projectile.timeLeft == 420)
-            {
-                Absorb(.5f); //half remaining
-            }
-            else if (projectile.timeLeft == 390)
-            {
-                Absorb(1f); //all remaining
-            }
+                if (projectile.timeLeft == 450)
+                {
+                    Absorb(.33f); //1 in 3
+                    projectile.netUpdate = true;
+                }
+                else if (projectile.timeLeft == 420)
+                {
+                    Absorb(.5f); //half remaining
+                    projectile.netUpdate = true;
+                }
+                else if (projectile.timeLeft == 390)
+                {
+                    Absorb(1f); //all remaining
+                    projectile.netUpdate = true;
+                }
 
-            if (projectile.timeLeft == 240)
-            {
-                Vector2 trajectory = Vector2.Zero;
-                Player playerTarget = Main.player[(int)PlayerTarget];
-                trajectory = playerTarget.Center - projectile.Center;
-                float magnitude = (float)Math.Sqrt(trajectory.X * trajectory.X + trajectory.Y * trajectory.Y);
-                if (magnitude > 0)
-                    trajectory *= 5f / magnitude;
-                else
-                    trajectory = new Vector2(0f, 5f);
+                if (projectile.timeLeft == 240)
+                {
+                    Vector2 trajectory = Vector2.Zero;
+                    Player playerTarget = Main.player[(int)PlayerTarget];
+                    trajectory = playerTarget.Center - projectile.Center;
+                    float magnitude = (float)Math.Sqrt(trajectory.X * trajectory.X + trajectory.Y * trajectory.Y);
+                    if (magnitude > 0)
+                        trajectory *= 5f / magnitude;
+                    else
+                        trajectory = new Vector2(0f, 5f);
 
-                projectile.velocity = trajectory;
+                    projectile.velocity = trajectory;
+                    projectile.netUpdate = true;
+                }
             }
 
             //Movement
@@ -85,52 +92,57 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
             }
 
-            #region Shrapnel
-            float rotator = 0;
-            float angle = 0;
-            Vector2 trajectory = new Vector2(0, 7); //Speed 7 of created projectiles
-
-            if (power >= 10) //Number of created projectiles (this is the rotation between each)
-                rotator = 20;
-            else if (power >= 6)
-                rotator = 30;
-            else if (power >= 4)
-                rotator = 45;
-            else if (power >= 2)
-                rotator = 90;
-            else
-                angle = 360; //Don't create projectiles
-
-            while(angle < 360)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Vector2 newTrajectory = trajectory.RotatedBy(MathHelper.ToRadians(angle)); //Rotate by angle
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, newTrajectory.X, newTrajectory.Y, ProjectileType<CollectiveFragment>(), projectile.damage, 2);
-                angle += rotator;
+                #region Shrapnel
+                float rotator = 0;
+                float angle = 0;
+                Vector2 trajectory = new Vector2(0, 7); //Speed 7 of created projectiles
+
+                if (power >= 10) //Number of created projectiles (this is the rotation between each)
+                    rotator = 20;
+                else if (power >= 6)
+                    rotator = 30;
+                else if (power >= 4)
+                    rotator = 45;
+                else if (power >= 2)
+                    rotator = 90;
+                else
+                    angle = 360; //Don't create projectiles
+
+                while (angle < 360)
+                {
+                    Vector2 newTrajectory = trajectory.RotatedBy(MathHelper.ToRadians(angle)); //Rotate by angle
+                    int p = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, newTrajectory.X, newTrajectory.Y, ProjectileType<CollectiveFragment>(), projectile.damage, 2);
+                    Main.projectile[p].netUpdate = true;
+                    angle += rotator;
+                }
+                #endregion
+
+                #region Shadows
+                angle = 0;
+                rotator = 0;
+
+                if (power >= 8) //Number of created projectiles (this is the rotation between each)
+                    rotator = 30;
+                else if (power >= 5)
+                    rotator = 45;
+                else if (power >= 3)
+                    rotator = 90;
+                else if (power >= 1)
+                    rotator = 180;
+                else
+                    angle = 360; //Don't create projectiles
+
+                while (angle < 360)
+                {
+                    int p = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 0, ProjectileType<RotatingShade>(), projectile.damage, 2, projectile.owner, projectile.whoAmI, angle);
+                    Main.projectile[p].netUpdate = true;
+                    angle += rotator;
+                }
+                #endregion
+
             }
-            #endregion
-
-            #region Shadows
-            angle = 0;
-            rotator = 0;
-
-            if (power >= 8) //Number of created projectiles (this is the rotation between each)
-                rotator = 30;
-            else if (power >= 5) 
-                rotator = 45;
-            else if (power >= 3)
-                rotator = 90;
-            else if (power >= 1)
-                rotator = 180;
-            else
-                angle = 360; //Don't create projectiles
-
-            while (angle < 360)
-            {
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 0, ProjectileType<RotatingShade>(), projectile.damage, 2, projectile.owner, projectile.whoAmI, angle);
-                angle += rotator;
-            }
-            #endregion
-
             base.Kill(timeLeft);
         }
 
@@ -154,7 +166,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                     Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2, projectile.owner, projectile.whoAmI, 1);
                     //power++ created proj increases power by 1
                 }
-                else if (Main.npc[i].active && Main.npc[i].type == NPCType<ShadowAdd>() && Main.rand.NextFloat(1) <= percent)
+                else if (Main.npc[i].active && Main.npc[i].type == NPCType<MirrorEntity>() && Main.rand.NextFloat(1) <= percent)
                 {
                     Main.npc[i].ai[2] = -1;
                     Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2,  projectile.owner, projectile.whoAmI, 2);
@@ -172,6 +184,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             projectile.position = projectile.Center;
             projectile.scale = 1 + (power * 0.25f);
             projectile.Center = projectile.position;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                projectile.netUpdate = true;
         }
     }
 
@@ -223,6 +237,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             base.Kill(timeLeft);
         }
     }
+
     internal class RotatingShade : ModProjectile
     {
         public override string Texture => "Terraria/NPC_82";
@@ -253,6 +268,18 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         private float darkX;
         private float darkY;
 
+        public override void SendExtraAI(System.IO.BinaryWriter writer)
+        {
+            writer.Write((double)darkX);
+            writer.Write((double)darkY);
+        }
+
+        public override void ReceiveExtraAI(System.IO.BinaryReader reader)
+        {
+            darkX = (float)reader.ReadDouble();
+            darkY = (float)reader.ReadDouble();
+        }
+
         /// <summary>
         /// array index of dark projectile
         /// </summary>
@@ -272,10 +299,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void AI()
         {
-            if (projectile.timeLeft == 90) // Just spawned
+            if (projectile.timeLeft == 90 && Main.netMode != NetmodeID.MultiplayerClient) // Just spawned
             {
                 darkX = Main.projectile[(int)darkWhoAmI].Center.X;
                 darkY = Main.projectile[(int)darkWhoAmI].Center.Y;
+                projectile.netUpdate = true;
             }
             Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
             if (Main.rand.NextBool(6))
@@ -338,11 +366,16 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
             }
             //Bump in randomized direction
-            int npc = NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y, NPCType<ShadowAdd>());
-            Main.npc[npc].ai[3] = Main.rand.Next(-7, 3);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                int npc = NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y, NPCType<ShadowAdd>());
+                Main.npc[npc].ai[3] = Main.rand.Next(-7, 3);
+                Main.npc[npc].netUpdate = true;
+            }
             base.Kill(timeLeft);
         }
     }
+
     internal class AbsorbedShadow : ModProjectile
     {
         public override string Texture => AssetDirectory.Invisible;
@@ -407,6 +440,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             Projectile darkOwner = Main.projectile[(int)darkWhoAmI];
             if (projectile.timeLeft == 480) 
             {
+                if (Main.netMode == NetmodeID.Server)
+                    projectile.netUpdate = true;
                 Vector2 darkToThis = darkOwner.Center - projectile.Center;
                 angle = (float)Math.Atan2(darkToThis.Y, darkToThis.X);
                 angle += (float)Math.PI;
@@ -438,7 +473,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void Kill(int timeLeft)
         {
             //Increase power
-            Main.projectile[(int)darkWhoAmI].ai[0] += powerIncrease;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Main.projectile[(int)darkWhoAmI].ai[0] += powerIncrease;
+                Main.projectile[(int)darkWhoAmI].netUpdate = true;
+            }
             base.Kill(timeLeft);
         }
     }

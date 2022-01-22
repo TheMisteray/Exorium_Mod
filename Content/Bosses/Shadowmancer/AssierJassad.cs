@@ -81,8 +81,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         private int phase = 1;
         private int pastAction1 = -1;
         private int pastAction2 = -1;
-        private int attackLength;
-        private int attackProgress;
+        private int attackLength = 0;
+        private int attackProgress = 0;
         private bool showHP = true;
         private int target = 0;
         private Vector2 moveTo = Vector2.Zero;
@@ -92,11 +92,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void SendExtraAI(System.IO.BinaryWriter writer)
         {
             writer.Write(showHP);
+            writer.Write(target);
         }
 
         public override void ReceiveExtraAI(System.IO.BinaryReader reader)
         {
             showHP = reader.ReadBoolean();
+            target = reader.ReadInt32();
         }
         #endregion Networking
 
@@ -106,6 +108,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             {
                 Vector2 angle = new Vector2(0, 5).RotatedByRandom(360);
                 Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustType<Shadow>(), angle.X, angle.Y, 0, default(Color), 4);
+                if (Main.netMode == NetmodeID.Server)
+                    npc.netUpdate = true;
                 preFight--;
                 if (preFight == 0)
                 {
@@ -148,12 +152,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             */
 
             Player player = Main.player[npc.target];
-            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient)
+            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (npc.position - player.position).Length() > 3000)
             {
                 npc.TargetClosest(true);
                 npc.netUpdate = true;
                 player = Main.player[npc.target];
-                if (!player.active || player.dead)
+                if (!player.active || player.dead || (npc.position - player.position).Length() > 3000)
                 {
                     npc.velocity = new Vector2(0f, 10f);
                     if (npc.timeLeft > 10)
@@ -229,7 +233,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         break;
                     case 2: //Dash
                             actionCool = 20;
-                            attackLength = 420;
+                            attackLength = 200;
                         break;
                     case 3: //waves
                             moveTime = 150;
@@ -255,7 +259,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             attackLength = 240;
                         break;
                     case 8: //Hex
-                            moveTime = 10;
+                            moveTime = 30;
                             actionCool = 10;
                             attackLength = 180;
                         break;
@@ -305,19 +309,19 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         }
                         break;
                     case 2:
-                        if (attackProgress < 200)
+                        if (attackProgress < 90)
                         {
                             npc.TargetClosest(false);
                             moveTo = player.Center;
                             moveTo.X += 500 * npc.direction;
                             npc.velocity = (moveTo - npc.Center) / 60;
                         }
-                        else if (attackProgress == 200)
+                        else if (attackProgress == 90)
                         {
                             npc.velocity.Y = 0;
                             npc.velocity.X = -10 * npc.direction;
                         }
-                        else if (attackProgress < 340)
+                        else if (attackProgress < 200)
                         {
                             Vector2 delta = npc.Center - new Vector2(npc.Center.X + Main.rand.NextFloat(5) * npc.direction, npc.Center.Y + Main.rand.NextFloat(-4, 5));
                             if (Main.rand.NextBool(1))
@@ -588,20 +592,14 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                showHP = true;
-                npc.netUpdate = true;
-            }
+            showHP = true;
+            //npc.netUpdate = true;
         }
 
         public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                showHP = true;
-                npc.netUpdate = true;
-            }
+            showHP = true;
+            //npc.netUpdate = true;
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
