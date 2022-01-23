@@ -21,8 +21,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
             projectile.alpha = 255;
-            projectile.ai[0] = 0;
-            projectile.ai[1] = 1;
         }
 
         public float spikeCounter
@@ -39,6 +37,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void AI()
         {
+            placeTimer++;
             if (placeTimer%60 == 0)
             {
                 Vector2 vector2 = new Vector2(projectile.position.X + (float)(projectile.width / 2), projectile.position.Y + (float)projectile.height);
@@ -55,7 +54,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             {
                 projectile.Kill();
             }
-            placeTimer++;
         }
     }
 }

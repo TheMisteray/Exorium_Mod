@@ -28,7 +28,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
             item.useTime = 36;
             item.useAnimation = 36;
             item.useStyle = ItemUseStyleID.SwingThrow;
-            item.value = Item.buyPrice(0, 0, 34, 0);
+            item.value = Item.buyPrice(0, 0, 54, 0);
             item.rare = 1;
             item.UseSound = SoundID.Item44;
 
@@ -39,7 +39,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
             // No buffTime because otherwise the item tooltip would say something like "1 minute duration"
             item.shoot = ModContent.ProjectileType<Projectiles.Minions.DancingSwordSummon>();
 
-            item.shootSpeed = 4;
+            item.shootSpeed = 7;
         }
 
         public override bool AltFunctionUse(Player player)

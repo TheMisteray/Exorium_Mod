@@ -96,28 +96,18 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
             #region General behavior
             Vector2 idlePosition = player.Center;
-            idlePosition.Y -= 48f; // Go up 48 coordinates (three tiles from the center of the player)
-
-            // If your minion doesn't aimlessly move around when it's idle, you need to "put" it into the line of other summoned minions
-            // The index is projectile.minionPos
-            float minionPositionOffsetX = (10 + projectile.minionPos * 40) * -player.direction;
-            idlePosition.X += minionPositionOffsetX; // Go behind the player
-
-            // All of this code below this line is adapted from Spazmamini code (ID 388, aiStyle 66)
 
             // Teleport to player if distance is too big
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             float distanceToIdlePosition = vectorToIdlePosition.Length();
             if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > 2000f)
             {
-                // Whenever you deal with non-regular events that change the behavior or position drastically, make sure to only run the code on the owner of the projectile,
-                // and then set netUpdate to true
                 projectile.position = idlePosition;
                 projectile.velocity *= 0.1f;
                 projectile.netUpdate = true;
             }
 
-            // If your minion is flying, you want to do this independently of any conditions
+            // Fix overlap
             float overlapVelocity = 0.04f;
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
@@ -136,7 +126,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
             #region Find target
             // Starting search distance
-            float distanceFromTarget = 700f;
+            float distanceFromTarget = 500f;
             Vector2 targetCenter = projectile.position;
             bool foundTarget = false;
 
@@ -189,6 +179,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 {
                     AIState = Main.rand.Next(3) + 1;
                     Timer = 0;
+                    projectile.velocity *= 3;
                     projectile.netUpdate = true;
                 }
                 //Choose attack style
@@ -197,7 +188,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
                     case 1: //Swift dashes at target
                         if (distanceFromTarget > 160f)
                         {
-                            speed = 30;
+                            speed = 22;
                             Vector2 direction = targetCenter - projectile.Center;
                             direction.Normalize();
                             direction *= speed;
@@ -246,7 +237,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
             }
             else
             {
-                projectile.rotation += projectile.velocity.X * 0.05f;
+                projectile.rotation += projectile.velocity.X * 0.03f;
                 // Minion doesn't have a target: return to player and idle
                 if (distanceToIdlePosition > 600f)
                 {
@@ -260,11 +251,9 @@ namespace ExoriumMod.Content.Projectiles.Minions
                     speed = 12f;
                     inertia = 80f;
                 }
-                if (distanceToIdlePosition > 20f)
+                if (distanceToIdlePosition > 200f)
                 {
-                    // The immediate range around the player (when it passively floats about)
-
-                    // This is a simple movement formula using the two parameters and its desired direction to create a "homing" movement
+                    // Swords kind float about nearby
                     vectorToIdlePosition.Normalize();
                     vectorToIdlePosition *= speed;
                     projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
@@ -284,9 +273,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         private void StartAI()
         {
+            //Act like a thrown weapon at first
             projectile.rotation += .1f;
             Timer++;
-            if (Timer > 60 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (Timer > 90 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 AIState = 1;
                 projectile.netUpdate = true;

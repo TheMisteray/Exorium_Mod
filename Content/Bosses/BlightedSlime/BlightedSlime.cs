@@ -51,6 +51,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         bool flag3 = false;
         bool flag6 = false;
+        bool flag7 = false;
         float timer = 0;
 
         public override void AI()
@@ -177,7 +178,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                     }
                     if ((double)npc.life < (double)npc.lifeMax * 0.1)
                     {
-                        npc.ai[0] += 2f;
+                        npc.ai[0] += 3f;
                     }
                     if (flag3 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -212,23 +213,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                             {
                                 flag3 = true;
                             }
-                            if (Main.expertMode && (npc.life < npc.lifeMax * 0.35) && Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                for (int i = 1; i < Main.rand.Next(10, 17); i++)
-                                {
-                                    Vector2 vector1 = new Vector2(npc.position.X + (float)(npc.width / 2) + (float)(Main.rand.Next(20) * npc.direction), npc.position.Y + (float)npc.height * 0.8f);
-                                    float num14 = Main.player[npc.target].position.X + (float)Main.player[npc.target].width * 0.5f - vector1.X + (float)Main.rand.Next(-80, 81);
-                                    float num15 = Main.player[npc.target].position.Y + (float)Main.player[npc.target].height * 0.5f - vector1.Y + (float)Main.rand.Next(-40, 41);
-                                    float num16 = (float)Math.Sqrt((double)(num14 * num14 + num15 * num15));
-                                    num16 = 5 / num16;
-                                    num14 *= num16;
-                                    num15 *= num16;
-                                    num14 += (float)Main.rand.Next(-50, 51)/10f;
-                                    num15 -= 12;
-                                    num15 += (float)Main.rand.Next(-30, 31)/10f;
-                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, num14, num15, ProjectileType<BlightSlimeShot>(), damage, 1, Main.myPlayer, 0, 0);
-                                }
-                            }
                             flag6 = true;
                             timer = 0;
                             npc.ai[0] = -160f;
@@ -236,10 +220,19 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                         }
                         else if (npc.ai[1] == 6f)
                         {
-                            npc.velocity.Y = -10f;
-                            npc.velocity.X = npc.velocity.X + 7f * (float)npc.direction;
-                            npc.ai[0] = -90f;
-                            npc.ai[1] += 1f;
+                            if (npc.life > npc.lifeMax * .25 || ((double)npc.life > (double)npc.lifeMax * .5 && Main.expertMode))
+                            {
+                                npc.velocity.Y = -10f;
+                                npc.velocity.X = npc.velocity.X + 7f * (float)npc.direction;
+                                npc.ai[0] = -90f;
+                                npc.ai[1] += 1f;
+                            }
+                            else
+                            {
+                                if (!flag7)
+                                    timer = 0;
+                                flag7 = true;
+                            }
                         }
                         else if (npc.ai[1] == 5f)
                         {
@@ -252,13 +245,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                         {
                             npc.velocity.Y = -18;
                             npc.velocity.X = 0;
-                            if ((double)npc.life < (double)npc.lifeMax * 0.5 && Main.expertMode)
+                            if ((double)npc.life < (double)npc.lifeMax * 0.85 || Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                flag3 = true;
-                            }
-                            if ((double)npc.life < (double)npc.lifeMax * 0.75 || Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                for (int i = 1; i < Main.rand.Next(10, 17); i++)
+                                for (int i = 1; i < Main.rand.Next(10, 17) + 10 * (1 - (int)(npc.life/npc.lifeMax)); i++)
                                 {
                                     Vector2 vector1 = new Vector2(npc.position.X + (float)(npc.width / 2) + (float)(Main.rand.Next(20) * npc.direction), npc.position.Y + (float)npc.height * 0.8f);
                                     float num14 = Main.player[npc.target].position.X + (float)Main.player[npc.target].width * 0.5f - vector1.X + (float)Main.rand.Next(-80, 81);
@@ -320,8 +309,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                         int dust2 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 60, npc.height, DustType<BlightDust>(), 0, 0, 150, default(Color), 2f);
                         if (npc.life > 0)
                         {
-                            /*
-                            float num11 = (float)npc.life / (float)npc.lifeMax;
+                            float num11 = 1;
                             num11 = num11 * 0.5f + 1.25f;
                             num11 *= num1;
                             if (num11 != npc.scale)
@@ -334,7 +322,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                                 npc.position.X = npc.position.X - (float)(npc.width / 2);
                                 npc.position.Y = npc.position.Y - (float)npc.height;
                             }
-                            */
                         }
                     }
                     npc.velocity.X = npc.velocity.X * 0.93f;
@@ -342,8 +329,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                     int dust = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustType<BlightDust>(), 0, 0, 150, default(Color), 2f);
                     if (npc.life > 0)
                     {
-                        /*
-                        float num11 = (float)npc.life / (float)npc.lifeMax;
+                        float num11 = 1;
                         num11 = num11 * 0.5f + 1.25f;
                         num11 *= num1;
                         if (num11 != npc.scale)
@@ -356,7 +342,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                             npc.position.X = npc.position.X - (float)(npc.width / 2);
                             npc.position.Y = npc.position.Y - (float)npc.height;
                         }
-                        */
                     }
                 }
             }
@@ -366,8 +351,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             dust46.velocity *= 0.5f;
             if (npc.life > 0)
             {
-                /*
-                float num11 = (float)npc.life / (float)npc.lifeMax;
+                float num11 = 1;
                 num11 = num11 * 0.5f + 1.25f;
                 num11 *= num1;
                 if (num1 != npc.scale)
@@ -380,7 +364,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                     npc.position.X = npc.position.X - (float)(npc.width / 2);
                     npc.position.Y = npc.position.Y - (float)npc.height;
                 }
-                */
             }
             if (npc.ai[1] == 5 || npc.ai[1] == 0)
             {
@@ -392,16 +375,40 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                 npc.velocity.Y = -7f;
                 timer++;
                 npc.noTileCollide = true;
+                npc.noGravity = true;
             }
             else if (flag6)
             {
                 flag6 = false;
                 npc.position.X = Main.player[npc.target].position.X - npc.width * 0.5f;
-                npc.velocity.Y = 15f;
+                npc.velocity.Y = 13f;
                 npc.netUpdate = true;
             }
-            if (npc.Bottom.Y > Main.player[npc.target].Center.Y) //Make tilecollide true again if jump into air is done
+            if (npc.Bottom.Y > Main.player[npc.target].Center.Y && !flag6) //Make tilecollide true again if jump into air is done
+            {
                 npc.noTileCollide = false;
+                npc.noGravity = false;
+            }
+
+            if (flag7)
+            {
+                int dust2 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 60, npc.height, DustType<BlightDust>(), 0, 0, 150, default(Color), 2f);
+                timer++;
+                npc.aiAction = 1;
+                if (timer % 15 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Vector2 up = new Vector2(0, -30);
+                    Vector2 altUp = up.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-15, 15)));
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, altUp.X, altUp.Y, ProjectileType<BlightSlimeShot>(), damage, 1.5f, Main.myPlayer, 0, 0);
+                }
+                if (timer > 180)
+                {
+                    npc.ai[1] += 1f;
+                    flag7 = false;
+                    npc.aiAction = 0;
+                }
+            }
+
             if (npc.alpha > 30)
             {
                 npc.alpha -= 2;
