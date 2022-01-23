@@ -88,7 +88,6 @@ namespace ExoriumMod.Content.Projectiles.Minions
             idlePosition.X += (projectile.width*2) * ((numbskull-1) - (float)(player.ownedProjectileCounts[ProjectileType<DarksteelSkullSummon>()]-1)/2);
             projectile.position.X = idlePosition.X - projectile.width/2;
             projectile.position.Y = idlePosition.Y - projectile.height * 1.5f;
-            projectile.netUpdate = true;
             #endregion
 
             #region Find target
