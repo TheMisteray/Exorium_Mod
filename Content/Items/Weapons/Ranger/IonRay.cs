@@ -22,7 +22,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            item.damage = 30;
+            item.damage = 28;
             item.ranged = true;
             item.width = 46;
             item.height = 26;
@@ -115,42 +115,19 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			if (Charge == MAX_CHARGE)
-				DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Main.player[projectile.owner].Center, projectile.velocity, 10, projectile.damage, -1.57f, 1f, 1000f, Color.Lime, (int)MOVE_DISTANCE);
+				DrawHelper.DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Main.player[projectile.owner].Center, projectile.velocity, 10, -1.57f, 1f, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
 			else
             {
 				Texture2D tex = GetTexture(AssetDirectory.Projectile + Name + "Guide");
 				float ratio = ((MAX_CHARGE - Charge) / MAX_CHARGE);
 				Vector2 offset = new Vector2(0, 30 * ratio);
 				Vector2 offset2 = offset.RotatedBy(projectile.velocity.ToRotation());
-				DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center + offset2, projectile.velocity, 10, projectile.damage, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE);
-				DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center - offset2, projectile.velocity, 10, projectile.damage, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE);
-				DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center + (offset2 * 2), projectile.velocity, 10, projectile.damage, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE);
-				DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center - (offset2 * 2), projectile.velocity, 10, projectile.damage, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE);
+				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center + offset2, projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center - offset2, projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center + (offset2 * 2), projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center - (offset2 * 2), projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
 			}
 			return false;
-		}
-
-		public void DrawLaser(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 unit, float step, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color), int transDist = 50)
-		{
-			float r = unit.ToRotation() + rotation;
-
-			// Draws the laser 'body'
-			for (float i = transDist; i <= Distance; i += step)
-			{
-				Color c = Color.White;
-				var origin = start + i * unit;
-				spriteBatch.Draw(texture, origin - Main.screenPosition,
-					new Rectangle(0, 26, 28, 26), i < transDist ? Color.Transparent : c, r,
-					new Vector2(28 * .5f, 26 * .5f), scale, 0, 0);
-			}
-
-			// Draws the laser 'tail'
-			spriteBatch.Draw(texture, start + unit * (transDist - step) - Main.screenPosition,
-				new Rectangle(0, 0, 28, 26), Color.White, r, new Vector2(28 * .5f, 26 * .5f), scale, 0, 0);
-
-			// Draws the laser 'head'
-			spriteBatch.Draw(texture, start + (Distance + step) * unit - Main.screenPosition,
-				new Rectangle(0, 52, 28, 26), Color.White, r, new Vector2(28 * .5f, 26 * .5f), scale, 0, 0);
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

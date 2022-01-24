@@ -19,11 +19,11 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            item.damage = 42;
+            item.damage = 36;
             item.width = 32;
             item.height = 24;
             item.magic = true;
-            item.mana = 14;
+            item.mana = 10;
             item.useTime = 42;
             item.useAnimation = 42;
             item.useStyle = 5;

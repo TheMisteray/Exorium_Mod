@@ -215,30 +215,21 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                             }
                             flag6 = true;
                             timer = 0;
-                            npc.ai[0] = -160f;
+                            npc.ai[0] = -180f;
                             npc.ai[1] = 0f;
                         }
                         else if (npc.ai[1] == 6f)
                         {
-                            if (npc.life > npc.lifeMax * .25 || ((double)npc.life > (double)npc.lifeMax * .5 && Main.expertMode))
-                            {
-                                npc.velocity.Y = -10f;
-                                npc.velocity.X = npc.velocity.X + 7f * (float)npc.direction;
-                                npc.ai[0] = -90f;
-                                npc.ai[1] += 1f;
-                            }
-                            else
-                            {
-                                if (!flag7)
-                                    timer = 0;
-                                flag7 = true;
-                            }
+                            npc.velocity.Y = -10f;
+                            npc.velocity.X = npc.velocity.X + 7f * (float)npc.direction;
+                            npc.ai[0] = -100f;
+                            npc.ai[1] += 1f;
                         }
                         else if (npc.ai[1] == 5f)
                         {
                             npc.velocity.Y = -9f;
                             npc.velocity.X = npc.velocity.X + 5f * (float)npc.direction;
-                            npc.ai[0] = -90f;
+                            npc.ai[0] = -100f;
                             npc.ai[1] += 1f;
                         }
                         else if (npc.ai[1] == 4f)
@@ -264,7 +255,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                                 }
                             }
                             int dust2 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 60, npc.height, DustType<BlightDust>(), 0, 0, 150, default(Color), 2f);
-                            npc.ai[0] = -160;
+                            npc.ai[0] = -180;
                             npc.ai[1] += 1f;
                         }
                         else if (npc.ai[1] == 3f)
@@ -276,16 +267,25 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                         }
                         else if (npc.ai[1] == 2f)
                         {
-                            npc.velocity.Y = -5.5f;
-                            npc.velocity.X = npc.velocity.X + 7f * (float)npc.direction;
-                            npc.ai[0] = -90f;
-                            npc.ai[1] += 1f;
+                            if (npc.life < npc.lifeMax * .25 || (npc.life < npc.lifeMax * .5 && Main.expertMode))
+                            {
+                                if (!flag7)
+                                    timer = 0;
+                                flag7 = true;
+                            }
+                            else
+                            {
+                                npc.velocity.Y = -5.5f;
+                                npc.velocity.X = npc.velocity.X + 7f * (float)npc.direction;
+                                npc.ai[0] = -100f;
+                                npc.ai[1] += 1f;
+                            }
                         }
                         else
                         {
                             npc.velocity.Y = -9f;
                             npc.velocity.X = npc.velocity.X + 5f * (float)npc.direction;
-                            npc.ai[0] = -90f;
+                            npc.ai[0] = -120f;
                             npc.ai[1] += 1f;
                         }
                     }
@@ -381,7 +381,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             {
                 flag6 = false;
                 npc.position.X = Main.player[npc.target].position.X - npc.width * 0.5f;
-                npc.velocity.Y = 13f;
+                npc.velocity.Y = 14f;
                 npc.netUpdate = true;
             }
             if (npc.Bottom.Y > Main.player[npc.target].Center.Y && !flag6) //Make tilecollide true again if jump into air is done
@@ -392,18 +392,22 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
             if (flag7)
             {
-                int dust2 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 60, npc.height, DustType<BlightDust>(), 0, 0, 150, default(Color), 2f);
+                for (int i = 0; i< 3; i++) //Dust
+                {
+                    int dust2 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 60, npc.height, DustType<BlightDust>(), 0, 0, 150, default(Color), 2f);
+                }
                 timer++;
                 npc.aiAction = 1;
                 if (timer % 15 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     Vector2 up = new Vector2(0, -30);
                     Vector2 altUp = up.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-15, 15)));
-                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, altUp.X, altUp.Y, ProjectileType<BlightSlimeShot>(), damage, 1.5f, Main.myPlayer, 0, 0);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, altUp.X, altUp.Y, ProjectileType<BlightedThorn>(), damage, 1.5f, Main.myPlayer, 0, 0);
                 }
                 if (timer > 180)
                 {
                     npc.ai[1] += 1f;
+                    npc.ai[0] = -110;
                     flag7 = false;
                     npc.aiAction = 0;
                 }

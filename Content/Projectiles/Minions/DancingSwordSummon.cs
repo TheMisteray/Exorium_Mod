@@ -186,7 +186,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 switch(AIState)
                 {
                     case 1: //Swift dashes at target
-                        if (distanceFromTarget > 160f)
+                        if (distanceFromTarget > 200f)
                         {
                             speed = 22;
                             Vector2 direction = targetCenter - projectile.Center;
@@ -198,7 +198,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
                         }
                         break;
                     case 2: //slow spin at target
-                        if (distanceFromTarget > 100f)
+                        if (distanceFromTarget > 160f)
                         {
                             Vector2 direction2 = targetCenter - projectile.Center;
                             direction2.Normalize();
