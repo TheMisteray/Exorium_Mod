@@ -5,6 +5,10 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using System;
+using Terraria.Graphics.Shaders;
+using Terraria.Graphics.Effects;
+using Microsoft.Xna.Framework.Graphics;
+using System.Runtime.InteropServices;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -154,6 +158,68 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void Kill(int timeLeft)
         {
             Main.PlaySound(SoundID.Item27, projectile.position);
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Size = 1)]
+    public struct ColorKnifeDrawer
+    {
+        private static VertexStrip _vertexStrip = new VertexStrip();
+
+        public void Draw(Projectile proj)
+        {
+            Effect effect = Filters.Scene["KnifeTrail"].GetShader().Shader;
+            Ref<Effect> effect2 = new Ref<Effect>(effect);
+
+            MiscShaderData miscShaderData = new MiscShaderData(effect2, "ArmorBasic");
+            miscShaderData.UseSaturation(-2.8f);
+            miscShaderData.UseOpacity(2f);
+            miscShaderData.Apply();
+            _vertexStrip.PrepareStripWithProceduralPadding(proj.oldPos, proj.oldRot, StripColors, StripWidth, -Main.screenPosition + proj.Size / 2f);
+            _vertexStrip.DrawTrail();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
+        private Color StripColors(float progressOnStrip)
+        {
+            Color result = Color.Lerp(Color.White, Color.Violet, GetLerpValue(0f, 0.7f, progressOnStrip, clamped: true)) * (1f - GetLerpValue(0f, 0.98f, progressOnStrip));
+            result.A /= 2;
+            return result;
+        }
+
+        private float StripWidth(float progressOnStrip)
+        {
+            return MathHelper.Lerp(26f, 32f, GetLerpValue(0f, 0.2f, progressOnStrip, clamped: true)) * GetLerpValue(0f, 0.07f, progressOnStrip, clamped: true);
+        }
+
+        public static float GetLerpValue(float from, float to, float t, bool clamped = false) //Taken from Lerp
+        {
+            if (clamped)
+            {
+                if (from < to)
+                {
+                    if (t < from)
+                    {
+                        return 0f;
+                    }
+                    if (t > to)
+                    {
+                        return 1f;
+                    }
+                }
+                else
+                {
+                    if (t < to)
+                    {
+                        return 1f;
+                    }
+                    if (t > from)
+                    {
+                        return 0f;
+                    }
+                }
+            }
+            return (t - from) / (to - from);
         }
     }
 }
