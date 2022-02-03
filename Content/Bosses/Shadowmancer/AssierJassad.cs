@@ -590,20 +590,10 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             }
         }
 
-        public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+        public override bool StrikeNPC(ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
         {
-            bool net = !showHP; //Less packets
             showHP = true;
-            if (Main.netMode == NetmodeID.Server && net)
-                npc.netUpdate = true;
-        }
-
-        public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
-        {
-            bool net = !showHP;
-            showHP = true;
-            if (Main.netMode == NetmodeID.Server && net)
-                npc.netUpdate = true;
+            return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)

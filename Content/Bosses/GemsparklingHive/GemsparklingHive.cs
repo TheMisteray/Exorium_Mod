@@ -27,8 +27,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.damage = 16;
             npc.defense = 9999;
             npc.knockBackResist = .3f;
-            npc.width = 64; //CHANGE
-            npc.height = 80; //CHANGE
+            npc.width = 64;
+            npc.height = 80;
             npc.value = Item.buyPrice(0, 1, 0, 0);
             npc.HitSound = SoundID.NPCHit41;
             npc.DeathSound = SoundID.NPCDeath43 ;
@@ -125,13 +125,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         private void ClosedAI(Player player)
         {
             npc.aiAction = 0;
-            if ((player.Center - npc.Center).X >= 0 && rotatorSpeed < .1f)
+            if ((player.Center - npc.Center).X >= 0 && rotatorSpeed < .06f)
             {
-                rotatorSpeed += .01f;
+                rotatorSpeed += .005f;
             }
-            else if ((player.Center - npc.Center).X < 0 && rotatorSpeed > -.1f)
+            else if ((player.Center - npc.Center).X < 0 && rotatorSpeed > -.06f)
             {
-                rotatorSpeed -= .01f;
+                rotatorSpeed -= .005f;
             }
             else
                 rotatorSpeed *= .96f;
@@ -173,8 +173,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             if (timer >= 120)
             {
-                float speed = 14f;
-                float inertia = 10f;
+                float speed = 28f;
+                float inertia = 50f;
 
                 //Movement
                 if (player.active)
@@ -189,7 +189,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             else
             {
-                rotatorSpeed *= 1.02f;
+                rotatorSpeed *= 1.01f;
                 npc.rotation += rotatorSpeed;
                 npc.velocity *= 0.92f;
             }
@@ -214,14 +214,15 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 if (npc.frame.Y != 0 && npc.frameCounter % 20 == 0)
                     npc.frame.Y -= frameHeight;
             }
-                npc.frame.Y = 0;
             npc.frameCounter++;
         }
 
         public override bool StrikeNPC(ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
         {
             if (aiState != 1)
-                effectiveDamageTaken += damage;
+                effectiveDamageTaken += (float)damage;
+            if (aiState != 0)
+                knockback = 0;
             damage = 0;
             return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
         }
