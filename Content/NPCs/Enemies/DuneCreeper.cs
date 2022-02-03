@@ -20,8 +20,8 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetDefaults()
         {
-            npc.width = 60;
-            npc.height = 120;
+            npc.width = 70;
+            npc.height = 30;
             npc.damage = 26;
             npc.defense = 12;
             npc.lifeMax = 180;
@@ -4114,8 +4114,8 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetDefaults()
         {
-            npc.width = 60;
-            npc.height = 120;
+            npc.width = 62;
+            npc.height = 62;
             npc.damage = 26;
             npc.defense = 12;
             npc.lifeMax = 180;
