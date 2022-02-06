@@ -47,7 +47,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
             if (!hasTouchedGround)
                 projectile.velocity.Y = 1;
-            else if (projectile.frame <= 1 && Main.rand.Next(150) == 0)
+            else if (projectile.frame <= 1 && Main.rand.Next(200) == 0)
                 Dust.NewDust(projectile.BottomLeft, projectile.width, 1, DustType<Dusts.BlightDust>(), 0, -10, 0, default, Main.rand.NextFloat(1, 2));
 
                 if (projectile.frame != 7)
@@ -85,12 +85,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                 return true;
             return false;
         }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            /*if (!(hasTouchedAir && hasTouchedGround))
-                projectile.position.Y -= 7;
-            else
-                projectile.position.Y -= 1;*/
             hasTouchedGround = true;
             projectile.velocity = Vector2.Zero;
 

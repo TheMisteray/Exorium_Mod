@@ -139,7 +139,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 {
                     Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
                     direction.Normalize();
-                    npc.velocity = direction * 3;
+                    npc.velocity = direction * 2;
                 }
 
                 npc.netUpdate = true;
@@ -180,7 +180,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
                 Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
                 direction.Normalize();
-                direction *= 4;
+                direction *= 3;
                 npc.velocity = direction;
             }
         }
