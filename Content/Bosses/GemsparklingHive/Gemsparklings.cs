@@ -77,15 +77,22 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 player = Main.player[npc.target];
                 if (!player.active || player.dead || (npc.position - player.position).Length() > 3000)
                 {
-                    //Make this retract them instead
-                    npc.velocity = new Vector2(0f, 10f);
-                    if (npc.timeLeft > 10)
-                    {
-                        npc.timeLeft = 10;
-                    }
-                    return;
+                    action = -1;
                 }
             }
+
+            //Despawn in hive despawned
+            if (!Main.npc[(int)hiveWhoAmI].active || Main.npc[(int)hiveWhoAmI].type != NPCType<GemsparklingHive>())
+            {
+                npc.velocity = new Vector2(0f, 10f);
+                if (npc.timeLeft > 10)
+                {
+                    npc.timeLeft = 10;
+                }
+                return;
+            }
+
+
             #endregion
 
             if (ticker % 120 == 0)
@@ -127,6 +134,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 }
                 else
                     npc.velocity = new Vector2(0f, 10f);
+
+                if (Vector2.Distance(npc.Center, Main.npc[(int)hiveWhoAmI].Center) > 600)
+                {
+                    Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
+                    direction.Normalize();
+                    npc.velocity = direction * 3;
+                }
+
                 npc.netUpdate = true;
             }
         }
@@ -150,16 +165,29 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             //Make intangible
             if (npc.alpha < 255)
-                npc.alpha += 15;
+                npc.alpha += 10;
             npc.dontTakeDamage = true;
 
-            float speed = 2f;
             //Movement
-            float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
-            Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
-            direction.Normalize();
-            direction *= speed;
-            npc.velocity = (npc.velocity + direction);
+            if (npc.alpha >= 255)
+            {
+                float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
+                Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
+                npc.velocity = direction;
+            }
+            else
+            {
+                float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
+                Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
+                direction.Normalize();
+                direction *= 4;
+                npc.velocity = direction;
+            }
+        }
+
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return action != -1;
         }
 
         public virtual void StatinaryAttack() { }

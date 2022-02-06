@@ -43,7 +43,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         int[] gemsparklings = new int[7];
 
-        private static int HEALTH_UNTIL_BREAK = Main.expertMode ? 200 : 150;
+        private static int HEALTH_UNTIL_BREAK = Main.expertMode ? 150 : 100;
 
         float effectiveDamageTaken = 0;
 
@@ -129,6 +129,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     {
                         chosenSparklings++;
                         Main.npc[chosen].ai[1] = 0;
+                        Main.npc[chosen].velocity = new Vector2(0, 5).RotatedByRandom(MathHelper.TwoPi);
                     }
                 }
             }
