@@ -30,6 +30,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.noTileCollide = true;
         }
 
+        public float attackTimer = 0;
+
         public float ticker
         {
             get => npc.ai[0];
@@ -41,6 +43,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             get => npc.ai[1];
             set => npc.ai[1] = value;
         }
+        //-1 - Lock on hive
         //0 - move
         //1 - moving attack
         //2 - stationary attack
@@ -49,6 +52,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             get => npc.ai[2] == 1f;
             set => npc.ai[2] = value ? 1f : 0f;
+        }
+
+        public float hiveWhoAmI
+        {
+            get => npc.ai[3];
+            set => npc.ai[3] = value;
         }
 
         public override void AI()
@@ -84,7 +93,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             if (ticker % 300 == 0)
                 StatinaryAttack();
 
-            if (action == 1)
+            if (action == -1)
+            {
+                Hide();
+                return;
+            }
+            else if (action == 1)
                 MovingAttack();
             else if (action == 2)
             {
@@ -94,6 +108,10 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             else
                 ticker++;
+
+            //Reset hide effects
+            npc.dontTakeDamage = false;
+            npc.alpha = 0;
 
             if (ticker % 30 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -126,6 +144,22 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     npc.frame.Y = 0;
                 }
             }
+        }
+
+        private void Hide()
+        {
+            //Make intangible
+            if (npc.alpha < 255)
+                npc.alpha += 15;
+            npc.dontTakeDamage = true;
+
+            float speed = 2f;
+            //Movement
+            float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
+            Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
+            direction.Normalize();
+            direction *= speed;
+            npc.velocity = (npc.velocity + direction);
         }
 
         public virtual void StatinaryAttack() { }

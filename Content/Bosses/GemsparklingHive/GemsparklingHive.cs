@@ -41,6 +41,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.noTileCollide = true;
         }
 
+        int[] gemsparklings = new int[7];
+
         private static int HEALTH_UNTIL_BREAK = Main.expertMode ? 200 : 150;
 
         float effectiveDamageTaken = 0;
@@ -55,8 +57,26 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         //Doesn't need netUpdate
         float rotatorSpeed = 0;
 
+        public bool setGemsparklings
+        {
+            get => npc.ai[2] == 1f;
+            set => npc.ai[2] = value ? 1f : 0f;
+        }
+
         public override void AI()
         {
+            if (!setGemsparklings && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                gemsparklings[0] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmethystGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                gemsparklings[1] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<TopazGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                gemsparklings[2] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<SapphireGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                gemsparklings[3] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<EmeraldGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                gemsparklings[4] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<RubyGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                gemsparklings[5] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<DiamondGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                gemsparklings[6] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmberGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                setGemsparklings = true;
+            }
+
             #region Targeting
             if (Main.netMode != 1)
             {
@@ -87,6 +107,30 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 effectiveDamageTaken = 0;
                 aiState = 1;
                 timer = 0;
+
+                int sparkingsAlive = 0;
+                foreach(int i in gemsparklings)
+                {
+                    NPC sparkNpc = Main.npc[i];
+                    if (CheckSparkling(sparkNpc))
+                        sparkingsAlive++;
+                }
+                if (sparkingsAlive == 0)
+                {
+                    npc.StrikeNPC(2000, 0, 0, true);
+                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 2000, 0, 0, 1);
+                }
+
+                int chosenSparklings = 0;
+                while (chosenSparklings < Math.Min(sparkingsAlive, Main.expertMode? 3 : 2)) //2 in normal 3 in expert or all if less alive
+                {
+                    int chosen = gemsparklings[Main.rand.Next(gemsparklings.Length)];
+                    if (CheckSparkling(Main.npc[chosen]))
+                    {
+                        chosenSparklings++;
+                        Main.npc[chosen].ai[1] = 0;
+                    }
+                }
             }
 
             timer++;
@@ -110,12 +154,24 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.velocity *= .9f;
             if (timer > 600)
             {
+                foreach (int i in gemsparklings)
+                {
+                    NPC sparkNpc = Main.npc[i];
+                    if (CheckSparkling(sparkNpc))
+                        sparkNpc.ai[1] = -1;
+                }
                 timer = 0;
                 aiState = 0;
                 timer = 0;
             }
             if (player.active == false)
             {
+                foreach (int i in gemsparklings)
+                {
+                    NPC sparkNpc = Main.npc[i];
+                    if (CheckSparkling(sparkNpc))
+                        sparkNpc.ai[1] = -1;
+                }
                 aiState = 0;
                 npc.velocity = new Vector2(0, 10);
                 timer = 0;
@@ -193,6 +249,25 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 npc.rotation += rotatorSpeed;
                 npc.velocity *= 0.92f;
             }
+        }
+
+        /// <summary>
+        /// Checks if given npc is active and a gemsparkling
+        /// </summary>
+        /// <param name="sparkNpc">npcwhoami</param>
+        /// <returns>if living gemsparking</returns>
+        private bool CheckSparkling(NPC sparkNpc)
+        {
+            if (sparkNpc.active &&
+                        (sparkNpc.type == NPCType<AmethystGemsparkling>() ||
+                        sparkNpc.type == NPCType<TopazGemsparkling>() ||
+                        sparkNpc.type == NPCType<RubyGemsparkling>() ||
+                        sparkNpc.type == NPCType<EmeraldGemsparkling>() ||
+                        sparkNpc.type == NPCType<SapphireGemsparkling>() ||
+                        sparkNpc.type == NPCType<DiamondGemsparkling>() ||
+                        sparkNpc.type == NPCType<AmberGemsparkling>()))
+                return true;
+            return false;
         }
 
         public override void FindFrame(int frameHeight)
