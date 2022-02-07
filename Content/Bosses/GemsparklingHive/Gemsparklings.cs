@@ -30,7 +30,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.noTileCollide = true;
         }
 
-        public float attackTimer = 0;
+        protected float attackTimer = 0;
 
         public float ticker
         {
@@ -43,7 +43,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             get => npc.ai[1];
             set => npc.ai[1] = value;
         }
-        //-1 - Lock on hive
+        //5 - Lock on hive
         //0 - move
         //1 - moving attack
         //2 - stationary attack
@@ -77,7 +77,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 player = Main.player[npc.target];
                 if (!player.active || player.dead || (npc.position - player.position).Length() > 3000)
                 {
-                    action = -1;
+                    npc.ai[1] = 5;
                 }
             }
 
@@ -95,32 +95,57 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
             #endregion
 
-            if (ticker % 120 == 0)
-                MovingAttack();
-            if (ticker % 300 == 0)
-                StatinaryAttack();
-
-            if (action == -1)
+            if (npc.ai[1] == 0)
             {
-                Hide();
-                return;
+                Move();
+                ticker++;
             }
-            else if (action == 1)
+            else if (npc.ai[1] == 1)
+            {
                 MovingAttack();
-            else if (action == 2)
+                Move();
+            }
+            else if (npc.ai[1] == 2)
             {
                 StatinaryAttack();
                 npc.velocity *= 0.96f;
-                return;
             }
-            else
-                ticker++;
+            else if (npc.ai[1] == 5)
+            {
+                Hide();
+            }
+
+
+            if (ticker % 160 == 120)
+                npc.ai[1] = 1;
+            if (ticker % 540 == 300)
+                npc.ai[1] = 2;
+        }
+
+        public override void FindFrame(int frameHeight)
+        {
+            int frameSpeed = 10;
+            npc.frameCounter++;
+            if (npc.frameCounter >= frameSpeed)
+            {
+                npc.frameCounter = 0;
+                npc.frame.Y += frameHeight;
+                if (npc.frame.Y >= frameHeight * 3)
+                {
+                    npc.frame.Y = 0;
+                }
+            }
+        }
+
+        public void Move()
+        {
+            Player player = Main.player[npc.target];
 
             //Reset hide effects
             npc.dontTakeDamage = false;
             npc.alpha = 0;
 
-            if (ticker % 30 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (ticker % 60 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 float speed = 10f;
                 float inertia = 20f;
@@ -146,26 +171,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
         }
 
-        public override void FindFrame(int frameHeight)
-        {
-            int frameSpeed = 10;
-            npc.frameCounter++;
-            if (npc.frameCounter >= frameSpeed)
-            {
-                npc.frameCounter = 0;
-                npc.frame.Y += frameHeight;
-                if (npc.frame.Y >= frameHeight * 3)
-                {
-                    npc.frame.Y = 0;
-                }
-            }
-        }
-
-        private void Hide()
+        public void Hide()
         {
             //Make intangible
             if (npc.alpha < 255)
-                npc.alpha += 10;
+                npc.alpha += 5;
             npc.dontTakeDamage = true;
 
             //Movement
@@ -180,14 +190,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
                 Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
                 direction.Normalize();
-                direction *= 3;
+                direction *= 10;
                 npc.velocity = direction;
             }
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
-            return action != -1;
+            return npc.ai[1] != 5;
         }
 
         public virtual void StatinaryAttack() { }
@@ -207,6 +217,37 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.height = 30;
             base.SetDefaults();
         }
+
+        public override void MovingAttack()
+        {
+            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(149, 0, 255), true);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 5;
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 6);
+            }
+            npc.ai[1] = 0;
+            npc.ai[0] ++;
+        }
+
+        public override void StatinaryAttack()
+        {
+            attackTimer++;
+            if (attackTimer % 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Vector2 shoot = new Vector2(0, 5);
+                Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(45 * (attackTimer / 10)));
+                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 6);
+            }
+            if (attackTimer > 80)
+            {
+                npc.ai[1] = 0;
+                attackTimer = 0;
+                npc.ai[0]++;
+            }
+        }
     }
 
     internal class TopazGemsparkling : Gemsparkling
@@ -220,6 +261,26 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.width = 38;
             npc.height = 48;
             base.SetDefaults();
+        }
+
+        public override void MovingAttack()
+        {
+            attackTimer++;
+            if (attackTimer % 20 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 247, 0), true);
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 4;
+                Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-30, 30)));
+                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 2);
+            }
+            if (attackTimer > 60)
+            {
+                npc.ai[1] = 0;
+                attackTimer = 0;
+                npc.ai[0]++;
+            }
         }
     }
 
@@ -235,6 +296,21 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.height = 32;
             base.SetDefaults();
         }
+
+        public override void MovingAttack()
+        {
+            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(35, 0, 255), true);
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 5;
+                Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(90 * i));
+                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 5);
+            }
+            npc.ai[1] = 0;
+            npc.ai[0]++;
+        }
     }
 
     internal class EmeraldGemsparkling : Gemsparkling
@@ -248,6 +324,20 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.width = 22;
             npc.height = 40;
             base.SetDefaults();
+        }
+
+        public override void MovingAttack()
+        {
+            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(0, 255, 0), true);
+            for (int i = 0; i < 3; i++)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 4;
+                Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 30 * i)), ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 3);
+            }
+            npc.ai[1] = 0;
+            npc.ai[0]++;
         }
     }
 
@@ -263,6 +353,20 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.height = 38;
             base.SetDefaults();
         }
+
+        public override void MovingAttack()
+        {
+            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 0, 0), true);
+            for (int i = 0; i < 3; i++)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 4 + i;
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 0);
+            }
+            npc.ai[1] = 0;
+            npc.ai[0]++;
+        }
     }
 
     internal class DiamondGemsparkling : Gemsparkling
@@ -277,6 +381,21 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.height = 30;
             base.SetDefaults();
         }
+
+        public override void MovingAttack()
+        {
+            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(100, 100, 100), true);
+            for (int i = 0; i < 5; i++)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 5;
+                Vector2 lineOffset = shoot.RotatedBy(MathHelper.PiOver2) * 4;
+                Projectile.NewProjectile(npc.Center + (-2 + i) * lineOffset, shoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 4);
+            }
+            npc.ai[1] = 0;
+            npc.ai[0]++;
+        }
     }
 
     internal class AmberGemsparkling : Gemsparkling
@@ -290,6 +409,20 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.width = 23;
             npc.height = 30;
             base.SetDefaults();
+        }
+
+        public override void MovingAttack()
+        {
+            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 110, 0), true);
+            for (int i = 0; i < 5; i++)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 6 - Math.Abs(-2 + i);
+                Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 15 * i)), ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 1);
+            }
+            npc.ai[1] = 0;
+            npc.ai[0]++;
         }
     }
 }

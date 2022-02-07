@@ -20,8 +20,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             item.damage = 24;
             item.ranged = true;
-            item.width = 22;
-            item.height = 40;
+            item.width = 38;
+            item.height = 64;
             item.useTime = 26;
             item.useAnimation = 26;
             item.useAmmo = AmmoID.Arrow;
@@ -57,6 +57,11 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
+        }
+
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(-10, 0);
         }
     }
 

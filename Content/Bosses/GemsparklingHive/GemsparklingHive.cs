@@ -67,13 +67,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             if (!setGemsparklings && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                gemsparklings[0] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmethystGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
-                gemsparklings[1] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<TopazGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
-                gemsparklings[2] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<SapphireGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
-                gemsparklings[3] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<EmeraldGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
-                gemsparklings[4] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<RubyGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
-                gemsparklings[5] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<DiamondGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
-                gemsparklings[6] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmberGemsparkling>(), 0, 0, -1, 0, npc.whoAmI, npc.target);
+                gemsparklings[0] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmethystGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
+                gemsparklings[1] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<TopazGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
+                gemsparklings[2] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<SapphireGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
+                gemsparklings[3] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<EmeraldGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
+                gemsparklings[4] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<RubyGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
+                gemsparklings[5] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<DiamondGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
+                gemsparklings[6] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmberGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
                 setGemsparklings = true;
             }
 
@@ -117,8 +117,9 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 }
                 if (sparkingsAlive == 0)
                 {
-                    npc.StrikeNPC(2000, 0, 0, true);
-                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 2000, 0, 0, 1);
+                    npc.NPCLoot();
+                    npc.timeLeft = 0;
+                    npc.netUpdate = true;
                 }
 
                 int chosenSparklings = 0;
@@ -153,13 +154,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             npc.aiAction = 1;
             npc.velocity *= .9f;
-            if (timer > 600)
+            if (timer > 900)
             {
                 foreach (int i in gemsparklings)
                 {
                     NPC sparkNpc = Main.npc[i];
                     if (CheckSparkling(sparkNpc))
-                        sparkNpc.ai[1] = -1;
+                        sparkNpc.ai[1] = 5;
                 }
                 timer = 0;
                 aiState = 0;
@@ -171,7 +172,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 {
                     NPC sparkNpc = Main.npc[i];
                     if (CheckSparkling(sparkNpc))
-                        sparkNpc.ai[1] = -1;
+                        sparkNpc.ai[1] = 5;
                 }
                 aiState = 0;
                 npc.velocity = new Vector2(0, 10);
@@ -181,6 +182,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         private void ClosedAI(Player player)
         {
+            foreach (int i in gemsparklings)
+            {
+                NPC sparkNpc = Main.npc[i];
+                if (CheckSparkling(sparkNpc))
+                    sparkNpc.ai[1] = 5;
+            }
             npc.aiAction = 0;
             if ((player.Center - npc.Center).X >= 0 && rotatorSpeed < .06f)
             {
