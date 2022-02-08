@@ -301,7 +301,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             if (attackTimer > 60)
             {
-                Projectile.NewProjectile(npc.Center, v, ProjectileType<TopazBeam>(), npc.damage / 3, 1, Main.myPlayer, 1);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    Projectile.NewProjectile(npc.Center, v, ProjectileType<TopazBeam>(), npc.damage / 3, 1, Main.myPlayer, 1);
                 npc.ai[1] = 0;
                 attackTimer = 0;
                 npc.ai[0]++;
@@ -324,7 +325,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         Vector2 v;
         float drawAlpha;
-        Texture2D tex;
+        Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
 
         public override void AI()
         {
@@ -338,11 +339,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(35, 0, 255), true);
             for (int i = 0; i < 4; i++)
             {
-                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
-                shoot.Normalize();
-                shoot *= 5;
-                Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(90 * i));
-                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 5);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                    shoot.Normalize();
+                    shoot *= 5;
+                    Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(90 * i));
+                    Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 5);
+                }
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
@@ -404,7 +408,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
                 shoot *= 4;
-                Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 30 * i)), ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 3);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 30 * i)), ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 3);
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
@@ -429,13 +434,30 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 0, 0), true);
             for (int i = 0; i < 3; i++)
             {
-                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
-                shoot.Normalize();
-                shoot *= 4 + i;
-                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 0);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                    shoot.Normalize();
+                    shoot *= 4 + i;
+                    Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 0);
+                }
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
+        }
+
+        public override void StatinaryAttack()
+        {
+            if (npc.velocity.Length() < 1 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 6;
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<RubyCrystal>(), npc.damage / 3, 1, Main.myPlayer, 1, Main.rand.NextFloat(.1f));
+                npc.ai[1] = 0;
+                attackTimer = 0;
+                npc.ai[0]++;
+            }
         }
     }
 
