@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -226,7 +227,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
                 shoot *= 5;
-                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 6);
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 6);
             }
             npc.ai[1] = 0;
             npc.ai[0] ++;
@@ -239,7 +240,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             {
                 Vector2 shoot = new Vector2(0, 5);
                 Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(45 * (attackTimer / 10)));
-                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 6);
+                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 6);
             }
             if (attackTimer > 80)
             {
@@ -263,6 +264,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             base.SetDefaults();
         }
 
+        Vector2 v;
+
         public override void MovingAttack()
         {
             attackTimer++;
@@ -273,10 +276,32 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 shoot.Normalize();
                 shoot *= 4;
                 Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-30, 30)));
-                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 2);
+                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 2);
             }
             if (attackTimer > 60)
             {
+                npc.ai[1] = 0;
+                attackTimer = 0;
+                npc.ai[0]++;
+            }
+        }
+
+        public override void StatinaryAttack()
+        {
+            if (attackTimer == 0)
+            {
+                v = Main.player[npc.target].Center - npc.Center;
+                v.Normalize();
+                v *= 4;
+            }
+            attackTimer++;
+            if (attackTimer % 2 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Projectile.NewProjectile(npc.Center, v, ProjectileType<TopazBeam>(), npc.damage / 3, 1, Main.myPlayer, 0);
+            }
+            if (attackTimer > 60)
+            {
+                Projectile.NewProjectile(npc.Center, v, ProjectileType<TopazBeam>(), npc.damage / 3, 1, Main.myPlayer, 1);
                 npc.ai[1] = 0;
                 attackTimer = 0;
                 npc.ai[0]++;
@@ -297,6 +322,17 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             base.SetDefaults();
         }
 
+        Vector2 v;
+        float drawAlpha;
+        Texture2D tex;
+
+        public override void AI()
+        {
+            if (npc.ai[1] != 2)
+                drawAlpha--;
+            base.AI();
+        }
+
         public override void MovingAttack()
         {
             DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(35, 0, 255), true);
@@ -306,10 +342,44 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 shoot.Normalize();
                 shoot *= 5;
                 Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(90 * i));
-                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 5);
+                Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 5);
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
+        }
+
+        public override void StatinaryAttack()
+        {
+            if (attackTimer == 0)
+            {
+                v = Main.player[npc.target].Center - npc.Center;
+                v.Normalize();
+                v *= 4;
+            }
+            attackTimer++;
+            if (drawAlpha < 10)
+                drawAlpha++;
+            npc.velocity = v;
+            if (attackTimer > 90)
+            {
+                npc.ai[1] = 0;
+                attackTimer = 0;
+                npc.ai[0]++;
+            }
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            Main.spriteBatch.Draw(tex, (npc.Center - Main.screenPosition), null, new Color(3 * drawAlpha, 0, 25 * drawAlpha, 0), 0, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            base.PostDraw(spriteBatch, drawColor);
+        }
+
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            float dist = Vector2.Distance(target.Center, npc.Center);
+            if (dist < tex.Width + npc.width)
+                return true;
+            return base.CanHitPlayer(target, ref cooldownSlot);
         }
     }
 
@@ -334,7 +404,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
                 shoot *= 4;
-                Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 30 * i)), ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 3);
+                Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 30 * i)), ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 3);
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
@@ -362,7 +432,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
                 shoot *= 4 + i;
-                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 0);
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 0);
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
@@ -391,7 +461,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 shoot.Normalize();
                 shoot *= 5;
                 Vector2 lineOffset = shoot.RotatedBy(MathHelper.PiOver2) * 4;
-                Projectile.NewProjectile(npc.Center + (-2 + i) * lineOffset, shoot, ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 4);
+                Projectile.NewProjectile(npc.Center + (-2 + i) * lineOffset, shoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 4);
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
@@ -419,7 +489,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
                 shoot *= 6 - Math.Abs(-2 + i);
-                Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 15 * i)), ProjectileType<GemDart>(), npc.damage / 2, 1, Main.myPlayer, 1);
+                Projectile.NewProjectile(npc.Center, shoot.RotatedBy(MathHelper.ToRadians(-30 + 15 * i)), ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 1);
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
