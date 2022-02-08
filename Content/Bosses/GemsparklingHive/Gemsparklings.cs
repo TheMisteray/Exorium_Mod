@@ -488,6 +488,24 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.ai[1] = 0;
             npc.ai[0]++;
         }
+
+        public override void StatinaryAttack()
+        {
+            if (attackTimer == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 28;
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<DiamondBeam>(), npc.damage / 2, 1, Main.myPlayer, 0, npc.whoAmI);
+            }
+            attackTimer++;
+            if (attackTimer > 230)
+            {
+                npc.ai[1] = 0;
+                npc.ai[0]++;
+                attackTimer = 0;
+            }
+        }
     }
 
     internal class AmberGemsparkling : Gemsparkling
