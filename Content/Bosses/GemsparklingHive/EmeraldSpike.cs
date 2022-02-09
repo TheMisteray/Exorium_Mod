@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -25,11 +26,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             projectile.tileCollide = false;
         }
 
-        private const int CHAIN_LENGTH = 30;
+        private const int CHAIN_LENGTH = 60;
 
-        private int drawAlpha = 0;
+        private float drawAlpha = 0;
 
         bool projCreated = false;
+
+        bool reCentered = false;
 
         public float chainPos
         {
@@ -39,15 +42,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void AI()
         {
-            if (projectile.timeLeft % 10 == 0 && drawAlpha < 10)
-                drawAlpha++;
-            else if (projectile.timeLeft % 10 == 0)
-                drawAlpha--;
-            if (Main.netMode != NetmodeID.MultiplayerClient && drawAlpha == 5 && chainPos < CHAIN_LENGTH)
+            drawAlpha += MathHelper.PiOver2 / 20;
+            if (Main.netMode != NetmodeID.MultiplayerClient && drawAlpha > MathHelper.PiOver4 && chainPos < CHAIN_LENGTH && !projCreated)
             {
-                Projectile.NewProjectile(projectile.position + projectile.velocity, projectile.velocity, ProjectileType<EmeraldSpike>(), projectile.damage, projectile.knockBack, Main.myPlayer, chainPos + 1);
+                Projectile.NewProjectile(projectile.Center + projectile.velocity, projectile.velocity, ProjectileType<EmeraldSpike>(), projectile.damage, projectile.knockBack, Main.myPlayer, chainPos + 1);
+                projCreated = true;
             }
-            if (drawAlpha <= 0)
+            if (drawAlpha >= Math.PI)
                 projectile.Kill();
         }
 
@@ -55,7 +56,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name);
 
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(0, 25 * drawAlpha, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(0, (int)(255 * Math.Sin(drawAlpha)), 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
             base.PostDraw(spriteBatch, lightColor);
         }
 

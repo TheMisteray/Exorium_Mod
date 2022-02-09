@@ -260,7 +260,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.damage = 10;
             npc.defDamage = 9;
             npc.width = 38;
-            npc.height = 48;
+            npc.height = 16;
             base.SetDefaults();
         }
 
@@ -325,7 +325,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         Vector2 v;
         float drawAlpha;
-        Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
 
         public override void AI()
         {
@@ -358,13 +357,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             {
                 v = Main.player[npc.target].Center - npc.Center;
                 v.Normalize();
-                v *= 4;
+                v *= 5;
             }
             attackTimer++;
             if (drawAlpha < 10)
                 drawAlpha++;
             npc.velocity = v;
-            if (attackTimer > 90)
+            if (attackTimer > 180)
             {
                 npc.ai[1] = 0;
                 attackTimer = 0;
@@ -374,12 +373,16 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            Main.spriteBatch.Draw(tex, (npc.Center - Main.screenPosition), null, new Color(3 * drawAlpha, 0, 25 * drawAlpha, 0), 0, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
+
+            Main.spriteBatch.Draw(tex, (npc.Center - Main.screenPosition), null, new Color(35, 0, 255, 0) /*new Color(3 * drawAlpha, 0, 25 * drawAlpha, 0)*/, 0, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
             base.PostDraw(spriteBatch, drawColor);
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
+            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
+
             float dist = Vector2.Distance(target.Center, npc.Center);
             if (dist < tex.Width + npc.width)
                 return true;
@@ -417,7 +420,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void StatinaryAttack()
         {
-            if (npc.velocity.Length() < 1 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (npc.velocity.Length() < .1f && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
@@ -462,12 +465,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void StatinaryAttack()
         {
-            if (npc.velocity.Length() < 1 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (npc.velocity.Length() < .1f && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
                 shoot *= 6;
-                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<RubyCrystal>(), npc.damage / 3, 1, Main.myPlayer, 1, Main.rand.NextFloat(.1f));
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<RubyCrystal>(), npc.damage / 3, 1, Main.myPlayer, 1, Main.rand.NextFloat(.1f, .3f));
                 npc.ai[1] = 0;
                 attackTimer = 0;
                 npc.ai[0]++;
@@ -510,7 +513,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
                 shoot *= 28;
-                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<DiamondBeam>(), npc.damage / 2, 1, Main.myPlayer, 0, npc.whoAmI);
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<Items.Weapons.Ranger.IonBeam>(), npc.damage / 2, 1, Main.myPlayer, 0, npc.whoAmI);
             }
             attackTimer++;
             if (attackTimer > 230)
@@ -547,6 +550,20 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             npc.ai[1] = 0;
             npc.ai[0]++;
+        }
+
+        public override void StatinaryAttack()
+        {
+            if (npc.velocity.Length() < .1f && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Vector2 shoot = Main.player[npc.target].Center - npc.Center;
+                shoot.Normalize();
+                shoot *= 5;
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<AmberPulse>(), npc.damage / 3, 1, Main.myPlayer);
+                npc.ai[1] = 0;
+                attackTimer = 0;
+                npc.ai[0]++;
+            }
         }
     }
 }

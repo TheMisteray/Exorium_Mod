@@ -40,10 +40,10 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             projectile.rotation += rotationSpeed;
             if (rotationSpeed > 0)
-                rotationSpeed -= .005f;
+                rotationSpeed -= .002f;
             projectile.alpha = 225;
             projectile.velocity *= .98f;
-            if (projectile.velocity.Length() <= 1)
+            if (projectile.velocity.Length() <= .1f)
             {
                 fuse++;
                 if (fuse > 60)
@@ -69,6 +69,9 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
+            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name);
+
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(255, 0, 0, 0), projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
             base.PostDraw(spriteBatch, lightColor);
         }
     }
