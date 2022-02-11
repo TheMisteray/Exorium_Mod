@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             projectile.alpha = 225;
             if (mode == 0)
             {
-                if (Main.rand.Next(50) == 0)
+                if (Main.rand.Next(100) == 0)
                 {
                     int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Rainbow>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 0, new Color(255, 247, 0));
                     Main.dust[dust0].position.X -= projectile.velocity.X / 10f * Main.rand.Next(10);

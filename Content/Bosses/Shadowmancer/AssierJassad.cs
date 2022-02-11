@@ -536,7 +536,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             if (!ExoriumWorld.downedShadowmancer)
             {
                 ExoriumWorld.downedShadowmancer = true;
-                Main.NewText("Kil", 100, 100, 100);
                 if (Main.netMode == NetmodeID.Server)
                 {
                     NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.

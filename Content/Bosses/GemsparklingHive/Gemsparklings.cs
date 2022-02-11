@@ -299,7 +299,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             {
                 Projectile.NewProjectile(npc.Center, v, ProjectileType<TopazBeam>(), npc.damage / 3, 1, Main.myPlayer, 0);
             }
-            if (attackTimer > 60)
+            if (attackTimer > 120)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                     Projectile.NewProjectile(npc.Center, v, ProjectileType<TopazBeam>(), npc.damage / 3, 1, Main.myPlayer, 1);
@@ -328,8 +328,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void AI()
         {
-            if (npc.ai[1] != 2)
-                drawAlpha--;
+            if (npc.ai[1] != 2 && drawAlpha > 0)
+                drawAlpha -= MathHelper.PiOver2 / 20;
             base.AI();
         }
 
@@ -360,8 +360,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 v *= 5;
             }
             attackTimer++;
-            if (drawAlpha < 10)
-                drawAlpha++;
+            if (drawAlpha < MathHelper.PiOver2)
+                drawAlpha += MathHelper.PiOver2 / 20;
             npc.velocity = v;
             if (attackTimer > 180)
             {
@@ -371,12 +371,16 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
+            if (npc.ai[1] == 2)
+            {
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
 
-            Main.spriteBatch.Draw(tex, (npc.Center - Main.screenPosition), null, new Color(35, 0, 255, 0) /*new Color(3 * drawAlpha, 0, 25 * drawAlpha, 0)*/, 0, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
-            base.PostDraw(spriteBatch, drawColor);
+                float scalar = 2;
+                Main.spriteBatch.Draw(tex, (npc.Center - Main.screenPosition), null, new Color((int)(35 * Math.Sin(drawAlpha)), 0, (int)(255 * Math.Sin(drawAlpha)), 0), 0, new Vector2(tex.Width / 2, tex.Height / 2), scalar, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, drawColor);
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -387,6 +391,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             if (dist < tex.Width + npc.width)
                 return true;
             return base.CanHitPlayer(target, ref cooldownSlot);
+        }
+
+        public override bool StrikeNPC(ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
+        {
+            if (npc.ai[1] == 2)
+                damage -= 10;
+            return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
         }
     }
 

@@ -32,8 +32,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         bool projCreated = false;
 
-        bool reCentered = false;
-
         public float chainPos
         {
             get => projectile.ai[0];
@@ -42,7 +40,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void AI()
         {
-            drawAlpha += MathHelper.PiOver2 / 20;
+            drawAlpha += MathHelper.PiOver2 / 10;
             if (Main.netMode != NetmodeID.MultiplayerClient && drawAlpha > MathHelper.PiOver4 && chainPos < CHAIN_LENGTH && !projCreated)
             {
                 Projectile.NewProjectile(projectile.Center + projectile.velocity, projectile.velocity, ProjectileType<EmeraldSpike>(), projectile.damage, projectile.knockBack, Main.myPlayer, chainPos + 1);

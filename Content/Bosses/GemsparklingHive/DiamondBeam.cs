@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -104,6 +105,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
 			LifeCounter++;
 			CastLights();
+			SpawnDusts(npc);
 
 			if (LifeCounter > LIFE_TIME)
 				projectile.Kill();
@@ -119,6 +121,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 				if (Charge == MAX_CHARGE)
 				{
 					DustHelper.DustRing(projectile.Center, DustType<Dusts.Rainbow>(), 5, 0, .2f, 1, 0, 0, 0, Color.White, true);
+					Main.NewText("Charged");
 				}
 			}
 		}
@@ -161,6 +164,41 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			{
 				projectile.soundDelay = SoundInterval;
 				Main.PlaySound(SoundID.NPCDeath7, projectile.position);
+			}
+		}
+
+		private void SpawnDusts(NPC npc)
+		{
+			Vector2 unit = projectile.velocity * -1;
+			Vector2 dustPos = npc.Center + projectile.velocity * BeamLength;
+
+			for (int i = 0; i < 2; ++i)
+			{
+				float num1 = projectile.velocity.ToRotation() + (Main.rand.Next(2) == 1 ? -1.0f : 1.0f) * 1.57f;
+				float num2 = (float)(Main.rand.NextDouble() * 0.8f + 1.0f);
+				Vector2 dustVel = new Vector2((float)Math.Cos(num1) * num2, (float)Math.Sin(num1) * num2);
+				Dust dust = Main.dust[Dust.NewDust(dustPos, 0, 0, 226, dustVel.X, dustVel.Y)];
+				dust.noGravity = true;
+				dust.scale = 1.2f;
+				dust = Dust.NewDustDirect(npc.Center, 0, 0, 31,
+					-unit.X * BeamLength, -unit.Y * BeamLength);
+				dust.fadeIn = 0f;
+				dust.noGravity = true;
+				dust.scale = 0.88f;
+				dust.color = Color.Cyan;
+			}
+
+			if (Main.rand.NextBool(5))
+			{
+				Vector2 offset = projectile.velocity.RotatedBy(1.57f) * ((float)Main.rand.NextDouble() - 0.5f) * projectile.width;
+				Dust dust = Main.dust[Dust.NewDust(dustPos + offset - Vector2.One * 4f, 8, 8, 31, 0.0f, 0.0f, 100, new Color(), 1.5f)];
+				dust.velocity *= 0.5f;
+				dust.velocity.Y = -Math.Abs(dust.velocity.Y);
+				unit = dustPos - npc.Center;
+				unit.Normalize();
+				dust = Main.dust[Dust.NewDust(npc.Center + 55 * unit, 8, 8, 31, 0.0f, 0.0f, 100, new Color(), 1.5f)];
+				dust.velocity = dust.velocity * 0.5f;
+				dust.velocity.Y = -Math.Abs(dust.velocity.Y);
 			}
 		}
 
