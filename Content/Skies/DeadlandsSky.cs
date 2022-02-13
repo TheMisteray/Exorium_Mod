@@ -8,7 +8,7 @@ using Terraria.Utilities;
 
 namespace ExoriumMod.Content.Skies
 {
-    class DeadlandsSky : CustomSky
+    class DeadlandsSky
     {
 
     }

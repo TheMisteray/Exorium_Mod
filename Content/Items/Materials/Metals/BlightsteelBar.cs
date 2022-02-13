@@ -20,6 +20,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             item.width = 30;
             item.height = 24;
             item.value = 4200;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.rare = 2;
             item.maxStack = 99;
             item.useTurn = true;

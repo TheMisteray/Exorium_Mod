@@ -51,24 +51,25 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 		public override void SetDefaults()
 		{
 			projectile.width = 8;
-			projectile.height = 10;
+			projectile.height = 8;
 			projectile.friendly = false;
 			projectile.penetrate = -1;
 			projectile.tileCollide = false;
 			projectile.hostile = true;
-			projectile.hide = true;
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			NPC npc = Main.npc[(int)NPCWhoAmI];
+			Vector2 unitVel = projectile.velocity;
+			unitVel.Normalize();
 
 			if (Charge == MAX_CHARGE)
-				DrawHelper.DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], npc.Center, projectile.velocity, 10, -1.57f, 1f, BeamLength, Color.White, (int)MOVE_DISTANCE, BeamLength);
+				DrawHelper.DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], npc.Center, unitVel, 10, -1.57f, 1f);
 			else
 			{
-				Texture2D tex = GetTexture(AssetDirectory.Projectile + Name + "Guide");
-				DrawHelper.DrawLaser(spriteBatch, tex, npc.Center, projectile.velocity, 10, MathHelper.PiOver2, 1, BeamLength, Color.White, (int)MOVE_DISTANCE, BeamLength);
+				Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name + "Guide");
+				DrawHelper.DrawLaser(spriteBatch, tex, npc.Center, unitVel, 10, MathHelper.PiOver2, 1);
 			}
 			return false;
 		}
@@ -91,6 +92,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			NPC npc = Main.npc[(int)NPCWhoAmI];
 			projectile.position = npc.Center + projectile.velocity * MOVE_DISTANCE;
 			projectile.timeLeft = 2;
+			if (npc.alpha > 10) //Ends laser when gemsparkling hides
+				projectile.timeLeft = 0;
 
 			//Turn after damage begins
 			if (LifeCounter > 0)
@@ -105,7 +108,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
 			LifeCounter++;
 			CastLights();
-			SpawnDusts(npc);
 
 			if (LifeCounter > LIFE_TIME)
 				projectile.Kill();
@@ -121,7 +123,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 				if (Charge == MAX_CHARGE)
 				{
 					DustHelper.DustRing(projectile.Center, DustType<Dusts.Rainbow>(), 5, 0, .2f, 1, 0, 0, 0, Color.White, true);
-					Main.NewText("Charged");
 				}
 			}
 		}
@@ -136,7 +137,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
 			// Change a portion of the Prism's current velocity so that it points to the mouse. This gives smooth movement over time.
 			aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(projectile.velocity), aim, TurnResponsiveness));
-			aim *= 28;
 
 			if (aim != projectile.velocity)
 			{
@@ -147,7 +147,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			//Push npc
 			Vector2 push = projectile.velocity;
 			push.Normalize();
-			npc.velocity = push * 2;
+			npc.position += push * -1;
 		}
 
 		private void CastLights()
@@ -164,41 +164,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			{
 				projectile.soundDelay = SoundInterval;
 				Main.PlaySound(SoundID.NPCDeath7, projectile.position);
-			}
-		}
-
-		private void SpawnDusts(NPC npc)
-		{
-			Vector2 unit = projectile.velocity * -1;
-			Vector2 dustPos = npc.Center + projectile.velocity * BeamLength;
-
-			for (int i = 0; i < 2; ++i)
-			{
-				float num1 = projectile.velocity.ToRotation() + (Main.rand.Next(2) == 1 ? -1.0f : 1.0f) * 1.57f;
-				float num2 = (float)(Main.rand.NextDouble() * 0.8f + 1.0f);
-				Vector2 dustVel = new Vector2((float)Math.Cos(num1) * num2, (float)Math.Sin(num1) * num2);
-				Dust dust = Main.dust[Dust.NewDust(dustPos, 0, 0, 226, dustVel.X, dustVel.Y)];
-				dust.noGravity = true;
-				dust.scale = 1.2f;
-				dust = Dust.NewDustDirect(npc.Center, 0, 0, 31,
-					-unit.X * BeamLength, -unit.Y * BeamLength);
-				dust.fadeIn = 0f;
-				dust.noGravity = true;
-				dust.scale = 0.88f;
-				dust.color = Color.Cyan;
-			}
-
-			if (Main.rand.NextBool(5))
-			{
-				Vector2 offset = projectile.velocity.RotatedBy(1.57f) * ((float)Main.rand.NextDouble() - 0.5f) * projectile.width;
-				Dust dust = Main.dust[Dust.NewDust(dustPos + offset - Vector2.One * 4f, 8, 8, 31, 0.0f, 0.0f, 100, new Color(), 1.5f)];
-				dust.velocity *= 0.5f;
-				dust.velocity.Y = -Math.Abs(dust.velocity.Y);
-				unit = dustPos - npc.Center;
-				unit.Normalize();
-				dust = Main.dust[Dust.NewDust(npc.Center + 55 * unit, 8, 8, 31, 0.0f, 0.0f, 100, new Color(), 1.5f)];
-				dust.velocity = dust.velocity * 0.5f;
-				dust.velocity.Y = -Math.Abs(dust.velocity.Y);
 			}
 		}
 

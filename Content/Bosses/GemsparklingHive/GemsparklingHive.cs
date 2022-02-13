@@ -117,7 +117,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 }
                 if (sparkingsAlive == 0)
                 {
-                    npc.NPCLoot();
                     npc.timeLeft = 0;
                     npc.netUpdate = true;
                 }
@@ -266,14 +265,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         /// <returns>if living gemsparking</returns>
         private bool CheckSparkling(NPC sparkNpc)
         {
-            if (sparkNpc.active &&
-                        (sparkNpc.type == NPCType<AmethystGemsparkling>() ||
-                        sparkNpc.type == NPCType<TopazGemsparkling>() ||
-                        sparkNpc.type == NPCType<RubyGemsparkling>() ||
-                        sparkNpc.type == NPCType<EmeraldGemsparkling>() ||
-                        sparkNpc.type == NPCType<SapphireGemsparkling>() ||
-                        sparkNpc.type == NPCType<DiamondGemsparkling>() ||
-                        sparkNpc.type == NPCType<AmberGemsparkling>()))
+            if (sparkNpc.active && sparkNpc.modNPC is Gemsparkling)
                 return true;
             return false;
         }
@@ -306,7 +298,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 effectiveDamageTaken += (float)damage;
             if (aiState != 0)
                 knockback = 0;
-            damage = 0;
+            npc.life = npc.lifeMax;
             return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
         }
 
@@ -318,6 +310,31 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             if (dist < target.width + npc.width)
                 return true;
             return false;
+        }
+
+        public void SparklingDied()
+        {
+            bool stillSpark = false;
+            int numSparks = 0;
+            foreach(int i in gemsparklings)
+            {
+                NPC npc = Main.npc[i];
+                if (CheckSparkling(npc))
+                {
+                    numSparks++;
+                    if (npc.ai[1] != 5)
+                        stillSpark = true;
+                }
+            }
+            if (!stillSpark)
+            {
+                aiState = 0;
+                if (numSparks == 0)
+                {
+                    npc.StrikeNPC(9999, 0, 0, true);
+                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 9999, 0, 0, 1);
+                }
+            }
         }
     }
 }

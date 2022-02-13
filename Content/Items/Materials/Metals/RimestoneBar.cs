@@ -24,6 +24,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
             item.useTurn = true;
             item.useAnimation = 15;
             item.useTime = 10;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.autoReuse = true;
             item.consumable = true;
             item.createTile = TileType<Tiles.RimestoneBarTile>();

@@ -6,6 +6,7 @@ namespace ExoriumMod.Helpers
 {
     public static class DrawHelper
     {
+		//TODO: rewrite this to work with other laser sizes
 		/// <summary>
 		/// Draws lasers
 		/// </summary>

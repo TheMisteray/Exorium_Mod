@@ -19,6 +19,9 @@ namespace ExoriumMod.Content.Tiles
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = true;
+            Main.tileSolidTop[Type] = true;
+            Main.tileFrameImportant[Type] = true;
+
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.LavaDeath = false;
@@ -30,7 +33,11 @@ namespace ExoriumMod.Content.Tiles
         public override bool Drop(int i, int j)
         {
             Tile t = Main.tile[i, j];
-            Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.DarksteelBar>());
+            int style = t.frameX / 18;
+            if (style == 0) // It can be useful to share a single tile with multiple styles. This code will let you drop the appropriate bar if you had multiple.
+            {
+                Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.DarksteelBar>());
+            }
             return base.Drop(i, j);
         }
     }

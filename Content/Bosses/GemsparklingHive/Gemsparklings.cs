@@ -196,6 +196,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
         }
 
+        public override void NPCLoot()
+        {
+            NPC hive = Main.npc[(int)hiveWhoAmI];
+            if (hive.modNPC is GemsparklingHive g)
+                g.SparklingDied();
+            base.NPCLoot();
+        }
+
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
             return npc.ai[1] != 5;
@@ -523,8 +531,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             {
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
-                shoot *= 28;
-                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<Items.Weapons.Ranger.IonBeam>(), npc.damage / 2, 1, Main.myPlayer, 0, npc.whoAmI);
+
+                Projectile.NewProjectile(npc.Center, shoot, ProjectileType<DiamondBeam>(), npc.damage / 2, 1, Main.myPlayer, 0, npc.whoAmI);
             }
             attackTimer++;
             if (attackTimer > 230)
@@ -544,8 +552,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             npc.damage = 12;
             npc.defDamage = 3;
-            npc.width = 23;
-            npc.height = 30;
+            npc.width = 38;
+            npc.height = 24;
             base.SetDefaults();
         }
 
