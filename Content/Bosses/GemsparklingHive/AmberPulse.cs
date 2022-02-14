@@ -20,7 +20,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             projectile.friendly = false;
             projectile.hostile = true;
             projectile.alpha = 255;
-            projectile.timeLeft = 600;
+            projectile.timeLeft = 1200;
             projectile.penetrate = -1;
             projectile.tileCollide = false;
         }

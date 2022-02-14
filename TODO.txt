@@ -32,8 +32,10 @@ Mod release
 
 
 Future:
-Remove Mordite
 Gemsparkling Hive
+	- Need to give gores
+	- Create spawn rock
+
 Caravene
 
 Deadlands Overhaul

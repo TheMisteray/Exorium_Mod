@@ -52,7 +52,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     c = new Color(0, 255, 0, 0);
                     break;
                 case 4:
-                    c = new Color(100, 100, 100, 0);
+                    c = new Color(200, 200, 200, 0);
                     break;
                 case 5:
                     c = new Color(35, 0, 255, 0);

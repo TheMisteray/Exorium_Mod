@@ -21,7 +21,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             projectile.hostile = true;
             projectile.extraUpdates = 50;
             projectile.timeLeft = 500;
-            projectile.penetrate = 1;
+            projectile.tileCollide = false;
         }
 
         public float mode
@@ -51,19 +51,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     Main.dust[dust0].position.Y -= projectile.velocity.Y / 10f * i;
                 }
             }
-        }
-
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            if (projectile.velocity.X != oldVelocity.X)
-            {
-                projectile.velocity.X = -oldVelocity.X;
-            }
-            if (projectile.velocity.Y != oldVelocity.Y)
-            {
-                projectile.velocity.Y = -oldVelocity.Y;
-            }
-            return false;
         }
 
         public override bool CanHitPlayer(Player target)

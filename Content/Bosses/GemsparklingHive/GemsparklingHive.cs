@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -25,7 +26,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.aiStyle = -1;
             npc.lifeMax = 1000;
             npc.damage = 16;
-            npc.defense = 9999;
+            npc.defense = 7;
             npc.knockBackResist = .3f;
             npc.width = 64;
             npc.height = 80;
@@ -45,23 +46,37 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         private static int HEALTH_UNTIL_BREAK = Main.expertMode ? 150 : 100;
 
-        float effectiveDamageTaken = 0;
-
-        float aiState = 0;
+        public float aiState
+        {
+            get => npc.ai[0];
+            set => npc.ai[0] = value;
+        }
         // 0 - closed
         // 1 - open
         // 2 - dash
 
-        float timer = 0;
-
-        //Doesn't need netUpdate
-        float rotatorSpeed = 0;
+        public float effectiveDamageTaken
+        {
+            get => npc.ai[1];
+            set => npc.ai[1] = value;
+        }
 
         public bool setGemsparklings
         {
             get => npc.ai[2] == 1f;
             set => npc.ai[2] = value ? 1f : 0f;
         }
+
+        public bool checkSparklings
+        {
+            get => npc.ai[3] == 1f;
+            set => npc.ai[3] = value ? 1f : 0f;
+        }
+
+        public float timer = 0;
+
+        //Doesn't need netUpdate
+        float rotatorSpeed = 0;
 
         public override void AI()
         {
@@ -115,22 +130,27 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     if (CheckSparkling(sparkNpc))
                         sparkingsAlive++;
                 }
-                if (sparkingsAlive == 0)
-                {
-                    npc.timeLeft = 0;
-                    npc.netUpdate = true;
-                }
 
                 int chosenSparklings = 0;
-                while (chosenSparklings < Math.Min(sparkingsAlive, Main.expertMode? 3 : 2)) //2 in normal 3 in expert or all if less alive
+                int alreadyChosen = -1;
+                int tries = 0;
+                while (chosenSparklings < 2) //2 or all if less alive
                 {
+                    tries++;
                     int chosen = gemsparklings[Main.rand.Next(gemsparklings.Length)];
+                    if (chosen == alreadyChosen)
+                        continue;
                     if (CheckSparkling(Main.npc[chosen]))
                     {
                         chosenSparklings++;
+                        alreadyChosen = chosen;
                         Main.npc[chosen].ai[1] = 0;
-                        Main.npc[chosen].velocity = new Vector2(0, 5).RotatedByRandom(MathHelper.TwoPi);
+                        Main.npc[chosen].velocity = new Vector2(0, 4).RotatedByRandom(MathHelper.TwoPi);
                     }
+                    if (chosenSparklings == 1 && sparkingsAlive == 1)
+                        break;
+                    if (sparkingsAlive == 0)
+                        break;
                 }
             }
 
@@ -147,6 +167,9 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     DashAI(player);
                     break;
             }
+
+            if (checkSparklings && Main.netMode != NetmodeID.MultiplayerClient)
+                SparklingDied();
         }
 
         private void OpenAI(Player player)
@@ -279,14 +302,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     npc.frameCounter = 0;
                     npc.frame.Y = 1 * frameHeight;
                 }
-                if (npc.frame.Y < 3 * frameHeight && npc.frameCounter%20 == 0)
+                if (npc.frame.Y < 3 * frameHeight && npc.frameCounter%10 == 0)
                 {
                     npc.frame.Y += frameHeight;
                 }
             }
             else
             {
-                if (npc.frame.Y != 0 && npc.frameCounter % 20 == 0)
+                if (npc.frame.Y != 0 && npc.frameCounter % 10 == 0)
                     npc.frame.Y -= frameHeight;
             }
             npc.frameCounter++;
@@ -314,6 +337,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public void SparklingDied()
         {
+            checkSparklings = false;
             bool stillSpark = false;
             int numSparks = 0;
             foreach(int i in gemsparklings)
@@ -335,6 +359,26 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 9999, 0, 0, 1);
                 }
             }
+        }
+
+        public override void NPCLoot()
+        {
+            Item.NewItem(npc.getRect(), ItemID.Amethyst, Main.rand.Next(8, 16));
+            Item.NewItem(npc.getRect(), ItemID.Topaz, Main.rand.Next(8, 16));
+            Item.NewItem(npc.getRect(), ItemID.Emerald, Main.rand.Next(4, 10));
+            Item.NewItem(npc.getRect(), ItemID.Sapphire, Main.rand.Next(4, 10));
+            Item.NewItem(npc.getRect(), ItemID.Ruby, Main.rand.Next(3, 8));
+            Item.NewItem(npc.getRect(), ItemID.Diamond, Main.rand.Next(2, 5));
+            Item.NewItem(npc.getRect(), ItemID.Amber, Main.rand.Next(1, 3));
+            Item.NewItem(npc.getRect(), ItemID.StoneBlock, Main.rand.Next(10, 31));
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            Vector2 drawCenter = npc.Center;
+            drawCenter.Y += 4;
+            spriteBatch.Draw(GetTexture(AssetDirectory.GemsparklingHive + Name + "_Glow"), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White, npc.rotation, new Vector2(npc.width, npc.height) / 2f, 1f, SpriteEffects.None, 0);
+            base.PostDraw(spriteBatch, drawColor);
         }
     }
 }

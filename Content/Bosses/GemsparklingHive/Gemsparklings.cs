@@ -116,7 +116,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Hide();
             }
 
-
             if (ticker % 160 == 120)
                 npc.ai[1] = 1;
             if (ticker % 540 == 300)
@@ -146,7 +145,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.dontTakeDamage = false;
             npc.alpha = 0;
 
-            if (ticker % 60 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (ticker % 30 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 float speed = 10f;
                 float inertia = 20f;
@@ -182,13 +181,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             //Movement
             if (npc.alpha >= 255)
             {
-                float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
                 Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
                 npc.velocity = direction;
             }
             else
             {
-                float between = Vector2.Distance(Main.npc[(int)hiveWhoAmI].Center, npc.Center);
                 Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - npc.Center;
                 direction.Normalize();
                 direction *= 10;
@@ -199,14 +196,27 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         public override void NPCLoot()
         {
             NPC hive = Main.npc[(int)hiveWhoAmI];
-            if (hive.modNPC is GemsparklingHive g)
-                g.SparklingDied();
+            if (hive.type == NPCType<GemsparklingHive>())
+                hive.ai[3] = 1;
             base.NPCLoot();
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
             return npc.ai[1] != 5;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            return false;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            Vector2 drawCenter = npc.Center;
+            drawCenter.Y += 4;
+            spriteBatch.Draw(GetTexture(AssetDirectory.GemsparklingHive + Name), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White, npc.rotation, new Vector2(npc.width, npc.height)/2, 1, SpriteEffects.None, 0);
+            base.PostDraw(spriteBatch, drawColor);
         }
 
         public virtual void StatinaryAttack() { }
@@ -222,7 +232,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             npc.damage = 12;
             npc.defDamage = 3;
-            npc.width = 23;
+            npc.width = 26;
             npc.height = 30;
             base.SetDefaults();
         }
@@ -238,7 +248,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Projectile.NewProjectile(npc.Center, shoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 6);
             }
             npc.ai[1] = 0;
-            npc.ai[0] ++;
+            npc.ai[0]++;
         }
 
         public override void StatinaryAttack()
@@ -250,12 +260,39 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(45 * (attackTimer / 10)));
                 Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 6);
             }
+            else if (attackTimer % 10 == 0)
+                DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(149, 0, 255), true);
             if (attackTimer > 80)
             {
                 npc.ai[1] = 0;
                 attackTimer = 0;
                 npc.ai[0]++;
             }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
+            Vector2 center = npc.Center;
+            Vector2 distToHive = hiveCenter - center;
+            float projRotation = distToHive.ToRotation() - 1.57f;
+            float distance = distToHive.Length();
+            while (distance > 30f && !float.IsNaN(distance))
+            {
+                distToHive.Normalize();                 //get unit vector
+                distToHive *= 24f;                      //speed = 24
+                center += distToHive;                   //update draw position
+                distToHive = hiveCenter - center;    //update distance
+                distance = distToHive.Length();
+                Color drawColor = new Color(149, 0, 255);
+
+                //Draw chain
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "GemChain");
+                spriteBatch.Draw(tex, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y),
+                    new Rectangle(0, 0, tex.Width, tex.Height), drawColor, projRotation,
+                    new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, lightColor);
         }
     }
 
@@ -286,6 +323,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 Vector2 offShoot = shoot.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-30, 30)));
                 Projectile.NewProjectile(npc.Center, offShoot, ProjectileType<GemDart>(), npc.damage / 3, 1, Main.myPlayer, 2);
             }
+            else if (attackTimer % 20 == 0)
+                DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 247, 0), true);
             if (attackTimer > 60)
             {
                 npc.ai[1] = 0;
@@ -309,12 +348,38 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             if (attackTimer > 120)
             {
+                DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 247, 0), true);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                     Projectile.NewProjectile(npc.Center, v, ProjectileType<TopazBeam>(), npc.damage / 3, 1, Main.myPlayer, 1);
                 npc.ai[1] = 0;
                 attackTimer = 0;
                 npc.ai[0]++;
             }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
+            Vector2 center = npc.Center;
+            Vector2 distToHive = hiveCenter - center;
+            float projRotation = distToHive.ToRotation() - 1.57f;
+            float distance = distToHive.Length();
+            while (distance > 30f && !float.IsNaN(distance))
+            {
+                distToHive.Normalize();                 //get unit vector
+                distToHive *= 24f;                      //speed = 24
+                center += distToHive;                   //update draw position
+                distToHive = hiveCenter - center;    //update distance
+                distance = distToHive.Length();
+                Color drawColor = new Color(255, 247, 0);
+
+                //Draw chain
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "GemChain");
+                spriteBatch.Draw(tex, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y),
+                    new Rectangle(0, 0, tex.Width, tex.Height), drawColor, projRotation,
+                    new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, lightColor);
         }
     }
 
@@ -379,7 +444,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             if (npc.ai[1] == 2)
             {
@@ -388,7 +453,28 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 float scalar = 2;
                 Main.spriteBatch.Draw(tex, (npc.Center - Main.screenPosition), null, new Color((int)(35 * Math.Sin(drawAlpha)), 0, (int)(255 * Math.Sin(drawAlpha)), 0), 0, new Vector2(tex.Width / 2, tex.Height / 2), scalar, SpriteEffects.None, 0f);
             }
-            return base.PreDraw(spriteBatch, drawColor);
+
+            Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
+            Vector2 center = npc.Center;
+            Vector2 distToHive = hiveCenter - center;
+            float projRotation = distToHive.ToRotation() - 1.57f;
+            float distance = distToHive.Length();
+            while (distance > 30f && !float.IsNaN(distance))
+            {
+                distToHive.Normalize();                 //get unit vector
+                distToHive *= 24f;                      //speed = 24
+                center += distToHive;                   //update draw position
+                distToHive = hiveCenter - center;    //update distance
+                distance = distToHive.Length();
+                Color drawColor = new Color(35, 0, 255);
+
+                //Draw chain
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "GemChain");
+                spriteBatch.Draw(tex, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y),
+                    new Rectangle(0, 0, tex.Width, tex.Height), drawColor, projRotation,
+                    new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, lightColor);
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -449,6 +535,33 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 attackTimer = 0;
                 npc.ai[0]++;
             }
+            else if (npc.velocity.Length() < .1f)
+                DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(0, 255, 0), true);
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
+            Vector2 center = npc.Center;
+            Vector2 distToHive = hiveCenter - center;
+            float projRotation = distToHive.ToRotation() - 1.57f;
+            float distance = distToHive.Length();
+            while (distance > 30f && !float.IsNaN(distance))
+            {
+                distToHive.Normalize();                 //get unit vector
+                distToHive *= 24f;                      //speed = 24
+                center += distToHive;                   //update draw position
+                distToHive = hiveCenter - center;    //update distance
+                distance = distToHive.Length();
+                Color drawColor = new Color(0, 255, 0);
+
+                //Draw chain
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "GemChain");
+                spriteBatch.Draw(tex, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y),
+                    new Rectangle(0, 0, tex.Width, tex.Height), drawColor, projRotation,
+                    new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, lightColor);
         }
     }
 
@@ -494,6 +607,32 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 attackTimer = 0;
                 npc.ai[0]++;
             }
+            else if (npc.velocity.Length() < .1f)
+                DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 0, 0), true);
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
+            Vector2 center = npc.Center;
+            Vector2 distToHive = hiveCenter - center;
+            float projRotation = distToHive.ToRotation() - 1.57f;
+            float distance = distToHive.Length();
+            while (distance > 30f && !float.IsNaN(distance))
+            {
+                distToHive.Normalize();                 //get unit vector
+                distToHive *= 24f;                      //speed = 24
+                center += distToHive;                   //update draw position
+                distToHive = hiveCenter - center;    //update distance
+                distance = distToHive.Length();
+                Color drawColor = new Color(255, 0, 0);
+
+                //Draw chain
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "GemChain");
+                spriteBatch.Draw(tex, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y),
+                    new Rectangle(0, 0, tex.Width, tex.Height), drawColor, projRotation,
+                    new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, lightColor);
         }
     }
 
@@ -505,14 +644,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             npc.damage = 22;
             npc.defDamage = 11;
-            npc.width = 23;
-            npc.height = 30;
+            npc.width = 38;
+            npc.height = 28;
             base.SetDefaults();
         }
 
         public override void MovingAttack()
         {
-            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(100, 100, 100), true);
+            DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, Color.White, true);
             for (int i = 0; i < 5; i++)
             {
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
@@ -541,6 +680,31 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 npc.ai[0]++;
                 attackTimer = 0;
             }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
+            Vector2 center = npc.Center;
+            Vector2 distToHive = hiveCenter - center;
+            float projRotation = distToHive.ToRotation() - 1.57f;
+            float distance = distToHive.Length();
+            while (distance > 30f && !float.IsNaN(distance))
+            {
+                distToHive.Normalize();                 //get unit vector
+                distToHive *= 24f;                      //speed = 24
+                center += distToHive;                   //update draw position
+                distToHive = hiveCenter - center;    //update distance
+                distance = distToHive.Length();
+                Color drawColor = Color.White;
+
+                //Draw chain
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "GemChain");
+                spriteBatch.Draw(tex, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y),
+                    new Rectangle(0, 0, tex.Width, tex.Height), drawColor, projRotation,
+                    new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, lightColor);
         }
     }
 
@@ -577,12 +741,39 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             {
                 Vector2 shoot = Main.player[npc.target].Center - npc.Center;
                 shoot.Normalize();
-                shoot *= 5;
+                shoot *= 2;
                 Projectile.NewProjectile(npc.Center, shoot, ProjectileType<AmberPulse>(), npc.damage / 3, 1, Main.myPlayer);
                 npc.ai[1] = 0;
                 attackTimer = 0;
                 npc.ai[0]++;
             }
+            if (npc.velocity.Length() < .1f)
+                DustHelper.DustRing(npc.Center, DustType<Rainbow>(), 4, 0, .2f, 1, 0, 0, 0, new Color(255, 110, 0), true);
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
+            Vector2 center = npc.Center;
+            Vector2 distToHive = hiveCenter - center;
+            float projRotation = distToHive.ToRotation() - 1.57f;
+            float distance = distToHive.Length();
+            while (distance > 30f && !float.IsNaN(distance))
+            {
+                distToHive.Normalize();                 //get unit vector
+                distToHive *= 24f;                      //speed = 24
+                center += distToHive;                   //update draw position
+                distToHive = hiveCenter - center;    //update distance
+                distance = distToHive.Length();
+                Color drawColor = new Color(255, 110, 0);
+
+                //Draw chain
+                Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "GemChain");
+                spriteBatch.Draw(tex, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y),
+                    new Rectangle(0, 0, tex.Width, tex.Height), drawColor, projRotation,
+                    new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+            }
+            return base.PreDraw(spriteBatch, lightColor);
         }
     }
 }

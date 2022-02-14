@@ -65,11 +65,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			unitVel.Normalize();
 
 			if (Charge == MAX_CHARGE)
-				DrawHelper.DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], npc.Center, unitVel, 10, -1.57f, 1f);
+				DrawHelper.DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], npc.Center, unitVel, 10, -1.57f, 1f, BeamLength, default, 30, BeamLength);
 			else
 			{
 				Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name + "Guide");
-				DrawHelper.DrawLaser(spriteBatch, tex, npc.Center, unitVel, 10, MathHelper.PiOver2, 1);
+				DrawHelper.DrawLaser(spriteBatch, tex, npc.Center, unitVel, 10, MathHelper.PiOver2, 1, BeamLength, default, 30, BeamLength);
 			}
 			return false;
 		}
