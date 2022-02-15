@@ -1,9 +1,5 @@
 ﻿using ExoriumMod.Core;
-using ExoriumMod.Helpers;
 using Microsoft.Xna.Framework;
-using System;
-using ExoriumMod.Content.Dusts;
-using ExoriumMod.Content.Buffs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -371,6 +367,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             Item.NewItem(npc.getRect(), ItemID.Diamond, Main.rand.Next(2, 5));
             Item.NewItem(npc.getRect(), ItemID.Amber, Main.rand.Next(1, 3));
             Item.NewItem(npc.getRect(), ItemID.StoneBlock, Main.rand.Next(10, 31));
+            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore1"), npc.scale);
+            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore2"), npc.scale);
+            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore3"), npc.scale);
+            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore4"), npc.scale);
+            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore5"), npc.scale);
         }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)

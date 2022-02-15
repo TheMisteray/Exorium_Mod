@@ -22,7 +22,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
 		private const float TurnResponsiveness = 0.01f;
 
-		private const float BeamLength = 1000f;
+		private const float BeamLength = 1600f;
 
 		private const int SoundInterval = 30;
 

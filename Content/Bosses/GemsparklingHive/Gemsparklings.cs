@@ -29,6 +29,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             npc.timeLeft = NPC.activeTime * 30;
             npc.noGravity = true;
             npc.noTileCollide = true;
+            npc.alpha = 255;
         }
 
         protected float attackTimer = 0;
@@ -213,9 +214,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            Vector2 drawCenter = npc.Center;
-            drawCenter.Y += 4;
-            spriteBatch.Draw(GetTexture(AssetDirectory.GemsparklingHive + Name), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White, npc.rotation, new Vector2(npc.width, npc.height)/2, 1, SpriteEffects.None, 0);
+            if (npc.alpha < 200)
+            {
+                Vector2 drawCenter = npc.Center;
+                drawCenter.Y += 4;
+                spriteBatch.Draw(GetTexture(AssetDirectory.GemsparklingHive + Name), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White, npc.rotation, new Vector2(npc.width, npc.height) / 2, 1, SpriteEffects.None, 0);
+            }
             base.PostDraw(spriteBatch, drawColor);
         }
 
@@ -293,6 +297,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
             }
             return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void NPCLoot()
+        {
+            DustHelper.DustCircle(npc.Center, DustID.AmethystBolt, 2, 50, 1, .5f, 0, 0, Color.White, true);
+            base.NPCLoot();
         }
     }
 
@@ -380,6 +390,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
             }
             return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void NPCLoot()
+        {
+            DustHelper.DustCircle(npc.Center, DustID.TopazBolt, 2, 50, 1, .5f, 0, 0, Color.White, true);
+            base.NPCLoot();
         }
     }
 
@@ -493,6 +509,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 damage -= 10;
             return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
         }
+
+        public override void NPCLoot()
+        {
+            DustHelper.DustCircle(npc.Center, DustID.SapphireBolt, 2, 50, 1, .5f, 0, 0, Color.White, true);
+            base.NPCLoot();
+        }
     }
 
     internal class EmeraldGemsparkling : Gemsparkling
@@ -562,6 +584,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
             }
             return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void NPCLoot()
+        {
+            DustHelper.DustCircle(npc.Center, DustID.EmeraldBolt, 2, 50, 1, .5f, 0, 0, Color.White, true);
+            base.NPCLoot();
         }
     }
 
@@ -633,6 +661,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
             }
             return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void NPCLoot()
+        {
+            DustHelper.DustCircle(npc.Center, DustID.RubyBolt, 2, 50, 1, .5f, 0, 0, Color.White, true);
+            base.NPCLoot();
         }
     }
 
@@ -706,6 +740,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             return base.PreDraw(spriteBatch, lightColor);
         }
+
+        public override void NPCLoot()
+        {
+            DustHelper.DustCircle(npc.Center, DustID.DiamondBolt, 2, 50, 1, .5f, 0, 0, Color.White, true);
+            base.NPCLoot();
+        }
     }
 
     internal class AmberGemsparkling : Gemsparkling
@@ -774,6 +814,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     new Vector2(tex.Width * 0.5f, tex.Height * 0.5f), 1f, SpriteEffects.None, 0f);
             }
             return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void NPCLoot()
+        {
+            DustHelper.DustCircle(npc.Center, DustID.AmberBolt, 2, 50, 1, .5f, 0, 0, Color.White, true);
+            base.NPCLoot();
         }
     }
 }
