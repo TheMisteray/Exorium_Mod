@@ -213,7 +213,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         break;
                     case 2: //Dash
                             actionCool = 20;
-                            attackLength = 200;
+                            attackLength = 270;
                         break;
                     case 3: //waves
                             moveTime = 150;
@@ -253,7 +253,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             #endregion
 
             #region Attack
-            if (Main.netMode != 1 && actionCool > 0f && moveTime <= 0)
+            if (actionCool > 0f && moveTime <= 0)
             {
                 switch (actionCycle)
                 {
@@ -269,8 +269,9 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                                 delta *= 5f / magnitude;
                             else
                                 delta = new Vector2(0f, 5f);
-                            Projectile.NewProjectile(npc.Center.X + npc.direction * -25, npc.Center.Y, delta.X, delta.Y, ProjectileType<ShadowBolt>(), damage, 2, Main.myPlayer);
-                            if (phase >= 2)
+                            if (Main.netMode != 1)
+                                Projectile.NewProjectile(npc.Center.X + npc.direction * -25, npc.Center.Y, delta.X, delta.Y, ProjectileType<ShadowBolt>(), damage, 2, Main.myPlayer);
+                            if (phase >= 2 && Main.netMode != 1)
                             {
                                 Vector2 perturbedSpeed = new Vector2(delta.X, delta.Y).RotatedBy(MathHelper.ToRadians(20));
                                 Vector2 perturbedSpeed2 = new Vector2(delta.X, delta.Y).RotatedBy(MathHelper.ToRadians(-20));
@@ -282,26 +283,26 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                     case 1:
                         npc.velocity = Vector2.Zero;
                         npc.aiAction = 2;
-                        if (attackProgress == 0 || attackProgress == 30 || phase >=2 && attackProgress == 60 || (phase == 3 && attackProgress == 90))
+                        if (Main.netMode != 1 && (attackProgress == 0 || attackProgress == 30 || phase >=2 && attackProgress == 60 || (phase == 3 && attackProgress == 90)))
                         {
                             Main.PlaySound(SoundID.Item1, npc.position);
                             Projectile.NewProjectile(npc.Center.X + npc.direction * -5, npc.Center.Y, (attackProgress/2) * -npc.direction, -8, ProjectileType<ShadowOrb>(), damage, 1, Main.myPlayer);
                         }
                         break;
                     case 2:
-                        if (attackProgress < 90)
+                        if (attackProgress < 180)
                         {
                             npc.TargetClosest(false);
                             moveTo = player.Center;
                             moveTo.X += 500 * npc.direction;
                             npc.velocity = (moveTo - npc.Center) / 60;
                         }
-                        else if (attackProgress == 90)
+                        else if (attackProgress == 180)
                         {
                             npc.velocity.Y = 0;
                             npc.velocity.X = -10 * npc.direction;
                         }
-                        else if (attackProgress < 200)
+                        else if (attackProgress < 270)
                         {
                             Vector2 delta = npc.Center - new Vector2(npc.Center.X + Main.rand.NextFloat(5) * npc.direction, npc.Center.Y + Main.rand.NextFloat(-4, 5));
                             if (Main.rand.NextBool(1))
@@ -313,7 +314,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         npc.aiAction = 1;
                         if (attackProgress == 0 || (attackProgress == 120 && phase >= 2) || (attackProgress == 240 && phase == 3))
                         {
-                            if (attackProgress == 120 || attackProgress == 240)
+                            if (Main.netMode != 1 && (attackProgress == 120 || attackProgress == 240))
                             {
                                 Vector2 delta = player.Center - new Vector2(player.Center.X - 180, player.Center.Y);
                                 float magnitude = (float)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
@@ -330,7 +331,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                                     delta = new Vector2(0f, 5f);
                                 Projectile.NewProjectile(player.Center.X + 180, player.Center.Y, delta.X, delta.Y, ProjectileType<ShadowBolt>(), damage, 2, Main.myPlayer);
                             }
-                            if (attackProgress == 0 || attackProgress == 240)
+                            if (Main.netMode != 1 && (attackProgress == 0 || attackProgress == 240))
                             {
                                 Vector2 delta = player.Center - new Vector2(player.Center.X, player.Center.Y - 180);
                                 float magnitude = (float)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
@@ -366,21 +367,21 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         }
                         if (attackProgress == 150)
                         {
-                            if (phase == 1)
+                            if (Main.netMode != 1 && phase == 1)
                             {
                                 for (int i = 0; i < 3; i++)
                                 {
                                     Projectile.NewProjectile(player.Center.X - 200 + (200 * i), player.Center.Y - 100, 0, 0, ProjectileType<ShadowFist>(), damage, 4, Main.myPlayer);
                                 }
                             }
-                            else if (phase == 2)
+                            else if (Main.netMode != 1 && phase == 2)
                             {
                                 for (int i = 0; i < 5; i++)
                                 {
                                     Projectile.NewProjectile(player.Center.X - 300 + (150 * i), player.Center.Y - 100, 0, 0, ProjectileType<ShadowFist>(), damage, 4, Main.myPlayer);
                                 }
                             }
-                            else
+                            else if (Main.netMode != 1)
                             {
                                 for (int i = 0; i < 7; i++)
                                 {
@@ -390,7 +391,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         }
                         break;
                     case 5:
-                        if (attackProgress == 120)
+                        if (Main.netMode != 1 && attackProgress == 120)
                         {
                             int location = (int)Main.rand.Next((!(phase == 3) ? 2 : 3));
                             for (int i = 0; i <= (!(phase == 3) ? 2 : 4); i++)
@@ -426,7 +427,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             Vector2 moveTo = player.Center;
                             npc.aiAction = 0;
                             npc.TargetClosest(false);
-                            player = Main.player[npc.target];
                             moveTo.Y -= 160;
                             moveTo.X += 600 * npc.direction;
                             target++;
@@ -441,7 +441,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         {
                             npc.velocity.X = 4 * -npc.direction;
                         }
-                        if (attackProgress % 60 == 0 && attackProgress > 60)
+                        if (Main.netMode != 1 && (attackProgress % 60 == 0 && attackProgress > 60))
                         {
                             Main.PlaySound(SoundID.Item1, npc.position);
                             Projectile.NewProjectile(npc.Center.X, npc.Center.Y -20, 0, 5, ProjectileType<ShadowBlade>(), damage, 2, Main.myPlayer);
@@ -451,7 +451,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         npc.spriteDirection = -npc.direction;
                         npc.velocity = Vector2.Zero;
                         npc.aiAction = 1;
-                        if (attackProgress == 0)
+                        if (Main.netMode != 1 && attackProgress == 0)
                         {
                             Projectile.NewProjectile(npc.Center.X + npc.direction * -50, npc.Center.Y, 0, 0, ProjectileType<CollectiveDarkness>(), damage, 2, Main.myPlayer, 1, npc.target);
                         }
@@ -459,7 +459,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                     case 8:
                         npc.velocity = Vector2.Zero;
                         npc.aiAction = 1;
-                        if (attackProgress%60==0 && attackProgress != 0)
+                        if (Main.netMode != 1 && (attackProgress % 60==0 && attackProgress != 0))
                         {
                             Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 0, ProjectileType<Hex>(), damage * 2, 2, Main.myPlayer);
                         }
@@ -512,6 +512,14 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         }
         public override bool PreNPCLoot()
         {
+            for (int i = 0; i < Main.npc.Length; i++)
+            {
+                if (Main.npc[i].active && (Main.npc[i].type == NPCType<ShadowAdd>() || Main.npc[i].type == NPCType<MirrorEntity>()))
+                {
+                    Main.npc[i].ai[2] = -1;
+                }
+            }
+
             //Update
             if (!ExoriumWorld.downedShadowmancer)
             {
@@ -528,19 +536,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             {
                 Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
                 Dust.NewDust(npc.position, npc.width, npc.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat(), 0, default, Main.rand.NextFloat(3));
-            }
-
-            foreach (NPC n in Main.npc)
-            {
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    if (n.modNPC is MirrorEntity || n.modNPC is ShadowAdd)
-                    {
-                        npc.StrikeNPC(333, 0, 0, true);
-                        if (Main.netMode != NetmodeID.SinglePlayer)
-                            NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 333, 0, 0, 1);
-                    }
-                }
             }
 
             return true;
