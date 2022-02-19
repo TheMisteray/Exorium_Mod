@@ -89,12 +89,7 @@ namespace ExoriumMod.Content.Tiles
                 top--;
             }
             player.showItemIcon2 = -1;
-            if (ExoriumWorld.downedShadowmancer)
-            {
-                player.showItemIconText = Language.GetTextValue("Shadow Altar");
-            }
-            else
-                player.showItemIconText = Language.GetTextValue("???");
+            player.showItemIconText = Language.GetTextValue("Shadow Altar");
             player.noThrow = 2;
             player.showItemIcon = true;
         }
