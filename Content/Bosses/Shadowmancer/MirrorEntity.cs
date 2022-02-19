@@ -23,7 +23,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             npc.aiStyle = -1;
             npc.lifeMax = 65;
-            npc.damage = 18;
+            npc.damage = 19;
             npc.defense = 0;
             npc.knockBackResist = 0f;
             npc.width = 42;

@@ -530,6 +530,19 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Dust.NewDust(npc.position, npc.width, npc.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat(), 0, default, Main.rand.NextFloat(3));
             }
 
+            foreach (NPC n in Main.npc)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    if (n.modNPC is MirrorEntity || n.modNPC is ShadowAdd)
+                    {
+                        npc.StrikeNPC(333, 0, 0, true);
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                            NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 333, 0, 0, 1);
+                    }
+                }
+            }
+
             return true;
         }
 
