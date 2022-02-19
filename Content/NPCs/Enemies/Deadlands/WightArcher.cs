@@ -6,7 +6,7 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.Content.NPCs.Enemies
+namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 {
     class WightArcher : ModNPC
     {
@@ -21,9 +21,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override void SetDefaults()
         {
             npc.CloneDefaults(NPCID.SkeletonArcher);
-            npc.damage = 18;
+            npc.damage = 13;
             npc.defense = 3;
-            npc.lifeMax = 90;
+            npc.lifeMax = 80;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath2;
             npc.value = 160f;

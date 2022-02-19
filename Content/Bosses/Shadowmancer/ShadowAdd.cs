@@ -1,10 +1,12 @@
-﻿using ExoriumMod.Content.Dusts;
+﻿using ExoriumMod.Core;
+using ExoriumMod.Content.Dusts;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
@@ -79,6 +81,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 npc.life = -1;
             }
             return true;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            Vector2 drawCenter = npc.Center;
+            drawCenter.Y += 2;
+            spriteBatch.Draw(GetTexture(AssetDirectory.Shadowmancer + "ShadowGlow"), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White, npc.rotation, new Vector2(npc.width, npc.height)/2, 1, npc.spriteDirection == 1? SpriteEffects.FlipHorizontally: SpriteEffects.None, 0);
         }
     }
 }

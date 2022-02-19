@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Content.NPCs.Enemies
+namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 {
     class WightWarrior : ModNPC
     {
@@ -20,9 +20,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             npc.width = 23;
             npc.height = 40;
-            npc.damage = 26;
-            npc.defense = 10;
-            npc.lifeMax = 180;
+            npc.damage = 19;
+            npc.defense = 8;
+            npc.lifeMax = 160;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath2;
             npc.value = 160f;

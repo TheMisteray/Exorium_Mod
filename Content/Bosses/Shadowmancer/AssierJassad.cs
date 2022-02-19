@@ -131,26 +131,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 npc.netUpdate = true;
             }
 
-            /*
-            if (Main.player[npc.target].dead && Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                npc.TargetClosest(true);
-                npc.netUpdate = true;
-                if (Main.player[npc.target].dead)
-                {
-                    npc.timeLeft = 0;
-                    if (Main.player[npc.target].Center.X < npc.Center.X)
-                    {
-                        npc.direction = 1;
-                    }
-                    else
-                    {
-                        npc.direction = -1;
-                    }
-                }
-            }
-            */
-
             Player player = Main.player[npc.target];
             if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (npc.position - player.position).Length() > 3000)
             {

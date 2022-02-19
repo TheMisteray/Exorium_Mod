@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
 using ExoriumMod.Content.Dusts;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
@@ -236,6 +237,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             }
             base.Kill(timeLeft);
         }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(154 * .2f, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
+            return true;
+        }
     }
 
     internal class RotatingShade : ModProjectile
@@ -374,6 +382,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             }
             base.Kill(timeLeft);
         }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow");
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(154 * .2f, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
+            return true;
+        }
     }
 
     internal class AbsorbedShadow : ModProjectile
@@ -479,6 +494,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Main.projectile[(int)darkWhoAmI].netUpdate = true;
             }
             base.Kill(timeLeft);
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow");
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(154 * .2f, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1f, SpriteEffects.None, 0f);
+            return true;
         }
     }
 }

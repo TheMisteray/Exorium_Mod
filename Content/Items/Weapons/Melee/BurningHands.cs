@@ -138,6 +138,13 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             }
         }
 
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        {
+            width /= 2;
+            height /= 2;
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough);
+        }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             projectile.Kill();

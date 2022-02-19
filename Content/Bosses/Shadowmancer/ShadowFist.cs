@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
@@ -66,6 +67,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                  Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<Shadow>(), projectile.oldVelocity.X * -1.5f, projectile.oldVelocity.Y * -1.5f);
             }
             Main.PlaySound(SoundID.Item14, projectile.position);
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, Color.White * .75f, projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
         }
     }
 }

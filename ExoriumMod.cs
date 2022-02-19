@@ -4,6 +4,10 @@ using System;
 using Terraria;
 using Terraria.ModLoader;
 using System.IO;
+using Terraria.Graphics.Effects;
+using ExoriumMod.Content.Skies;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
 
 namespace ExoriumMod
 {
@@ -13,11 +17,18 @@ namespace ExoriumMod
 
         public ExoriumMod()
 		{
-		}
+            instance = this;
+        }
 
         public override void Load()
         {
             instance = this;
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                SkyManager.Instance["ExoriumMod:DeadlandsSky"] = new DeadlandsSky();
+                Filters.Scene["ExoriumMod:DeadlandsSky"] = new Filter((new ScreenShaderData("FilterMiniTower")).UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryLow);
+            }
         }
 
         public override void Unload()

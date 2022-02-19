@@ -14,7 +14,7 @@ namespace ExoriumMod.Core
 
         public override void UpdateBiomes()
         {
-            ZoneDeadlands = ExoriumWorld.deadlandTiles > 500;
+            ZoneDeadlands = ExoriumWorld.deadlandTiles > 450;
         }
 
         public override bool CustomBiomesMatch(Player other)
@@ -43,6 +43,13 @@ namespace ExoriumMod.Core
                 return mod.GetTexture("Assets/Backgrounds/Map/DeadlandsMapBackground" /*AssetDirectory.MapBackground + "DeadlandsMapBackground"*/);
             }
             return null;
+        }
+
+
+        public override void UpdateBiomeVisuals()
+        {
+            player.ManageSpecialBiomeVisuals("ExoriumMod:DeadlandsSky", ZoneDeadlands);
+            base.UpdateBiomeVisuals();
         }
     }
 

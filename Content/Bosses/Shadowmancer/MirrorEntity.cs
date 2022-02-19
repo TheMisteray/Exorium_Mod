@@ -22,7 +22,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void SetDefaults()
         {
             npc.aiStyle = -1;
-            npc.lifeMax = 60;
+            npc.lifeMax = 65;
             npc.damage = 18;
             npc.defense = 0;
             npc.knockBackResist = 0f;
@@ -85,6 +85,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             get => npc.ai[3];
             set => npc.ai[3] = value;
+        }
+
+        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        {
+            npc.lifeMax = (int)(npc.lifeMax * 0.7 * bossLifeScale);
+            npc.damage = (int)(npc.damage * 0.8);
         }
 
         private int attackLength;

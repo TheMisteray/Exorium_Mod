@@ -122,6 +122,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 				float ratio = ((MAX_CHARGE - Charge) / MAX_CHARGE);
 				Vector2 offset = new Vector2(0, 30 * ratio);
 				Vector2 offset2 = offset.RotatedBy(projectile.velocity.ToRotation());
+				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center + offset2, projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
 				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center - offset2, projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
 				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center + (offset2 * 2), projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
 				DrawHelper.DrawLaser(spriteBatch, tex, Main.player[projectile.owner].Center - (offset2 * 2), projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);

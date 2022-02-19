@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using System;
 using Microsoft.Xna.Framework;
 
-namespace ExoriumMod.Content.NPCs.Enemies
+namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 {
     class Poltergeist : Hover
     {
