@@ -32,9 +32,7 @@ Mod release
 
 
 Future:
-Gemsparkling Hive
-	- Need to give gores
-	- Create spawn rock
+Gemsparkling Hive - done
 
 Caravene
 

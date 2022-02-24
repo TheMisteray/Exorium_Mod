@@ -4,9 +4,9 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Content.Walls
+namespace ExoriumMod.Content.Walls.StructureWalls.FallenTowerWalls
 {
-    class DarkBrickWall : ModWall
+    class CharredObsidianWall : ModWall
     {
         public override bool Autoload(ref string name, ref string texture)
         {
@@ -17,8 +17,8 @@ namespace ExoriumMod.Content.Walls
         public override void SetDefaults()
         {
             Main.wallHouse[Type] = false;
-            drop = ItemType < Items.WallItems.DarkBrickWall>();
-            AddMapEntry(new Color(40, 40, 40));
+            drop = ItemType<Items.WallItems.StructureWallItems.FallenTowerWallItems.CharredObsidianWall>();
+            AddMapEntry(new Color(51, 12, 5));
         }
     }
 }

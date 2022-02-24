@@ -2,11 +2,12 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Content.Tiles
+namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
 {
-    class DarkBrickTile : ModTile
+    class CharredObsidianTile : ModTile
     {
         public override bool Autoload(ref string name, ref string texture)
         {
@@ -19,14 +20,14 @@ namespace ExoriumMod.Content.Tiles
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
-            drop = ItemType<Items.TileItems.DarkBrick>();
-            AddMapEntry(new Color(100, 100, 100));
-            dustType = 54;
+            drop = ItemType<Items.TileItems.StructureTileItems.FallenTowerTileItems.CharredObsidian>();
+            AddMapEntry(new Color(51, 12, 5));
+            dustType = DustID.Obsidian;
             soundType = 21;
             soundStyle = 1;
             mineResist = 2f;
-            minPick = 110;
-            Main.dust[dustType].color = new Color(60, 60, 60);
+            minPick = 210;
+            Main.dust[dustType].color = new Color(51, 12, 5);
         }
 
         public override bool CanExplode(int i, int j)
