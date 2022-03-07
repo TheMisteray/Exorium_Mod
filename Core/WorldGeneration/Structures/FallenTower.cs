@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Content.Tiles;
-using ExoriumMod.Content.Walls;
+using ExoriumMod.Content.Walls.StructureWalls.FallenTowerWalls;
+using ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles;
+using Terraria.ID;
 
 namespace ExoriumMod.Core.WorldGeneration.Structures
 {
@@ -18,8 +19,8 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
             {
                 if (attempts > 10000)
                     return;
-                i = Main.maxTilesX / 2 + (WorldGen.genRand.Next(-Main.maxTilesX / 6, Main.maxTilesX / 6));
-                j = (Main.maxTilesY / 5) * 2 + (WorldGen.genRand.Next(-Main.maxTilesY / 12, Main.maxTilesY / 6));
+                i = Main.maxTilesX / 2 + (WorldGen.genRand.Next(Main.maxTilesX / 6, Main.maxTilesX / 3) * (WorldGen.genRand.NextBool() ? -1 : 1));
+                j = Main.maxTilesY - 200;
                 //Check for other protected structures
                 if (WorldGen.structures.CanPlace(new Rectangle(i, j, _shadowhouseShape.GetLength(1), _shadowhouseShape.GetLength(0)), 50))
                     success = true;
@@ -31,32 +32,28 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                     int k = i + x;
                     int l = j + y;
                     Tile tile = Framing.GetTileSafely(k, l);
-                    switch (_shadowhouseShape[y, x])
+                    switch (_fallenTowerShape[y, x])
                     {
-                        case 0:
-                            tile.active(false);
+                        case 0: //Nothing for now
+                            //tile.active(false);
                             break;
                         case 1:
                             WorldGen.KillTile(k, l);
-                            WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
+                            tile.wall = (ushort)WallType<CharredObsidianWall>();
+                            WorldGen.PlaceTile(k, l, TileType<CharredObsidianTile>());
                             tile.slope(0);
                             break;
                         case 2:
                             WorldGen.KillTile(k, l);
-                            WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
+                            tile.wall = (ushort)WallType<CharredObsidianWall>();
+                            WorldGen.PlaceTile(k, l, TileType<CharredObsidianTile>());
                             tile.slope(2);
                             break;
                         case 3:
                             WorldGen.KillTile(k, l);
-                            WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
+                            tile.wall = (ushort)WallType<CharredObsidianWall>();
+                            WorldGen.PlaceTile(k, l, TileID.Torches);
                             tile.slope(1);
-                            break;
-                    }
-
-                    switch (_shadowhouseWall[y, x])
-                    {
-                        case 1:
-                            tile.wall = (ushort)WallType<DarkBrickWall>();
                             break;
                     }
                 }
