@@ -9,6 +9,8 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
 {
     public static partial class ExoriumStructures
     {
+        private const int SIDE_GAP_WIDTH = 20;
+
         public static void FallenTower()
         {
             int attempts = 0;
@@ -55,6 +57,22 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                             WorldGen.PlaceTile(k, l, TileID.Torches);
                             tile.slope(1);
                             break;
+                    }
+                }
+            }
+            for (int a = 0; a < _fallenTowerShape.GetLength(1) - (SIDE_GAP_WIDTH * 2); a++)
+            {
+                for (int b = 0; b < 120 - _fallenTowerShape.GetLength(0); b++)
+                {
+                    int k = i + SIDE_GAP_WIDTH + a;
+                    int l = j + _fallenTowerShape.GetLength(0) + b;
+                    if (WorldGen.InWorld(k, l))
+                    {
+                        Tile tile = Framing.GetTileSafely(k, l);
+                        WorldGen.KillTile(k, l);
+                        tile.wall = (ushort)WallType<CharredObsidianWall>();
+                        WorldGen.PlaceTile(k, l, TileType<CharredObsidianTile>());
+                        tile.slope(0);
                     }
                 }
             }
