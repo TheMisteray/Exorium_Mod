@@ -67,7 +67,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
             int frameHeight = tex.Height / Main.projFrames[projectile.type];
             int startY = frameHeight * projectile.frame;
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), new Rectangle(0, startY, projectile.width, projectile.height), Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (projectile.alpha - 255)) / 255f), 0, new Vector2(tex.Width / 2, frameHeight / 2), projectile.scale, SpriteEffects.None, 0f); ;
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), new Rectangle(0, startY, projectile.width, projectile.height), Color.Lerp(new Color(0, 0, 0, 0), new Color(50, 50, 50, 50), (float)(-1 * (projectile.alpha - 255)) / 255f), 0, new Vector2(tex.Width / 2, frameHeight / 2), projectile.scale, SpriteEffects.None, 0f); ;
         }
     }
 }

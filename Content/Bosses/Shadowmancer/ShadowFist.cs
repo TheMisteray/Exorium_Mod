@@ -75,7 +75,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             Vector2 drawCenter = projectile.Center;
             drawCenter.Y += 2;
             drawCenter.X -= 2;
-            Main.spriteBatch.Draw(tex, (drawCenter - Main.screenPosition), null, Color.White * .75f, 0, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (drawCenter - Main.screenPosition), null, Color.White * .2f, 0, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
         }
     }
 }

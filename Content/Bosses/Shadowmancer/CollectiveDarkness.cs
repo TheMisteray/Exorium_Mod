@@ -241,7 +241,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(154 * .2f, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
             return true;
         }
     }
@@ -386,7 +386,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(154 * .2f, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
             return true;
         }
     }
@@ -478,10 +478,10 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
             Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
             //Dust
-            if (Main.rand.NextBool(2))
+            if (Main.rand.NextBool(5))
             {
                 Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>(), delta.X, delta.Y);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), delta.X, delta.Y, 0, new Color(200, 0, 0));
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), delta.X, delta.Y, 0, new Color(200, 0, 0), .5f);
             }
         }
 
@@ -499,7 +499,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(154 * .2f, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1f, SpriteEffects.None, 0f);
             return true;
         }
     }

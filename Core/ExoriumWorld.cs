@@ -105,6 +105,18 @@ namespace ExoriumMod.Core
                       WorldGeneration.Biomes.ExoriumBiomes.DeadlandsGeneration();
                   }));
             }
+
+            int FinalCleanupIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Final Cleanup"));
+            if (FinalCleanupIndex != -1)
+            {
+                tasks.Insert(FinalCleanupIndex + 1, new PassLegacy("Exorium Structures", delegate (GenerationProgress progress)
+               {
+                   progress.Message = "Generating Exorium Structures";
+                   WorldGeneration.Structures.ExoriumStructures.ShadowHouse();
+                   WorldGeneration.Structures.ExoriumStructures.FillCrates();
+                   WorldGeneration.Structures.ExoriumStructures.FallenTower();
+               }));
+            }
         }
 
         private void ExoriumOreGeneration(GenerationProgress progress)
@@ -147,10 +159,10 @@ namespace ExoriumMod.Core
 
         public override void PostWorldGen()
         {
-            WorldGeneration.Structures.ExoriumStructures.ShadowHouse();
-            WorldGeneration.Structures.ExoriumStructures.FillCrates();
+            //WorldGeneration.Structures.ExoriumStructures.ShadowHouse();
+            //WorldGeneration.Structures.ExoriumStructures.FillCrates();
 
-
+            //WorldGeneration.Structures.ExoriumStructures.FallenTower();
         }
     }
 }

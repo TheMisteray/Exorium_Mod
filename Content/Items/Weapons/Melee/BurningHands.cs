@@ -73,7 +73,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 for (int i = 0; i<=2; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.ToRadians(-(Main.rand.NextFloat(10) + 16) + (Main.rand.NextFloat(10)+16)*i));
-                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, (int)(damage/3.5f), knockBack, player.whoAmI, 0, 1);
+                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, (int)(damage/4f), knockBack, player.whoAmI, 0, 1);
                 }
             }
             else
@@ -108,6 +108,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             projectile.friendly = true;
             projectile.magic = true;
             projectile.timeLeft = 25;
+            projectile.penetrate = 3;
         }
 
         public override void AI()
@@ -120,10 +121,11 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             if (projectile.ai[1] == 1)
             {
                 projectile.alpha = 255;
-                projectile.penetrate = -1;
                 projectile.velocity = projectile.velocity * 0.95f;
                 FireDust();
             }
+            else
+                projectile.penetrate = 1;
             if (projectile.velocity != Vector2.Zero)
             {
                 projectile.spriteDirection = projectile.direction;

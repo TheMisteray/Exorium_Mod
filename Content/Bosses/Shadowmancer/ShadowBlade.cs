@@ -73,7 +73,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, Color.White * .75f, projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, Color.White * .3f, projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
         }
     }
 }

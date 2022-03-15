@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             if (projectile.timeLeft <= 500 )
                 projectile.tileCollide = true;
             Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
-            if (Main.rand.NextBool(3))
+            if (Main.rand.NextBool(6))
             {
                 int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), delta.X, delta.Y);
                 Main.dust[dust0].color = new Color(200, 0, 0);
@@ -56,7 +56,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, Color.White * .75f, projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, Color.White * .4f, projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
         }
     }
 }

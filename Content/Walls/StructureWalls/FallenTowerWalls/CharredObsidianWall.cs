@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.Walls.StructureWalls.FallenTowerWalls
         {
             Main.wallHouse[Type] = false;
             drop = ItemType<Items.WallItems.StructureWallItems.FallenTowerWallItems.CharredObsidianWall>();
-            AddMapEntry(new Color(51, 12, 5));
+            AddMapEntry(new Color(25, 6, 2));
         }
     }
 }

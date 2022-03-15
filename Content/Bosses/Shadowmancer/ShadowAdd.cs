@@ -87,7 +87,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             Vector2 drawCenter = npc.Center;
             drawCenter.Y += 2;
-            spriteBatch.Draw(GetTexture(AssetDirectory.Shadowmancer + "ShadowGlow"), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White, npc.rotation, new Vector2(npc.width, npc.height)/2, 1, npc.spriteDirection == 1? SpriteEffects.FlipHorizontally: SpriteEffects.None, 0);
+            spriteBatch.Draw(GetTexture(AssetDirectory.Shadowmancer + "ShadowGlow"), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White * .4f, npc.rotation, new Vector2(npc.width, npc.height)/2, 1, npc.spriteDirection == 1? SpriteEffects.FlipHorizontally: SpriteEffects.None, 0);
         }
     }
 }

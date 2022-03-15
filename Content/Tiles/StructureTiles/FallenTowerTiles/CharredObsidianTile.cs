@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = true;
-            Main.tileMergeDirt[Type] = true;
+            Main.tileMerge[TileID.Ash][this.Type] = true;
             Main.tileBlockLight[Type] = true;
             drop = ItemType<Items.TileItems.StructureTileItems.FallenTowerTileItems.CharredObsidian>();
             AddMapEntry(new Color(51, 12, 5));
