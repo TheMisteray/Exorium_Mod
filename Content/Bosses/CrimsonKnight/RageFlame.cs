@@ -10,28 +10,34 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
-    class FlameTrail : ModProjectile
+    class RageFlame : ModProjectile
     {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Flames");
+        }
+
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 16;
+            projectile.width = 1200;
+            projectile.height = 1200;
             projectile.penetrate = -1;
-            projectile.timeLeft = 1200;
-            projectile.tileCollide = true;
+            projectile.timeLeft = 300;
+            projectile.tileCollide = false;
             projectile.friendly = false;
             projectile.hostile = true;
         }
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
+        private const float RANGE = 500;
+
+        public override bool CanHitPlayer(Player target)
         {
-            projectile.velocity = Vector2.Zero;
-            return false;
+            return (target.Center - projectile.Center).Length() < target.width + RANGE;
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            target.AddBuff(BuffID.OnFire, 300);
+            target.AddBuff(BuffID.OnFire, 600);
         }
     }
 }
