@@ -19,6 +19,7 @@ namespace ExoriumMod.Core
         public const string Shadowmancer = Boss + "Shadowmancer/";
         public const string GemsparklingHive = Boss + "GemsparklingHive/";
         public const string BlightedSlime = Boss + "BlightedSlime/";
+        public const string CrimsonKnight = Boss + "CrimsonKnight/";
 
         public const string Buff = Assets + "Buffs/";
         public const string MinionBuff = Buff + "Minions/";
