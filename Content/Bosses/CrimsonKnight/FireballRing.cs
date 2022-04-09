@@ -12,6 +12,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     class FireballRing : ModProjectile
     {
+        public override string Texture => AssetDirectory.CrimsonKnight + "CaraveneFireball";
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Fireball");

@@ -12,6 +12,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     class CaraveneFireball : ModProjectile
     {
+        public override string Texture => AssetDirectory.CrimsonKnight + Name;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Fireball");
