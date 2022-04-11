@@ -12,6 +12,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     class FlameTrail : ModProjectile
     {
+        public override string Texture => AssetDirectory.CrimsonKnight + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 32;

@@ -54,12 +54,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             npc.damage = (int)(npc.damage * 0.8);
         }
 
-        private bool introAnimation = true;
+        private bool introAnimation = false;
         private int introTicker = 180;
 
         private bool exitAnimation = false;
 
         private bool leftTele = false;
+
+        private bool parry = false;
 
         //Actions
         //0 - jump
@@ -107,9 +109,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
             }
 
-
-
-
+            //Override normal action
             if (introAnimation)
             {
                 IntroAI();
@@ -125,6 +125,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 }
 
+                wait--;
                 return;
             }
 
@@ -132,35 +133,45 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             switch (Action)
             {
                 case 0:
-                    npc.velocity = new Vector2(0, -12);
                     npc.noGravity = false;
-                    if (actionTimer > 60)
+                    if (actionTimer == 0)
+                    {
+                        float xDiff = player.Center.X - npc.Center.X;
+                        npc.velocity = new Vector2(xDiff / 30, -12);
+                    }
+                    if (actionTimer > 30)
                     {
                         //TODO: add move selection and horizontal movement
+                        // 1, 6, 7, 10
+                        Action = 1;
+                        wait = 10;
+                        actionTimer = 0;
                     }
                     break;
                 case 1:
                     npc.velocity = new Vector2(7, 0) * ((player.Center.X > npc.Center.X) ? 1 : -1);
                     break;
                 case 2:
-                    if (actionTimer > 0)
+                    if (actionTimer == 0)
                     {
                         if ((npc.Center - player.Center).Length() > 0)
                             leftTele = false;
                         else
                             leftTele = true;
                     }
-
-                    if (actionTimer == 90)
+                    else if (actionTimer == 90)
                     {
                         npc.velocity = (player.Center - npc.Center) / 4;
                         npc.noGravity = true;
                     }
-                    if (actionTimer == 94)
+                    else if (actionTimer == 94)
                     {
                         npc.velocity = Vector2.Zero;
                     }
-                    //TODO swing and then gain gravity
+                    else
+                    {
+                        //TODO swing and then gain gravity
+                    }
 
                     break;
                 case 3:
@@ -173,7 +184,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 4:
-
+                    if (actionTimer > 60)
+                        parry = true;
+                    if (actionTimer > 180)
+                    {
+                        parry = false;
+                        //TODO chose new action
+                    }
                     break;
                 case 5:
                     if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -208,6 +225,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 9:
+                    npc.velocity = Vector2.Zero;
+                    if (actionTimer < 90)
+                    {
+                        //Fire
+                    }
+                    else
+                    {
+                        //Edn attack
+                    }
                     break;
                 case 10:
                     break;

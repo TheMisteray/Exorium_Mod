@@ -12,6 +12,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     class FlamePillar : ModProjectile
     {
+        public override string Texture => AssetDirectory.CrimsonKnight + Name;
+
         public override void SetDefaults()
         {
             projectile.width = 32;

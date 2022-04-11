@@ -12,6 +12,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     class RageFlame : ModProjectile
     {
+        public override string Texture => AssetDirectory.Invisible;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Flames");
