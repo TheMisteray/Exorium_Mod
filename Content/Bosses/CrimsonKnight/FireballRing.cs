@@ -30,8 +30,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             projectile.hostile = true;
         }
 
-        private const float WIDTH = 600;
-        private const float HEIGHT = 50;
+        private const float WIDTH = 800;
+        private const float HEIGHT = 60;
         Vector2 spawnAxis = Vector2.Zero;
 
         public float RotationOffset
@@ -52,10 +52,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spawnAxis = projectile.position;
 
             spawnAxis.Y += 5;
-            Vector2 offsetAxel = new Vector2(WIDTH * (float)Math.Cos(RotationOffset), HEIGHT * (float)Math.Cos(RotationOffset));
+            Vector2 offsetAxel = new Vector2(WIDTH * (float)Math.Sin(RotationOffset), HEIGHT * (float)Math.Sin(RotationOffset - MathHelper.PiOver2));
             projectile.position = spawnAxis + offsetAxel;
 
-            projectile.rotation += .02f;
+            projectile.rotation += .2f;
+            RotationOffset += .006f;
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)

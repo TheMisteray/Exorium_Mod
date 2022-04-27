@@ -12,6 +12,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     class CaraveneBladeProj : ModProjectile
     {
+        public override string Texture => AssetDirectory.Invisible;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Flametounge Greatsword");
@@ -57,9 +59,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            //Draw indicator line
+            Texture2D tex = GetTexture(AssetDirectory.CrimsonKnight + Name);
+
+            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(254, 121, 2) * ((600 - spawnActionTimer)/600), projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            return false;
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)

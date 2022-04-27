@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using System.Collections.Generic;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -19,7 +20,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Crimson Knight");
-            Main.npcFrameCount[npc.type] = 7;
+            //Main.npcFrameCount[npc.type] = 7;
 
             //Always draw so visuals don't fail while offscreen
             NPCID.Sets.MustAlwaysDraw[npc.type] = true;
@@ -32,8 +33,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             npc.damage = 29;
             npc.defense = 11;
             npc.knockBackResist = 0f;
-            npc.width = 42;
-            npc.height = 48;
+            npc.width = 160;
+            npc.height = 200;
             npc.value = Item.buyPrice(0, 7, 7, 7);
             npc.npcSlots = 30f;
             npc.boss = true;
@@ -50,8 +51,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
-            npc.lifeMax = (int)(npc.lifeMax * 0.8 * bossLifeScale);
-            npc.damage = (int)(npc.damage * 0.8);
+            npc.lifeMax = (int)(9999 * bossLifeScale);
+            npc.damage = (int)(npc.damage * 0.7);
         }
 
         private bool introAnimation = false;
@@ -141,15 +142,58 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     if (actionTimer > 30)
                     {
-                        //TODO: add move selection and horizontal movement
-                        // 1, 6, 7, 10
-                        Action = 1;
-                        wait = 10;
-                        actionTimer = 0;
+                        if (npc.life < npc.lifeMax / 2 && Main.rand.Next(4) == 0)
+                        {
+                            Action = 10;
+                            wait = 60;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 1;
+                            wait = 30;
+                        }
+                        else if (Main.rand.Next(1) == 0)
+                        {
+                            Action = 6;
+                            wait = 20;
+                        }
+                        else
+                        {
+                            Action = 7;
+                            wait = 20;
+                        }
+
+                        actionTimer = -1;
                     }
                     break;
                 case 1:
-                    npc.velocity = new Vector2(7, 0) * ((player.Center.X > npc.Center.X) ? 1 : -1);
+                    if (actionTimer <= 30)
+                        npc.velocity = new Vector2(11, 0) * ((player.Center.X > npc.Center.X) ? 1 : -1);
+                    if (actionTimer >= 30)
+                    {
+                        if (Main.rand.Next(3) == 0)
+                        {
+                            Action = 3;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 5;
+                            wait = 5;
+                        }
+                        else if (Main.rand.Next(1) == 0)
+                        {
+                            Action = 6;
+                            wait = 20;
+                        }
+                        else
+                        {
+                            Action = 7;
+                            wait = 20;
+                        }
+
+                        actionTimer = -1;
+                    }
                     break;
                 case 2:
                     if (actionTimer == 0)
@@ -168,6 +212,31 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         npc.velocity = Vector2.Zero;
                     }
+                    else if (actionTimer >= 150)
+                    {
+                        //0 1 4 7
+                        if (Main.rand.Next(4) == 0)
+                        {
+                            Action = 0;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(3) == 0)
+                        {
+                            Action = 1;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 4;
+                            wait = 5;
+                        }
+                        else
+                        {
+                            Action = 7;
+                            wait = 20;
+                        }
+                        actionTimer = -1;
+                    }
                     else
                     {
                         //TODO swing and then gain gravity
@@ -175,12 +244,41 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                     break;
                 case 3:
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (actionTimer == 5)
                     {
-                        for (int i = 0; i < 12; i++)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(player.Center + new Vector2(0, -1000), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 6) * i, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
+                            for (int i = 0; i < 12; i++)
+                            {
+                                Projectile.NewProjectile(player.Center + new Vector2(0, -1000), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 6) * i, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
+                            }
                         }
+                    }
+                    else if (actionTimer == 60)
+                    {
+                        //TODO: add move selection
+                        //0 1 2 7
+                        if (Main.rand.Next(4) == 0)
+                        {
+                            Action = 0;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(3) == 0)
+                        {
+                            Action = 1;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 2;
+                            wait = 5;
+                        }
+                        else
+                        {
+                            Action = 7;
+                            wait = 20;
+                        }
+                        actionTimer = -1;
                     }
                     break;
                 case 4:
@@ -190,30 +288,127 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         parry = false;
                         //TODO chose new action
+                        if (Main.rand.Next(3) == 0)
+                        {
+                            Action = 1;
+                            wait = 5;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 3;
+                            wait = 5;
+                        }
+                        else
+                        {
+                            Action = 6;
+                            wait = 5;
+                        }
+                        actionTimer = -1;
                     }
                     break;
                 case 5:
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer == 0)
                     {
                         for (int i = 0; i < 5; i++)
                         {
-                            Projectile.NewProjectile(npc.Bottom, new Vector2(-20 + (10 * i), 12), ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
+                            Vector2 vel = new Vector2(0, -12);
+                            vel = vel.RotatedBy(MathHelper.ToRadians(-30 + (15 * i)));
+                            Projectile.NewProjectile(npc.Bottom, vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
                         }
+                    }
+                    if (actionTimer == 30)
+                    {
+                        //TODO: add move selection
+                        // 0 2 4 6
+                        if (Main.rand.Next(4) == 0)
+                        {
+                            Action = 0;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(3) == 0)
+                        {
+                            Action = 2;
+                            wait = 5;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 4;
+                            wait = 5;
+                        }
+                        else
+                        {
+                            Action = 6;
+                            wait = 20;
+                        }
+                        actionTimer = -1;
                     }
                     break;
                 case 6:
                     if (actionTimer % 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(player.Center + new Vector2(Main.rand.NextFloat(-600, 600), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
+                        Projectile.NewProjectile(player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
+                    }
+                    if (actionTimer >= 150)
+                    {
+                        //0 1 2 3
+                        if (Main.rand.Next(4) == 0)
+                        {
+                            Action = 0;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(3) == 0)
+                        {
+                            Action = 1;
+                            wait = 30;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 2;
+                            wait = 30;
+                        }
+                        else
+                        {
+                            Action = 3;
+                            wait = 20;
+                        }
+                        actionTimer = -1;
                     }
                     break;
                 case 7:
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer == 0)
                     {
                         for (int i = 0; i < 7; i++)
                         {
-                            Projectile.NewProjectile(npc.Bottom, new Vector2(0 + (15 * i), 16 - i), ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
+                            Vector2 vel = new Vector2(0, -12);
+                            vel = vel.RotatedBy(MathHelper.ToRadians((-10 + (20 * i))) * npc.spriteDirection);
+                            Projectile.NewProjectile(npc.Bottom, vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (npc.life < (npc.lifeMax / 2)) ? 1 : 0);
                         }
+                    }
+                    if (actionTimer >= 20)
+                    {
+                        //1 2 4 6
+                        if (Main.rand.Next(4) == 0)
+                        {
+                            Action = 1;
+                            wait = 20;
+                        }
+                        else if (Main.rand.Next(3) == 0)
+                        {
+                            Action = 2;
+                            wait = 30;
+                        }
+                        else if (Main.rand.Next(2) == 0)
+                        {
+                            Action = 4;
+                            wait = 30;
+                        }
+                        else
+                        {
+                            Action = 6;
+                            wait = 20;
+                        }
+
+                        actionTimer = -1;
                     }
                     break;
                 case 8:
