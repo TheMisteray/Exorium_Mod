@@ -24,6 +24,8 @@ namespace ExoriumMod.Core
         public int cloakHP = 40;
         public int cloakTimer = 0;
 
+        public Vector2 screenModify;
+
         public override void ResetEffects()
         {
             morditeArmor = false;
@@ -37,6 +39,13 @@ namespace ExoriumMod.Core
             acidArrows = false;
             ritualArrow = false;
             reverseHandOut = false;
+            screenModify = player.Center;
+        }
+
+        public Vector2 ScreenModify
+        {
+            get => screenModify;
+            set => screenModify = value;
         }
 
         public override void PostUpdateEquips()
@@ -114,6 +123,14 @@ namespace ExoriumMod.Core
         {
             if (item.useAmmo == AmmoID.Arrow && wightQuiver)
                 mult += 0.06f;
+        }
+
+        public override void ModifyScreenPosition()
+        {
+            if (screenModify != player.Center)
+                Main.screenPosition = new Vector2
+                    (screenModify.X + (Main.screenWidth / 2),
+                    screenModify.Y + (Main.screenWidth / 2));
         }
     }
 }

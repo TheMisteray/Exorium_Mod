@@ -30,7 +30,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             projectile.hostile = true;
         }
 
-        private const float WIDTH = 800;
+        private const float WIDTH = 1000;
         private const float HEIGHT = 60;
         Vector2 spawnAxis = Vector2.Zero;
 

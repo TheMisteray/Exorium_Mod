@@ -60,7 +60,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private bool exitAnimation = false;
 
-        private bool leftTele = false;
+        private bool left = false;
 
         private bool parry = false;
 
@@ -76,7 +76,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //8 - sweep up
         //9 - flame breath
         //10 - portal dash
-        //11 - Enrage
+        //11 - Burning Sphere
+        //12 - enrage
         public float Action
         {
             get => npc.ai[0];
@@ -138,9 +139,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     if (actionTimer == 0)
                     {
                         float xDiff = player.Center.X - npc.Center.X;
-                        npc.velocity = new Vector2(xDiff / 30, -12);
+                        npc.velocity = new Vector2(xDiff / 150, -16);
                     }
-                    if (actionTimer > 30)
+                    else if (actionTimer < 90)
+                    {
+                        //Get to player level
+                        if (player.Top.Y > npc.Bottom.Y)
+                            npc.noTileCollide = true;
+                        else
+                            npc.noTileCollide = false;
+                        if (npc.velocity.Y == 0)
+                            npc.velocity.X = 0;
+                    }
+                    else if (npc.velocity == Vector2.Zero)
                     {
                         if (npc.life < npc.lifeMax / 2 && Main.rand.Next(4) == 0)
                         {
@@ -167,9 +178,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 1:
-                    if (actionTimer <= 30)
-                        npc.velocity = new Vector2(11, 0) * ((player.Center.X > npc.Center.X) ? 1 : -1);
-                    if (actionTimer >= 30)
+                    if (actionTimer == 0)
+                    {
+                        if (actionTimer == 0)
+                        {
+                            if ((npc.Center - player.Center).X > 0)
+                                left = false;
+                            else
+                                left = true;
+                        }
+                    }
+                    if (actionTimer <= 70)
+                        npc.velocity = new Vector2(24, 0) * (left ? 1 : -1);
+                    if (actionTimer >= 70)
                     {
                         if (Main.rand.Next(3) == 0)
                         {
@@ -198,10 +219,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 2:
                     if (actionTimer == 0)
                     {
-                        if ((npc.Center - player.Center).Length() > 0)
-                            leftTele = false;
+                        if ((npc.Center - player.Center).X > 0)
+                            left = false;
                         else
-                            leftTele = true;
+                            left = true;
                     }
                     else if (actionTimer == 90)
                     {
@@ -212,7 +233,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         npc.velocity = Vector2.Zero;
                     }
-                    else if (actionTimer >= 150)
+                    else if (actionTimer == 100)
+                    {
+                        npc.noGravity = false;
+                    }
+                    else if (actionTimer >= 160)
                     {
                         //0 1 4 7
                         if (Main.rand.Next(4) == 0)
@@ -451,6 +476,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             introTicker--;
             if (introTicker <= 0)
                 introAnimation = false;
+
+            for (int i = 0; i < 255; i++)
+            {
+                //Set all players cameras to Caravene
+                if (Main.player[i].active)
+                    Main.player[i].GetModPlayer<ExoriumPlayer>().screenModify = npc.Center;
+            }
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)

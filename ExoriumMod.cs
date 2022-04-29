@@ -8,6 +8,7 @@ using Terraria.Graphics.Effects;
 using ExoriumMod.Content.Skies;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.Graphics;
 
 namespace ExoriumMod
 {
