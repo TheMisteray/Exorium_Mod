@@ -16,33 +16,33 @@ namespace ExoriumMod.Content.Projectiles.Minions
         {
             DisplayName.SetDefault("Sand Aegis");
             // This is necessary for right-click targeting
-            ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
+            ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 
             // These below are needed for a minion
             // Denotes that this projectile is a pet or minion
-            Main.projPet[projectile.type] = true;
+            Main.projPet[Projectile.type] = true;
             // This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
-            ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
+            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
             // Don't mistake this with "if this is true, then it will automatically home". It is just for damage reduction for certain NPCs
-            ProjectileID.Sets.Homing[projectile.type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
 
         public sealed override void SetDefaults()
         {
-            projectile.width = 64;
-            projectile.height = 64;
+            Projectile.width = 64;
+            Projectile.height = 64;
             // Makes the minion go through tiles freely
-            projectile.tileCollide = false;
-            projectile.scale = .7f;
+            Projectile.tileCollide = false;
+            Projectile.scale = .7f;
             // These below are needed for a minion weapon
             // Only controls if it deals damage to enemies on contact (more on that later)
-            projectile.friendly = true;
+            Projectile.friendly = true;
             // Only determines the damage type
-            projectile.minion = true;
+            Projectile.minion = true;
             // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
-            projectile.minionSlots = 1f;
+            Projectile.minionSlots = 1f;
             // Needed so the minion doesn't despawn on collision with enemies or tiles
-            projectile.penetrate = -1;
+            Projectile.penetrate = -1;
         }
 
         // Here you can decide if your minion breaks things like grass or pots
@@ -59,7 +59,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
             #region Active check
             // This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
@@ -69,7 +69,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
             }
             if (player.HasBuff(BuffType<Buffs.Minions.SandAegis>()))
             {
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
             }
             #endregion
 
@@ -78,22 +78,22 @@ namespace ExoriumMod.Content.Projectiles.Minions
             int num = player.ownedProjectileCounts[ProjectileType<SandAegis>()];
             if (num == 0) num = 1; 
             double deg = 360 / num; //Speed
-            double rad = ((deg * projectile.minionPos) + projectile.ai[1]) * (Math.PI / 180); //Convert degrees to radians
+            double rad = ((deg * Projectile.minionPos) + Projectile.ai[1]) * (Math.PI / 180); //Convert degrees to radians
             double dist = 86; //Distance away from the player
-            idlePosition.X = player.Center.X - (int)(Math.Cos(rad + 1.5) * dist) - projectile.width / 2;
-            idlePosition.Y = player.Center.Y - (int)(Math.Sin(rad + 1.5) * dist) - projectile.height / 2;
-            projectile.ai[1] += 1f;
+            idlePosition.X = player.Center.X - (int)(Math.Cos(rad + 1.5) * dist) - Projectile.width / 2;
+            idlePosition.Y = player.Center.Y - (int)(Math.Sin(rad + 1.5) * dist) - Projectile.height / 2;
+            Projectile.ai[1] += 1f;
 
             // Teleport to player if distance is too big
-            Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+            Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
             float distanceToIdlePosition = vectorToIdlePosition.Length();
             if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > 2000f)
             {
                 // Whenever you deal with non-regular events that change the behavior or position drastically, make sure to only run the code on the owner of the projectile,
                 // and then set netUpdate to true
-                projectile.position = idlePosition;
-                projectile.velocity *= 0.1f;
-                projectile.netUpdate = true;
+                Projectile.position = idlePosition;
+                Projectile.velocity *= 0.1f;
+                Projectile.netUpdate = true;
             }
 
             // If your minion is flying, you want to do this independently of any conditions
@@ -102,13 +102,13 @@ namespace ExoriumMod.Content.Projectiles.Minions
             {
                 // Fix overlap with other minions
                 Projectile other = Main.projectile[i];
-                if (i != projectile.whoAmI && other.active && other.owner == projectile.owner && Math.Abs(projectile.position.X - other.position.X) + Math.Abs(projectile.position.Y - other.position.Y) < projectile.width)
+                if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
                 {
-                    if (projectile.position.X < other.position.X) projectile.velocity.X -= overlapVelocity;
-                    else projectile.velocity.X += overlapVelocity;
+                    if (Projectile.position.X < other.position.X) Projectile.velocity.X -= overlapVelocity;
+                    else Projectile.velocity.X += overlapVelocity;
 
-                    if (projectile.position.Y < other.position.Y) projectile.velocity.Y -= overlapVelocity;
-                    else projectile.velocity.Y += overlapVelocity;
+                    if (Projectile.position.Y < other.position.Y) Projectile.velocity.Y -= overlapVelocity;
+                    else Projectile.velocity.Y += overlapVelocity;
                 }
             }
             #endregion
@@ -123,7 +123,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
             if (player.HasMinionAttackTargetNPC)
             {
                 NPC npc = Main.npc[player.MinionAttackTargetNPC];
-                float between = Vector2.Distance(npc.Center, projectile.Center);
+                float between = Vector2.Distance(npc.Center, Projectile.Center);
                 // Reasonable distance away so it doesn't target across multiple screens
                 if (between < 450f)
                 {
@@ -140,10 +140,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
                     NPC npc = Main.npc[i];
                     if (npc.CanBeChasedBy())
                     {
-                        float between = Vector2.Distance(npc.Center, projectile.Center);
-                        bool closest = Vector2.Distance(projectile.Center, targetCenter) > between;
+                        float between = Vector2.Distance(npc.Center, Projectile.Center);
+                        bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;
                         bool inRange = between < distanceFromTarget;
-                        bool lineOfSight = Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height);
+                        bool lineOfSight = Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height);
                         // Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
                         // The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
                         bool closeThroughWall = between < 100f;
@@ -161,7 +161,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
             // friendly needs to be set to false so it doesn't damage things like target dummies while idling
             // Both things depend on if it has a target or not, so it's just one assignment here
             // You don't need this assignment if your minion is shooting things instead of dealing contact damage
-            projectile.friendly = foundTarget;
+            Projectile.friendly = foundTarget;
             #endregion
 
             #region Movement
@@ -176,10 +176,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 if (distanceFromTarget > 60f)
                 {
                     // The immediate range around the target (so it doesn't latch onto it when close)
-                    Vector2 direction = targetCenter - projectile.Center;
+                    Vector2 direction = targetCenter - Projectile.Center;
                     direction.Normalize();
                     direction *= speed;
-                    projectile.velocity = (projectile.velocity * (inertia - 1) + direction) / inertia;
+                    Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
                 }
             }
             else
@@ -199,13 +199,13 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 }
                 vectorToIdlePosition.Normalize();
                 vectorToIdlePosition *= speed;
-                projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
+                Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
             }
             #endregion
 
             #region Animation and visuals
             // So it will lean slightly towards the direction it's moving
-            projectile.rotation = projectile.velocity.X * 0.05f;
+            Projectile.rotation = Projectile.velocity.X * 0.05f;
             #endregion
         }
     }

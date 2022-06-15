@@ -1,9 +1,11 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -13,31 +15,32 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Unleash fists of flame\n" +
-                "Right click to shoot flames from your fingertips\n" +
-                "(Right click uses Mana, and can't be used with mana sickness)");
+            Tooltip.SetDefault("Unleash flames from your fingertips\n" +
+                "Uses Mana and can't be used with mana sickness\n" +
+                "Right click to shoot a flaming fist\n" +
+                "(Right click does not use mana)");
         }
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
-            item.rare = 3;
-            item.damage = 42;
-            item.melee = true;
-            item.mana = 7;
-            item.noMelee = true;
-            item.value = Item.sellPrice(silver: 60, copper: 15);
-            item.useStyle = 1;
-            item.useTime = 32;
-            item.useAnimation = 32;
-            item.knockBack = 7;
-            item.autoReuse = true;
-            item.UseSound = SoundID.Item109;
-            item.shoot = ProjectileType<BurningHand>();
-            item.shootSpeed = 29;
-            item.useTurn = true;
-            item.noUseGraphic = true;
+            Item.width = 30;
+            Item.height = 30;
+            Item.rare = 3;
+            Item.damage = 42;
+            Item.DamageType = DamageClass.Melee;
+            Item.mana = 7;
+            Item.noMelee = true;
+            Item.value = Item.sellPrice(silver: 60, copper: 15);
+            Item.useStyle = 1;
+            Item.useTime = 32;
+            Item.useAnimation = 32;
+            Item.knockBack = 7;
+            Item.autoReuse = true;
+            Item.UseSound = SoundID.Item109;
+            Item.shoot = ProjectileType<BurningHand>();
+            Item.shootSpeed = 29;
+            Item.useTurn = true;
+            Item.noUseGraphic = true;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -47,53 +50,52 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 2)
+            if (!(player.altFunctionUse == 2))
             {
-                item.mana = 30;
-                item.useTime = 14;
-                item.useAnimation = 14;
-                item.UseSound = SoundID.Item34;
+                Item.mana = 30;
+                Item.useTime = 14;
+                Item.useAnimation = 14;
+                Item.UseSound = SoundID.Item34;
                 if (player.HasBuff(BuffID.ManaSickness))
                     return false;
             }
             else
             {
-                item.mana = 0;
-                item.useTime = 28;
-                item.useAnimation = 28;
-                item.UseSound = SoundID.Item109;
+                Item.mana = 0;
+                Item.useTime = 28;
+                Item.useAnimation = 28;
+                Item.UseSound = SoundID.Item109;
             }
             return base.CanUseItem(player);
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.altFunctionUse == 2)
             {
                 for (int i = 0; i<=2; i++)
                 {
-                    Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.ToRadians(-(Main.rand.NextFloat(10) + 16) + (Main.rand.NextFloat(10)+16)*i));
-                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, (int)(damage/4f), knockBack, player.whoAmI, 0, 1);
+                    Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.ToRadians(-(Main.rand.NextFloat(10) + 16) + (Main.rand.NextFloat(10)+16)*i));
+                    Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, (int)(damage/4f), knockback, player.whoAmI, 0, 1);
                 }
             }
             else
             {
-                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(15)); //degree spread.
+                Vector2 perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(15)); //degree spread.
                                                                                                                 // Stagger difference
                 float scale = 1f - (Main.rand.NextFloat() * .3f);
                 perturbedSpeed = perturbedSpeed * scale;
-                Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+                Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
             }
             return false;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.HellstoneBar, 22);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 
@@ -103,53 +105,53 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            projectile.width = 50;
-            projectile.height = 40;
-            projectile.friendly = true;
-            projectile.magic = true;
-            projectile.timeLeft = 25;
-            projectile.penetrate = 3;
+            Projectile.width = 50;
+            Projectile.height = 40;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.timeLeft = 25;
+            Projectile.penetrate = 3;
         }
 
         public override void AI()
         {
             if (Main.rand.Next(3) == 0)
                 FireDust();
-            projectile.ai[0] += 1f; //Moved from FireDust to here to avoid extra calls since FireDust is called more than once per tick
-            if (projectile.wet && !projectile.lavaWet) //water death
-                projectile.active = false;
-            if (projectile.ai[1] == 1)
+            Projectile.ai[0] += 1f; //Moved from FireDust to here to avoid extra calls since FireDust is called more than once per tick
+            if (Projectile.wet && !Projectile.lavaWet) //water death
+                Projectile.active = false;
+            if (Projectile.ai[1] == 1)
             {
-                projectile.alpha = 255;
-                projectile.velocity = projectile.velocity * 0.95f;
+                Projectile.alpha = 255;
+                Projectile.velocity = Projectile.velocity * 0.95f;
                 FireDust();
             }
             else
-                projectile.penetrate = 1;
-            if (projectile.velocity != Vector2.Zero)
+                Projectile.penetrate = 1;
+            if (Projectile.velocity != Vector2.Zero)
             {
-                projectile.spriteDirection = projectile.direction;
-                if (projectile.velocity.X >= 0)
+                Projectile.spriteDirection = Projectile.direction;
+                if (Projectile.velocity.X >= 0)
                 {
-                    projectile.rotation = projectile.velocity.ToRotation();
+                    Projectile.rotation = Projectile.velocity.ToRotation();
                 }
                 else
                 {
-                    projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(180);
+                    Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(180);
                 }
             }
         }
 
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
             width /= 2;
             height /= 2;
-            return base.TileCollideStyle(ref width, ref height, ref fallThrough);
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.Kill();
+            Projectile.Kill();
             return false;
         }
 
@@ -160,16 +162,16 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void Kill(int timeLeft)
         {
-            if (projectile.ai[1] == 0)
+            if (Projectile.ai[1] == 0)
             {
-                projectile.velocity *= 0.4f;
+                Projectile.velocity *= 0.4f;
                 for (int i = 0; i < 25; i++)
                 {
-                    Vector2 randDir = projectile.velocity.RotatedByRandom(MathHelper.ToRadians(360));
+                    Vector2 randDir = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(360));
                     FireDust();
                     //Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 6, randDir.X, randDir.Y, 0, default, Main.rand.NextFloat(3) + 1);
                 }
-                Main.PlaySound(SoundID.Item89, projectile.position);
+                SoundEngine.PlaySound(SoundID.Item89, Projectile.position);
             }
         }
 
@@ -180,29 +182,29 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             int num2475;
 
             //ai for dust taken from flamethrower
-            if (projectile.type == 188 && projectile.ai[0] < 8f)
+            if (Projectile.type == 188 && Projectile.ai[0] < 8f)
             {
-                projectile.ai[0] = 8f;
+                Projectile.ai[0] = 8f;
             }
-            if (projectile.timeLeft > 60)
+            if (Projectile.timeLeft > 60)
             {
-                projectile.timeLeft = 60;
+                Projectile.timeLeft = 60;
             }
             float num2127 = 1f;
-            if (projectile.ai[0] == 8f)
+            if (Projectile.ai[0] == 8f)
             {
                 num2127 = 0.25f;
             }
-            else if (projectile.ai[0] == 9f)
+            else if (Projectile.ai[0] == 9f)
             {
                 num2127 = 0.5f;
             }
-            else if (projectile.ai[0] == 10f)
+            else if (Projectile.ai[0] == 10f)
             {
                 num2127 = 0.75f;
             }
             int num2126 = 6;
-            if (projectile.type == 101)
+            if (Projectile.type == 101)
             {
                 num2126 = 75;
             }
@@ -210,12 +212,12 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             {
                 for (int num2125 = 0; num2125 < 1; num2125 = num2475 + 1)
                 {
-                    Vector2 position100 = new Vector2(projectile.position.X, projectile.position.Y);
-                    int width87 = projectile.width;
-                    int height87 = projectile.height;
+                    Vector2 position100 = new Vector2(Projectile.position.X, Projectile.position.Y);
+                    int width87 = Projectile.width;
+                    int height87 = Projectile.height;
                     int num2484 = num2126;
-                    float speedX25 = projectile.velocity.X * 0.2f;
-                    float speedY29 = projectile.velocity.Y * 0.2f;
+                    float speedX25 = Projectile.velocity.X * 0.2f;
+                    float speedY29 = Projectile.velocity.Y * 0.2f;
                     Color newColor5 = default(Color);
                     int num2124 = Dust.NewDust(position100, width87, height87, num2484, speedX25, speedY29, 100, newColor5, 1f);
                     if (Main.rand.Next(3) != 0 || (num2126 == 75 && Main.rand.Next(3) == 0))
@@ -228,7 +230,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         Dust expr_DD61_cp_0 = Main.dust[num2124];
                         expr_DD61_cp_0.velocity.Y = expr_DD61_cp_0.velocity.Y * 2f;
                     }
-                    if (projectile.type == 188)
+                    if (Projectile.type == 188)
                     {
                         dust81 = Main.dust[num2124];
                         dust81.scale *= 1.25f;
@@ -247,7 +249,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                     if (num2126 == 75)
                     {
                         dust81 = Main.dust[num2124];
-                        dust81.velocity += projectile.velocity;
+                        dust81.velocity += Projectile.velocity;
                         if (!Main.dust[num2124].noGravity)
                         {
                             dust81 = Main.dust[num2124];

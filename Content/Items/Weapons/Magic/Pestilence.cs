@@ -18,33 +18,32 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            item.damage = 17;
-            item.width = 15;
-            item.height = 15;
-            item.magic = true;
-            item.mana = 6;
-            item.useTime = 12;
-            item.useAnimation = 24;
-            item.useStyle = 5;
-            item.noMelee = true;
-            item.knockBack = 1;
-            item.value = Item.sellPrice(silver: 68); ;
-            item.rare = 2;
-            item.UseSound = SoundID.Item42;
-            item.shoot = ProjectileType<BlightHail>();
-            item.shootSpeed = 20;
-            item.autoReuse = true;
-            item.scale = 0.9f;
+            Item.damage = 17;
+            Item.width = 15;
+            Item.height = 15;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 6;
+            Item.useTime = 12;
+            Item.useAnimation = 24;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.knockBack = 1;
+            Item.value = Item.sellPrice(silver: 68); ;
+            Item.rare = 2;
+            Item.UseSound = SoundID.Item42;
+            Item.shoot = ProjectileType<BlightHail>();
+            Item.shootSpeed = 20;
+            Item.autoReuse = true;
+            Item.scale = 0.9f;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
             recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 6);
             recipe.AddTile(TileID.Bookcases);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
     class BlightHail : ModProjectile
@@ -53,41 +52,41 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            projectile.width = 80;
-            projectile.height = 80;
-            projectile.alpha = 255;
-            projectile.timeLeft = 30;
-            projectile.penetrate = -1;
-            projectile.friendly = true;
-            projectile.magic = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
+            Projectile.width = 80;
+            Projectile.height = 80;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 30;
+            Projectile.penetrate = -1;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
             for (int i = 0; i < 4; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.BlightDust>(), Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f);
             }
             if (Main.rand.NextBool(2))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.25f, projectile.velocity.Y * 0.25f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.BlightDust>(), Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f);
             }
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), 0, 0);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.BlightDust>(), 0, 0);
             }
             if (Main.rand.NextBool(4))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.BlightDust>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
-            if (projectile.ai[0] == 2)
+            if (Projectile.ai[0] == 2)
             {
-                projectile.timeLeft -= 2;
-                projectile.position = projectile.Center;
-                projectile.scale *= 1.08f;
-                projectile.Center = projectile.position;
+                Projectile.timeLeft -= 2;
+                Projectile.position = Projectile.Center;
+                Projectile.scale *= 1.08f;
+                Projectile.Center = Projectile.position;
             }
         }
     }

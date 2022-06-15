@@ -1,17 +1,40 @@
-﻿using ExoriumMod.Core;
+﻿using ReLogic.Content;
+using ExoriumMod.Core;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent;
+using Terraria;
 
 namespace ExoriumMod.Content.Tiles.Trees
 {
+    /*
     class DeadwoodTree : ModTree
     {
         private Mod mod => ModLoader.GetMod("ExoriumMod");
 
+        public override void SetStaticDefaults()
+        {
+            GrowsOnTileId = new int[1] { TileType<AshenDustTile>() };
+        }
+
+        public override TreePaintingSettings TreeShaderSettings => new TreePaintingSettings
+        {
+            UseSpecialGroups = true,
+            SpecialGroupMinimalHueValue = 11f / 72f,
+            SpecialGroupMaximumHueValue = 0.25f,
+            SpecialGroupMinimumSaturationValue = 0.88f,
+            SpecialGroupMaximumSaturationValue = 1f
+        };
+
+        public override void SetTreeFoliageSettings(Tile tile, int xoffset, ref int treeFrame, ref int floorY, ref int topTextureFrameWidth, ref int topTextureFrameHeight)
+        {
+            //TODO
+        }
+
         public override int GrowthFXGore()
         {
-            return mod.GetGoreSlot(AssetDirectory.TreeGores + "DeadwoodTreeFX");
+            return mod.Find<ModGore>(AssetDirectory.TreeGores + "DeadwoodTreeFX").Type;
         }
 
         public override int DropWood()
@@ -19,21 +42,22 @@ namespace ExoriumMod.Content.Tiles.Trees
             return ItemType<Items.TileItems.Deadwood>();
         }
 
-        public override Texture2D GetTexture()
+        public override Asset<Texture2D> GetTexture()
         {
-            return mod.GetTexture("Assets/Tiles/Trees/DeadwoodTree" /*AssetDirectory.Tree + "DeadwoodTree"*/);
+            return Request<Texture2D>("Assets/Tiles/Trees/DeadwoodTree" /*AssetDirectory.Tree + "DeadwoodTree"*//*;
         }
 
-        public override Texture2D GetTopTextures(int i, int j, ref int frame, ref int frameWidth, ref int frameHeight, ref int xOffsetLeft, ref int yOffset)
+        public override Asset<Texture2D> GetTopTextures()
         {
-            return mod.GetTexture("Assets/Tiles/Trees/DeadwoodTree" + "_Tops");
+            return Request<Texture2D>("Assets/Tiles/Trees/DeadwoodTree" + "_Tops");
         }
 
-        public override Texture2D GetBranchTextures(int i, int j, int trunkOffset, ref int frame)
+        public override Asset<Texture2D> GetBranchTextures()
         {
-            return mod.GetTexture("Assets/Tiles/Trees/DeadwoodTree" + "_Branches");
+            return Request<Texture2D>("Assets/Tiles/Trees/DeadwoodTree" + "_Branches");
         }
 
         public override int CreateDust() => DustType<Dusts.DeadwoodTreeDust>();
     }
+*/
 }

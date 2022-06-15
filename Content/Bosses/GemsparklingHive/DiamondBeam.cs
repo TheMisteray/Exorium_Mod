@@ -1,6 +1,8 @@
 ﻿using ExoriumMod.Core;
 using ExoriumMod.Helpers;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -28,21 +30,21 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
 		public float LifeCounter
 		{
-			get => projectile.ai[0];
-			set => projectile.ai[0] = value;
+			get => Projectile.ai[0];
+			set => Projectile.ai[0] = value;
 		}
 
 		// The actual charge value is stored in the localAI0 field
 		public float Charge
 		{
-			get => projectile.localAI[0];
-			set => projectile.localAI[0] = value;
+			get => Projectile.localAI[0];
+			set => Projectile.localAI[0] = value;
 		}
 
 		public float NPCWhoAmI
         {
-			get => projectile.ai[1];
-			set => projectile.ai[1] = value;
+			get => Projectile.ai[1];
+			set => Projectile.ai[1] = value;
 		}
 
 		// Are we at max charge? With c#6 you can simply use => which indicates this is a get only property
@@ -50,26 +52,26 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
 		public override void SetDefaults()
 		{
-			projectile.width = 8;
-			projectile.height = 8;
-			projectile.friendly = false;
-			projectile.penetrate = -1;
-			projectile.tileCollide = false;
-			projectile.hostile = true;
+			Projectile.width = 8;
+			Projectile.height = 8;
+			Projectile.friendly = false;
+			Projectile.penetrate = -1;
+			Projectile.tileCollide = false;
+			Projectile.hostile = true;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			NPC npc = Main.npc[(int)NPCWhoAmI];
-			Vector2 unitVel = projectile.velocity;
+			Vector2 unitVel = Projectile.velocity;
 			unitVel.Normalize();
 
 			if (Charge == MAX_CHARGE)
-				DrawHelper.DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], npc.Center, unitVel, 10, -1.57f, 1f, BeamLength, default, 30, BeamLength);
+				DrawHelper.DrawLaser(TextureAssets.Projectile[Projectile.type].Value, npc.Center, unitVel, 10, -1.57f, 1f, BeamLength, default, 30, BeamLength);
 			else
 			{
-				Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name + "Guide");
-				DrawHelper.DrawLaser(spriteBatch, tex, npc.Center, unitVel, 10, MathHelper.PiOver2, 1, BeamLength, default, 30, BeamLength);
+				Texture2D tex = Request<Texture2D>(AssetDirectory.GemsparklingHive + Name + "Guide").Value;
+				DrawHelper.DrawLaser(tex, npc.Center, unitVel, 10, MathHelper.PiOver2, 1, BeamLength, default, 30, BeamLength);
 			}
 			return false;
 		}
@@ -79,7 +81,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			if (!IsAtMaxCharge) return false;
 
 			NPC npc = Main.npc[(int)NPCWhoAmI];
-			Vector2 unit = projectile.velocity;
+			Vector2 unit = Projectile.velocity;
 			float point = 0f;
 
 			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), npc.Center,
@@ -90,10 +92,10 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 		public override void AI()
 		{
 			NPC npc = Main.npc[(int)NPCWhoAmI];
-			projectile.position = npc.Center + projectile.velocity * MOVE_DISTANCE;
-			projectile.timeLeft = 2;
+			Projectile.position = npc.Center + Projectile.velocity * MOVE_DISTANCE;
+			Projectile.timeLeft = 2;
 			if (npc.alpha > 10) //Ends laser when gemsparkling hides
-				projectile.timeLeft = 0;
+				Projectile.timeLeft = 0;
 
 			//Turn after damage begins
 			if (LifeCounter > 0)
@@ -110,9 +112,9 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			CastLights();
 
 			if (LifeCounter > LIFE_TIME)
-				projectile.Kill();
+				Projectile.Kill();
 			if (!npc.active || npc.type != NPCType<DiamondGemsparkling>())
-				projectile.Kill();
+				Projectile.Kill();
 		}
 
 		private void ChargeLaser(NPC npc)
@@ -122,7 +124,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 				Charge++;
 				if (Charge == MAX_CHARGE)
 				{
-					DustHelper.DustRing(projectile.Center, DustType<Dusts.Rainbow>(), 5, 0, .2f, 1, 0, 0, 0, Color.White, true);
+					DustHelper.DustRing(Projectile.Center, DustType<Dusts.Rainbow>(), 5, 0, .2f, 1, 0, 0, 0, Color.White, true);
 				}
 			}
 		}
@@ -136,16 +138,16 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 			}
 
 			// Change a portion of the Prism's current velocity so that it points to the mouse. This gives smooth movement over time.
-			aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(projectile.velocity), aim, TurnResponsiveness));
+			aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(Projectile.velocity), aim, TurnResponsiveness));
 
-			if (aim != projectile.velocity)
+			if (aim != Projectile.velocity)
 			{
-				projectile.netUpdate = true;
+				Projectile.netUpdate = true;
 			}
-			projectile.velocity = aim;
+			Projectile.velocity = aim;
 
 			//Push npc
-			Vector2 push = projectile.velocity;
+			Vector2 push = Projectile.velocity;
 			push.Normalize();
 			npc.position += push * -1;
 		}
@@ -154,16 +156,16 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 		{
 			// Cast a light along the line of the laser
 			DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
-			Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (BeamLength - MOVE_DISTANCE), 26, DelegateMethods.CastLight);
+			Utils.PlotTileLine(Projectile.Center, Projectile.Center + Projectile.velocity * (BeamLength - MOVE_DISTANCE), 26, DelegateMethods.CastLight);
 		}
 
 		private void PlaySounds()
 		{
 			// The Prism makes sound intermittently while in use, using the vanilla projectile variable soundDelay.
-			if (projectile.soundDelay <= 0)
+			if (Projectile.soundDelay <= 0)
 			{
-				projectile.soundDelay = SoundInterval;
-				Main.PlaySound(SoundID.NPCDeath7, projectile.position);
+				Projectile.soundDelay = SoundInterval;
+				SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.position);
 			}
 		}
 

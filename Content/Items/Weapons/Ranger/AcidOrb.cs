@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -19,25 +20,25 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            item.damage = 20;
-            item.useStyle = 5;
-            item.useAnimation = 32;
-            item.useTime = 32;
-            item.shootSpeed = 13f;
-            item.knockBack = 0.5f;
-            item.width = 32;
-            item.height = 32;
-            item.scale = 1f;
-            item.rare = 1;
-            item.value = Item.sellPrice(silver: 4);
-            item.consumable = true;
-            item.maxStack = 999;
-            item.ranged = true;
-            item.noMelee = true; 
-            item.noUseGraphic = true; 
-            item.autoReuse = true; 
-            item.UseSound = SoundID.Item1;
-            item.shoot = ProjectileType<AcidOrbProj>();
+            Item.damage = 20;
+            Item.useStyle = 5;
+            Item.useAnimation = 32;
+            Item.useTime = 32;
+            Item.shootSpeed = 13f;
+            Item.knockBack = 0.5f;
+            Item.width = 32;
+            Item.height = 32;
+            Item.scale = 1f;
+            Item.rare = 1;
+            Item.value = Item.sellPrice(silver: 4);
+            Item.consumable = true;
+            Item.maxStack = 999;
+            Item.DamageType = DamageClass.Ranged;
+            Item.noMelee = true; 
+            Item.noUseGraphic = true; 
+            Item.autoReuse = true; 
+            Item.UseSound = SoundID.Item1;
+            Item.shoot = ProjectileType<AcidOrbProj>();
         }
     }
 
@@ -47,20 +48,20 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            projectile.width = 12;
-            projectile.height = 12;
-            projectile.friendly = true;
-            projectile.ranged = true;
-            projectile.penetrate = 3;
-            projectile.timeLeft = 600;
+            Projectile.width = 12;
+            Projectile.height = 12;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.penetrate = 3;
+            Projectile.timeLeft = 600;
         }
 
         private const int MAX_TICKS = 25;
 
         public float ticks
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public override void AI()
@@ -71,11 +72,11 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 const float velXmult = 0.98f;
                 const float velYmult = 0.35f;
                 ticks = MAX_TICKS;
-                projectile.velocity.X *= velXmult;
-                projectile.velocity.Y += velYmult;
+                Projectile.velocity.X *= velXmult;
+                Projectile.velocity.Y += velYmult;
             }
-            projectile.rotation =
-                projectile.velocity.ToRotation() +
+            Projectile.rotation =
+                Projectile.velocity.ToRotation() +
                 MathHelper.ToRadians(90f);
 
         }
@@ -84,9 +85,9 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             for (int k = 0; k < 12; k++)
             {
-                int dust = Dust.NewDust(projectile.position - projectile.velocity, projectile.width, projectile.height, 33, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f, 0, new Color(255, 110, 0));
+                int dust = Dust.NewDust(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, 33, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f, 0, new Color(255, 110, 0));
             }
-            Main.PlaySound(SoundID.Item27, projectile.position);
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

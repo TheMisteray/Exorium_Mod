@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,18 +18,18 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.damage = 19;
-            item.melee = true;
-            item.width = 10;
-            item.height = 10;
-            item.useTime = 28;
-            item.useAnimation = 28;
-            item.useStyle = 1;
-            item.knockBack = 3;
-            item.value = 2000;
-            item.rare = 1;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
+            Item.damage = 19;
+            Item.DamageType = DamageClass.Melee;
+            Item.width = 10;
+            Item.height = 10;
+            Item.useTime = 28;
+            Item.useAnimation = 28;
+            Item.useStyle = 1;
+            Item.knockBack = 3;
+            Item.value = 2000;
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
         }
 
         public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
@@ -38,9 +39,9 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 target.life = 1;
                 target.checkDead();
                 target.StrikeNPC(Main.expertMode ? 100 : 50, 0, 0, true);
-                NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, target.whoAmI, Main.expertMode ? 100 : 50, 0, 0, 1);
+                NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, target.whoAmI, Main.expertMode ? 100 : 50, 0, 0, 1);
                 player.HealEffect(Main.expertMode ? 2 : 1, true);
-                Main.PlaySound(SoundID.Item20, player.position);
+                SoundEngine.PlaySound(SoundID.Item20, player.position);
             }
         }
     }

@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using System;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -22,22 +23,22 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.damage = 11;
-            item.melee = true;
-            item.width = 34;
-            item.height = 34;
-            item.useTime = 26;
-            item.useAnimation = 26;
-            item.useStyle = 1;
-            item.knockBack = 6;
-            item.value = Item.sellPrice(silver: 14);
-            item.rare = 1;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-            item.scale = 2f;
-            item.useTurn = true;
-            item.shoot = ProjectileType<RimeBladeProj>();
-            item.shootSpeed = 10;
+            Item.damage = 11;
+            Item.DamageType = DamageClass.Melee;
+            Item.width = 34;
+            Item.height = 34;
+            Item.useTime = 26;
+            Item.useAnimation = 26;
+            Item.useStyle = 1;
+            Item.knockBack = 6;
+            Item.value = Item.sellPrice(silver: 14);
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
+            Item.scale = 2f;
+            Item.useTurn = true;
+            Item.shoot = ProjectileType<RimeBladeProj>();
+            Item.shootSpeed = 10;
         }
 
         private int frost = 0;
@@ -50,17 +51,17 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
-                item.noMelee = true;
+                Item.noMelee = true;
             else
-                item.noMelee = false;
+                Item.noMelee = false;
             return true;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.altFunctionUse == 2 && frost/5 > 0)
             {
-                int proj1 = Projectile.NewProjectile(position.X, position.Y, speedX, speedY, mod.ProjectileType("RimeBladeProj"), damage *= (frost/5) * 3, knockBack, player.whoAmI, frost/5);
+                int proj1 = Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, Mod.Find<ModProjectile>("RimeBladeProj").Type, damage *= (frost/5) * 3, knockback, player.whoAmI, frost/5);
                 Main.projectile[proj1].position = Main.projectile[proj1].Center;
                 Main.projectile[proj1].width *= (frost / 5);
                 Main.projectile[proj1].height *= (frost / 5);
@@ -114,11 +115,10 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>(), 8);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 
@@ -128,42 +128,42 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            projectile.timeLeft = 300;
-            projectile.height = 16;
-            projectile.width = 16;
-            projectile.friendly = true;
-            projectile.hostile = false;
-            projectile.alpha = 255;
-            projectile.melee = true;
-            projectile.tileCollide = false;
+            Projectile.timeLeft = 300;
+            Projectile.height = 16;
+            Projectile.width = 16;
+            Projectile.friendly = true;
+            Projectile.hostile = false;
+            Projectile.alpha = 255;
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
         {
-            DustHelper.DustCircle(projectile.Center, DustType<Dusts.Rainbow>(), projectile.width / 2, (float)Math.Pow(projectile.ai[0], 2), 1, 0, 0, 0, Color.LightBlue, false);
+            DustHelper.DustCircle(Projectile.Center, DustType<Dusts.Rainbow>(), Projectile.width / 2, (float)Math.Pow(Projectile.ai[0], 2), 1, 0, 0, 0, Color.LightBlue, false);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.Frostburn, 200 * (int)projectile.ai[0], true);
+            target.AddBuff(BuffID.Frostburn, 200 * (int)Projectile.ai[0], true);
         }
 
         public override void Kill(int timeLeft)
         {
-            for (int i = 0; i <= projectile.ai[0] * 10; i++)
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 67, 0, 0);
+            for (int i = 0; i <= Projectile.ai[0] * 10; i++)
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, 0, 0);
         }
 
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
             //Make hitbox smaller than dust
             //pythagorean
-            float radius = (float)Math.Pow(width/2 * projectile.scale, 2);
+            float radius = (float)Math.Pow(width/2 * Projectile.scale, 2);
             radius /= 2;
             radius = (float)Math.Sqrt(radius);
             width = (int)radius;
             height = (int)radius;
-            return base.TileCollideStyle(ref width, ref height, ref fallThrough);
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
         }
     }
 }

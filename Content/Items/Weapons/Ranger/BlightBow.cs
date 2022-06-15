@@ -17,31 +17,30 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            item.damage = 22;
-            item.ranged = true;
-            item.width = 22;
-            item.height = 40;
-            item.useTime = 28;
-            item.useAnimation = 28;
-            item.useAmmo = AmmoID.Arrow;
-            item.knockBack = 2;
-            item.value = Item.sellPrice(silver: 36);
-            item.rare = 1;
-            item.UseSound = SoundID.Item5;
-            item.autoReuse = true;
-            item.shoot = 10;
-            item.noMelee = true;
-            item.shootSpeed = 28;
-            item.useStyle = 5;
+            Item.damage = 22;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 22;
+            Item.height = 40;
+            Item.useTime = 28;
+            Item.useAnimation = 28;
+            Item.useAmmo = AmmoID.Arrow;
+            Item.knockBack = 2;
+            Item.value = Item.sellPrice(silver: 36);
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item5;
+            Item.autoReuse = true;
+            Item.shoot = 10;
+            Item.noMelee = true;
+            Item.shootSpeed = 28;
+            Item.useStyle = 5;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 8);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

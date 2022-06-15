@@ -1,52 +1,54 @@
 ﻿using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using Terraria.GameContent;
 
 namespace ExoriumMod.Content.Projectiles
 {
     class Fireball : ModProjectile
     {
-        public override string Texture => "Terraria/Projectile_" + ProjectileID.BallofFire;
+        public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BallofFire;
 
         public override void SetDefaults()
         {
-            projectile.CloneDefaults(ProjectileID.BallofFire);
-            projectile.aiStyle = -1;
+            Projectile.CloneDefaults(ProjectileID.BallofFire);
+            Projectile.aiStyle = -1;
         }
 
         public override void AI()
         {
-            projectile.rotation -= .2f;
-            Dust.NewDust(projectile.Center, 0, 0, 6, 0f, 0f, 0, default(Color), 1f);
+            Projectile.rotation -= .2f;
+            Dust.NewDust(Projectile.Center, 0, 0, 6, 0f, 0f, 0, default(Color), 1f);
         }
 
         public override void Kill(int timeLeft)
         {
             int explosionArea = 320;
-            Vector2 oldSize = projectile.Size;
+            Vector2 oldSize = Projectile.Size;
             // Resize the projectile hitbox to be bigger.
-            projectile.position = projectile.Center;
-            projectile.Size += new Vector2(explosionArea);
-            projectile.Center = projectile.position;
+            Projectile.position = Projectile.Center;
+            Projectile.Size += new Vector2(explosionArea);
+            Projectile.Center = Projectile.position;
 
-            projectile.tileCollide = false;
-            projectile.velocity = Vector2.Zero;
+            Projectile.tileCollide = false;
+            Projectile.velocity = Vector2.Zero;
             // Damage enemies inside the hitbox area
-            projectile.Damage();
-            projectile.Damage();
-            projectile.scale = 0.01f;
+            Projectile.Damage();
+            Projectile.Damage();
+            Projectile.scale = 0.01f;
 
             //Resize the hitbox to its original size
-            projectile.position = projectile.Center;
-            projectile.Size = new Vector2(10);
-            projectile.Center = projectile.position;
+            Projectile.position = Projectile.Center;
+            Projectile.Size = new Vector2(10);
+            Projectile.Center = Projectile.position;
 
-            Main.PlaySound(SoundID.Item14, projectile.position);
+            SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
             for (int i = 0; i < 200; i++)
             {
                 Vector2 outward = new Vector2(0, Main.rand.NextFloat(20)).RotatedBy(Main.rand.NextFloat(MathHelper.Pi * 2));
-                Dust dust = Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 55, outward.X, outward.Y, 0, Color.Orange, 2f);
+                Dust dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, 55, outward.X, outward.Y, 0, Color.Orange, 2f);
                 dust.position += outward;
                 dust.noGravity = true;
             }

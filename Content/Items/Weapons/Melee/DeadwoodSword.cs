@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -16,27 +17,26 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.damage = 6;
-            item.melee = true;
-            item.width = 10;
-            item.height = 10;
-            item.useTime = 10;
-            item.useAnimation = 10;
-            item.useStyle = 1;
-            item.knockBack = 2;
-            item.value = 20;
-            item.rare = 0;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
+            Item.damage = 6;
+            Item.DamageType = DamageClass.Melee;
+            Item.width = 10;
+            Item.height = 10;
+            Item.useTime = 10;
+            Item.useAnimation = 10;
+            Item.useStyle = 1;
+            Item.knockBack = 2;
+            Item.value = 20;
+            Item.rare = 0;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 7);
             recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

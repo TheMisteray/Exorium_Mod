@@ -18,26 +18,26 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            item.damage = 125;
-            item.useStyle = 4;
-            item.useTime = 42;
-            item.useAnimation = 42;
-            item.knockBack = 2;
-            item.rare = 3;
-            item.value = Item.buyPrice(gold: 5);
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 30;
-            item.magic = true;
-            item.mana = 50;
-            item.noMelee = true;
-            item.shootSpeed = 16f;
-            item.autoReuse = false;
-            item.shoot = ProjectileType<Projectiles.Fireball>();
-            item.consumable = true;
-            item.UseSound = SoundID.Item7;
-            item.useTurn = true;
-            item.noUseGraphic = true;
+            Item.damage = 125;
+            Item.useStyle = 4;
+            Item.useTime = 42;
+            Item.useAnimation = 42;
+            Item.knockBack = 2;
+            Item.rare = 3;
+            Item.value = Item.buyPrice(gold: 5);
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 30;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 50;
+            Item.noMelee = true;
+            Item.shootSpeed = 16f;
+            Item.autoReuse = false;
+            Item.shoot = ProjectileType<Projectiles.Fireball>();
+            Item.consumable = true;
+            Item.UseSound = SoundID.Item7;
+            Item.useTurn = true;
+            Item.noUseGraphic = true;
         }
 
         public override bool CanUseItem(Player player)

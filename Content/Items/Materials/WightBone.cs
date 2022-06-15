@@ -9,11 +9,11 @@ namespace ExoriumMod.Content.Items.Materials
 
         public override void SetDefaults()
         {
-            item.value = 2;
-            item.width = 16;
-            item.height = 14;
-            item.rare = 0;
-            item.maxStack = 999;
+            Item.value = 2;
+            Item.width = 16;
+            Item.height = 14;
+            Item.rare = 0;
+            Item.maxStack = 999;
         }
     }
 }

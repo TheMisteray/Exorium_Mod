@@ -1,24 +1,21 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace ExoriumMod.Content.Buffs
 {
     class Shield : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Buff + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Buff + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Shield");
             Description.SetDefault("Increased Defense");
             Main.pvpBuff[Type] = true;
             Main.buffNoSave[Type] = true;
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)

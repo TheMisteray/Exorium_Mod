@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -18,30 +19,30 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            item.damage = 24;
-            item.ranged = true;
-            item.width = 38;
-            item.height = 64;
-            item.useTime = 26;
-            item.useAnimation = 26;
-            item.useAmmo = AmmoID.Arrow;
-            item.knockBack = 2;
-            item.value = Item.sellPrice(gold: 3, silver: 50); ;
-            item.rare = 3;
-            item.UseSound = SoundID.Item5;
-            item.autoReuse = true;
-            item.shoot = 10;
-            item.noMelee = true;
-            item.shootSpeed = 30;
-            item.useStyle = 5;
+            Item.damage = 24;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 38;
+            Item.height = 64;
+            Item.useTime = 26;
+            Item.useAnimation = 26;
+            Item.useAmmo = AmmoID.Arrow;
+            Item.knockBack = 2;
+            Item.value = Item.sellPrice(gold: 3, silver: 50); ;
+            Item.rare = 3;
+            Item.UseSound = SoundID.Item5;
+            Item.autoReuse = true;
+            Item.shoot = 10;
+            Item.noMelee = true;
+            Item.shootSpeed = 30;
+            Item.useStyle = 5;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             int spShoot = Main.rand.Next(0,6);
             if (spShoot == 5)
             {
-                Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ProjectileType<DarksteelArrow>(), damage, knockBack, player.whoAmI);
+                Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, ProjectileType<DarksteelArrow>(), damage, knockback, player.whoAmI);
                 return false;
             }
             else
@@ -52,11 +53,10 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 10);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
 
         public override Vector2? HoldoutOffset()
@@ -71,8 +71,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
-            aiType = ProjectileID.WoodenArrowFriendly;
+            Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+            AIType = ProjectileID.WoodenArrowFriendly;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -85,8 +85,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             if (Main.rand.NextBool(3))
             {
                 int offset = Main.rand.Next(-4, 4);
-                new Vector2(projectile.position.X + offset, projectile.position.Y + offset);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                new Vector2(Projectile.position.X + offset, Projectile.position.Y + offset);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.DarksteelDust>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -95,7 +95,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             for (int i = 0; i < 15; i++)
             {
                 int offset = Main.rand.Next(-4, 4);
-                Dust.NewDust(new Vector2(projectile.position.X + offset, projectile.position.Y + offset), projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
+                Dust.NewDust(new Vector2(Projectile.position.X + offset, Projectile.position.Y + offset), Projectile.width, Projectile.height, DustType<Dusts.DarksteelDust>(), Projectile.oldVelocity.X * 1.5f, Projectile.oldVelocity.Y * 1.5f);
             }
         }
     }

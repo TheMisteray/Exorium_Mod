@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,28 +17,28 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetDefaults()
         {
-            projectile.width = 12;
-            projectile.height = 12;
-            projectile.friendly = false;
-            projectile.timeLeft = 600;
-            projectile.hostile = true;
-            projectile.tileCollide = false;
+            Projectile.width = 12;
+            Projectile.height = 12;
+            Projectile.friendly = false;
+            Projectile.timeLeft = 600;
+            Projectile.hostile = true;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
         {
-            projectile.velocity.Y += .18f;
-            projectile.rotation += .2f;
-            if (Math.Abs(projectile.velocity.X) >= 1)
+            Projectile.velocity.Y += .18f;
+            Projectile.rotation += .2f;
+            if (Math.Abs(Projectile.velocity.X) >= 1)
             {
-                projectile.velocity.X *= .96f;
+                Projectile.velocity.X *= .96f;
             }
-            if (projectile.timeLeft <= 500 )
-                projectile.tileCollide = true;
-            Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
+            if (Projectile.timeLeft <= 500 )
+                Projectile.tileCollide = true;
+            Vector2 delta = Projectile.position - new Vector2(Projectile.position.X + Main.rand.NextFloat(-1, 2), Projectile.position.Y + Main.rand.NextFloat(-1, 2));
             if (Main.rand.NextBool(6))
             {
-                int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), delta.X, delta.Y);
+                int dust0 = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Rainbow>(), delta.X, delta.Y);
                 Main.dust[dust0].color = new Color(200, 0, 0);
             }
         }
@@ -46,17 +47,17 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             for (int k = 0; k < 5; k++)
             {
-                int dust = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>(), projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
+                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Shadow>(), Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
                 Main.dust[dust].color = new Color(255, 110, 0);
             }
-            Main.PlaySound(SoundID.Item27, projectile.position);
-            NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y, NPCType<ShadowAdd>());
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
+            NPC.NewNPC(Projectile.GetSource_FromThis(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCType<ShadowAdd>());
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, Color.White * .4f, projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.Shadowmancer + Name + "_aGlow").Value;
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, Color.White * .4f, Projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0);
         }
     }
 }

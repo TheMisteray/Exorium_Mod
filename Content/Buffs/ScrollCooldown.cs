@@ -1,24 +1,21 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace ExoriumMod.Content.Buffs
 {
     class ScrollCooldown : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Buff + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Buff + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Scroll Cooldown");
             Description.SetDefault("You cannot use Spell Scrolls");
             Main.pvpBuff[Type] = false;
             Main.buffNoSave[Type] = false;
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
             Main.debuff[Type] = true;
         }
 

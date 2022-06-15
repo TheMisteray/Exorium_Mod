@@ -14,41 +14,41 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.aiStyle = -1;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.timeLeft = 600;
-            projectile.penetrate = 1;
-            projectile.tileCollide = false;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.timeLeft = 600;
+            Projectile.penetrate = 1;
+            Projectile.tileCollide = false;
         }
 
         public float fuse
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public float rotationSpeed
         {
-            get => projectile.ai[1];
-            set => projectile.ai[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
         public override void AI()
         {
-            projectile.rotation += rotationSpeed;
+            Projectile.rotation += rotationSpeed;
             if (rotationSpeed > 0)
                 rotationSpeed -= .002f;
-            projectile.alpha = 225;
-            projectile.velocity *= .98f;
-            if (projectile.velocity.Length() <= .1f)
+            Projectile.alpha = 225;
+            Projectile.velocity *= .98f;
+            if (Projectile.velocity.Length() <= .1f)
             {
                 fuse++;
                 if (fuse > 60)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
             }
         }
@@ -60,19 +60,19 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     Vector2 v = new Vector2(0, 7);
-                    Vector2 v2 = v.RotatedBy(MathHelper.PiOver4 * i + projectile.rotation);
-                    Projectile.NewProjectile(projectile.Center, v2, ProjectileType<GemDart>(), projectile.damage, 1, Main.myPlayer, 0);
+                    Vector2 v2 = v.RotatedBy(MathHelper.PiOver4 * i + Projectile.rotation);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, v2, ProjectileType<GemDart>(), Projectile.damage, 1, Main.myPlayer, 0);
                 }
             }
             base.Kill(timeLeft);
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.GemsparklingHive + Name).Value;
 
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(255, 0, 0, 0), projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
-            base.PostDraw(spriteBatch, lightColor);
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, new Color(255, 0, 0, 0), Projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0);
+            base.PostDraw(lightColor);
         }
     }
 }

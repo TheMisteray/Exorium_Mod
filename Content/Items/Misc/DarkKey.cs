@@ -14,9 +14,9 @@ namespace ExoriumMod.Content.Items.Misc
 
         public override void SetDefaults()
         {
-            item.width = 14;
-            item.height = 20;
-            item.maxStack = 99;
+            Item.width = 14;
+            Item.height = 20;
+            Item.maxStack = 99;
         }
     }
 }

@@ -6,13 +6,9 @@ namespace ExoriumMod.Content.Buffs
 {
     class ThrowingRapierDamage : ModBuff
     {
-		public override bool Autoload(ref string name, ref string texture)
-		{
-			texture = AssetDirectory.Invisible;
-			return base.Autoload(ref name, ref texture);
-		}
+        public override string Texture => AssetDirectory.Invisible;
 
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("20!!!");
 			Description.SetDefault("");

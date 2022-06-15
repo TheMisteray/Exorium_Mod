@@ -5,6 +5,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.Bestiary;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -14,28 +16,28 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 4;
+            Main.npcFrameCount[NPC.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            npc.aiStyle = -1;
-            npc.lifeMax = 1000;
-            npc.damage = 16;
-            npc.defense = 7;
-            npc.knockBackResist = .3f;
-            npc.width = 64;
-            npc.height = 80;
-            npc.value = Item.buyPrice(0, 1, 0, 0);
-            npc.HitSound = SoundID.NPCHit41;
-            npc.DeathSound = SoundID.NPCDeath43 ;
-            npc.timeLeft = NPC.activeTime * 30;
-            for (int k = 0; k < npc.buffImmune.Length; k++)
+            NPC.aiStyle = -1;
+            NPC.lifeMax = 1000;
+            NPC.damage = 16;
+            NPC.defense = 7;
+            NPC.knockBackResist = .3f;
+            NPC.width = 64;
+            NPC.height = 80;
+            NPC.value = Item.buyPrice(0, 1, 0, 0);
+            NPC.HitSound = SoundID.NPCHit41;
+            NPC.DeathSound = SoundID.NPCDeath43 ;
+            NPC.timeLeft = NPC.activeTime * 30;
+            for (int k = 0; k < NPC.buffImmune.Length; k++)
             {
-                npc.buffImmune[k] = true;
+                NPC.buffImmune[k] = true;
             }
-            npc.noGravity = true;
-            npc.noTileCollide = true;
+            NPC.noGravity = true;
+            NPC.noTileCollide = true;
         }
 
         int[] gemsparklings = new int[7];
@@ -44,8 +46,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public float aiState
         {
-            get => npc.ai[0];
-            set => npc.ai[0] = value;
+            get => NPC.ai[0];
+            set => NPC.ai[0] = value;
         }
         // 0 - closed
         // 1 - open
@@ -53,20 +55,20 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public float effectiveDamageTaken
         {
-            get => npc.ai[1];
-            set => npc.ai[1] = value;
+            get => NPC.ai[1];
+            set => NPC.ai[1] = value;
         }
 
         public bool setGemsparklings
         {
-            get => npc.ai[2] == 1f;
-            set => npc.ai[2] = value ? 1f : 0f;
+            get => NPC.ai[2] == 1f;
+            set => NPC.ai[2] = value ? 1f : 0f;
         }
 
         public bool checkSparklings
         {
-            get => npc.ai[3] == 1f;
-            set => npc.ai[3] = value ? 1f : 0f;
+            get => NPC.ai[3] == 1f;
+            set => NPC.ai[3] = value ? 1f : 0f;
         }
 
         public float timer = 0;
@@ -78,35 +80,35 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             if (!setGemsparklings && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                gemsparklings[0] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmethystGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
-                gemsparklings[1] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<TopazGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
-                gemsparklings[2] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<SapphireGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
-                gemsparklings[3] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<EmeraldGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
-                gemsparklings[4] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<RubyGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
-                gemsparklings[5] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<DiamondGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
-                gemsparklings[6] = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCType<AmberGemsparkling>(), 0, 0, 5, 0, npc.whoAmI, npc.target);
+                gemsparklings[0] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<AmethystGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
+                gemsparklings[1] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<TopazGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
+                gemsparklings[2] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<SapphireGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
+                gemsparklings[3] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<EmeraldGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
+                gemsparklings[4] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<RubyGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
+                gemsparklings[5] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<DiamondGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
+                gemsparklings[6] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<AmberGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
                 setGemsparklings = true;
             }
 
             #region Targeting
             if (Main.netMode != 1)
             {
-                npc.TargetClosest(true);
-                npc.netUpdate = true;
+                NPC.TargetClosest(true);
+                NPC.netUpdate = true;
             }
 
-            Player player = Main.player[npc.target];
-            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (npc.position - player.position).Length() > 3000)
+            Player player = Main.player[NPC.target];
+            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 3000)
             {
-                npc.TargetClosest(true);
-                npc.netUpdate = true;
-                player = Main.player[npc.target];
-                if (!player.active || player.dead || (npc.position - player.position).Length() > 3000)
+                NPC.TargetClosest(true);
+                NPC.netUpdate = true;
+                player = Main.player[NPC.target];
+                if (!player.active || player.dead || (NPC.position - player.position).Length() > 3000)
                 {
-                    npc.velocity = new Vector2(0f, 10f);
-                    if (npc.timeLeft > 10)
+                    NPC.velocity = new Vector2(0f, 10f);
+                    if (NPC.timeLeft > 10)
                     {
-                        npc.timeLeft = 10;
+                        NPC.timeLeft = 10;
                     }
                     return;
                 }
@@ -170,8 +172,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         private void OpenAI(Player player)
         {
-            npc.aiAction = 1;
-            npc.velocity *= .9f;
+            NPC.aiAction = 1;
+            NPC.velocity *= .9f;
             if (timer > 900)
             {
                 foreach (int i in gemsparklings)
@@ -193,7 +195,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                         sparkNpc.ai[1] = 5;
                 }
                 aiState = 0;
-                npc.velocity = new Vector2(0, 10);
+                NPC.velocity = new Vector2(0, 10);
                 timer = 0;
             }
         }
@@ -206,18 +208,18 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 if (CheckSparkling(sparkNpc))
                     sparkNpc.ai[1] = 5;
             }
-            npc.aiAction = 0;
-            if ((player.Center - npc.Center).X >= 0 && rotatorSpeed < .06f)
+            NPC.aiAction = 0;
+            if ((player.Center - NPC.Center).X >= 0 && rotatorSpeed < .06f)
             {
                 rotatorSpeed += .005f;
             }
-            else if ((player.Center - npc.Center).X < 0 && rotatorSpeed > -.06f)
+            else if ((player.Center - NPC.Center).X < 0 && rotatorSpeed > -.06f)
             {
                 rotatorSpeed -= .005f;
             }
             else
                 rotatorSpeed *= .96f;
-            npc.rotation += rotatorSpeed;
+            NPC.rotation += rotatorSpeed;
 
             float speed = 14f;
             float inertia = 100f;
@@ -225,17 +227,17 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             //Movement
             if (player.active)
             {
-                float between = Vector2.Distance(player.Center, npc.Center);
+                float between = Vector2.Distance(player.Center, NPC.Center);
                 if (between > 80f)
                 {
-                    Vector2 direction = player.Center - npc.Center;
+                    Vector2 direction = player.Center - NPC.Center;
                     direction.Normalize();
                     direction *= speed;
-                    npc.velocity = (npc.velocity * (inertia - 1) + direction) / inertia;
+                    NPC.velocity = (NPC.velocity * (inertia - 1) + direction) / inertia;
                 }
             }
             else
-                npc.velocity *= 1.02f;
+                NPC.velocity *= 1.02f;
 
             if (timer >= 300)
             {
@@ -246,7 +248,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         private void DashAI(Player player)
         {
-            npc.aiAction = 0;
+            NPC.aiAction = 0;
             if (timer >= 150)
             {
                 aiState = 0;
@@ -261,19 +263,19 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 //Movement
                 if (player.active)
                 {
-                    Vector2 direction = player.Center - npc.Center;
+                    Vector2 direction = player.Center - NPC.Center;
                     direction.Normalize();
                     direction *= speed;
-                    npc.velocity = (npc.velocity * (inertia - 1) + direction) / inertia;
+                    NPC.velocity = (NPC.velocity * (inertia - 1) + direction) / inertia;
                 }
                 else
-                    npc.velocity *= 1.01f;
+                    NPC.velocity *= 1.01f;
             }
             else
             {
                 rotatorSpeed *= 1.01f;
-                npc.rotation += rotatorSpeed;
-                npc.velocity *= 0.92f;
+                NPC.rotation += rotatorSpeed;
+                NPC.velocity *= 0.92f;
             }
         }
 
@@ -284,31 +286,31 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         /// <returns>if living gemsparking</returns>
         private bool CheckSparkling(NPC sparkNpc)
         {
-            if (sparkNpc.active && sparkNpc.modNPC is Gemsparkling)
+            if (sparkNpc.active && sparkNpc.ModNPC is Gemsparkling)
                 return true;
             return false;
         }
 
         public override void FindFrame(int frameHeight)
         {
-            if (npc.aiAction == 1)
+            if (NPC.aiAction == 1)
             {
-                if (npc.frame.Y == 0)
+                if (NPC.frame.Y == 0)
                 {
-                    npc.frameCounter = 0;
-                    npc.frame.Y = 1 * frameHeight;
+                    NPC.frameCounter = 0;
+                    NPC.frame.Y = 1 * frameHeight;
                 }
-                if (npc.frame.Y < 3 * frameHeight && npc.frameCounter%10 == 0)
+                if (NPC.frame.Y < 3 * frameHeight && NPC.frameCounter%10 == 0)
                 {
-                    npc.frame.Y += frameHeight;
+                    NPC.frame.Y += frameHeight;
                 }
             }
             else
             {
-                if (npc.frame.Y != 0 && npc.frameCounter % 10 == 0)
-                    npc.frame.Y -= frameHeight;
+                if (NPC.frame.Y != 0 && NPC.frameCounter % 10 == 0)
+                    NPC.frame.Y -= frameHeight;
             }
-            npc.frameCounter++;
+            NPC.frameCounter++;
         }
 
         public override bool StrikeNPC(ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
@@ -317,7 +319,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 effectiveDamageTaken += (float)damage;
             if (aiState != 0)
                 knockback = 0;
-            npc.life = npc.lifeMax;
+            NPC.life = NPC.lifeMax;
             return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
         }
 
@@ -325,8 +327,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             if (aiState == 1)
                 return false;
-            float dist = Vector2.Distance(target.Center, npc.Center);
-            if (dist < target.width + npc.width)
+            float dist = Vector2.Distance(target.Center, NPC.Center);
+            if (dist < target.width + NPC.width)
                 return true;
             return false;
         }
@@ -351,35 +353,47 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 aiState = 0;
                 if (numSparks == 0)
                 {
-                    npc.StrikeNPC(9999, 0, 0, true);
-                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 9999, 0, 0, 1);
+                    NPC.StrikeNPC(9999, 0, 0, true);
+                    NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, NPC.whoAmI, 9999, 0, 0, 1);
                 }
             }
         }
 
-        public override void NPCLoot()
+        public override void OnKill()
         {
-            Item.NewItem(npc.getRect(), ItemID.Amethyst, Main.rand.Next(8, 16));
-            Item.NewItem(npc.getRect(), ItemID.Topaz, Main.rand.Next(8, 16));
-            Item.NewItem(npc.getRect(), ItemID.Emerald, Main.rand.Next(4, 10));
-            Item.NewItem(npc.getRect(), ItemID.Sapphire, Main.rand.Next(4, 10));
-            Item.NewItem(npc.getRect(), ItemID.Ruby, Main.rand.Next(3, 8));
-            Item.NewItem(npc.getRect(), ItemID.Diamond, Main.rand.Next(2, 5));
-            Item.NewItem(npc.getRect(), ItemID.Amber, Main.rand.Next(1, 3));
-            Item.NewItem(npc.getRect(), ItemID.StoneBlock, Main.rand.Next(10, 31));
-            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore1"), npc.scale);
-            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore2"), npc.scale);
-            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore3"), npc.scale);
-            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore4"), npc.scale);
-            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore5"), npc.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>(Name + "_gore1").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>(Name + "_gore2").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>(Name + "_gore3").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>(Name + "_gore4").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>(Name + "_gore5").Type, NPC.scale);
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            Vector2 drawCenter = npc.Center;
+            npcLoot.Add(ItemDropRule.Common(ItemID.Amethyst, 1, 8, 15));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Topaz, 1, 8, 15));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Emerald, 1, 4, 9));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Sapphire, 1, 4, 9));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Ruby, 1, 3, 7));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Diamond, 1, 2, 4));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Amber, 1, 1, 2));
+            npcLoot.Add(ItemDropRule.Common(ItemID.StoneBlock, 1, 10, 30));
+
+            base.ModifyNPCLoot(npcLoot);
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Vector2 drawCenter = NPC.Center;
             drawCenter.Y += 4;
-            spriteBatch.Draw(GetTexture(AssetDirectory.GemsparklingHive + Name + "_Glow"), drawCenter - Main.screenPosition, new Rectangle(0, npc.frame.Y, npc.width, npc.height), Color.White, npc.rotation, new Vector2(npc.width, npc.height) / 2f, 1f, SpriteEffects.None, 0);
-            base.PostDraw(spriteBatch, drawColor);
+            spriteBatch.Draw(Request<Texture2D>(AssetDirectory.GemsparklingHive + Name + "_Glow").Value, drawCenter - screenPos, new Rectangle(0, NPC.frame.Y, NPC.width, NPC.height), Color.White, NPC.rotation, new Vector2(NPC.width, NPC.height) / 2f, 1f, SpriteEffects.None, 0);
+            base.PostDraw(spriteBatch, screenPos, drawColor);
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.Add(
+            new FlavorTextBestiaryInfoElement("This hollowed out rock is home to a species of living gemstones. To harvest its gemstones on its surface you will have to deal with its inhabitants."));
         }
     }
 }

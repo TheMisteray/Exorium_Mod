@@ -42,43 +42,43 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                     if (!WorldGen.InWorld(k, l))
                         break;
                     Tile tile = Framing.GetTileSafely(k, l);
-                    tile.liquid = 0;
+                    tile.LiquidAmount = 0;
                     switch (_fallenTowerShape[y, x])
                     {
                         case 0:
-                            tile.active(false);
+                            tile.HasTile = false;
                             WorldGen.KillTile(k, l);
-                            tile.wall = (ushort)WallType<CharredObsidianWall>();
+                            tile.WallType = (ushort)WallType<CharredObsidianWall>();
                             break;
                         case 1:
-                            tile.active(false);
+                            tile.HasTile = false;
                             WorldGen.KillTile(k, l);
                             WorldGen.PlaceTile(k, l, TileType<CharredObsidianTile>());
-                            tile.slope(0);
+                            tile.Slope = 0;
                             break;
                         case 2:
-                            tile.active(false);
+                            tile.HasTile = false;
                             WorldGen.KillTile(k, l);
                             WorldGen.PlaceTile(k, l, TileType<CharredObsidianPlatformTile>());
-                            tile.wall = (ushort)WallType<CharredObsidianWall>();
+                            tile.WallType = (ushort)WallType<CharredObsidianWall>();
                             break;
                         case 3:
-                            tile.active(false);
+                            tile.HasTile = false;
                             WorldGen.KillTile(k, l);
-                            tile.wall = (ushort)WallType<CharredObsidianWall>();
+                            tile.WallType = (ushort)WallType<CharredObsidianWall>();
                             WorldGen.PlaceTile(k, l, TileID.Torches);
                             break;
                         case 4:
-                            tile.active(false);
+                            tile.HasTile = false;
                             WorldGen.KillTile(k, l);
                             WorldGen.PlaceTile(k, l, TileType<CharredObsidianTile>());
-                            tile.slope(2);
+                            tile.Slope = SlopeType.SlopeDownRight;
                             break;
                         case 5:
-                            tile.active(false);
+                            tile.HasTile = false;
                             WorldGen.KillTile(k, l);
                             WorldGen.PlaceTile(k, l, TileType<CharredObsidianTile>());
-                            tile.slope(1);
+                            tile.Slope = SlopeType.SlopeDownLeft;
                             break;
                         default:
                             break;
@@ -96,7 +96,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                         Tile tile = Framing.GetTileSafely(k, l);
                         WorldGen.KillTile(k, l);
                         if (a != 0 && a != _fallenTowerShape.GetLength(1) - (SIDE_GAP_WIDTH * 2) - 1) // no wall on the far sides so they don't bleed out
-                            tile.wall = (ushort)WallType<CharredObsidianWall>();
+                            tile.WallType = (ushort)WallType<CharredObsidianWall>();
                         WorldGen.PlaceTile(k, l, TileType<CharredObsidianTile>());
                     }
                 }

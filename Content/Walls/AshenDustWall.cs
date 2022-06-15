@@ -6,13 +6,9 @@ namespace ExoriumMod.Content.Walls
 {
     class AshenDustWall : ModWall
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Wall + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Wall + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             AddMapEntry(new Color(110, 110, 110));
         }

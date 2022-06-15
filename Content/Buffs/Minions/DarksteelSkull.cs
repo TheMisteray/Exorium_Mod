@@ -7,13 +7,9 @@ namespace ExoriumMod.Content.Buffs.Minions
 {
     class DarksteelSkull : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.MinionBuff + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.MinionBuff + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Mordite Skull");
             Description.SetDefault("The Darksteel skull will fight for you \n" +
@@ -27,7 +23,7 @@ namespace ExoriumMod.Content.Buffs.Minions
             if (player.ownedProjectileCounts[ProjectileType<Projectiles.Minions.DarksteelSkullSummon>()] > 0)
             {
                 player.buffTime[buffIndex] = 18000;
-                player.minionDamage += player.ownedProjectileCounts[ProjectileType<Projectiles.Minions.DarksteelSkullSummon>()] * .03f;
+                player.GetDamage(DamageClass.Summon) += player.ownedProjectileCounts[ProjectileType<Projectiles.Minions.DarksteelSkullSummon>()] * .03f;
             }
             else
             {

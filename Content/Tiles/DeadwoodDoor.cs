@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -13,13 +14,9 @@ namespace ExoriumMod.Content.Tiles
     {
         public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
 
-        public override bool Autoload(ref string name, ref string texture)
-        {
-			texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+		public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.tileFrameImportant[Type] = true;
 			Main.tileSolid[Type] = false;
@@ -70,13 +67,13 @@ namespace ExoriumMod.Content.Tiles
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("Deadwood Door");
 			AddMapEntry(new Color(90, 90, 90), name);
-			dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
-			disableSmartCursor = true;
-			adjTiles = new int[] { TileID.OpenDoor };
-			closeDoorID = ModContent.TileType<DeadwoodDoorClosed>();
+			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
+			TileID.Sets.DisableSmartCursor[Type] = true;
+			AdjTiles = new int[] { TileID.OpenDoor };
+			CloseDoorID = ModContent.TileType<DeadwoodDoorClosed>();
 		}
 
-		public override bool HasSmartInteract()
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
@@ -88,15 +85,15 @@ namespace ExoriumMod.Content.Tiles
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 32, 48, ModContent.ItemType<Items.TileItems.DeadwoodDoor>());
+			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 48, ModContent.ItemType<Items.TileItems.DeadwoodDoor>());
 		}
 
 		public override void MouseOver(int i, int j)
 		{
 			Player player = Main.LocalPlayer;
 			player.noThrow = 2;
-			player.showItemIcon = true;
-			player.showItemIcon2 = ModContent.ItemType<Items.TileItems.DeadwoodDoor>();
+			player.cursorItemIconEnabled = true;
+			player.cursorItemIconID = ModContent.ItemType<Items.TileItems.DeadwoodDoor>();
 		}
 	}
 
@@ -104,13 +101,9 @@ namespace ExoriumMod.Content.Tiles
     {
         public override string HighlightTexture => AssetDirectory.Tile + "DarkbrickDoorClosed_Highlight";
 
-        public override bool Autoload(ref string name, ref string texture)
-        {
-			texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
 		{
 			Main.tileFrameImportant[Type] = true;
 			Main.tileBlockLight[Type] = true;
@@ -141,13 +134,13 @@ namespace ExoriumMod.Content.Tiles
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("Deadwood Door");
 			AddMapEntry(new Color(90, 90, 90), name);
-			dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
-			disableSmartCursor = true;
-			adjTiles = new int[] { TileID.ClosedDoor };
-			openDoorID = ModContent.TileType<DeadwoodDoorOpen>();
+			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
+			TileID.Sets.DisableSmartCursor[Type] = true;
+			AdjTiles = new int[] { TileID.ClosedDoor };
+			OpenDoorID = ModContent.TileType<DeadwoodDoorOpen>();
 		}
 
-		public override bool HasSmartInteract()
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
@@ -159,15 +152,15 @@ namespace ExoriumMod.Content.Tiles
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 16, 48, ModContent.ItemType<Items.TileItems.DeadwoodDoor>());
+			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 48, ModContent.ItemType<Items.TileItems.DeadwoodDoor>());
 		}
 
 		public override void MouseOver(int i, int j)
 		{
 			Player player = Main.LocalPlayer;
 			player.noThrow = 2;
-			player.showItemIcon = true;
-			player.showItemIcon2 = ModContent.ItemType<Items.TileItems.DeadwoodDoor>();
+			player.cursorItemIconEnabled = true;
+			player.cursorItemIconID = ModContent.ItemType<Items.TileItems.DeadwoodDoor>();
 		}
 	}
 }

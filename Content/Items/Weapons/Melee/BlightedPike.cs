@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
 using ExoriumMod.Helpers;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -20,44 +21,43 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.damage = 22;
-            item.melee = true;
-            item.width = 80;
-            item.height = 80;
-            item.useTime = 36;
-            item.shootSpeed = 3.7f;
-            item.useAnimation = 20;
-            item.useStyle = 5;
-            item.knockBack = 5;
-            item.value = Item.sellPrice(silver: 68);
-            item.rare = 2;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-            item.noMelee = true;
-            item.noUseGraphic = true;
-            item.shoot = ProjectileType<BlightedPikeProj>();
+            Item.damage = 22;
+            Item.DamageType = DamageClass.Melee;
+            Item.width = 80;
+            Item.height = 80;
+            Item.useTime = 36;
+            Item.shootSpeed = 3.7f;
+            Item.useAnimation = 20;
+            Item.useStyle = 5;
+            Item.knockBack = 5;
+            Item.value = Item.sellPrice(silver: 68);
+            Item.rare = 2;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
+            Item.noMelee = true;
+            Item.noUseGraphic = true;
+            Item.shoot = ProjectileType<BlightedPikeProj>();
         }
 
 
         public override bool CanUseItem(Player player)
         {
-            return player.ownedProjectileCounts[item.shoot] < 1;
+            return player.ownedProjectileCounts[Item.shoot] < 1;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(position.X, position.Y, speedX * 3, speedY * 3, mod.ProjectileType("BlightHail"), damage, knockBack, player.whoAmI); //fires additional projectile
+            Projectile.NewProjectile(source, position.X, position.Y, velocity.X * 3, velocity.Y * 3, Mod.Find<ModProjectile>("BlightHail").Type, damage, knockback, player.whoAmI); //fires additional projectile
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
             recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 6);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
     class BlightedPikeProj : ModProjectile
@@ -66,40 +66,40 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            projectile.width = 18;
-            projectile.height = 18;
-            projectile.aiStyle = 19;
-            projectile.penetrate = -1;
-            projectile.scale = 1.3f;
-            projectile.alpha = 0;
-            projectile.hide = true;
-            projectile.ownerHitCheck = true;
-            projectile.melee = true;
-            projectile.tileCollide = false;
-            projectile.friendly = true;
+            Projectile.width = 18;
+            Projectile.height = 18;
+            Projectile.aiStyle = 19;
+            Projectile.penetrate = -1;
+            Projectile.scale = 1.3f;
+            Projectile.alpha = 0;
+            Projectile.hide = true;
+            Projectile.ownerHitCheck = true;
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.tileCollide = false;
+            Projectile.friendly = true;
         }
 
         public float movementFactor //Speed of attack
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public override void AI()
         {
-            Player spearUser = Main.player[projectile.owner];
+            Player spearUser = Main.player[Projectile.owner];
             Vector2 ownerMountedCenter = spearUser.RotatedRelativePoint(spearUser.MountedCenter, true);
-            projectile.direction = spearUser.direction;
-            spearUser.heldProj = projectile.whoAmI;
+            Projectile.direction = spearUser.direction;
+            spearUser.heldProj = Projectile.whoAmI;
             spearUser.itemTime = spearUser.itemAnimation;
-            projectile.position.X = ownerMountedCenter.X - (float)(projectile.width / 2);
-            projectile.position.Y = ownerMountedCenter.Y - (float)(projectile.height / 2);
+            Projectile.position.X = ownerMountedCenter.X - (float)(Projectile.width / 2);
+            Projectile.position.Y = ownerMountedCenter.Y - (float)(Projectile.height / 2);
             if (!spearUser.frozen) //prevents spear from moving is owner is frozen
             {
                 if (movementFactor == 0f)
                 {
                     movementFactor = 3f; // Forward
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
                 if (spearUser.itemAnimation < spearUser.itemAnimationMax / 3) // Back
                 {
@@ -111,24 +111,24 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 }
             }
 
-            projectile.position += projectile.velocity * movementFactor;
+            Projectile.position += Projectile.velocity * movementFactor;
 
             if (spearUser.itemAnimation == 0)
             {
-                projectile.Kill();
+                Projectile.Kill();
             }
 
-            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(135f);
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(135f);
 
-            if (projectile.spriteDirection == -1)
+            if (Projectile.spriteDirection == -1)
             {
-                projectile.rotation -= MathHelper.ToRadians(90f);
+                Projectile.rotation -= MathHelper.ToRadians(90f);
             }
 
             if (Main.rand.NextBool(3))
             {
-                Dust dust = Dust.NewDustDirect(projectile.position, projectile.height, projectile.width, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.1f, projectile.velocity.Y * 0.1f, 200, Scale: 1.1f);
-                dust.velocity += projectile.velocity * 0.2f;
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.height, Projectile.width, DustType<Dusts.BlightDust>(), Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 200, Scale: 1.1f);
+                dust.velocity += Projectile.velocity * 0.2f;
                 dust.velocity *= 0.2f;
             }
         }
@@ -140,16 +140,16 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            projectile.width = 40;
-            projectile.height = 40;
-            projectile.alpha = 255;
-            projectile.timeLeft = 30;
-            projectile.penetrate = -1;
-            projectile.friendly = true;
-            projectile.melee = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.scale = 0.7f;
+            Projectile.width = 40;
+            Projectile.height = 40;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 30;
+            Projectile.penetrate = -1;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.scale = 0.7f;
         }
 
         public override void AI()
@@ -157,7 +157,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             //projectile.velocity.Y += projectile.ai[0];
             for (int i = 0; i < 4; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.BlightDust>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
         }
     }

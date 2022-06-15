@@ -14,26 +14,26 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetDefaults()
         {
-            projectile.width = 8;
-            projectile.height = 8;
-            projectile.aiStyle = -1;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 255;
-            projectile.timeLeft = 600;
-            projectile.penetrate = -1;
-            projectile.tileCollide = false;
+            Projectile.width = 8;
+            Projectile.height = 8;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 600;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
         }
 
         public float color
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.GemsparklingHive + Name).Value;
 
             Color c;
 
@@ -65,8 +65,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     break;
             }
 
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, c, projectile.velocity.ToRotation(), new Vector2(tex.Width/2, tex.Height/2), 1, SpriteEffects.None, 0f);
-            base.PostDraw(spriteBatch, lightColor);
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, c, Projectile.velocity.ToRotation(), new Vector2(tex.Width/2, tex.Height/2), 1, SpriteEffects.None, 0);
+            base.PostDraw(lightColor);
         }
     }
 }

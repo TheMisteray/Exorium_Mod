@@ -17,12 +17,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetDefaults()
         {
-            item.maxStack = 30;
-            item.consumable = true;
-            item.width = 24;
-            item.height = 24;
-            item.rare = -12;
-            item.expert = true;
+            Item.maxStack = 30;
+            Item.consumable = true;
+            Item.width = 24;
+            Item.height = 24;
+            Item.rare = -12;
+            Item.expert = true;
         }
 
         public override bool CanRightClick()
@@ -33,23 +33,23 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void OpenBossBag(Player player)
         {
             if (Main.rand.NextBool(1))
-                player.QuickSpawnItem(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
+                player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
             else
-                player.QuickSpawnItem(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), Main.rand.Next(1, 3));
-            player.QuickSpawnItem(ItemType<Items.Weapons.Ranger.AcidOrb>(), Main.rand.Next(21, 43));
+                player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), Main.rand.Next(1, 3));
+            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Ranger.AcidOrb>(), Main.rand.Next(21, 43));
             switch (Main.rand.Next(3))
             {
                 case 0:
-                    player.QuickSpawnItem(ItemType<Items.Weapons.Magic.ShadowBolt>());
+                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Magic.ShadowBolt>());
                     break;
                 case 1:
-                    player.QuickSpawnItem(ItemType<Items.Weapons.Melee.NineLivesStealer>());
+                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Melee.NineLivesStealer>());
                     break;
                 case 2:
-                    player.QuickSpawnItem(ItemType<Items.Weapons.Summoner.ShadowOrb>(), Main.rand.Next(18, 24));
+                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Summoner.ShadowOrb>(), Main.rand.Next(18, 24));
                     break;
             }
-            player.QuickSpawnItem(ItemType<Items.Accessories.ShadowmancerCloak>());
+            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Accessories.ShadowmancerCloak>());
         }
 
         public override int BossBagNPC => NPCType<AssierJassad>();

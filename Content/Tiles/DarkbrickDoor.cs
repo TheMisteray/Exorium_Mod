@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -15,13 +16,9 @@ namespace ExoriumMod.Content.Tiles
     {
         public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
 
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileBlockLight[Type] = true;
@@ -54,31 +51,31 @@ namespace ExoriumMod.Content.Tiles
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("");
             AddMapEntry(new Color(50, 50, 50), name);
-            disableSmartCursor = true;
-            adjTiles = new int[] { TileID.ClosedDoor };
-            openDoorID = TileType<DarkbrickDoorOpen>();
-            minPick = 110;
+            TileID.Sets.DisableSmartCursor[Type] = true;
+            AdjTiles = new int[] { TileID.ClosedDoor };
+            OpenDoorID = TileType<DarkbrickDoorOpen>();
+            MinPick = 110;
         }
 
-        public override bool HasSmartInteract()
+        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
         {
             return true;
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 48, ItemType<Items.TileItems.DarkbrickDoor>());
+            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 48, ItemType<Items.TileItems.StructureTileItems.ShadowmancerTileItems.DarkbrickDoor>());
         }
 
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
-            player.showItemIcon = true;
-            player.showItemIcon2 = ItemType<Items.TileItems.DarkbrickDoor>();
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = ItemType<Items.TileItems.StructureTileItems.ShadowmancerTileItems.DarkbrickDoor>();
         }
 
-        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex)
+        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
             if (NPC.AnyNPCs(NPCType<Bosses.Shadowmancer.AssierJassad>()) && Main.rand.NextBool(1))
                 Dust.NewDust(new Vector2(i * 16 + 4, j * 16 + 2), 4, 4, DustType<Dusts.Shadow>(), 0f, 0f, 100, default(Color), 1f);
@@ -94,13 +91,9 @@ namespace ExoriumMod.Content.Tiles
     {
         public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
 
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileSolid[Type] = false;
@@ -153,13 +146,13 @@ namespace ExoriumMod.Content.Tiles
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("");
             AddMapEntry(new Color(50, 50, 50), name);
-            disableSmartCursor = true;
-            adjTiles = new int[] { TileID.OpenDoor };
-            closeDoorID = TileType<DarkbrickDoorClosed>();
-            minPick = 110;
+            TileID.Sets.DisableSmartCursor[Type] = true;
+            AdjTiles = new int[] { TileID.OpenDoor };
+            CloseDoorID = TileType<DarkbrickDoorClosed>();
+            MinPick = 110;
         }
 
-        public override bool HasSmartInteract()
+        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
         {
             return true;
         }
@@ -171,15 +164,15 @@ namespace ExoriumMod.Content.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 32, 48, ItemType<Items.TileItems.DarkbrickDoor>());
+            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 48, ItemType<Items.TileItems.StructureTileItems.ShadowmancerTileItems.DarkbrickDoor>());
         }
 
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
-            player.showItemIcon = true;
-            player.showItemIcon2 = ItemType<Items.TileItems.DarkbrickDoor>();
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = ItemType<Items.TileItems.StructureTileItems.ShadowmancerTileItems.DarkbrickDoor>();
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
@@ -190,7 +183,7 @@ namespace ExoriumMod.Content.Tiles
                 Main.tileSolid[Type] = false;
         }
 
-        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex)
+        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
             if (NPC.AnyNPCs(NPCType<Bosses.Shadowmancer.AssierJassad>()) && Main.rand.NextBool(1))
                 Dust.NewDust(new Vector2(i * 16 + 4, j * 16 + 2), 4, 4, DustType<Dusts.Shadow>(), 0f, 0f, 100, default(Color), 1f);

@@ -10,13 +10,9 @@ namespace ExoriumMod.Content.Tiles
 {
     class DeadwoodPlatformTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileSolidTop[Type] = true;
@@ -36,11 +32,11 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
             AddMapEntry(new Color(40, 40, 40));
-            drop = ItemType<Items.TileItems.DeadwoodPlatform>();
-            disableSmartCursor = true;
-            adjTiles = new int[] { TileID.Platforms };
-            dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
-            Main.dust[dustType].color = new Color(40, 40, 40);
+            ItemDrop = ItemType<Items.TileItems.DeadwoodPlatform>();
+            TileID.Sets.DisableSmartCursor[Type] = true;
+            AdjTiles = new int[] { TileID.Platforms };
+            DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
+            Main.dust[DustType].color = new Color(40, 40, 40);
         }
     }
 }

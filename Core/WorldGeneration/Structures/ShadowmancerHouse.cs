@@ -2,7 +2,7 @@
 using Terraria;
 using static Terraria.ModLoader.ModContent;
 using ExoriumMod.Content.Tiles;
-using ExoriumMod.Content.Walls;
+using ExoriumMod.Content.Walls.StructureWalls.ShadowmancerWalls;
 
 namespace ExoriumMod.Core.WorldGeneration.Structures
 {
@@ -36,7 +36,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                     int k = i + x;
                     int l = j + y;
                     Tile tile = Framing.GetTileSafely(k, l);
-                    tile.liquid = 0;
+                    tile.LiquidAmount = 0;
                     switch (_shadowhouseShape[y, x])
                     {
                         case 0:
@@ -45,24 +45,24 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                         case 1:
                             WorldGen.KillTile(k, l);
                             WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
-                            tile.slope(0);
+                            tile.Slope = 0;
                             break;
                         case 2:
                             WorldGen.KillTile(k, l);
                             WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
-                            tile.slope(2);
+                            tile.Slope = Terraria.ID.SlopeType.SlopeDownRight;
                             break;
                         case 3:
                             WorldGen.KillTile(k, l);
                             WorldGen.PlaceTile(k, l, TileType<DarkBrickTile>());
-                            tile.slope(1);
+                            tile.Slope = Terraria.ID.SlopeType.SlopeDownLeft;
                             break;
                     }
 
                     switch (_shadowhouseWall[y, x])
                     {
                         case 1:
-                            tile.wall = (ushort)WallType<DarkBrickWall>();
+                            tile.WallType = (ushort)WallType<DarkBrickWall>();
                             break;
                     }
                 }
@@ -108,7 +108,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
             for (int chestIndex = 0; chestIndex < 1000; chestIndex++)
             {
                 Chest chest = Main.chest[chestIndex];
-                if (chest != null && Framing.GetTileSafely(chest.x, chest.y).type == TileType<CrateTile>())
+                if (chest != null && Framing.GetTileSafely(chest.x, chest.y).TileType == TileType<CrateTile>())
                 {
                     int item = Main.rand.Next(rareCrateItem.GetLength(1));
                     chest.item[0].SetDefaults(rareCrateItem[0, item]);

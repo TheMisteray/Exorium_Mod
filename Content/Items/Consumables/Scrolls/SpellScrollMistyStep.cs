@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Consumables.Scrolls
 {
@@ -19,22 +20,22 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.useAnimation = 30;
-            item.useTime = 30;
-            item.useTurn = true;
-            item.useStyle = 4;
-            item.UseSound = SoundID.Item4;
-            item.maxStack = 30;
-            item.consumable = true;
-            item.rare = 2;
-            item.mana = 50;
-            item.maxStack = 30;
-            item.value = Item.buyPrice(gold: 5);
-            item.noUseGraphic = true;
-            item.shoot = 10;
-            item.scale = .5f;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useAnimation = 30;
+            Item.useTime = 30;
+            Item.useTurn = true;
+            Item.useStyle = 4;
+            Item.UseSound = SoundID.Item4;
+            Item.maxStack = 30;
+            Item.consumable = true;
+            Item.rare = 2;
+            Item.mana = 50;
+            Item.maxStack = 30;
+            Item.value = Item.buyPrice(gold: 5);
+            Item.noUseGraphic = true;
+            Item.shoot = 10;
+            Item.scale = .5f;
         }
 
         public override bool CanUseItem(Player player)
@@ -47,7 +48,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 7200);
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             //Dust at player
             Vector2 dustSpeed = new Vector2(0, 3);
@@ -77,18 +78,18 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             Vector2 telePos = new Vector2(mouse.ToTileCoordinates().X, mouse.ToTileCoordinates().Y);
 
             //If teleport spot is bad shorten teleport, (3x4 spot)
-            while ((Main.tile[(int)telePos.X, (int)telePos.Y].active() && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y].type]) ||
-                (Main.tile[(int)telePos.X + 1, (int)telePos.Y].active() && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y].type]) ||
-                (Main.tile[(int)telePos.X, (int)telePos.Y + 1].active() && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y + 1].type]) ||
-                (Main.tile[(int)telePos.X + 1, (int)telePos.Y + 1].active() && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y + 1].type]) ||
-                (Main.tile[(int)telePos.X, (int)telePos.Y + 2].active() && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y + 2].type]) ||
-                (Main.tile[(int)telePos.X + 1, (int)telePos.Y + 2].active() && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y + 2].type]) ||
-                (Main.tile[(int)telePos.X + 2, (int)telePos.Y].active() && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y].type]) ||
-                (Main.tile[(int)telePos.X + 2, (int)telePos.Y + 1].active() && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y + 1].type]) ||
-                (Main.tile[(int)telePos.X + 2, (int)telePos.Y + 2].active() && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y + 2].type]) ||
-                (Main.tile[(int)telePos.X, (int)telePos.Y + 3].active() && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y].type + 3]) ||
-                (Main.tile[(int)telePos.X + 1, (int)telePos.Y + 3].active() && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y + 3].type]) ||
-                (Main.tile[(int)telePos.X + 2, (int)telePos.Y + 3].active() && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y + 3].type]))
+            while ((Main.tile[(int)telePos.X, (int)telePos.Y].HasTile && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y].TileType]) ||
+                (Main.tile[(int)telePos.X + 1, (int)telePos.Y].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y].TileType]) ||
+                (Main.tile[(int)telePos.X, (int)telePos.Y + 1].HasTile && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y + 1].TileType]) ||
+                (Main.tile[(int)telePos.X + 1, (int)telePos.Y + 1].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y + 1].TileType]) ||
+                (Main.tile[(int)telePos.X, (int)telePos.Y + 2].HasTile && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y + 2].TileType]) ||
+                (Main.tile[(int)telePos.X + 1, (int)telePos.Y + 2].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y + 2].TileType]) ||
+                (Main.tile[(int)telePos.X + 2, (int)telePos.Y].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y].TileType]) ||
+                (Main.tile[(int)telePos.X + 2, (int)telePos.Y + 1].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y + 1].TileType]) ||
+                (Main.tile[(int)telePos.X + 2, (int)telePos.Y + 2].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y + 2].TileType]) ||
+                (Main.tile[(int)telePos.X, (int)telePos.Y + 3].HasTile && Main.tileSolid[Main.tile[(int)telePos.X, (int)telePos.Y].TileType + 3]) ||
+                (Main.tile[(int)telePos.X + 1, (int)telePos.Y + 3].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 1, (int)telePos.Y + 3].TileType]) ||
+                (Main.tile[(int)telePos.X + 2, (int)telePos.Y + 3].HasTile && Main.tileSolid[Main.tile[(int)telePos.X + 2, (int)telePos.Y + 3].TileType]))
             {
                 mouse += unit;
                 offset += unit;

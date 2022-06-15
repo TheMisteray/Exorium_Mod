@@ -7,13 +7,9 @@ namespace ExoriumMod.Content.Buffs.Minions
 {
     class BlightSlime : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.MinionBuff + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.MinionBuff + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Mini Blighted Slime");
             Description.SetDefault("The mini blightslime will fight for you");

@@ -15,25 +15,25 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetDefaults()
         {
-            projectile.width = 40;
-            projectile.height = 100;
-            projectile.friendly = false;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 600;
-            projectile.hostile = true;
-            projectile.tileCollide = false;
+            Projectile.width = 40;
+            Projectile.height = 100;
+            Projectile.friendly = false;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 600;
+            Projectile.hostile = true;
+            Projectile.tileCollide = false;
         }
 
         public float TargetPlayer
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public float AIState
         {
-            get => projectile.ai[1];
-            set => projectile.ai[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
         public float TargetPlayerX
@@ -52,72 +52,72 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             switch (AIState)
             {
                 case 0: //Keep given velocity
-                    projectile.rotation = projectile.velocity.ToRotation() - MathHelper.PiOver2;
-                    if (projectile.timeLeft < 540 && Main.netMode != NetmodeID.MultiplayerClient)
+                    Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+                    if (Projectile.timeLeft < 540 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         AIState++;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
                     break;
                 case 1: // Fly above player
                     Vector2 highAbove = new Vector2(0, -1000);
                     Vector2 floatPos = highAbove.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-60, 60)));
-                    projectile.velocity = ((player.Center + floatPos) - projectile.Center) / 30;
-                    projectile.rotation = projectile.velocity.ToRotation() - MathHelper.PiOver2;
-                    if (projectile.timeLeft < 450 && Main.netMode != NetmodeID.MultiplayerClient)
+                    Projectile.velocity = ((player.Center + floatPos) - Projectile.Center) / 30;
+                    Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+                    if (Projectile.timeLeft < 450 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         AIState++;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
                     break;
                 case 2: // Point at player and send indicator
-                    projectile.velocity = Vector2.Zero;
-                    projectile.rotation = (player.Center - projectile.Center).ToRotation() - MathHelper.PiOver2 + MathHelper.ToRadians(Main.rand.NextFloat(-30, 30));
+                    Projectile.velocity = Vector2.Zero;
+                    Projectile.rotation = (player.Center - Projectile.Center).ToRotation() - MathHelper.PiOver2 + MathHelper.ToRadians(Main.rand.NextFloat(-30, 30));
                     //Add indicator
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         AIState++;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
                     break;
                 case 3: // Wait for a moment
-                    if (projectile.timeLeft < 330 && Main.netMode != NetmodeID.MultiplayerClient)
+                    if (Projectile.timeLeft < 330 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         AIState++;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
                     break;
                 case 4: // Shoot forward
                     Vector2 shootForward = new Vector2(0, 34);
-                    Vector2 shoot = shootForward.RotatedBy(projectile.rotation);
-                    projectile.velocity = shoot;
-                    if (projectile.Bottom.Y > player.Center.Y)
-                        projectile.tileCollide = true;
+                    Vector2 shoot = shootForward.RotatedBy(Projectile.rotation);
+                    Projectile.velocity = shoot;
+                    if (Projectile.Bottom.Y > player.Center.Y)
+                        Projectile.tileCollide = true;
                     break;
                 default: // Stay stuck in ground and don't deal damage again
-                    projectile.velocity = Vector2.Zero;
-                    projectile.hostile = false;
+                    Projectile.velocity = Vector2.Zero;
+                    Projectile.hostile = false;
                     break;
             }
         }
 
-        public override bool PreDrawExtras(SpriteBatch spriteBatch)
+        public override bool PreDrawExtras()
         {
             if (AIState == 3)
             {
-                Texture2D tex = GetTexture(AssetDirectory.BlightedSlime + "BlightedThornIndicator");
-                DrawHelper.DrawLaser(spriteBatch, tex, projectile.Center, new Vector2(0, 1).RotatedBy(projectile.rotation), 10, MathHelper.PiOver2, 1);
+                Texture2D tex = Request<Texture2D>(AssetDirectory.BlightedSlime + "BlightedThornIndicator").Value;
+                DrawHelper.DrawLaser(tex, Projectile.Center, new Vector2(0, 1).RotatedBy(Projectile.rotation), 10, MathHelper.PiOver2, 1);
             }
             return true;
         }
 
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
             height = 2;
             fallThrough = false;
             for (int i = 0; i < 2; i++)
             {
-                Dust.NewDust(projectile.position, projectile.width, 1, DustType<Dusts.BlightDust>(), projectile.velocity.X * -1, projectile.velocity.Y * -1);
+                Dust.NewDust(Projectile.position, Projectile.width, 1, DustType<Dusts.BlightDust>(), Projectile.velocity.X * -1, Projectile.velocity.Y * -1);
             }
             return true;
         }
@@ -126,9 +126,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
             for (int i = 0; i < 25; i++)
             {
-                Dust.NewDust(projectile.position, projectile.width, 1, DustType<Dusts.BlightDust>(), projectile.velocity.X * -1, projectile.velocity.Y * -1);
+                Dust.NewDust(Projectile.position, Projectile.width, 1, DustType<Dusts.BlightDust>(), Projectile.velocity.X * -1, Projectile.velocity.Y * -1);
             }
-            projectile.tileCollide = false;
+            Projectile.tileCollide = false;
             //No more AI
             AIState = 5;
             return false;
@@ -138,7 +138,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
             for (int i = 0; i < 20; i++)
             {
-                Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<Dusts.BlightDust>(), projectile.velocity.X * -1, projectile.velocity.Y * -1);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<Dusts.BlightDust>(), Projectile.velocity.X * -1, Projectile.velocity.Y * -1);
             }
         }
     }

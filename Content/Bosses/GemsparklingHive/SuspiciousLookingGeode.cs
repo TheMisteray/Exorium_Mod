@@ -14,34 +14,34 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetDefaults()
         {
-            npc.aiStyle = -1;
-            npc.lifeMax = 150;
-            npc.damage = 0;
-            npc.defense = 7;
-            npc.knockBackResist = 0;
-            npc.width = 64;
-            npc.height = 80;
-            npc.HitSound = SoundID.NPCHit41;
-            npc.DeathSound = SoundID.NPCHit41;
-            npc.timeLeft = NPC.activeTime * 30;
-            for (int k = 0; k < npc.buffImmune.Length; k++)
+            NPC.aiStyle = -1;
+            NPC.lifeMax = 150;
+            NPC.damage = 0;
+            NPC.defense = 7;
+            NPC.knockBackResist = 0;
+            NPC.width = 64;
+            NPC.height = 80;
+            NPC.HitSound = SoundID.NPCHit41;
+            NPC.DeathSound = SoundID.NPCHit41;
+            NPC.timeLeft = NPC.activeTime * 30;
+            for (int k = 0; k < NPC.buffImmune.Length; k++)
             {
-                npc.buffImmune[k] = true;
+                NPC.buffImmune[k] = true;
             }
         }
 
-        public override void NPCLoot()
+        public override void OnKill()
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
-                NPC.NewNPC((int)npc.Center.X, (int)npc.Bottom.Y, NPCType<GemsparklingHive>());
-            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore1"), npc.scale);
-            Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/GemsparklingHive/" + Name + "_gore2"), npc.scale);
-            base.NPCLoot();
+                NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<GemsparklingHive>());
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>(Name + "_gore1").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>(Name + "_gore2").Type, NPC.scale);
+            base.OnKill();
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.player.ZoneRockLayerHeight)
+            if (spawnInfo.Player.ZoneRockLayerHeight)
             {
                 return .005f;
             }

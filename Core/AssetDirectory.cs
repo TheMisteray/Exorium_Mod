@@ -28,6 +28,8 @@ namespace ExoriumMod.Core
 
         public const string Effect = Assets + "Effects/";
 
+        public const string Gore = Assets + "Gores/";
+
         public const string Items = Assets + "Items/";
 
         //Items -------------------------------

@@ -6,16 +6,12 @@ namespace ExoriumMod.Content.Dusts
 {
     class DeadwoodTreeDust : ModDust
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Dust + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Dust + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Dust.CloneDust(7);
-            base.SetDefaults();
+            base.SetStaticDefaults();
         }
     }
 }

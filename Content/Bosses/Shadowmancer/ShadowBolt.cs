@@ -2,6 +2,7 @@
 using ExoriumMod.Content.Dusts;
 using Terraria;
 using Microsoft.Xna.Framework;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -15,44 +16,44 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 30;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 600;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            Projectile.width = 30;
+            Projectile.height = 30;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 600;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
         }
 
         public override void AI()
         {
-            projectile.rotation += .1f;
-            Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
+            Projectile.rotation += .1f;
+            Vector2 delta = Projectile.position - new Vector2(Projectile.position.X + Main.rand.NextFloat(-1, 2), Projectile.position.Y + Main.rand.NextFloat(-1, 2));
             if (Main.rand.NextBool(2))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>(), delta.X, delta.Y);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Shadow>(), delta.X, delta.Y);
             }
             if (Main.rand.NextBool(5))
             {
-                int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), delta.X, delta.Y);
+                int dust0 = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Rainbow>(), delta.X, delta.Y);
                 Main.dust[dust0].color = new Color(200, 0, 0);
             }
         }
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.Item20, projectile.position);
+            SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
         }
 
         public override bool ShouldUpdatePosition()
         {
-            return projectile.timeLeft <= 540;
+            return Projectile.timeLeft <= 540;
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name);
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, Color.White * .2f, projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.Shadowmancer + Name).Value;
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, Color.White * .2f, Projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0);
         }
     }
 }

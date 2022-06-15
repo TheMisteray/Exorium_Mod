@@ -13,26 +13,26 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.friendly = false;
-            projectile.hostile = false;
-            projectile.timeLeft = 1200;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.alpha = 255;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.friendly = false;
+            Projectile.hostile = false;
+            Projectile.timeLeft = 1200;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.alpha = 255;
         }
 
         public float spikeCounter
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public float placeTimer
         {
-            get => projectile.ai[1];
-            set => projectile.ai[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
         public override void AI()
@@ -40,19 +40,19 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             placeTimer++;
             if (placeTimer%60 == 0)
             {
-                Vector2 vector2 = new Vector2(projectile.position.X + (float)(projectile.width / 2), projectile.position.Y + (float)projectile.height);
-                float num1 = projectile.position.X + (float)projectile.width * 0.5f - vector2.X;
-                float num2 = projectile.position.Y + projectile.height * 0.5f - vector2.Y;
+                Vector2 vector2 = new Vector2(Projectile.position.X + (float)(Projectile.width / 2), Projectile.position.Y + (float)Projectile.height);
+                float num1 = Projectile.position.X + (float)Projectile.width * 0.5f - vector2.X;
+                float num2 = Projectile.position.Y + Projectile.height * 0.5f - vector2.Y;
                 float num3 = (float)Math.Sqrt((double)(num1 * num1 + num2 * num2));
                 num3 = 5 / num3;
                 num1 *= num3;
                 num2 *= num3;
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 150, num1, num2, ProjectileType<BlightedSpike>(), projectile.damage, 1, Main.myPlayer, 0, 0);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y - 150, num1, num2, ProjectileType<BlightedSpike>(), Projectile.damage, 1, Main.myPlayer, 0, 0);
                 spikeCounter++;
             }
             if (spikeCounter >= 5)
             {
-                projectile.Kill();
+                Projectile.Kill();
             }
         }
     }

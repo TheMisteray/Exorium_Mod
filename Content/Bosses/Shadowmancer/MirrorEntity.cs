@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Bestiary;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
@@ -16,46 +17,46 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Shadowmancer");
-            Main.npcFrameCount[npc.type] = 7;
+            Main.npcFrameCount[NPC.type] = 7;
         }
 
         public override void SetDefaults()
         {
-            npc.aiStyle = -1;
-            npc.lifeMax = 65;
-            npc.damage = 19;
-            npc.defense = 0;
-            npc.knockBackResist = 0f;
-            npc.width = 42;
-            npc.height = 48;
-            npc.lavaImmune = true;
-            npc.HitSound = SoundID.NPCHit54;
-            npc.DeathSound = SoundID.NPCDeath52;
-            npc.buffImmune[BuffID.OnFire] = true;
-            npc.buffImmune[BuffID.Frostburn] = true;
-            npc.noGravity = true;
-            npc.noTileCollide = true;
+            NPC.aiStyle = -1;
+            NPC.lifeMax = 65;
+            NPC.damage = 19;
+            NPC.defense = 0;
+            NPC.knockBackResist = 0f;
+            NPC.width = 42;
+            NPC.height = 48;
+            NPC.lavaImmune = true;
+            NPC.HitSound = SoundID.NPCHit54;
+            NPC.DeathSound = SoundID.NPCDeath52;
+            NPC.buffImmune[BuffID.OnFire] = true;
+            NPC.buffImmune[BuffID.Frostburn] = true;
+            NPC.noGravity = true;
+            NPC.noTileCollide = true;
         }
 
         private float wait = 90;
 
         public override bool PreAI()
         {
-            if (npc.ai[2] == -1 && Main.netMode != NetmodeID.MultiplayerClient) //Killed by collective Darkness
+            if (NPC.ai[2] == -1 && Main.netMode != NetmodeID.MultiplayerClient) //Killed by collective Darkness
             {
-                npc.StrikeNPC(333, 0, 0, true);
+                NPC.StrikeNPC(333, 0, 0, true);
                 if (Main.netMode != NetmodeID.SinglePlayer)
-                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, npc.whoAmI, 333, 0, 0, 1);
-                npc.active = false;
-                npc.life = -1;
+                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, NPC.whoAmI, 333, 0, 0, 1);
+                NPC.active = false;
+                NPC.life = -1;
             }
             if (wait > 0)
             {
                 if (Main.rand.NextBool(1))
                 {
                     int offset = Main.rand.Next(-12, 13);
-                    new Vector2(npc.position.X + offset, npc.position.Y + offset);
-                    Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustType<Shadow>(), npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f);
+                    new Vector2(NPC.position.X + offset, NPC.position.Y + offset);
+                    Dust.NewDust(NPC.position + NPC.velocity, NPC.width, NPC.height, DustType<Shadow>(), NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f);
                 }
                 wait--;
                 return false;
@@ -65,32 +66,32 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         private float actionCool
         {
-            get => npc.ai[0];
-            set => npc.ai[0] = value;
+            get => NPC.ai[0];
+            set => NPC.ai[0] = value;
         }
 
         private float actionCycle
         {
-            get => npc.ai[1];
-            set => npc.ai[1] = value;
+            get => NPC.ai[1];
+            set => NPC.ai[1] = value;
         }
 
         private float moveTime //unaffected by anything
         {
-            get => npc.ai[2];
-            set => npc.ai[2] = value;
+            get => NPC.ai[2];
+            set => NPC.ai[2] = value;
         }
 
         private float attackProgress
         {
-            get => npc.ai[3];
-            set => npc.ai[3] = value;
+            get => NPC.ai[3];
+            set => NPC.ai[3] = value;
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
-            npc.lifeMax = (int)(npc.lifeMax * 0.7 * bossLifeScale);
-            npc.damage = (int)(npc.damage * 0.8);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.7 * bossLifeScale);
+            NPC.damage = (int)(NPC.damage * 0.8);
         }
 
         private int attackLength;
@@ -113,39 +114,39 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void AI()
         {
-            int damage = npc.damage / (Main.expertMode == true ? 4 : 2);
-            npc.aiAction = 0;
+            int damage = NPC.damage / (Main.expertMode == true ? 4 : 2);
+            NPC.aiAction = 0;
 
             if (Main.netMode != 1)
             {
-                npc.TargetClosest(true);
-                npc.netUpdate = true;
+                NPC.TargetClosest(true);
+                NPC.netUpdate = true;
             }
 
-            Player player = Main.player[npc.target];
-            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (npc.position - player.position).Length() > 2000)
+            Player player = Main.player[NPC.target];
+            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 2000)
             {
-                npc.TargetClosest(true);
-                npc.netUpdate = true;
-                player = Main.player[npc.target];
-                if (!player.active || player.dead || (npc.position - player.position).Length() > 2000)
+                NPC.TargetClosest(true);
+                NPC.netUpdate = true;
+                player = Main.player[NPC.target];
+                if (!player.active || player.dead || (NPC.position - player.position).Length() > 2000)
                 {
-                    npc.velocity = new Vector2(0f, 10f);
-                    if (npc.timeLeft > 10)
+                    NPC.velocity = new Vector2(0f, 10f);
+                    if (NPC.timeLeft > 10)
                     {
-                        npc.timeLeft = 10;
+                        NPC.timeLeft = 10;
                     }
                     return;
                 }
             }
 
-            if (player.position.X + (float)(player.width / 2) > npc.position.X + (float)(npc.width / 2))
+            if (player.position.X + (float)(player.width / 2) > NPC.position.X + (float)(NPC.width / 2))
             {
-                npc.direction = -1;
+                NPC.direction = -1;
             }
             else
             {
-                npc.direction = 1;
+                NPC.direction = 1;
             }
 
             if (Main.netMode != 1 && moveTime > 0)
@@ -153,14 +154,14 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 if (target == 0)
                 {
                     moveTo = player.Center;
-                    npc.aiAction = 0;
-                    npc.TargetClosest(false);
+                    NPC.aiAction = 0;
+                    NPC.TargetClosest(false);
                     moveTo.Y -= Main.rand.NextFloat(0, 201) + 160;
                     moveTo.X += Main.rand.NextFloat(-655, 656);
                     target++;
                 }
-                npc.velocity = (moveTo - npc.Center) / 90;
-                npc.velocity.Y *= 5.5f;
+                NPC.velocity = (moveTo - NPC.Center) / 90;
+                NPC.velocity.Y *= 5.5f;
                 moveTime--;
             }
 
@@ -181,8 +182,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 }
                 attackProgress = 0;
                 target = 0;
-                npc.velocity.X = 0;
-                npc.velocity.Y = 0;
+                NPC.velocity.X = 0;
+                NPC.velocity.Y = 0;
             }
 
             if (Main.netMode != 1 && actionCool > 0f && moveTime <= 0)
@@ -190,11 +191,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 switch (actionCycle)
                 {
                     case 0:
-                        npc.velocity = Vector2.Zero;
-                        npc.aiAction = 1;
+                        NPC.velocity = Vector2.Zero;
+                        NPC.aiAction = 1;
                         if (attackProgress == 0)
                         {
-                            Vector2 delta = player.Center - npc.Center;
+                            Vector2 delta = player.Center - NPC.Center;
                             float magnitude = (float)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
                             if (magnitude > 0)
                             {
@@ -204,35 +205,35 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             {
                                 delta = new Vector2(0f, 5f);
                             }
-                            Projectile.NewProjectile(npc.Center.X + npc.direction * -25, npc.Center.Y, delta.X, delta.Y, ProjectileType<ShadowBolt>(), damage, 2, Main.myPlayer);
-                            npc.netUpdate = true;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + NPC.direction * -25, NPC.Center.Y, delta.X, delta.Y, ProjectileType<ShadowBolt>(), damage, 2, Main.myPlayer);
+                            NPC.netUpdate = true;
                         }
                         break;
                     case 1:
                         if (attackProgress < 300)
                         {
-                            npc.TargetClosest(false);
+                            NPC.TargetClosest(false);
                             moveTo = player.Center;
-                            moveTo.X += 500 * npc.direction;
-                            npc.velocity = (moveTo - npc.Center) / 60;
+                            moveTo.X += 500 * NPC.direction;
+                            NPC.velocity = (moveTo - NPC.Center) / 60;
                         }
                         else if (attackProgress == 300)
                         {
-                            npc.velocity.Y = 0;
-                            npc.velocity.X = -10 * npc.direction;
+                            NPC.velocity.Y = 0;
+                            NPC.velocity.X = -10 * NPC.direction;
                         }
                         else if (attackProgress < 440)
                         {
-                            Vector2 delta = npc.Center - new Vector2(npc.Center.X + Main.rand.NextFloat(5) * npc.direction, npc.Center.Y + Main.rand.NextFloat(-4, 5));
+                            Vector2 delta = NPC.Center - new Vector2(NPC.Center.X + Main.rand.NextFloat(5) * NPC.direction, NPC.Center.Y + Main.rand.NextFloat(-4, 5));
                             if (Main.rand.NextBool(1))
-                                Dust.NewDust(npc.Center + npc.velocity, npc.width, npc.height, DustType<Shadow>(), delta.X, delta.Y);
+                                Dust.NewDust(NPC.Center + NPC.velocity, NPC.width, NPC.height, DustType<Shadow>(), delta.X, delta.Y);
                         }
                         break;
                 }
                 attackProgress++;
                 if (attackProgress > attackLength)
                 {
-                    npc.aiAction = 0;
+                    NPC.aiAction = 0;
                     actionCool--;
                 }
             }
@@ -240,32 +241,38 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void FindFrame(int frameHeight)
         {
-            if (npc.aiAction == 0)
+            if (NPC.aiAction == 0)
             {
-                npc.frame.Y = 0;
+                NPC.frame.Y = 0;
             }
-            if (npc.aiAction == 1)
+            if (NPC.aiAction == 1)
             {
-                if (npc.frameCounter % 18 < 9)
-                    npc.frame.Y = 1 * frameHeight;
+                if (NPC.frameCounter % 18 < 9)
+                    NPC.frame.Y = 1 * frameHeight;
                 else
-                    npc.frame.Y = 2 * frameHeight;
+                    NPC.frame.Y = 2 * frameHeight;
             }
 
             if (!(actionCycle == 1 && attackProgress > 300))
-                npc.spriteDirection = -npc.direction;
-            npc.frameCounter++;
+                NPC.spriteDirection = -NPC.direction;
+            NPC.frameCounter++;
         }
 
-        public override void NPCLoot()
+        public override void OnKill()
         {
             Vector2 dustSpeed = new Vector2(0, 5);
             for (int i = 0; i < 20; i++)
             {
                 Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
-                Dust.NewDust(npc.position, npc.width, npc.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
             }
-            base.NPCLoot();
+            base.OnKill();
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.Add(
+            new FlavorTextBestiaryInfoElement("An illusory clone conjured by the \"Mirror Image\" spell. It is substantially weaker than its creator, and is likey meant as a distraction."));
         }
     }
 }

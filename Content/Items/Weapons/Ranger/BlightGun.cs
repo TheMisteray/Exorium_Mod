@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -19,22 +20,22 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            item.damage = 23;
-            item.ranged = true;
-            item.width = 40;
-            item.height = 20;
-            item.useTime = 24;
-            item.useAnimation = 24;
-            item.useStyle = 5;
-            item.noMelee = true;
-            item.knockBack = 6;
-            item.value = Item.sellPrice(silver: 68); ;
-            item.rare = 2;
-            item.UseSound = SoundID.Item11;
-            item.autoReuse = true;
-            item.shoot = 10;
-            item.shootSpeed = 14f;
-            item.useAmmo = AmmoID.Bullet;
+            Item.damage = 23;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 40;
+            Item.height = 20;
+            Item.useTime = 24;
+            Item.useAnimation = 24;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.knockBack = 6;
+            Item.value = Item.sellPrice(silver: 68); ;
+            Item.rare = 2;
+            Item.UseSound = SoundID.Item11;
+            Item.autoReuse = true;
+            Item.shoot = 10;
+            Item.shootSpeed = 14f;
+            Item.useAmmo = AmmoID.Bullet;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -46,20 +47,20 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             if (player.altFunctionUse == 2)
             {
-                item.useAnimation = 84;
-                item.useTime = 84;
-                item.UseSound = SoundID.Item36;
+                Item.useAnimation = 84;
+                Item.useTime = 84;
+                Item.UseSound = SoundID.Item36;
             }
             else
             {
-                item.useAnimation = 24;
-                item.useTime = 24;
-                item.UseSound = SoundID.Item11;
+                Item.useAnimation = 24;
+                Item.useTime = 24;
+                Item.UseSound = SoundID.Item11;
             }
             return true;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.altFunctionUse == 2)
             {
@@ -67,10 +68,10 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 int numberProjectiles = 8 + Main.rand.Next(4); // 8 to 11 shots
                 for (int i = 0; i < numberProjectiles; i++)
                 {
-                    Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(30)); // 32 degree spread.
+                    Vector2 perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(30)); // 32 degree spread.
                     float scale = (1.5f - Main.rand.NextFloat() * 1.2f);
                     perturbedSpeed = perturbedSpeed * scale; 
-                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+                    Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
                 }
                 return false; // return false because we don't want tmodloader to shoot projectile
             }
@@ -79,12 +80,11 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
             recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 6);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -18,36 +19,34 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            item.damage = 7;
-            item.ranged = true;
-            item.width = 22;
-            item.height = 40;
-            item.useTime = 33;
-            item.useAnimation = 33;
-            item.useAmmo = AmmoID.Arrow;
-            item.knockBack = 0;
-            item.value = Item.sellPrice(silver: 14); ;
-            item.rare = 1;
-            item.UseSound = SoundID.Item5;
-            item.autoReuse = true;
-            item.shoot = 10;
-            item.noMelee = true;
-            item.shootSpeed = 7;
-            item.useStyle = 5;
+            Item.damage = 7;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 22;
+            Item.height = 40;
+            Item.useTime = 33;
+            Item.useAnimation = 33;
+            Item.useAmmo = AmmoID.Arrow;
+            Item.knockBack = 0;
+            Item.value = Item.sellPrice(silver: 14); ;
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item5;
+            Item.autoReuse = true;
+            Item.shoot = 10;
+            Item.noMelee = true;
+            Item.shootSpeed = 7;
+            Item.useStyle = 5;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             int spShoot = Main.rand.Next(0,5);
-            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(7));
-            speedX = perturbedSpeed.X;
-            speedY = perturbedSpeed.Y;
+            Vector2 perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(7));
+            velocity = perturbedSpeed;
             if (spShoot == 1)
             {
-                Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ProjectileID.FrostburnArrow, damage, knockBack, player.whoAmI);
-                perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(9));
-                speedX = perturbedSpeed.X;
-                speedY = perturbedSpeed.Y;
+                Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, ProjectileID.FrostburnArrow, damage, knockback, player.whoAmI);
+                perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(9));
+                velocity = perturbedSpeed;
                 return true;
             }
             else
@@ -58,11 +57,10 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>(), 8);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

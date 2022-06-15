@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -18,56 +19,54 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
 
         public override void SetDefaults()
         {
-            item.damage = 26;
-            item.summon = true;
-            item.mana = 20;
-            item.width = 26;
-            item.height = 34;
-            item.useTime = 36;
-            item.useAnimation = 36;
-            item.useStyle = 1;
-            item.noMelee = true;
-            item.knockBack = 3;
-            item.value = Item.buyPrice(0, 0, 68, 0);
-            item.rare = 2;
-            item.UseSound = SoundID.Item44;
-            item.shoot = ProjectileType<Projectiles.Minions.BlightSlime>();
-            item.shootSpeed = 10f;
-            item.buffType = BuffType<Buffs.Minions.BlightSlime>(); //The buff added to player after used the item
+            Item.damage = 26;
+            Item.DamageType = DamageClass.Summon;
+            Item.mana = 20;
+            Item.width = 26;
+            Item.height = 34;
+            Item.useTime = 36;
+            Item.useAnimation = 36;
+            Item.useStyle = 1;
+            Item.noMelee = true;
+            Item.knockBack = 3;
+            Item.value = Item.buyPrice(0, 0, 68, 0);
+            Item.rare = 2;
+            Item.UseSound = SoundID.Item44;
+            Item.shoot = ProjectileType<Projectiles.Minions.BlightSlime>();
+            Item.shootSpeed = 10f;
+            Item.buffType = BuffType<Buffs.Minions.BlightSlime>(); //The buff added to player after used the item
         }
 
         public override bool AltFunctionUse(Player player)
         {
             return true;
         }
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             // This is needed so the buff that keeps your minion alive and allows you to despawn it properly applies
-            player.AddBuff(item.buffType, 2);
+            player.AddBuff(Item.buffType, 2);
 
-            // Here you can change where the minion is spawned. Most vanilla minions spawn at the cursor position.
-            position = Main.MouseWorld;
-            return true;
+            player.SpawnMinionOnCursor(source, player.whoAmI, type, Item.damage, knockback);
+
+            return false;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)/* Suggestion: Return null instead of false */
         {
             if (player.altFunctionUse == 2)
             {
-                player.MinionNPCTargetAim();
+                player.MinionNPCTargetAim(true);
             }
             return base.UseItem(player);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
             recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 6);
             recipe.AddTile(TileID.Bookcases);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

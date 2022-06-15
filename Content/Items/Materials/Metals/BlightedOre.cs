@@ -15,19 +15,19 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetDefaults()
         {
-            item.useStyle = 1;
-            item.useTurn = true;
-            item.useAnimation = 15;
-            item.useTime = 10;
-            item.autoReuse = true;
-            item.width = 16;
-            item.height = 16;
-            item.value = 1000;
-            item.rare = 2;
-            item.maxStack = 999;
-            item.value = 200;
-            item.consumable = true;
-            item.createTile = TileType<Tiles.BlightedOreTile>();
+            Item.useStyle = 1;
+            Item.useTurn = true;
+            Item.useAnimation = 15;
+            Item.useTime = 10;
+            Item.autoReuse = true;
+            Item.width = 16;
+            Item.height = 16;
+            Item.value = 1000;
+            Item.rare = 2;
+            Item.maxStack = 999;
+            Item.value = 200;
+            Item.consumable = true;
+            Item.createTile = TileType<Tiles.BlightedOreTile>();
         }
     }
 

@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using System;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -20,32 +21,32 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            item.damage = 18;
-            item.ranged = true;
-            item.width = 22;
-            item.height = 40;
-            item.useTime = 26;
-            item.useAnimation = 26;
-            item.useAmmo = AmmoID.Arrow;
-            item.knockBack = 2;
-            item.value = Item.sellPrice(gold: 3, silver: 50); ;
-            item.rare = 2;
-            item.UseSound = SoundID.Item5;
-            item.autoReuse = true;
-            item.shoot = 10;
-            item.noMelee = true;
-            item.shootSpeed = 30;
-            item.useStyle = 5;
+            Item.damage = 18;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 22;
+            Item.height = 40;
+            Item.useTime = 26;
+            Item.useAnimation = 26;
+            Item.useAmmo = AmmoID.Arrow;
+            Item.knockBack = 2;
+            Item.value = Item.sellPrice(gold: 3, silver: 50); ;
+            Item.rare = 2;
+            Item.UseSound = SoundID.Item5;
+            Item.autoReuse = true;
+            Item.shoot = 10;
+            Item.noMelee = true;
+            Item.shootSpeed = 30;
+            Item.useStyle = 5;
         }
 
         private int rainbow;
         private bool side;
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             side = !side;
-            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.ToRadians(Utils.Clamp(Main.rand.NextFloat(40), 15, 25) * ((side) ? 1 : -1)));
-            int projectile = Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<LustrousBeam>(), damage, knockBack, player.whoAmI, player.position.X, player.position.Y);
+            Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.ToRadians(Utils.Clamp(Main.rand.NextFloat(40), 15, 25) * ((side) ? 1 : -1)));
+            int projectile = Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<LustrousBeam>(), damage, knockback, player.whoAmI, player.position.X, player.position.Y);
             Main.projectile[projectile].localAI[1] = rainbow;
             rainbow++;
             if (rainbow == 7)
@@ -55,7 +56,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.Amethyst);
             recipe.AddIngredient(ItemID.Topaz);
             recipe.AddIngredient(ItemID.Sapphire);
@@ -65,9 +66,9 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             recipe.AddIngredient(ItemID.Amber);
             recipe.AddIngredient(ItemID.PlatinumBar, 20);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            ModRecipe altRecipe = new ModRecipe(mod);
+            recipe.Register();
+
+            Recipe altRecipe = CreateRecipe();
             altRecipe.AddIngredient(ItemID.Amethyst);
             altRecipe.AddIngredient(ItemID.Topaz);
             altRecipe.AddIngredient(ItemID.Sapphire);
@@ -77,8 +78,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             altRecipe.AddIngredient(ItemID.Amber);
             altRecipe.AddIngredient(ItemID.GoldBar, 20);
             altRecipe.AddTile(TileID.Anvils);
-            altRecipe.SetResult(this);
-            altRecipe.AddRecipe();
+            altRecipe.Register();
         }
     }
 
@@ -88,43 +88,43 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            projectile.width = 12;
-            projectile.height = 12;
-            projectile.aiStyle = -1;
-            projectile.friendly = true;
-            projectile.hostile = false;
-            projectile.ranged = true;
-            projectile.extraUpdates = 50;
-            projectile.timeLeft = 4500;
-            projectile.penetrate = 1;
+            Projectile.width = 12;
+            Projectile.height = 12;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = true;
+            Projectile.hostile = false;
+            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.extraUpdates = 50;
+            Projectile.timeLeft = 4500;
+            Projectile.penetrate = 1;
         }
 
         private bool retargeted
         {
-            get => projectile.ai[0] == 1f;
-            set => projectile.ai[0] = value ? 1f : 0f;
+            get => Projectile.ai[0] == 1f;
+            set => Projectile.ai[0] = value ? 1f : 0f;
         }
 
 
         public override void AI()
         {
-            Vector2 vectorToCursor = Main.MouseWorld - projectile.Center;
-            Vector2 vectorToPlayer = (new Vector2(projectile.ai[0], projectile.ai[1])) - projectile.Center;
+            Vector2 vectorToCursor = Main.MouseWorld - Projectile.Center;
+            Vector2 vectorToPlayer = (new Vector2(Projectile.ai[0], Projectile.ai[1])) - Projectile.Center;
             float distanceToCursor = vectorToCursor.Length();
             float distanceToPlayer = vectorToPlayer.Length();
             if (distanceToPlayer > distanceToCursor && !retargeted)
             {
                 retargeted = true;
-                projectile.velocity = projectile.velocity.RotatedBy((float)(Math.Atan2(projectile.velocity.X, projectile.velocity.Y) - (float)(Math.Atan2(vectorToCursor.X, vectorToCursor.Y))));
-                projectile.netUpdate = true;
+                Projectile.velocity = Projectile.velocity.RotatedBy((float)(Math.Atan2(Projectile.velocity.X, Projectile.velocity.Y) - (float)(Math.Atan2(vectorToCursor.X, vectorToCursor.Y))));
+                Projectile.netUpdate = true;
             }
-            projectile.alpha = 225;
+            Projectile.alpha = 225;
             for (int i = 0; i < 10; i++)
             {
-                int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Rainbow>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 0, default(Color));
-                Main.dust[dust0].position.X -= projectile.velocity.X / 10f * i;
-                Main.dust[dust0].position.Y -= projectile.velocity.Y / 10f * i;
-                switch (projectile.localAI[1])
+                int dust0 = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.Rainbow>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color));
+                Main.dust[dust0].position.X -= Projectile.velocity.X / 10f * i;
+                Main.dust[dust0].position.Y -= Projectile.velocity.Y / 10f * i;
+                switch (Projectile.localAI[1])
                 {
                     case 0:
                         Main.dust[dust0].color = new Color(255, 0, 0);

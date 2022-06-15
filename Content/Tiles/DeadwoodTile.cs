@@ -8,21 +8,17 @@ namespace ExoriumMod.Content.Tiles
 {
     class DeadwoodTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
-            drop = ItemType<Items.TileItems.Deadwood>();
+            ItemDrop = ItemType<Items.TileItems.Deadwood>();
             AddMapEntry(new Color(40, 40, 40));
-            dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
-            Main.dust[dustType].color = new Color(40, 40, 40);
+            DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
+            Main.dust[DustType].color = new Color(40, 40, 40);
         }
     }
 }

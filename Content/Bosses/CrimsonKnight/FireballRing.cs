@@ -21,13 +21,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 1200;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 1200;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
         }
 
         private const float WIDTH = 1000;
@@ -36,26 +36,26 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public float RotationOffset
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public bool Enrage
         {
-            get => projectile.ai[1] == 1f;
-            set => projectile.ai[1] = value ? 1f : 0f;
+            get => Projectile.ai[1] == 1f;
+            set => Projectile.ai[1] = value ? 1f : 0f;
         }
 
         public override void AI()
         {
-            if (projectile.timeLeft == 1200)
-                spawnAxis = projectile.position;
+            if (Projectile.timeLeft == 1200)
+                spawnAxis = Projectile.position;
 
             spawnAxis.Y += 5;
             Vector2 offsetAxel = new Vector2(WIDTH * (float)Math.Sin(RotationOffset), HEIGHT * (float)Math.Sin(RotationOffset - MathHelper.PiOver2));
-            projectile.position = spawnAxis + offsetAxel;
+            Projectile.position = spawnAxis + offsetAxel;
 
-            projectile.rotation += .2f;
+            Projectile.rotation += .2f;
             RotationOffset += .006f;
         }
 

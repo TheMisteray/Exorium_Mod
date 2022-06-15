@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -15,13 +17,9 @@ namespace ExoriumMod.Content.Tiles
 	{
         public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
 
-        public override bool Autoload(ref string name, ref string texture)
-        {
-			texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+		public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.tileSolidTop[Type] = true;
 			Main.tileFrameImportant[Type] = true;
@@ -33,8 +31,8 @@ namespace ExoriumMod.Content.Tiles
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
 			TileObjectData.newTile.Origin = new Point16(1, 1);
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
-			TileObjectData.newTile.HookCheck = new PlacementHook(new Func<int, int, int, int, int, int>(Chest.FindEmptyChest), -1, 0, true);
-			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(new Func<int, int, int, int, int, int>(Chest.AfterPlacement_Hook), -1, 0, false);
+			TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
+			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
 			TileObjectData.newTile.AnchorInvalidTiles = new[] { 127 };
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.LavaDeath = false;
@@ -44,39 +42,41 @@ namespace ExoriumMod.Content.Tiles
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("Deadwood Dresser");
 			AddMapEntry(new Color(90, 90, 90), name);
-			dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
-			disableSmartCursor = true;
-			adjTiles = new int[] { TileID.Dressers };
-			dresser = "Deadwood Dresser";
-			dresserDrop = ModContent.ItemType<Items.TileItems.DeadwoodDresser>();
+			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
+			TileID.Sets.DisableSmartCursor[Type] = true;
+			AdjTiles = new int[] { TileID.Dressers };
+			ContainerName.SetDefault("Deadwood Dresser");
+			DresserDrop = ModContent.ItemType<Items.TileItems.DeadwoodDresser>();
+
+			TileID.Sets.BasicDresser[Type] = true;
 		}
 
-		public override bool HasSmartInteract()
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
 
-		public override bool NewRightClick(int i, int j)
+		public override bool RightClick(int i, int j)
 		{
 			Player player = Main.LocalPlayer;
-			if (Main.tile[Player.tileTargetX, Player.tileTargetY].frameY == 0)
+			if (Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY == 0)
 			{
 				Main.CancelClothesWindow(true);
 				Main.mouseRightRelease = false;
-				int left = (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].frameX / 18);
+				int left = (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18);
 				left %= 3;
 				left = Player.tileTargetX - left;
-				int top = Player.tileTargetY - (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].frameY / 18);
+				int top = Player.tileTargetY - (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY / 18);
 				if (player.sign > -1)
 				{
-					Main.PlaySound(SoundID.MenuClose);
+					SoundEngine.PlaySound(SoundID.MenuClose);
 					player.sign = -1;
 					Main.editSign = false;
 					Main.npcChatText = string.Empty;
 				}
 				if (Main.editChest)
 				{
-					Main.PlaySound(SoundID.MenuTick);
+					SoundEngine.PlaySound(SoundID.MenuTick);
 					Main.editChest = false;
 					Main.npcChatText = string.Empty;
 				}
@@ -91,7 +91,7 @@ namespace ExoriumMod.Content.Tiles
 					{
 						player.chest = -1;
 						Recipe.FindRecipes();
-						Main.PlaySound(SoundID.MenuClose);
+						SoundEngine.PlaySound(SoundID.MenuClose);
 					}
 					else
 					{
@@ -101,7 +101,8 @@ namespace ExoriumMod.Content.Tiles
 				}
 				else
 				{
-					player.flyingPigChest = -1;
+					player.piggyBankProjTracker.Clear(); 
+					player.voidLensChest.Clear();
 					int num213 = Chest.FindChest(left, top);
 					if (num213 != -1)
 					{
@@ -110,14 +111,14 @@ namespace ExoriumMod.Content.Tiles
 						{
 							player.chest = -1;
 							Recipe.FindRecipes();
-							Main.PlaySound(SoundID.MenuClose);
+							SoundEngine.PlaySound(SoundID.MenuClose);
 						}
 						else if (num213 != player.chest && player.chest == -1)
 						{
 							player.chest = num213;
 							Main.playerInventory = true;
 							Main.recBigList = false;
-							Main.PlaySound(SoundID.MenuOpen);
+							SoundEngine.PlaySound(SoundID.MenuOpen);
 							player.chestX = left;
 							player.chestY = top;
 						}
@@ -126,7 +127,7 @@ namespace ExoriumMod.Content.Tiles
 							player.chest = num213;
 							Main.playerInventory = true;
 							Main.recBigList = false;
-							Main.PlaySound(SoundID.MenuTick);
+							SoundEngine.PlaySound(SoundID.MenuTick);
 							player.chestX = left;
 							player.chestY = top;
 						}
@@ -139,8 +140,8 @@ namespace ExoriumMod.Content.Tiles
 				Main.playerInventory = false;
 				player.chest = -1;
 				Recipe.FindRecipes();
-				Main.dresserX = Player.tileTargetX;
-				Main.dresserY = Player.tileTargetY;
+				Main.interactedDresserTopLeftX = Player.tileTargetX;
+				Main.interactedDresserTopLeftY = Player.tileTargetY;
 				Main.OpenClothesWindow();
 			}
 			return true;
@@ -152,39 +153,39 @@ namespace ExoriumMod.Content.Tiles
 			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 			int left = Player.tileTargetX;
 			int top = Player.tileTargetY;
-			left -= (int)(tile.frameX % 54 / 18);
-			if (tile.frameY % 36 != 0)
+			left -= (int)(tile.TileFrameX % 54 / 18);
+			if (tile.TileFrameY % 36 != 0)
 			{
 				top--;
 			}
 			int chestIndex = Chest.FindChest(left, top);
-			player.showItemIcon2 = -1;
+			player.cursorItemIconID = -1;
 			if (chestIndex < 0)
 			{
-				player.showItemIconText = Language.GetTextValue("LegacyDresserType.0");
+				player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
 			}
 			else
 			{
 				if (Main.chest[chestIndex].name != "")
 				{
-					player.showItemIconText = Main.chest[chestIndex].name;
+					player.cursorItemIconText = Main.chest[chestIndex].name;
 				}
 				else
 				{
-					player.showItemIconText = chest;
+					player.cursorItemIconText = Name;
 				}
-				if (player.showItemIconText == chest)
+				if (player.cursorItemIconText == Name)
 				{
-					player.showItemIcon2 = ModContent.ItemType<Items.TileItems.DeadwoodDresser>();
-					player.showItemIconText = "";
+					player.cursorItemIconID = ModContent.ItemType<Items.TileItems.DeadwoodDresser>();
+					player.cursorItemIconText = "";
 				}
 			}
 			player.noThrow = 2;
-			player.showItemIcon = true;
-			if (player.showItemIconText == "")
+			player.cursorItemIconEnabled = true;
+			if (player.cursorItemIconText == "")
 			{
-				player.showItemIcon = false;
-				player.showItemIcon2 = 0;
+				player.cursorItemIconEnabled = false;
+				player.cursorItemIconID = 0;
 			}
 		}
 
@@ -194,38 +195,38 @@ namespace ExoriumMod.Content.Tiles
 			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 			int left = Player.tileTargetX;
 			int top = Player.tileTargetY;
-			left -= (int)(tile.frameX % 54 / 18);
-			if (tile.frameY % 36 != 0)
+			left -= (int)(tile.TileFrameX % 54 / 18);
+			if (tile.TileFrameY % 36 != 0)
 			{
 				top--;
 			}
 			int num138 = Chest.FindChest(left, top);
-			player.showItemIcon2 = -1;
+			player.cursorItemIconID = -1;
 			if (num138 < 0)
 			{
-				player.showItemIconText = Language.GetTextValue("LegacyDresserType.0");
+				player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
 			}
 			else
 			{
 				if (Main.chest[num138].name != "")
 				{
-					player.showItemIconText = Main.chest[num138].name;
+					player.cursorItemIconText = Main.chest[num138].name;
 				}
 				else
 				{
-					player.showItemIconText = chest;
+					player.cursorItemIconText = Name;
 				}
-				if (player.showItemIconText == chest)
+				if (player.cursorItemIconText == Name)
 				{
-					player.showItemIcon2 = ModContent.ItemType<Items.TileItems.DeadwoodDresser>();
-					player.showItemIconText = "";
+					player.cursorItemIconID = ModContent.ItemType<Items.TileItems.DeadwoodDresser>();
+					player.cursorItemIconText = "";
 				}
 			}
 			player.noThrow = 2;
-			player.showItemIcon = true;
-			if (Main.tile[Player.tileTargetX, Player.tileTargetY].frameY > 0)
+			player.cursorItemIconEnabled = true;
+			if (Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY > 0)
 			{
-				player.showItemIcon2 = ItemID.FamiliarShirt;
+				player.cursorItemIconID = ItemID.FamiliarShirt;
 			}
 		}
 
@@ -236,7 +237,7 @@ namespace ExoriumMod.Content.Tiles
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 48, 32, dresserDrop);
+			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 48, 32, DresserDrop);
 			Chest.DestroyChest(i, j);
 		}
 	}

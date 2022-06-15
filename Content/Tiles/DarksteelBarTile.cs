@@ -5,18 +5,16 @@ using static Terraria.ModLoader.ModContent;
 using Terraria.Localization;
 using Terraria.ObjectData;
 using Microsoft.Xna.Framework;
+using Terraria.ID;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Tiles
 {
     class DarksteelBarTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
             Main.tileSolidTop[Type] = true;
@@ -27,16 +25,18 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile(Type);
 
+            HitSound = SoundID.Tink;
+
             AddMapEntry(new Color(0, 0, 0), Language.GetText("MapObject.MetalBar")); // localized text for "Metal Bar"
         }
 
         public override bool Drop(int i, int j)
         {
             Tile t = Main.tile[i, j];
-            int style = t.frameX / 18;
+            int style = t.TileFrameX / 18;
             if (style == 0) // It can be useful to share a single tile with multiple styles. This code will let you drop the appropriate bar if you had multiple.
             {
-                Item.NewItem(i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.DarksteelBar>());
+                Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 16, ItemType<Items.Materials.Metals.DarksteelBar>());
             }
             return base.Drop(i, j);
         }

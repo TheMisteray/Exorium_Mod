@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Consumables
 {
@@ -20,52 +21,47 @@ namespace ExoriumMod.Content.Items.Consumables
 
         public override void SetDefaults()
         {
-            item.damage = 42;
-            item.width = 50;
-            item.height = 36;
-            item.useStyle = ItemUseStyleID.EatingUsing;
-            item.useAnimation = 15;
-            item.useTime = 15;
-            item.useTurn = true;
-            item.UseSound = SoundID.Item1;
-            item.noUseGraphic = true;
-            item.maxStack = 1;
-            item.consumable = true;
-            item.rare = -1;
-            item.value = 0;
-            item.noMelee = true;
-            item.shoot = 1;
+            Item.damage = 42;
+            Item.width = 50;
+            Item.height = 36;
+            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
+            Item.useTurn = true;
+            Item.UseSound = SoundID.Item1;
+            Item.noUseGraphic = true;
+            Item.maxStack = 1;
+            Item.consumable = true;
+            Item.rare = -1;
+            Item.value = 0;
+            Item.noMelee = true;
+            Item.shoot = 1;
         }
 
-        public override void OnConsumeItem(Player player)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int d = Projectile.NewProjectile(player.Center, Vector2.Zero, ProjectileID.Dynamite, 1000, 20, player.whoAmI);
+            int d = Projectile.NewProjectile(source, player.Center, Vector2.Zero, ProjectileID.Dynamite, 1000, 20, player.whoAmI);
             Main.projectile[d].hostile = true;
             Main.projectile[d].timeLeft = 2;
             Vector2 throwUp = new Vector2(0, -10);
-            int bombs = Main.rand.Next(3, 6);
+            int bombs = Main.rand.Next(5, 8);
             for (int i = 0; i < bombs; i++)
             {
                 Vector2 perturbedThrow = throwUp.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-30, 30)));
-                Projectile.NewProjectile(player.Center, perturbedThrow, ProjectileID.MolotovCocktail, item.damage, item.knockBack, player.whoAmI);
+                Projectile.NewProjectile(source, player.Center, perturbedThrow, ProjectileID.MolotovCocktail, Item.damage, Item.knockBack, player.whoAmI);
             }
             base.OnConsumeItem(player);
+            return false;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.WoodBreastplate);
             recipe.AddIngredient(ItemID.MolotovCocktail, 3);
             recipe.AddIngredient(ItemID.RopeCoil);
             recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-        }
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-        {
-            return false;
+            recipe.Register();
         }
     }
 }

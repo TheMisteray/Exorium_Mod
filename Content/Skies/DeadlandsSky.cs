@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
@@ -53,7 +54,7 @@ namespace ExoriumMod.Content.Skies
 				if (!Main.dayTime) //dark at night
 					trueTime = 0;
 				timeMult = Math.Sin(MathHelper.PiOver2 * (1 - Math.Abs((trueTime - 27000) / 27000)));
-				spriteBatch.Draw(Main.blackTileTexture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color((int)(120 * timeMult), (int)(120 * timeMult), (int)(120 * timeMult), 220) * intensity);
+				spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color((int)(120 * timeMult), (int)(120 * timeMult), (int)(120 * timeMult), 220) * intensity);
 			}
 		}
 

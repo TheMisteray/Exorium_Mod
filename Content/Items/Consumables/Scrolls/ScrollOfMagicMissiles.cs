@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -19,27 +20,27 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            item.damage = 44;
-            item.useStyle = 4;
-            item.useTime = 14;
-            item.useAnimation = 42;
-            item.knockBack = 2;
-            item.rare = 1;
-            item.value = Item.buyPrice(silver: 50);
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 30;
-            item.magic = true;
-            item.mana = 20;
+            Item.damage = 44;
+            Item.useStyle = 4;
+            Item.useTime = 14;
+            Item.useAnimation = 42;
+            Item.knockBack = 2;
+            Item.rare = 1;
+            Item.value = Item.buyPrice(silver: 50);
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 30;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 20;
             //item.channel = true;
-            item.noMelee = true;
-            item.shootSpeed = 16f;
-            item.autoReuse = false;
-            item.shoot = ProjectileID.MagicMissile;
-            item.consumable = true;
-            item.UseSound = SoundID.Item7;
-            item.useTurn = true;
-            item.noUseGraphic = true;
+            Item.noMelee = true;
+            Item.shootSpeed = 16f;
+            Item.autoReuse = false;
+            Item.shoot = ProjectileID.MagicMissile;
+            Item.consumable = true;
+            Item.UseSound = SoundID.Item7;
+            Item.useTurn = true;
+            Item.noUseGraphic = true;
         }
 
         private int firstShot = 0;
@@ -60,11 +61,11 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 2700);
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(20));
+            Vector2 perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(20));
             perturbedSpeed.RotatedBy(MathHelper.ToRadians(180));
-            Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+            Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
             firstShot++;
             return false;
         }

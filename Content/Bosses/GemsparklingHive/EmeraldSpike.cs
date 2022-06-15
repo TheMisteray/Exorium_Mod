@@ -15,15 +15,15 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.aiStyle = -1;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 255;
-            projectile.timeLeft = 600;
-            projectile.penetrate = -1;
-            projectile.tileCollide = false;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 600;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
         }
 
         private const int CHAIN_LENGTH = 60;
@@ -34,8 +34,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public float chainPos
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public override void AI()
@@ -43,19 +43,19 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             drawAlpha += MathHelper.PiOver2 / 10;
             if (Main.netMode != NetmodeID.MultiplayerClient && drawAlpha > MathHelper.PiOver4 && chainPos < CHAIN_LENGTH && !projCreated)
             {
-                Projectile.NewProjectile(projectile.Center + projectile.velocity, projectile.velocity, ProjectileType<EmeraldSpike>(), projectile.damage, projectile.knockBack, Main.myPlayer, chainPos + 1);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity, Projectile.velocity, ProjectileType<EmeraldSpike>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, chainPos + 1);
                 projCreated = true;
             }
             if (drawAlpha >= Math.PI)
-                projectile.Kill();
+                Projectile.Kill();
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + Name);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.GemsparklingHive + Name).Value;
 
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(0, (int)(255 * Math.Sin(drawAlpha)), 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
-            base.PostDraw(spriteBatch, lightColor);
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, new Color(0, (int)(255 * Math.Sin(drawAlpha)), 0, 0), Projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0);
+            base.PostDraw(lightColor);
         }
 
         public override bool ShouldUpdatePosition()

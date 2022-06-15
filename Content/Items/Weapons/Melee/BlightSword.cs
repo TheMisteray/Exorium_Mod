@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using ExoriumMod.Helpers;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -21,33 +22,32 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.damage = 50;
-            item.melee = true;
-            item.width = 590;
-            item.height = 280;
-            item.useTime = 22;
-            item.useAnimation = 22;
-            item.useStyle = ItemUseStyleID.HoldingOut;
-            item.noMelee = true;
-            item.channel = true;
-            item.knockBack = 15;
-            item.value = Item.sellPrice(silver: 36); ;
-            item.rare = 1;
-            item.UseSound = SoundID.Item1;
-            item.shoot = ProjectileType<SwungBlightedSword>();
-            item.shootSpeed = 10f;
-            item.noUseGraphic = true;
+            Item.damage = 50;
+            Item.DamageType = DamageClass.Melee;
+            Item.width = 590;
+            Item.height = 280;
+            Item.useTime = 22;
+            Item.useAnimation = 22;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.noMelee = true;
+            Item.channel = true;
+            Item.knockBack = 15;
+            Item.value = Item.sellPrice(silver: 36); ;
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item1;
+            Item.shoot = ProjectileType<SwungBlightedSword>();
+            Item.shootSpeed = 10f;
+            Item.noUseGraphic = true;
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ProjectileType<SwungBlightedSword>()] <= 0;
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 16);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 
@@ -60,61 +60,61 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blighted Sword");
-            Main.projFrames[projectile.type] = 7;
-            ProjectileID.Sets.NeedsUUID[projectile.type] = true;
+            Main.projFrames[Projectile.type] = 7;
+            ProjectileID.Sets.NeedsUUID[Projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 500;
-            projectile.height = 30;
-            projectile.friendly = true;
-            projectile.melee = true;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 216089;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
+            Projectile.width = 500;
+            Projectile.height = 30;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 216089;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
 
         public float state
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public float strength
         {
-            get => projectile.ai[1];
-            set => projectile.ai[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.Center = player.Center;
+            Player player = Main.player[Projectile.owner];
+            Projectile.Center = player.Center;
             Vector2 rrp = player.RotatedRelativePoint(player.MountedCenter, true);
 
             //Visuals
             UpdatePlayerVisuals(player, rrp);
 
             if (player.dead)
-                projectile.Kill();
+                Projectile.Kill();
 
             // Client Side
-            if (Main.myPlayer == projectile.owner && state == 0f)
+            if (Main.myPlayer == Projectile.owner && state == 0f)
             {
                 if (player.channel && !player.noItems && !player.CCed) //ends if not channeled, player is cursed, or player is stopped for other reasons
                 {
                     //Dynamic aim
                     UpdateAim(rrp, player.HeldItem.shootSpeed);
 
-                    projectile.netUpdate = true;
-                    if (projectile.timeLeft % 90 == 0 && strength < 5)
+                    Projectile.netUpdate = true;
+                    if (Projectile.timeLeft % 90 == 0 && strength < 5)
                     {
                         strength++;
                         Vector2 distance = new Vector2(0, 5);
                         DustHelper.DustRing(player.Center, DustType<Dusts.BlightDust>(), 5, 0, MathHelper.ToRadians(10 - (int)strength), .5f + .1f * strength, .5f + .1f * strength, 0, 0, default, true);
-                        Main.PlaySound(SoundID.MaxMana, projectile.Center);
+                        SoundEngine.PlaySound(SoundID.MaxMana, Projectile.Center);
                     }
                 }
 
@@ -122,19 +122,19 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 else if (state == 0f)
                 {
                     //Flip hand 180
-                    player.itemRotation = (projectile.velocity * projectile.direction).ToRotation();
+                    player.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
 
-                    Main.PlaySound(SoundID.Item1, projectile.Center);
+                    SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                     state = 1f;
-                    projectile.timeLeft = 98;
+                    Projectile.timeLeft = 98;
                 }
 
                 for (int i = 0; i < strength; i++)
                 {
                     //Create vector that is linearly dependant of the sword
                     Vector2 bladeLength = new Vector2(0, 1);
-                    Vector2 blade = bladeLength.RotatedBy(projectile.rotation + MathHelper.PiOver2);
-                    blade *= Main.rand.NextFloat(projectile.width / 2 - 30) + 30;
+                    Vector2 blade = bladeLength.RotatedBy(Projectile.rotation + MathHelper.PiOver2);
+                    blade *= Main.rand.NextFloat(Projectile.width / 2 - 30) + 30;
                     //dust along it
                     Dust.NewDust(player.Center + blade, 0, 0, DustType<Dusts.BlightDust>(), Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-2, 2), 0, default, Main.rand.NextFloat(.5f + (.3f * strength)));
                 }
@@ -142,21 +142,21 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             else if (state == 1f)
             {
                 if (strength == 0f)
-                    projectile.Kill();
-                if (projectile.timeLeft % 3 == 0)
+                    Projectile.Kill();
+                if (Projectile.timeLeft % 3 == 0)
                 {
-                    projectile.frame++;
+                    Projectile.frame++;
 
                     //after frame is increased, so just as the final frame is reached
-                    if (projectile.frame == 6)
+                    if (Projectile.frame == 6)
                     {
                         //Get vector to end of sword
-                        Vector2 SwordTip = new Vector2(0, projectile.width/2);
-                        Vector2 hitSpot = SwordTip.RotatedBy(projectile.rotation - MathHelper.PiOver2);
+                        Vector2 SwordTip = new Vector2(0, Projectile.width/2);
+                        Vector2 hitSpot = SwordTip.RotatedBy(Projectile.rotation - MathHelper.PiOver2);
                         DustHelper.DustCircle(player.Center + hitSpot, DustType<Dusts.BlightDust>(), 8 + strength * 2, (strength + 1) * 20, .5f + .1f * strength, .5f + .1f * strength, 0, 0, default, true);
 
                         //ending
-                        Main.PlaySound(SoundID.Item89, projectile.Center);
+                        SoundEngine.PlaySound(SoundID.Item89, Projectile.Center);
                         state = 2f;
                     }
                 }
@@ -164,30 +164,30 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             else if (state == 2f)
             {
                 state = 3f;
-                projectile.timeLeft = 30;
+                Projectile.timeLeft = 30;
             }
         }
 
         private void UpdatePlayerVisuals(Player player, Vector2 playerHandPos)
         {
-            projectile.Center = playerHandPos;
-            projectile.rotation = projectile.velocity.ToRotation();
+            Projectile.Center = playerHandPos;
+            Projectile.rotation = Projectile.velocity.ToRotation();
 
             //Continuous holdout
             if (state == 0 || strength == 0)
-                player.ChangeDir(-projectile.direction);
+                player.ChangeDir(-Projectile.direction);
             else //Flip player after swing
-                player.ChangeDir(projectile.direction);
+                player.ChangeDir(Projectile.direction);
             
             
             //player.ChangeDir(projectile.direction);
 
-            player.heldProj = projectile.whoAmI;
+            player.heldProj = Projectile.whoAmI;
             player.itemTime = 15;
             player.itemAnimation = 15;
 
             //Hand direction
-            player.itemRotation = (projectile.velocity * projectile.direction).ToRotation();
+            player.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
         }
 
         private void UpdateAim(Vector2 source, float speed)
@@ -199,26 +199,26 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             }
 
             // Slow turn to cursor
-            aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(projectile.velocity), aim, AimResponsiveness));
+            aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(Projectile.velocity), aim, AimResponsiveness));
             aim *= speed;
 
-            if (aim != projectile.velocity)
+            if (aim != Projectile.velocity)
             {
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
-            projectile.velocity = aim;
+            Projectile.velocity = aim;
         }
 
-        public override bool CanDamage()
+        public override bool? CanDamage()/* Suggestion: Return null instead of false */
         {
-            return projectile.frame == 6 && projectile.timeLeft == 30;
+            return Projectile.frame == 6 && Projectile.timeLeft == 30;
         }
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
             //Right half
-            hitbox.Y += projectile.height - projectile.width/2;
-            hitbox.Height = projectile.width;
+            hitbox.Y += Projectile.height - Projectile.width/2;
+            hitbox.Height = Projectile.width;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -228,12 +228,12 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            Vector2 SwordTip = new Vector2(0, projectile.width / 2);
-            Vector2 hitSpot = SwordTip.RotatedBy(projectile.rotation - MathHelper.PiOver2);
+            Vector2 SwordTip = new Vector2(0, Projectile.width / 2);
+            Vector2 hitSpot = SwordTip.RotatedBy(Projectile.rotation - MathHelper.PiOver2);
             float _ = float.NaN;
 
             //Check collision of line from sword center to sword end with target hitbox
-            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), projectile.Center, projectile.Center + hitSpot, projectile.height * projectile.scale, ref _);
+            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + hitSpot, Projectile.height * Projectile.scale, ref _);
         }
 
         public override bool? CanCutTiles()

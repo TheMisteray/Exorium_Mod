@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Microsoft.Xna.Framework;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,67 +17,67 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetDefaults()
         {
-            projectile.width = 90;
-            projectile.height = 90;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 480;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 30;
+            Projectile.width = 90;
+            Projectile.height = 90;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 480;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 30;
         }
 
         private float PlayerTarget
         {
-            get => projectile.ai[1];
-            set => projectile.ai[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
         private float power
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public override void AI()
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (projectile.timeLeft == 450)
+                if (Projectile.timeLeft == 450)
                 {
                     Absorb(.33f); //1 in 3
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
-                else if (projectile.timeLeft == 420)
+                else if (Projectile.timeLeft == 420)
                 {
                     Absorb(.5f); //half remaining
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
-                else if (projectile.timeLeft == 390)
+                else if (Projectile.timeLeft == 390)
                 {
                     Absorb(1f); //all remaining
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
 
-                if (projectile.timeLeft == 240)
+                if (Projectile.timeLeft == 240)
                 {
                     Vector2 trajectory = Vector2.Zero;
                     Player playerTarget = Main.player[(int)PlayerTarget];
-                    trajectory = playerTarget.Center - projectile.Center;
+                    trajectory = playerTarget.Center - Projectile.Center;
                     float magnitude = (float)Math.Sqrt(trajectory.X * trajectory.X + trajectory.Y * trajectory.Y);
                     if (magnitude > 0)
                         trajectory *= 5f / magnitude;
                     else
                         trajectory = new Vector2(0f, 5f);
 
-                    projectile.velocity = trajectory;
-                    projectile.netUpdate = true;
+                    Projectile.velocity = trajectory;
+                    Projectile.netUpdate = true;
                 }
             }
 
             //Movement
-            projectile.velocity *= 0.99f;
-            projectile.rotation += 2;
+            Projectile.velocity *= 0.99f;
+            Projectile.rotation += 2;
 
             Resize();
 
@@ -85,12 +86,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.NPCDeath6, projectile.position);
-            Vector2 dustSpeed = new Vector2(0, 10 * projectile.scale);
-            for (int i = 0; i < (15 * (projectile.scale / 2)); i++)
+            SoundEngine.PlaySound(SoundID.NPCDeath6, Projectile.position);
+            Vector2 dustSpeed = new Vector2(0, 10 * Projectile.scale);
+            for (int i = 0; i < (15 * (Projectile.scale / 2)); i++)
             {
                 Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
-                Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
             }
 
             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -114,7 +115,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 while (angle < 360)
                 {
                     Vector2 newTrajectory = trajectory.RotatedBy(MathHelper.ToRadians(angle)); //Rotate by angle
-                    int p = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, newTrajectory.X, newTrajectory.Y, ProjectileType<CollectiveFragment>(), projectile.damage, 2);
+                    int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, newTrajectory.X, newTrajectory.Y, ProjectileType<CollectiveFragment>(), Projectile.damage, 2);
                     Main.projectile[p].netUpdate = true;
                     angle += rotator;
                 }
@@ -137,7 +138,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
                 while (angle < 360)
                 {
-                    int p = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 0, ProjectileType<RotatingShade>(), projectile.damage, 2, projectile.owner, projectile.whoAmI, angle);
+                    int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 0, 0, ProjectileType<RotatingShade>(), Projectile.damage, 2, Projectile.owner, Projectile.whoAmI, angle);
                     Main.projectile[p].netUpdate = true;
                     angle += rotator;
                 }
@@ -150,7 +151,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             Vector2 dist = new Vector2(projHitbox.Center.X - targetHitbox.Center.X, projHitbox.Center.Y - targetHitbox.Center.Y);
-            return dist.Length() < (projectile.width/2 * projectile.scale) + targetHitbox.Width;
+            return dist.Length() < (Projectile.width/2 * Projectile.scale) + targetHitbox.Width;
         }
 
         /// <summary>
@@ -164,13 +165,13 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 if (Main.npc[i].active && Main.npc[i].type == NPCType<ShadowAdd>() && Main.rand.NextFloat(1) <= percent)
                 {
                     Main.npc[i].ai[2] = -1;
-                    Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2, projectile.owner, projectile.whoAmI, 1);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2, Projectile.owner, Projectile.whoAmI, 1);
                     //power++ created proj increases power by 1
                 }
                 else if (Main.npc[i].active && Main.npc[i].type == NPCType<MirrorEntity>() && Main.rand.NextFloat(1) <= percent)
                 {
                     Main.npc[i].ai[2] = -1;
-                    Projectile.NewProjectile(Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2,  projectile.owner, projectile.whoAmI, 2);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.npc[i].Center.X, Main.npc[i].Center.Y, 0, 0, ProjectileType<AbsorbedShadow>(), 0, 2,  Projectile.owner, Projectile.whoAmI, 2);
                     //power += created proj increases power by 2
                 }
             }
@@ -182,11 +183,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         /// </summary>
         private void Resize()
         {
-            projectile.position = projectile.Center;
-            projectile.scale = 1 + (power * 0.25f);
-            projectile.Center = projectile.position;
+            Projectile.position = Projectile.Center;
+            Projectile.scale = 1 + (power * 0.25f);
+            Projectile.Center = Projectile.position;
             if (Main.netMode != NetmodeID.MultiplayerClient)
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
         }
     }
 
@@ -202,27 +203,27 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void SetDefaults()
         {
             //TODO: set width and height accordingly
-            projectile.width = 30;
-            projectile.height = 30;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 420;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 30;
+            Projectile.width = 30;
+            Projectile.height = 30;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 420;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 30;
         }
 
         public override void AI()
         {
-            projectile.rotation += .1f;
-            Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
+            Projectile.rotation += .1f;
+            Vector2 delta = Projectile.position - new Vector2(Projectile.position.X + Main.rand.NextFloat(-1, 2), Projectile.position.Y + Main.rand.NextFloat(-1, 2));
             if (Main.rand.NextBool(2))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>(), delta.X, delta.Y);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Shadow>(), delta.X, delta.Y);
             }
             if (Main.rand.NextBool(5))
             {
-                int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), delta.X, delta.Y);
+                int dust0 = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Rainbow>(), delta.X, delta.Y);
                 Main.dust[dust0].color = new Color(200, 0, 0);
             }
         }
@@ -233,39 +234,39 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             for (int i = 0; i < 10; i++)
             {
                 Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
-                Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
             }
             base.Kill(timeLeft);
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.Shadowmancer + Name + "_aGlow").Value;
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), Projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0);
             return true;
         }
     }
 
     internal class RotatingShade : ModProjectile
     {
-        public override string Texture => "Terraria/NPC_82";
+        public override string Texture => "Terraria/Images/NPC_82";
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Shadow");
-            Main.projFrames[projectile.type] = 4;
+            Main.projFrames[Projectile.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 26;
-            projectile.height = 48;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 90;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 30;
+            Projectile.width = 26;
+            Projectile.height = 48;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 90;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 30;
         }
 
         private float rotation = 0;
@@ -293,8 +294,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         /// </summary>
         private float darkWhoAmI
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         /// <summary>
@@ -302,33 +303,33 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         /// </summary>
         private float petalAngle
         {
-            get => projectile.ai[1] + 45;
+            get => Projectile.ai[1] + 45;
         }
 
         public override void AI()
         {
-            if (projectile.timeLeft == 90 && Main.netMode != NetmodeID.MultiplayerClient) // Just spawned
+            if (Projectile.timeLeft == 90 && Main.netMode != NetmodeID.MultiplayerClient) // Just spawned
             {
                 darkX = Main.projectile[(int)darkWhoAmI].Center.X;
                 darkY = Main.projectile[(int)darkWhoAmI].Center.Y;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
-            Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
+            Vector2 delta = Projectile.position - new Vector2(Projectile.position.X + Main.rand.NextFloat(-1, 2), Projectile.position.Y + Main.rand.NextFloat(-1, 2));
             if (Main.rand.NextBool(6))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>(), delta.X, delta.Y);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Shadow>(), delta.X, delta.Y);
             }
 
             // Loop frames
             int frameSpeed = 5;
-            projectile.frameCounter++;
-            if (projectile.frameCounter >= frameSpeed)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= frameSpeed)
             {
-                projectile.frameCounter = 0;
-                projectile.frame++;
-                if (projectile.frame >= Main.projFrames[projectile.type])
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                 }
             }
 
@@ -336,23 +337,23 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             if (petalAngle > 90 && petalAngle < 270)
             {
                 if (angle < 45)
-                    projectile.direction = 1;
+                    Projectile.direction = 1;
                 else
-                    projectile.direction = -1;
+                    Projectile.direction = -1;
             }
             else
             {
                 if (angle > 45)
-                    projectile.direction = -1;
+                    Projectile.direction = -1;
                 else 
-                    projectile.direction = 1;
+                    Projectile.direction = 1;
             }
-            rotation += projectile.direction;
+            rotation += Projectile.direction;
             if (rotation > 10)
                 rotation = 10;
             else if (rotation < -10)
                 rotation = -10;
-            projectile.rotation = MathHelper.ToRadians(rotation);
+            Projectile.rotation = MathHelper.ToRadians(rotation);
 
             //Positioning
             //Posiitoning - petal from Dark
@@ -361,32 +362,32 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             offset = new Vector2((float)(r * Math.Cos(MathHelper.ToRadians(angle))), (float)(r * Math.Sin(MathHelper.ToRadians(angle))));
             Vector2 rotatedOffset = offset.RotatedBy(MathHelper.ToRadians(petalAngle));
             angle ++;
-            projectile.Center = position + rotatedOffset;
+            Projectile.Center = position + rotatedOffset;
         }
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.NPCDeath6, projectile.position);
+            SoundEngine.PlaySound(SoundID.NPCDeath6, Projectile.position);
             Vector2 dustSpeed = new Vector2(0, 5);
             for (int i = 0; i < 15; i++)
             {
                 Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
-                Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
             }
             //Bump in randomized direction
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                int npc = NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y, NPCType<ShadowAdd>());
+                int npc = NPC.NewNPC(Projectile.GetSource_FromThis(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCType<ShadowAdd>());
                 Main.npc[npc].ai[3] = Main.rand.Next(-7, 3);
                 Main.npc[npc].netUpdate = true;
             }
             base.Kill(timeLeft);
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0f);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow").Value;
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), Projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 2, SpriteEffects.None, 0);
             return true;
         }
     }
@@ -402,14 +403,14 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetDefaults()
         {
-            projectile.width = 10;
-            projectile.height = 10;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 480;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = false;
-            projectile.alpha = 255;
+            Projectile.width = 10;
+            Projectile.height = 10;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 480;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = false;
+            Projectile.alpha = 255;
         }
 
         private double distance = 0;
@@ -421,8 +422,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         /// </summary>
         private float darkWhoAmI
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         /// <summary>
@@ -446,21 +447,21 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         /// </summary>
         private float powerIncrease
         {
-            get => projectile.ai[1];
+            get => Projectile.ai[1];
         }
 
         public override void AI()
         {
             //Setup values
             Projectile darkOwner = Main.projectile[(int)darkWhoAmI];
-            if (projectile.timeLeft == 480) 
+            if (Projectile.timeLeft == 480) 
             {
                 if (Main.netMode == NetmodeID.Server)
-                    projectile.netUpdate = true;
-                Vector2 darkToThis = darkOwner.Center - projectile.Center;
+                    Projectile.netUpdate = true;
+                Vector2 darkToThis = darkOwner.Center - Projectile.Center;
                 angle = (float)Math.Atan2(darkToThis.Y, darkToThis.X);
                 angle += (float)Math.PI;
-                distance = Math.Sqrt(Math.Pow(projectile.Center.X - darkOwner.Center.X,2) + Math.Pow(projectile.Center.Y - darkOwner.Center.Y,2)); //r for purposes of spiral
+                distance = Math.Sqrt(Math.Pow(Projectile.Center.X - darkOwner.Center.X,2) + Math.Pow(Projectile.Center.Y - darkOwner.Center.Y,2)); //r for purposes of spiral
                 fraction = (float)distance / 120f;
             }
 
@@ -470,18 +471,18 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             position.Y += (float)(distance * Math.Sin(angle));
             distance -= fraction;
             angle -= MathHelper.ToRadians(2);
-            projectile.Center = position;
+            Projectile.Center = position;
 
             //Kill
             if (distance < 0)
-                projectile.timeLeft = 0;
+                Projectile.timeLeft = 0;
 
-            Vector2 delta = projectile.position - new Vector2(projectile.position.X + Main.rand.NextFloat(-1, 2), projectile.position.Y + Main.rand.NextFloat(-1, 2));
+            Vector2 delta = Projectile.position - new Vector2(Projectile.position.X + Main.rand.NextFloat(-1, 2), Projectile.position.Y + Main.rand.NextFloat(-1, 2));
             //Dust
             if (Main.rand.NextBool(5))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Shadow>(), delta.X, delta.Y);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Rainbow>(), delta.X, delta.Y, 0, new Color(200, 0, 0), .5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Shadow>(), delta.X, delta.Y);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Rainbow>(), delta.X, delta.Y, 0, new Color(200, 0, 0), .5f);
             }
         }
 
@@ -496,10 +497,10 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             base.Kill(timeLeft);
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow");
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1f, SpriteEffects.None, 0f);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.Shadowmancer + "CollectiveFragment" + "_aGlow").Value;
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, new Color(40, 0, 0, 0), Projectile.velocity.ToRotation(), new Vector2(tex.Width / 2, tex.Height / 2), 1f, SpriteEffects.None, 0);
             return true;
         }
     }

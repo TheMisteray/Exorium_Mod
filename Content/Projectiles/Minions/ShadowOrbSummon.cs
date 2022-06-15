@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,12 +15,13 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetDefaults()
         {
-            projectile.width = 12;
-            projectile.height = 12;
-            projectile.friendly = true;
-            projectile.minion = true;
-            projectile.penetrate = 3;
-            projectile.timeLeft = 600;
+            Projectile.width = 12;
+            Projectile.height = 12;
+            Projectile.friendly = true;
+            Projectile.minion = true;
+            Projectile.penetrate = 3;
+            Projectile.timeLeft = 600;
+            Projectile.damage = 14;
         }
 
         private const int MAX_TICKS = 25;
@@ -33,11 +35,11 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 const float velXmult = 0.98f;
                 const float velYmult = 0.35f;
                 ticks = MAX_TICKS;
-                projectile.velocity.X *= velXmult;
-                projectile.velocity.Y += velYmult;
+                Projectile.velocity.X *= velXmult;
+                Projectile.velocity.Y += velYmult;
             }
-            projectile.rotation =
-                projectile.velocity.ToRotation() +
+            Projectile.rotation =
+                Projectile.velocity.ToRotation() +
                 MathHelper.ToRadians(90f);
 
         }
@@ -46,11 +48,14 @@ namespace ExoriumMod.Content.Projectiles.Minions
         {
             for (int k = 0; k < 12; k++)
             {
-                int dust = Dust.NewDust(projectile.position - projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Shadow>(), projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
+                int dust = Dust.NewDust(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.Shadow>(), Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
             }
-            Main.PlaySound(SoundID.Item27, projectile.position);
-            Main.player[projectile.owner].AddBuff(BuffType<Buffs.Minions.ShadowSummon>(), 1);
-            Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<ShadowSummon>(), projectile.damage, projectile.knockBack, projectile.owner);
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
+
+            Player player = Main.player[Projectile.owner];
+            player.AddBuff(BuffType<Buffs.Minions.ShadowSummon>(), 1);
+
+            player.SpawnMinionOnCursor(player.GetSource_FromThis(), player.whoAmI, ProjectileType<ShadowSummon>(), (int)Projectile.ai[0], Projectile.knockBack, Projectile.Center - (player.Center - (player.Center - Main.MouseWorld)));
         }
     }
 }

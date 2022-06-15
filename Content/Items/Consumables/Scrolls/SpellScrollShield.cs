@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -20,20 +21,20 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.useAnimation = 20;
-            item.useTurn = true;
-            item.useTime = 20;
-            item.useStyle = 4;
-            item.UseSound = SoundID.Item4;
-            item.maxStack = 30;
-            item.mana = 20;
-            item.consumable = true;
-            item.rare = 1;
-            item.value = Item.buyPrice(gold: 1);
-            item.shoot = 10;
-            item.noUseGraphic = true;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useAnimation = 20;
+            Item.useTurn = true;
+            Item.useTime = 20;
+            Item.useStyle = 4;
+            Item.UseSound = SoundID.Item4;
+            Item.maxStack = 30;
+            Item.mana = 20;
+            Item.consumable = true;
+            Item.rare = 1;
+            Item.value = Item.buyPrice(gold: 1);
+            Item.shoot = 10;
+            Item.noUseGraphic = true;
         }
 
         public override bool CanUseItem(Player player)
@@ -48,7 +49,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
         }
 
         //For some reason needed to have the item be consumed
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             return false;
         }

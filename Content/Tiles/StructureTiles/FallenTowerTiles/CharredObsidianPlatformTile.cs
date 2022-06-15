@@ -10,13 +10,9 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
 {
     class CharredObsidianPlatformTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileSolidTop[Type] = true;
@@ -36,11 +32,11 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
             AddMapEntry(new Color(51, 12, 5));
-            drop = ItemType<Items.TileItems.StructureTileItems.FallenTowerTileItems.CharredObsidianPlatform>();
-            disableSmartCursor = true;
-            adjTiles = new int[] { TileID.Platforms };
-            dustType = DustID.Obsidian;
-            Main.dust[dustType].color = new Color(51, 12, 5);
+            ItemDrop = ItemType<Items.TileItems.StructureTileItems.FallenTowerTileItems.CharredObsidianPlatform>();
+            TileID.Sets.DisableSmartCursor[Type] = true;
+            AdjTiles = new int[] { TileID.Platforms };
+            DustType = DustID.Obsidian;
+            Main.dust[DustType].color = new Color(51, 12, 5);
         }
     }
 }

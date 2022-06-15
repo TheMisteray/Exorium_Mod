@@ -7,13 +7,9 @@ namespace ExoriumMod.Content.Buffs.Minions
 {
     class SandWisp : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.MinionBuff + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.MinionBuff + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sand Wisp");
             Description.SetDefault("The sand wisp will fight for you");

@@ -17,12 +17,12 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 24;
-            item.height = 24;
-            item.accessory = true;
-            item.value = 1000;
-            item.rare = 1;
-            item.defense = 4;
+            Item.width = 24;
+            Item.height = 24;
+            Item.accessory = true;
+            Item.value = 1000;
+            Item.rare = 1;
+            Item.defense = 4;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
@@ -32,12 +32,11 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.Shackle);
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 2);
             recipe.AddTile(TileID.TinkerersWorkbench);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

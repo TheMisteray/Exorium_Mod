@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -18,13 +19,9 @@ namespace ExoriumMod.Content.Tiles
 
         public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
 
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2);
             Main.tileSolidTop[Type] = false;
@@ -41,29 +38,29 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.AnchorInvalidTiles = new[] { 127 };
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-            TileObjectData.newTile.HookCheck = new PlacementHook(new Func<int, int, int, int, int, int>(Chest.FindEmptyChest), -1, 0, true);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(new Func<int, int, int, int, int, int>(Chest.AfterPlacement_Hook), -1, 0, false);
+            TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
+            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
             TileObjectData.newTile.StyleHorizontal = true;
             ModTranslation name = CreateMapEntryName();
             TileObjectData.addTile(Type);
             name.SetDefault("Shadow Altar");
             AddMapEntry(new Color(20, 20, 20), name);
-            disableSmartCursor = true;
-            minPick = 10000;
+            TileID.Sets.DisableSmartCursor[Type] = true;
+            MinPick = 10000;
         }
         
-        public override bool HasSmartInteract()
+        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
         {
             return false;
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 64, 32, chestDrop);
+            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ChestDrop);
             Chest.DestroyChest(i, j);
         }
 
-        public override bool NewRightClick(int i, int j)
+        public override bool RightClick(int i, int j)
         {
             Player player = Main.LocalPlayer;
             if (!NPC.AnyNPCs(NPCType<Bosses.Shadowmancer.AssierJassad>()))
@@ -80,28 +77,28 @@ namespace ExoriumMod.Content.Tiles
             Tile tile = Main.tile[i, j];
             int left = i;
             int top = j;
-            if (tile.frameX % 36 != 0)
+            if (tile.TileFrameX % 36 != 0)
             {
                 left--;
             }
-            if (tile.frameY != 0)
+            if (tile.TileFrameY != 0)
             {
                 top--;
             }
-            player.showItemIcon2 = -1;
-            player.showItemIconText = Language.GetTextValue("Shadow Altar");
+            player.cursorItemIconID = -1;
+            player.cursorItemIconText = Language.GetTextValue("Shadow Altar");
             player.noThrow = 2;
-            player.showItemIcon = true;
+            player.cursorItemIconEnabled = true;
         }
 
         public override void MouseOverFar(int i, int j)
         {
             MouseOver(i, j);
             Player player = Main.LocalPlayer;
-            if (player.showItemIconText == "")
+            if (player.cursorItemIconText == "")
             {
-                player.showItemIcon = false;
-                player.showItemIcon2 = 0;
+                player.cursorItemIconEnabled = false;
+                player.cursorItemIconID = 0;
             }
         }
 
@@ -145,7 +142,7 @@ namespace ExoriumMod.Content.Tiles
             }
             int x = (int)player.Center.X;
             int y = (int)player.Bottom.Y - 200;
-            int index = NPC.NewNPC(x, y, type, 0, 0, 0, 0, 180);
+            int index = NPC.NewNPC(new EntitySource_SpawnNPC(), x, y, type, 0, 0, 0, 0, 180);
             if (syncID < 0)
             {
                 //NPC refNPC = new NPC();

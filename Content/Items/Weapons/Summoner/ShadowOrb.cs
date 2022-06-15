@@ -1,5 +1,7 @@
 ﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,33 +16,36 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
         {
             Tooltip.SetDefault("Produces a shadow on impact that will do your bidding" +
                 "\nShadows have a small chance to inflict consuming dark");
-            ItemID.Sets.GamepadWholeScreenUseRange[item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
-            ItemID.Sets.LockOnIgnoresCollision[item.type] = true;
+            ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
+            ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
-            item.damage = 14;
-            item.knockBack = 0f;
-            item.width = 32;
-            item.height = 32;
-            item.useTime = 60;
-            item.useAnimation = 60;
-            item.useStyle = ItemUseStyleID.SwingThrow;
-            item.value = Item.buyPrice(0, 0, 7, 0);
-            item.rare = 1;
-            item.UseSound = SoundID.Item1;
-            item.maxStack = 999;
-            item.noMelee = true;
-            item.consumable = true;
-            item.shootSpeed = 10f;
-            item.summon = true;
+            Item.damage = 14;
+            Item.knockBack = 0f;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 60;
+            Item.useAnimation = 60;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.value = Item.buyPrice(0, 0, 7, 0);
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item1;
+            Item.maxStack = 999;
+            Item.noMelee = true;
+            Item.consumable = true;
+            Item.shootSpeed = 10f;
+            Item.DamageType = DamageClass.Summon;
 
-            // These below are needed for a minion weapon
-            item.noMelee = true;
-            item.summon = true;
             // No buffTime because otherwise the item tooltip would say something like "1 minute duration"
-            item.shoot = ProjectileType<Projectiles.Minions.ShadowOrbSummon>();
+            Item.shoot = ProjectileType<Projectiles.Minions.ShadowOrbSummon>();
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Item.damage);
+            return false;
         }
     }
 }

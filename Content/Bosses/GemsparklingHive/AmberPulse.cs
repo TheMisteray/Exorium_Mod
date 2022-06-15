@@ -14,42 +14,42 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetDefaults()
         {
-            projectile.width = 128;
-            projectile.height = 128;
-            projectile.aiStyle = -1;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 255;
-            projectile.timeLeft = 1200;
-            projectile.penetrate = -1;
-            projectile.tileCollide = false;
+            Projectile.width = 128;
+            Projectile.height = 128;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 1200;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
         }
 
         public float scalar
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public override void AI()
         {
             scalar += MathHelper.PiOver4 / 30;
-            projectile.rotation += .07f;
+            Projectile.rotation += .07f;
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
+            Texture2D tex = Request<Texture2D>(AssetDirectory.GemsparklingHive + "SapphireRing").Value;
 
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(255, 110, 0, 0), projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1 + (float)((Math.Sin(scalar) * 1.5) + 1), SpriteEffects.None, 0f) ;
-            base.PostDraw(spriteBatch, lightColor);
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), null, new Color(255, 110, 0, 0), Projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1 + (float)((Math.Sin(scalar) * 1.5) + 1), SpriteEffects.None, 0) ;
+            base.PostDraw(lightColor);
         }
 
         public override bool CanHitPlayer(Player target)
         {
-            Texture2D tex = GetTexture(AssetDirectory.GemsparklingHive + "SapphireRing");
+            Texture2D tex = Request<Texture2D>(AssetDirectory.GemsparklingHive + "SapphireRing").Value;
 
-            float dist = Vector2.Distance(target.Center, projectile.Center);
+            float dist = Vector2.Distance(target.Center, Projectile.Center);
             if (dist < (tex.Width/2) * (1 + (float)((Math.Sin(scalar) * 2) + 1)) + target.width/2)
                 return true;
             return false;

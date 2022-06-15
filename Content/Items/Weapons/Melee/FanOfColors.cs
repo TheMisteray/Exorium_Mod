@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -9,6 +10,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.Graphics.Effects;
 using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.InteropServices;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -24,45 +26,45 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.damage = 17;
-            item.melee = true;
-            item.noMelee = true;
-            item.width = 32;
-            item.height = 32;
-            item.useTime = 76;
-            item.useAnimation = 76;
-            item.useStyle = 1;
-            item.knockBack = 3;
-            item.value = Item.sellPrice(gold: 3, silver: 75);
-            item.rare = 2;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-            item.shoot = ProjectileType<ColorKnife>();
-            item.shootSpeed = 48f;
-            item.useTurn = true;
-            item.noUseGraphic = true;
+            Item.damage = 17;
+            Item.DamageType = DamageClass.Melee;
+            Item.noMelee = true;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 76;
+            Item.useAnimation = 76;
+            Item.useStyle = 1;
+            Item.knockBack = 3;
+            Item.value = Item.sellPrice(gold: 3, silver: 75);
+            Item.rare = 2;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
+            Item.shoot = ProjectileType<ColorKnife>();
+            Item.shootSpeed = 48f;
+            Item.useTurn = true;
+            Item.noUseGraphic = true;
         }
 
         private bool mode = true;
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float numberProjectiles = 7;
             float rotation = MathHelper.ToRadians(15);
-            position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
+            position += Vector2.Normalize(velocity) * 45f;
             for (int i = 0; i<numberProjectiles; i++)
             {
                 if (mode)
                 {
-                    Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-(rotation/2), 1.5f*rotation, i / (numberProjectiles - 1))) * .2f;
-                    int projectile = Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+                    Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.Lerp(-(rotation/2), 1.5f*rotation, i / (numberProjectiles - 1))) * .2f;
+                    int projectile = Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
                     Main.projectile[projectile].localAI[1] = i;
                     Main.projectile[projectile].localAI[0] = 5 * i;
                 }
                 else
                 {
-                    Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp((rotation/2), -rotation*1.5f, i / (numberProjectiles - 1))) * .2f;
-                    int projectile = Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+                    Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.Lerp((rotation/2), -rotation*1.5f, i / (numberProjectiles - 1))) * .2f;
+                    int projectile = Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
                     Main.projectile[projectile].localAI[1] = i;
                     Main.projectile[projectile].localAI[0] = 5 * i;
                 }
@@ -73,7 +75,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.Amethyst);
             recipe.AddIngredient(ItemID.Topaz);
             recipe.AddIngredient(ItemID.Sapphire);
@@ -83,8 +85,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             recipe.AddIngredient(ItemID.Amber);
             recipe.AddIngredient(ItemID.ThrowingKnife, 100);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 
@@ -94,70 +95,70 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 7;
+            Main.projFrames[Projectile.type] = 7;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 14;
-            projectile.height = 30;
-            projectile.friendly = true;
-            projectile.melee = true;
-            projectile.timeLeft = 360;
+            Projectile.width = 14;
+            Projectile.height = 30;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.timeLeft = 360;
         }
 
         public override void AI()
         {
-            projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.57f;
-            projectile.active = true;
-            projectile.alpha = 0;
-            if (projectile.timeLeft == 360)
-                projectile.netUpdate = true;
-            if (projectile.localAI[0] > 0)
+            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.active = true;
+            Projectile.alpha = 0;
+            if (Projectile.timeLeft == 360)
+                Projectile.netUpdate = true;
+            if (Projectile.localAI[0] > 0)
             {
-                projectile.alpha = 255;
-                projectile.localAI[0]--;
-                switch (projectile.localAI[1])
+                Projectile.alpha = 255;
+                Projectile.localAI[0]--;
+                switch (Projectile.localAI[1])
                 {
                     case 0:
-                        Lighting.AddLight(projectile.position, 255 * 0.002f, 0 * 0.002f, 0 * 0.002f);
+                        Lighting.AddLight(Projectile.position, 255 * 0.002f, 0 * 0.002f, 0 * 0.002f);
                         break;
                     case 1:
-                        Lighting.AddLight(projectile.position, 255 * 0.002f, 110 * 0.002f, 0 * 0.002f);
+                        Lighting.AddLight(Projectile.position, 255 * 0.002f, 110 * 0.002f, 0 * 0.002f);
                         break;
                     case 2:
-                        Lighting.AddLight(projectile.position, 255 * 0.002f, 247 * 0.002f, 0 * 0.002f);
+                        Lighting.AddLight(Projectile.position, 255 * 0.002f, 247 * 0.002f, 0 * 0.002f);
                         break;
                     case 3:
-                        Lighting.AddLight(projectile.position, 0 * 0.002f, 255 * 0.002f, 0 * 0.002f);
+                        Lighting.AddLight(Projectile.position, 0 * 0.002f, 255 * 0.002f, 0 * 0.002f);
                         break;
                     case 4:
-                        Lighting.AddLight(projectile.position, 0 * 0.002f, 255 * 0.002f, 204 * 0.002f);
+                        Lighting.AddLight(Projectile.position, 0 * 0.002f, 255 * 0.002f, 204 * 0.002f);
                         break;
                     case 5:
-                        Lighting.AddLight(projectile.position, 35 * 0.002f, 0 * 0.002f, 255 * 0.002f);
+                        Lighting.AddLight(Projectile.position, 35 * 0.002f, 0 * 0.002f, 255 * 0.002f);
                         break;
                     case 6:
-                        Lighting.AddLight(projectile.position, 149 * 0.002f, 0 * 0.002f, 255 * 0.002f);
+                        Lighting.AddLight(Projectile.position, 149 * 0.002f, 0 * 0.002f, 255 * 0.002f);
                         break;
                 }
             }
-            projectile.frame = (int)projectile.localAI[1];
+            Projectile.frame = (int)Projectile.localAI[1];
         }
 
         public override bool ShouldUpdatePosition()
         {
-            return projectile.localAI[0] <= 0;
+            return Projectile.localAI[0] <= 0;
         }
 
-        public override bool CanDamage()
+        public override bool? CanDamage()/* Suggestion: Return null instead of false */
         {
-            return projectile.localAI[0] <= 0;
+            return Projectile.localAI[0] <= 0;
         }
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.Item27, projectile.position);
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
     }
 

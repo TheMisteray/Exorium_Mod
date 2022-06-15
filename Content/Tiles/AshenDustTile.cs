@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,27 +10,16 @@ namespace ExoriumMod.Content.Tiles
 {
     class AshenDustTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
-            drop = ItemType<Items.TileItems.AshenDust>();
+            ItemDrop = ItemType<Items.TileItems.AshenDust>();
             AddMapEntry(new Color(90, 90, 90));
-            SetModTree(new Trees.DeadwoodTree());
-            dustType = DustType<Dusts.DeadDust>();
-        }
-
-        public override int SaplingGrowthType(ref int style)
-        {
-            style = 0;
-            return TileType<DeadwoodSaplingTile>();
+            DustType = DustType<Dusts.DeadDust>();
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -37,7 +27,7 @@ namespace ExoriumMod.Content.Tiles
             num = fail ? 1 : 3;
         }
 
-        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex)
+        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
             if (Main.rand.NextBool(700))
             {
@@ -57,7 +47,7 @@ namespace ExoriumMod.Content.Tiles
 
         public override void RandomUpdate(int i, int j)
         {
-            if (!Main.tile[i, j - 1].active() && Main.rand.Next(1400) == 0)
+            if (!Main.tile[i, j - 1].HasTile && Main.rand.NextBool(1400))
                 WorldGen.PlaceTile(i, j - 1, TileType<DeadweedTile>(), true, false);
         }
     }

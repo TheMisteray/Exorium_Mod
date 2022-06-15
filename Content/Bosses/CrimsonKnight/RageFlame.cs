@@ -21,20 +21,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            projectile.width = 1200;
-            projectile.height = 1200;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 300;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            Projectile.width = 1200;
+            Projectile.height = 1200;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 300;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
         }
 
         private const float RANGE = 500;
 
         public override bool CanHitPlayer(Player target)
         {
-            return (target.Center - projectile.Center).Length() < target.width + RANGE;
+            return (target.Center - Projectile.Center).Length() < target.width + RANGE;
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)

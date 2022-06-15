@@ -16,18 +16,18 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 16;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 1200;
-            projectile.tileCollide = true;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            Projectile.width = 32;
+            Projectile.height = 16;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 1200;
+            Projectile.tileCollide = true;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
 

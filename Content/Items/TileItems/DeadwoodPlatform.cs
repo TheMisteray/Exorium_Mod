@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria;
 
 namespace ExoriumMod.Content.Items.TileItems
 {
@@ -15,24 +16,23 @@ namespace ExoriumMod.Content.Items.TileItems
 
         public override void SetDefaults()
         {
-            item.width = 8;
-            item.height = 10;
-            item.maxStack = 999;
-            item.useTurn = true;
-            item.autoReuse = true;
-            item.useAnimation = 10;
-            item.useTime = 5;
-            item.useStyle = 1;
-            item.consumable = true;
-            item.createTile = TileType<Tiles.DeadwoodPlatformTile>();
+            Item.width = 8;
+            Item.height = 10;
+            Item.maxStack = 999;
+            Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.useAnimation = 10;
+            Item.useTime = 5;
+            Item.useStyle = 1;
+            Item.consumable = true;
+            Item.createTile = TileType<Tiles.DeadwoodPlatformTile>();
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(2);
             recipe.AddIngredient(ItemType<Deadwood>());
-            recipe.SetResult(this, 2);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

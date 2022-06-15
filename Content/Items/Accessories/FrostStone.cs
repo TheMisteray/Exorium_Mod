@@ -15,11 +15,11 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 28;
-            item.height = 28;
-            item.value = 25000;
-            item.accessory = true;
-            item.rare = 3;
+            Item.width = 28;
+            Item.height = 28;
+            Item.value = 25000;
+            Item.accessory = true;
+            Item.rare = 3;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

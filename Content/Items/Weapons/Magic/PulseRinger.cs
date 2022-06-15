@@ -2,6 +2,7 @@
 using ExoriumMod.Helpers;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -19,32 +20,31 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            item.damage = 36;
-            item.width = 32;
-            item.height = 24;
-            item.magic = true;
-            item.mana = 10;
-            item.useTime = 42;
-            item.useAnimation = 42;
-            item.useStyle = 5;
-            item.noMelee = true;
-            item.knockBack = 1;
-            item.value = Item.sellPrice(silver: 48);
-            item.rare = 1;
-            item.UseSound = SoundID.Item75;
-            item.shoot = ProjectileType<EnergyRing>();
-            item.shootSpeed = 2;
-            item.autoReuse = true;
+            Item.damage = 36;
+            Item.width = 32;
+            Item.height = 24;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 10;
+            Item.useTime = 42;
+            Item.useAnimation = 42;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.knockBack = 1;
+            Item.value = Item.sellPrice(silver: 48);
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item75;
+            Item.shoot = ProjectileType<EnergyRing>();
+            Item.shootSpeed = 2;
+            Item.autoReuse = true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.MeteoriteBar, 24);
             recipe.AddIngredient(ItemID.HellstoneBar, 6);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
 
         public override Vector2? HoldoutOffset()
@@ -59,47 +59,47 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            projectile.width = 40;
-            projectile.height = 40;
-            projectile.alpha = 255;
-            projectile.timeLeft = 1200;
-            projectile.penetrate = -1;
-            projectile.friendly = true;
-            projectile.magic = true;
-            projectile.extraUpdates = 9;
+            Projectile.width = 40;
+            Projectile.height = 40;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 1200;
+            Projectile.penetrate = -1;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.extraUpdates = 9;
         }
 
         public override void AI()
         {
-            DustHelper.DustRing(projectile.Center, DustType<Dusts.Rainbow>(), projectile.width * projectile.scale / 2, 0, .14f, .16f, 0, 0, 0, Color.Lime, false);
+            DustHelper.DustRing(Projectile.Center, DustType<Dusts.Rainbow>(), Projectile.width * Projectile.scale / 2, 0, .14f, .16f, 0, 0, 0, Color.Lime, false);
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            projectile.position = projectile.Center;
-            projectile.scale -= .25f;
-            projectile.Center = projectile.position;
-            if (projectile.scale <= 0)
-                projectile.Kill();
+            Projectile.position = Projectile.Center;
+            Projectile.scale -= .25f;
+            Projectile.Center = Projectile.position;
+            if (Projectile.scale <= 0)
+                Projectile.Kill();
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Main.PlaySound(SoundID.Item10, projectile.position);
-            if (projectile.velocity.X != oldVelocity.X)
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            if (Projectile.velocity.X != oldVelocity.X)
             {
-                projectile.velocity.X = -oldVelocity.X;
+                Projectile.velocity.X = -oldVelocity.X;
             }
-            if (projectile.velocity.Y != oldVelocity.Y)
+            if (Projectile.velocity.Y != oldVelocity.Y)
             {
-                projectile.velocity.Y = -oldVelocity.Y;
+                Projectile.velocity.Y = -oldVelocity.Y;
             }
-            projectile.position = projectile.Center;
-            projectile.scale -= .25f;
-            projectile.Center = projectile.position;
-            if (projectile.scale <= 0)
-                projectile.Kill();
+            Projectile.position = Projectile.Center;
+            Projectile.scale -= .25f;
+            Projectile.Center = Projectile.position;
+            if (Projectile.scale <= 0)
+                Projectile.Kill();
             return false;
         }
     }

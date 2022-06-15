@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -13,32 +14,40 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Wight Warrior");
-            Main.npcFrameCount[npc.type] = Main.npcFrameCount[NPCID.ArmoredSkeleton];
+            Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.ArmoredSkeleton];
         }
 
         public override void SetDefaults()
         {
-            npc.width = 23;
-            npc.height = 40;
-            npc.damage = 19;
-            npc.defense = 8;
-            npc.lifeMax = 160;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath2;
-            npc.value = 160f;
-            npc.knockBackResist = .2f;
-            npc.aiStyle = 3;
-            aiType = NPCID.ArmoredSkeleton;
-            npc.buffImmune[BuffID.Confused] = false;
-            animationType = NPCID.ArmoredSkeleton;
+            NPC.width = 23;
+            NPC.height = 40;
+            NPC.damage = 19;
+            NPC.defense = 8;
+            NPC.lifeMax = 160;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath2;
+            NPC.value = 160f;
+            NPC.knockBackResist = .2f;
+            NPC.aiStyle = 3;
+            AIType = NPCID.ArmoredSkeleton;
+            NPC.buffImmune[BuffID.Confused] = false;
+            AnimationType = NPCID.ArmoredSkeleton;
         }
 
-        public override void NPCLoot()
+        public override void OnKill()
         {
             if (Main.rand.NextBool(3))
-                Item.NewItem(npc.getRect(), ItemType<Items.Materials.WightBone>());
+                Item.NewItem(NPC.GetSource_Loot(), NPC.getRect(), ItemType<Items.Materials.WightBone>());
             if (Main.rand.NextBool(40))
-                Item.NewItem(npc.getRect(), ItemType<Items.Accessories.BlightedManacle>());
+                Item.NewItem(NPC.GetSource_Loot(), NPC.getRect(), ItemType<Items.Accessories.BlightedManacle>());
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.WightBone>(), 3));
+            npcLoot.Add(ItemDropRule.Common(ItemType<Items.Accessories.BlightedManacle>(), 40));
+
+            base.ModifyNPCLoot(npcLoot);
         }
     }
 }

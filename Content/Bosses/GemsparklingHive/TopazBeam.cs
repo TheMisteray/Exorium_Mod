@@ -14,41 +14,41 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetDefaults()
         {
-            projectile.width = 12;
-            projectile.height = 12;
-            projectile.aiStyle = -1;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.extraUpdates = 50;
-            projectile.timeLeft = 500;
-            projectile.tileCollide = false;
+            Projectile.width = 12;
+            Projectile.height = 12;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.extraUpdates = 50;
+            Projectile.timeLeft = 500;
+            Projectile.tileCollide = false;
         }
 
         public float mode
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public override void AI()
         {
-            projectile.alpha = 225;
+            Projectile.alpha = 225;
             if (mode == 0)
             {
-                if (Main.rand.Next(100) == 0)
+                if (Main.rand.NextBool(100))
                 {
-                    int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Rainbow>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 0, new Color(255, 247, 0));
-                    Main.dust[dust0].position.X -= projectile.velocity.X / 10f * Main.rand.Next(10);
-                    Main.dust[dust0].position.Y -= projectile.velocity.Y / 10f * Main.rand.Next(10);
+                    int dust0 = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.Rainbow>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, new Color(255, 247, 0));
+                    Main.dust[dust0].position.X -= Projectile.velocity.X / 10f * Main.rand.Next(10);
+                    Main.dust[dust0].position.Y -= Projectile.velocity.Y / 10f * Main.rand.Next(10);
                 }
             }
             else
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    int dust0 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Rainbow>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 0, new Color(255, 247, 0));
-                    Main.dust[dust0].position.X -= projectile.velocity.X / 10f * i;
-                    Main.dust[dust0].position.Y -= projectile.velocity.Y / 10f * i;
+                    int dust0 = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.Rainbow>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, new Color(255, 247, 0));
+                    Main.dust[dust0].position.X -= Projectile.velocity.X / 10f * i;
+                    Main.dust[dust0].position.Y -= Projectile.velocity.Y / 10f * i;
                 }
             }
         }

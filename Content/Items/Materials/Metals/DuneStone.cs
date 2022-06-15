@@ -10,18 +10,18 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetDefaults()
         {
-            item.width = 16;
-            item.height = 14;
-            item.rare = 0;
-            item.value = 100;
-            item.maxStack = 999;
-            item.useStyle = 1;
-            item.useTurn = true;
-            item.useAnimation = 15;
-            item.useTime = 15;
-            item.autoReuse = true;
-            item.consumable = true;
-            item.createTile = TileType<Tiles.DuneStoneTile>();
+            Item.width = 16;
+            Item.height = 14;
+            Item.rare = 0;
+            Item.value = 100;
+            Item.maxStack = 999;
+            Item.useStyle = 1;
+            Item.useTurn = true;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
+            Item.autoReuse = true;
+            Item.consumable = true;
+            Item.createTile = TileType<Tiles.DuneStoneTile>();
         }
     }
 }

@@ -18,25 +18,24 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.CloneDefaults(ItemID.WoodenBoomerang);
-            item.shoot = ProjectileType<RimeBoomerang>();
-            item.damage = 15;
-            item.useTime = 34;
-            item.useAnimation = 34;
-            item.autoReuse = true;
-            item.rare = 1;
-            item.value = Item.sellPrice(silver: 14);
-            item.UseSound = SoundID.Item1;
-            item.shootSpeed = 18;
+            Item.CloneDefaults(ItemID.WoodenBoomerang);
+            Item.shoot = ProjectileType<RimeBoomerang>();
+            Item.damage = 15;
+            Item.useTime = 34;
+            Item.useAnimation = 34;
+            Item.autoReuse = true;
+            Item.rare = 1;
+            Item.value = Item.sellPrice(silver: 14);
+            Item.UseSound = SoundID.Item1;
+            Item.shootSpeed = 18;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>(), 8);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
 
     }
@@ -52,19 +51,19 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            projectile.timeLeft = 30;
-            projectile.height = 38;
-            projectile.width = 38;
-            projectile.friendly = true;
-            projectile.hostile = false;
+            Projectile.timeLeft = 30;
+            Projectile.height = 38;
+            Projectile.width = 38;
+            Projectile.friendly = true;
+            Projectile.hostile = false;
         }
 
         public override void AI()
         {
-            projectile.rotation++;
+            Projectile.rotation++;
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 67, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -81,7 +80,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void Kill(int timeLeft)
         {
             for (int i = 0; i <= 9; i++)
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 67, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
         }
     }
 }

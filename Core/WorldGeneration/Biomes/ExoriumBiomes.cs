@@ -23,15 +23,15 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                 {
                     int j = 0;
                     int l = 0;
-                    while (!Framing.GetTileSafely(i, j).active() && (double)j < Main.worldSurface)
+                    while (!Framing.GetTileSafely(i, j).HasTile && (double)j < Main.worldSurface)
                     {
                         j++;
                     }
-                    while (!Framing.GetTileSafely(k, l).active() && (double)l < Main.worldSurface)
+                    while (!Framing.GetTileSafely(k, l).HasTile && (double)l < Main.worldSurface)
                     {
                         l++;
                     }
-                    if (((Framing.GetTileSafely(k, l).type == TileID.Dirt) && (Framing.GetTileSafely(k, l).type == TileID.Dirt)) || attempts > 100000)//if too many attempts dirt is no longer required
+                    if (((Framing.GetTileSafely(k, l).TileType == TileID.Dirt) && (Framing.GetTileSafely(k, l).TileType == TileID.Dirt)) || attempts > 100000)//if too many attempts dirt is no longer required
                     {
                         j += 50;
                         l += 50;
@@ -45,9 +45,9 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                                     placementOK = false;
                                     break;
                                 }
-                                if (Framing.GetTileSafely(m, n).active())
+                                if (Framing.GetTileSafely(m, n).HasTile)
                                 {
-                                    int type = Framing.GetTileSafely(m, n).type;
+                                    int type = Framing.GetTileSafely(m, n).TileType;
                                     if (type == TileID.BlueDungeonBrick || type == TileID.GreenDungeonBrick || type == TileID.PinkDungeonBrick || type == TileID.Cloud || type == TileID.RainCloud || type == TileID.WoodBlock || type == TileID.LivingWood || type == TileID.Ebonstone || type == TileID.Crimstone || type == TileID.SandstoneBrick)
                                     {
                                         placementOK = false;
@@ -83,7 +83,7 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                     {
                         if (WorldGen.InWorld(m, n, 30)) //Don't think this is actually necessary
                         {
-                            switch (Framing.GetTileSafely(m, n).type)
+                            switch (Framing.GetTileSafely(m, n).TileType)
                             {
                                 case TileID.Copper:
                                 case TileID.Tin:
@@ -95,7 +95,7 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                                 case TileID.Platinum:
                                 case TileID.Crimtane:
                                 case TileID.Demonite:
-                                    Framing.GetTileSafely(m, n).type = (ushort)TileType<BlightedOreTile>();
+                                    Framing.GetTileSafely(m, n).TileType = (ushort)TileType<BlightedOreTile>();
                                     break;
                                 case TileID.BlueDungeonBrick:
                                 case TileID.GreenDungeonBrick:
@@ -103,15 +103,15 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                                 case TileID.LivingWood:
                                     break;
                                 default:
-                                    Framing.GetTileSafely(m, n).type = (ushort)TileType<AshenDustTile>();
+                                    Framing.GetTileSafely(m, n).TileType = (ushort)TileType<AshenDustTile>();
                                     break;
                             }
-                            if (Framing.GetTileSafely(m, n).wall != 0 && Framing.GetTileSafely(m, n).wall != 7 && Framing.GetTileSafely(m, n).wall != 8 && Framing.GetTileSafely(m, n).wall != 9 &&
-                                Framing.GetTileSafely(m, n).wall != 244 && Framing.GetTileSafely(m, n).wall != 94 && Framing.GetTileSafely(m, n).wall != 95 && Framing.GetTileSafely(m, n).wall != 96 &&
-                                Framing.GetTileSafely(m, n).wall != 97 && Framing.GetTileSafely(m, n).wall != 98 && Framing.GetTileSafely(m, n).wall != 99 && Framing.GetTileSafely(m, n).wall != 100 &&
-                                Framing.GetTileSafely(m, n).wall != 101 && Framing.GetTileSafely(m, n).wall != 102 && Framing.GetTileSafely(m, n).wall != 103 && Framing.GetTileSafely(m, n).wall != 104 &&
-                                Framing.GetTileSafely(m, n).wall != 105)
-                                Framing.GetTileSafely(m, n).wall = (ushort)WallType<AshenDustWall>();
+                            if (Framing.GetTileSafely(m, n).WallType != 0 && Framing.GetTileSafely(m, n).WallType != 7 && Framing.GetTileSafely(m, n).WallType != 8 && Framing.GetTileSafely(m, n).WallType != 9 &&
+                                Framing.GetTileSafely(m, n).WallType != 244 && Framing.GetTileSafely(m, n).WallType != 94 && Framing.GetTileSafely(m, n).WallType != 95 && Framing.GetTileSafely(m, n).WallType != 96 &&
+                                Framing.GetTileSafely(m, n).WallType != 97 && Framing.GetTileSafely(m, n).WallType != 98 && Framing.GetTileSafely(m, n).WallType != 99 && Framing.GetTileSafely(m, n).WallType != 100 &&
+                                Framing.GetTileSafely(m, n).WallType != 101 && Framing.GetTileSafely(m, n).WallType != 102 && Framing.GetTileSafely(m, n).WallType != 103 && Framing.GetTileSafely(m, n).WallType != 104 &&
+                                Framing.GetTileSafely(m, n).WallType != 105)
+                                Framing.GetTileSafely(m, n).WallType = (ushort)WallType<AshenDustWall>();
                         }
                     }
                 }

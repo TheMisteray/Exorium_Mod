@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,46 +15,46 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 9;
+            Main.projFrames[Projectile.type] = 9;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 90;
-            projectile.height = 90;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 260;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 30;
+            Projectile.width = 90;
+            Projectile.height = 90;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 260;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 30;
         }
 
         public override void AI()
         {
-            if (projectile.timeLeft == 260)
+            if (Projectile.timeLeft == 260)
             {
-                Main.PlaySound(SoundID.Item121, projectile.position);
-                projectile.hostile = false;
+                SoundEngine.PlaySound(SoundID.Item121, Projectile.position);
+                Projectile.hostile = false;
             }
-            else if (projectile.timeLeft > 180)
+            else if (Projectile.timeLeft > 180)
             {
-                if (projectile.timeLeft % 5 == 0 && projectile.frame != 7)
-                    projectile.frame ++;
+                if (Projectile.timeLeft % 5 == 0 && Projectile.frame != 7)
+                    Projectile.frame ++;
             }
-            else if (projectile.timeLeft == 180)
+            else if (Projectile.timeLeft == 180)
             {
-                projectile.frame++;
-                projectile.hostile = true;
-                Main.PlaySound(SoundID.Item124, projectile.position);
+                Projectile.frame++;
+                Projectile.hostile = true;
+                SoundEngine.PlaySound(SoundID.Item124, Projectile.position);
             }
-            else if (projectile.timeLeft < 180)
+            else if (Projectile.timeLeft < 180)
             {
-                projectile.position = projectile.Center;
-                projectile.scale += 0.02f;
-                projectile.Center = projectile.position;
-                projectile.alpha += 5;
-                projectile.hostile = false;
+                Projectile.position = Projectile.Center;
+                Projectile.scale += 0.02f;
+                Projectile.Center = Projectile.position;
+                Projectile.alpha += 5;
+                Projectile.hostile = false;
             }
         }
 
@@ -62,12 +63,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             target.AddBuff((BuffID.Confused), 240, false);
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.Shadowmancer + Name + "_aGlow");
-            int frameHeight = tex.Height / Main.projFrames[projectile.type];
-            int startY = frameHeight * projectile.frame;
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), new Rectangle(0, startY, projectile.width, projectile.height), Color.Lerp(new Color(0, 0, 0, 0), new Color(50, 50, 50, 50), (float)(-1 * (projectile.alpha - 255)) / 255f), 0, new Vector2(tex.Width / 2, frameHeight / 2), projectile.scale, SpriteEffects.None, 0f); ;
+            Texture2D tex = Request<Texture2D>(AssetDirectory.Shadowmancer + Name + "_aGlow").Value;
+            int frameHeight = tex.Height / Main.projFrames[Projectile.type];
+            int startY = frameHeight * Projectile.frame;
+            Main.EntitySpriteDraw(tex, (Projectile.Center - Main.screenPosition), new Rectangle(0, startY, Projectile.width, Projectile.height), Color.Lerp(new Color(0, 0, 0, 0), new Color(50, 50, 50, 50), (float)(-1 * (Projectile.alpha - 255)) / 255f), 0, new Vector2(tex.Width / 2, frameHeight / 2), Projectile.scale, SpriteEffects.None, 0); ;
         }
     }
 }

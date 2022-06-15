@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -20,20 +22,20 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetDefaults()
         {
-            npc.width = 30;
-            npc.height = 36;
-            npc.damage = 26;
-            npc.defense = 3;
-            npc.lifeMax = 320;
-            npc.HitSound = SoundID.NPCHit5;
-            npc.DeathSound = SoundID.NPCDeath15;
-            npc.value = 1200f;
-            npc.knockBackResist = 0f;
-            npc.aiStyle = -1;
-            npc.buffImmune[BuffID.Frostburn] = true;
-            npc.buffImmune[BuffID.Frozen] = true;
-            npc.noTileCollide = true;
-            npc.noGravity = true;
+            NPC.width = 30;
+            NPC.height = 36;
+            NPC.damage = 26;
+            NPC.defense = 3;
+            NPC.lifeMax = 320;
+            NPC.HitSound = SoundID.NPCHit5;
+            NPC.DeathSound = SoundID.NPCDeath15;
+            NPC.value = 1200f;
+            NPC.knockBackResist = 0f;
+            NPC.aiStyle = -1;
+            NPC.buffImmune[BuffID.Frostburn] = true;
+            NPC.buffImmune[BuffID.Frozen] = true;
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
         }
 
         private int attackCounter;
@@ -52,7 +54,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             for (int i = 0; i < 3; i++)
             {
                 int dustType = 67;
-                int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, dustType);
+                int dustIndex = Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType);
                 Dust dust = Main.dust[dustIndex];
                 dust.velocity.X = dust.velocity.X + Main.rand.Next(-50, 51) * 0.01f;
                 dust.velocity.Y = dust.velocity.Y + Main.rand.Next(-50, 51) * 0.01f;
@@ -60,18 +62,18 @@ namespace ExoriumMod.Content.NPCs.Enemies
             }
         }
 
-        public override void NPCLoot()
+        public override void OnKill()
         {
             for (int i = 0; i < 9; i++)
             {
                 int dustType = 67;
-                int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, dustType);
+                int dustIndex = Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType);
                 Dust dust = Main.dust[dustIndex];
                 dust.velocity.X = dust.velocity.X + Main.rand.Next(-50, 51) * 0.01f;
                 dust.velocity.Y = dust.velocity.Y + Main.rand.Next(-50, 51) * 0.01f;
                 dust.scale *= 1f + Main.rand.Next(-30, 31) * 0.01f;
             }
-            base.NPCLoot();
+            base.OnKill();
         }
     }
 
@@ -80,20 +82,20 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override string Texture => AssetDirectory.EnemyNPC + Name;
         public override void SetDefaults()
         {
-            npc.width = 30;
-            npc.height = 24;
-            npc.damage = 10;
-            npc.defense = 8;
-            npc.lifeMax = 160;
-            npc.HitSound = SoundID.NPCHit5;
-            npc.DeathSound = SoundID.NPCDeath15;
-            npc.value = 200f;
-            npc.knockBackResist = 0f;
-            npc.aiStyle = -1;
-            npc.buffImmune[BuffID.Frostburn] = true;
-            npc.buffImmune[BuffID.Frozen] = true;
-            npc.noTileCollide = true;
-            npc.noGravity = true;
+            NPC.width = 30;
+            NPC.height = 24;
+            NPC.damage = 10;
+            NPC.defense = 8;
+            NPC.lifeMax = 160;
+            NPC.HitSound = SoundID.NPCHit5;
+            NPC.DeathSound = SoundID.NPCDeath15;
+            NPC.value = 200f;
+            NPC.knockBackResist = 0f;
+            NPC.aiStyle = -1;
+            NPC.buffImmune[BuffID.Frostburn] = true;
+            NPC.buffImmune[BuffID.Frozen] = true;
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
         }
 
         public override void HitEffect(int hitDirection, double damage)
@@ -101,7 +103,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             for (int i = 0; i < 3; i++)
             {
                 int dustType = 67;
-                int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, dustType);
+                int dustIndex = Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType);
                 Dust dust = Main.dust[dustIndex];
                 dust.velocity.X = dust.velocity.X + Main.rand.Next(-50, 51) * 0.01f;
                 dust.velocity.Y = dust.velocity.Y + Main.rand.Next(-50, 51) * 0.01f;
@@ -109,18 +111,18 @@ namespace ExoriumMod.Content.NPCs.Enemies
             }
         }
 
-        public override void NPCLoot()
+        public override void OnKill()
         {
             for (int i = 0; i < 9; i++)
             {
                 int dustType = 67;
-                int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, dustType);
+                int dustIndex = Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType);
                 Dust dust = Main.dust[dustIndex];
                 dust.velocity.X = dust.velocity.X + Main.rand.Next(-50, 51) * 0.01f;
                 dust.velocity.Y = dust.velocity.Y + Main.rand.Next(-50, 51) * 0.01f;
                 dust.scale *= 1f + Main.rand.Next(-30, 31) * 0.01f;
             }
-            base.NPCLoot();
+            base.OnKill();
         }
     }
 
@@ -129,20 +131,20 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override string Texture => AssetDirectory.EnemyNPC + Name;
         public override void SetDefaults()
         {
-            npc.width = 30;
-            npc.height = 32;
-            npc.damage = 6;
-            npc.defense = 5;
-            npc.lifeMax = 160;
-            npc.HitSound = SoundID.NPCHit5;
-            npc.DeathSound = SoundID.NPCDeath15;
-            npc.value = 200f;
-            npc.knockBackResist = 0f;
-            npc.aiStyle = -1;
-            npc.buffImmune[BuffID.Frostburn] = true;
-            npc.buffImmune[BuffID.Frozen] = true;
-            npc.noTileCollide = true;
-            npc.noGravity = true;
+            NPC.width = 30;
+            NPC.height = 32;
+            NPC.damage = 6;
+            NPC.defense = 5;
+            NPC.lifeMax = 160;
+            NPC.HitSound = SoundID.NPCHit5;
+            NPC.DeathSound = SoundID.NPCDeath15;
+            NPC.value = 200f;
+            NPC.knockBackResist = 0f;
+            NPC.aiStyle = -1;
+            NPC.buffImmune[BuffID.Frostburn] = true;
+            NPC.buffImmune[BuffID.Frozen] = true;
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
         }
 
         public override void Init()
@@ -156,7 +158,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             for (int i = 0; i < 3; i++)
             {
                 int dustType = 67;
-                int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, dustType);
+                int dustIndex = Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType);
                 Dust dust = Main.dust[dustIndex];
                 dust.velocity.X = dust.velocity.X + Main.rand.Next(-50, 51) * 0.01f;
                 dust.velocity.Y = dust.velocity.Y + Main.rand.Next(-50, 51) * 0.01f;
@@ -164,18 +166,18 @@ namespace ExoriumMod.Content.NPCs.Enemies
             }
         }
 
-        public override void NPCLoot()
+        public override void OnKill()
         {
             for (int i = 0; i < 9; i++)
             {
                 int dustType = 67;
-                int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, dustType);
+                int dustIndex = Dust.NewDust(NPC.position, NPC.width, NPC.height, dustType);
                 Dust dust = Main.dust[dustIndex];
                 dust.velocity.X = dust.velocity.X + Main.rand.Next(-50, 51) * 0.01f;
                 dust.velocity.Y = dust.velocity.Y + Main.rand.Next(-50, 51) * 0.01f;
                 dust.scale *= 1f + Main.rand.Next(-30, 31) * 0.01f;
             }
-            base.NPCLoot();
+            base.OnKill();
         }
     }
 
@@ -219,73 +221,73 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void AI()
         {
-            if (npc.localAI[1] == 0f)
+            if (NPC.localAI[1] == 0f)
             {
-                npc.localAI[1] = 1f;
+                NPC.localAI[1] = 1f;
                 Init();
             }
-            if (npc.ai[3] > 0f)
+            if (NPC.ai[3] > 0f)
             {
-                npc.realLife = (int)npc.ai[3];
+                NPC.realLife = (int)NPC.ai[3];
             }
-            if (!head && npc.timeLeft < 300)
+            if (!head && NPC.timeLeft < 300)
             {
-                npc.timeLeft = 300;
+                NPC.timeLeft = 300;
             }
-            if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead)
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead)
             {
-                npc.TargetClosest(true);
+                NPC.TargetClosest(true);
             }
-            if (Main.player[npc.target].dead && npc.timeLeft > 300)
+            if (Main.player[NPC.target].dead && NPC.timeLeft > 300)
             {
-                npc.timeLeft = 300;
+                NPC.timeLeft = 300;
             }
             if (Main.netMode != 1)
             {
-                if (!tail && npc.ai[0] == 0f)
+                if (!tail && NPC.ai[0] == 0f)
                 {
                     if (head)
                     {
-                        npc.ai[3] = (float)npc.whoAmI;
-                        npc.realLife = npc.whoAmI;
-                        npc.ai[2] = (float)Main.rand.Next(minLength, maxLength + 1);
-                        npc.ai[0] = (float)NPC.NewNPC((int)(npc.position.X + (float)(npc.width / 2)), (int)(npc.position.Y + (float)npc.height), bodyType, npc.whoAmI);
+                        NPC.ai[3] = (float)NPC.whoAmI;
+                        NPC.realLife = NPC.whoAmI;
+                        NPC.ai[2] = (float)Main.rand.Next(minLength, maxLength + 1);
+                        NPC.ai[0] = (float)NPC.NewNPC(NPC.GetSource_FromAI(), (int)(NPC.position.X + (float)(NPC.width / 2)), (int)(NPC.position.Y + (float)NPC.height), bodyType, NPC.whoAmI);
                     }
-                    else if (npc.ai[2] > 0f)
+                    else if (NPC.ai[2] > 0f)
                     {
-                        npc.ai[0] = (float)NPC.NewNPC((int)(npc.position.X + (float)(npc.width / 2)), (int)(npc.position.Y + (float)npc.height), npc.type, npc.whoAmI);
+                        NPC.ai[0] = (float)NPC.NewNPC(NPC.GetSource_FromAI(), (int)(NPC.position.X + (float)(NPC.width / 2)), (int)(NPC.position.Y + (float)NPC.height), NPC.type, NPC.whoAmI);
                     }
                     else
                     {
-                        npc.ai[0] = (float)NPC.NewNPC((int)(npc.position.X + (float)(npc.width / 2)), (int)(npc.position.Y + (float)npc.height), tailType, npc.whoAmI);
+                        NPC.ai[0] = (float)NPC.NewNPC(NPC.GetSource_FromAI(), (int)(NPC.position.X + (float)(NPC.width / 2)), (int)(NPC.position.Y + (float)NPC.height), tailType, NPC.whoAmI);
                     }
-                    Main.npc[(int)npc.ai[0]].ai[3] = npc.ai[3];
-                    Main.npc[(int)npc.ai[0]].realLife = npc.realLife;
-                    Main.npc[(int)npc.ai[0]].ai[1] = (float)npc.whoAmI;
-                    Main.npc[(int)npc.ai[0]].ai[2] = npc.ai[2] - 1f;
-                    npc.netUpdate = true;
+                    Main.npc[(int)NPC.ai[0]].ai[3] = NPC.ai[3];
+                    Main.npc[(int)NPC.ai[0]].realLife = NPC.realLife;
+                    Main.npc[(int)NPC.ai[0]].ai[1] = (float)NPC.whoAmI;
+                    Main.npc[(int)NPC.ai[0]].ai[2] = NPC.ai[2] - 1f;
+                    NPC.netUpdate = true;
                 }
-                if (!head && (!Main.npc[(int)npc.ai[1]].active || Main.npc[(int)npc.ai[1]].type != headType && Main.npc[(int)npc.ai[1]].type != bodyType))
+                if (!head && (!Main.npc[(int)NPC.ai[1]].active || Main.npc[(int)NPC.ai[1]].type != headType && Main.npc[(int)NPC.ai[1]].type != bodyType))
                 {
-                    npc.life = 0;
-                    npc.HitEffect(0, 10.0);
-                    npc.active = false;
+                    NPC.life = 0;
+                    NPC.HitEffect(0, 10.0);
+                    NPC.active = false;
                 }
-                if (!tail && (!Main.npc[(int)npc.ai[0]].active || Main.npc[(int)npc.ai[0]].type != bodyType && Main.npc[(int)npc.ai[0]].type != tailType))
+                if (!tail && (!Main.npc[(int)NPC.ai[0]].active || Main.npc[(int)NPC.ai[0]].type != bodyType && Main.npc[(int)NPC.ai[0]].type != tailType))
                 {
-                    npc.life = 0;
-                    npc.HitEffect(0, 10.0);
-                    npc.active = false;
+                    NPC.life = 0;
+                    NPC.HitEffect(0, 10.0);
+                    NPC.active = false;
                 }
-                if (!npc.active && Main.netMode == 2)
+                if (!NPC.active && Main.netMode == 2)
                 {
-                    NetMessage.SendData(28, -1, -1, null, npc.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+                    NetMessage.SendData(28, -1, -1, null, NPC.whoAmI, -1f, 0f, 0f, 0, 0, 0);
                 }
             }
-            int num180 = (int)(npc.position.X / 16f) - 1;
-            int num181 = (int)((npc.position.X + (float)npc.width) / 16f) + 2;
-            int num182 = (int)(npc.position.Y / 16f) - 1;
-            int num183 = (int)((npc.position.Y + (float)npc.height) / 16f) + 2;
+            int num180 = (int)(NPC.position.X / 16f) - 1;
+            int num181 = (int)((NPC.position.X + (float)NPC.width) / 16f) + 2;
+            int num182 = (int)(NPC.position.Y / 16f) - 1;
+            int num183 = (int)((NPC.position.Y + (float)NPC.height) / 16f) + 2;
             if (num180 < 0)
             {
                 num180 = 0;
@@ -309,21 +311,21 @@ namespace ExoriumMod.Content.NPCs.Enemies
                 {
                     for (int num185 = num182; num185 < num183; num185++)
                     {
-                        if (Main.tile[num184, num185] != null && (Main.tile[num184, num185].nactive() && (Main.tileSolid[(int)Main.tile[num184, num185].type] || Main.tileSolidTop[(int)Main.tile[num184, num185].type] && Main.tile[num184, num185].frameY == 0) || Main.tile[num184, num185].liquid > 64))
+                        if (Main.tile[num184, num185] != null && (Main.tile[num184, num185].HasUnactuatedTile && (Main.tileSolid[(int)Main.tile[num184, num185].TileType] || Main.tileSolidTop[(int)Main.tile[num184, num185].TileType] && Main.tile[num184, num185].TileFrameY == 0) || Main.tile[num184, num185].LiquidAmount > 64))
                         {
                             Vector2 vector17;
                             vector17.X = (float)(num184 * 16);
                             vector17.Y = (float)(num185 * 16);
-                            if (npc.position.X + (float)npc.width > vector17.X && npc.position.X < vector17.X + 16f && npc.position.Y + (float)npc.height > vector17.Y && npc.position.Y < vector17.Y + 16f)
+                            if (NPC.position.X + (float)NPC.width > vector17.X && NPC.position.X < vector17.X + 16f && NPC.position.Y + (float)NPC.height > vector17.Y && NPC.position.Y < vector17.Y + 16f)
                             {
                                 flag18 = true;
-                                if (Main.rand.NextBool(100) && npc.behindTiles && Main.tile[num184, num185].nactive())
+                                if (Main.rand.NextBool(100) && NPC.behindTiles && Main.tile[num184, num185].HasUnactuatedTile)
                                 {
                                     WorldGen.KillTile(num184, num185, true, true, false);
                                 }
-                                if (Main.netMode != 1 && Main.tile[num184, num185].type == 2)
+                                if (Main.netMode != 1 && Main.tile[num184, num185].TileType == 2)
                                 {
-                                    ushort arg_BFCA_0 = Main.tile[num184, num185 - 1].type;
+                                    ushort arg_BFCA_0 = Main.tile[num184, num185 - 1].TileType;
                                 }
                             }
                         }
@@ -332,7 +334,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             }
             if (!flag18 && head)
             {
-                Rectangle rectangle = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
+                Rectangle rectangle = new Rectangle((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height);
                 int num186 = 1000;
                 bool flag19 = true;
                 for (int num187 = 0; num187 < 255; num187++)
@@ -354,20 +356,20 @@ namespace ExoriumMod.Content.NPCs.Enemies
             }
             if (directional)
             {
-                if (npc.velocity.X < 0f)
+                if (NPC.velocity.X < 0f)
                 {
-                    npc.spriteDirection = 1;
+                    NPC.spriteDirection = 1;
                 }
-                else if (npc.velocity.X > 0f)
+                else if (NPC.velocity.X > 0f)
                 {
-                    npc.spriteDirection = -1;
+                    NPC.spriteDirection = -1;
                 }
             }
             float num188 = speed;
             float num189 = turnSpeed;
-            Vector2 vector18 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-            float num191 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2);
-            float num192 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2);
+            Vector2 vector18 = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
+            float num191 = Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2);
+            float num192 = Main.player[NPC.target].position.Y + (float)(Main.player[NPC.target].height / 2);
             num191 = (float)((int)(num191 / 16f) * 16);
             num192 = (float)((int)(num192 / 16f) * 16);
             vector18.X = (float)((int)(vector18.X / 16f) * 16);
@@ -375,36 +377,36 @@ namespace ExoriumMod.Content.NPCs.Enemies
             num191 -= vector18.X;
             num192 -= vector18.Y;
             float num193 = (float)System.Math.Sqrt((double)(num191 * num191 + num192 * num192));
-            if (npc.ai[1] > 0f && npc.ai[1] < (float)Main.npc.Length)
+            if (NPC.ai[1] > 0f && NPC.ai[1] < (float)Main.npc.Length)
             {
                 try
                 {
-                    vector18 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                    num191 = Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - vector18.X;
-                    num192 = Main.npc[(int)npc.ai[1]].position.Y + (float)(Main.npc[(int)npc.ai[1]].height / 2) - vector18.Y;
+                    vector18 = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
+                    num191 = Main.npc[(int)NPC.ai[1]].position.X + (float)(Main.npc[(int)NPC.ai[1]].width / 2) - vector18.X;
+                    num192 = Main.npc[(int)NPC.ai[1]].position.Y + (float)(Main.npc[(int)NPC.ai[1]].height / 2) - vector18.Y;
                 }
                 catch
                 {
                 }
-                npc.rotation = (float)System.Math.Atan2((double)num192, (double)num191) + 1.57f;
+                NPC.rotation = (float)System.Math.Atan2((double)num192, (double)num191) + 1.57f;
                 num193 = (float)System.Math.Sqrt((double)(num191 * num191 + num192 * num192));
-                int num194 = (int)(npc.height * .75); //was npc.width
-                if (tail) num194 -= npc.height / 2;
+                int num194 = (int)(NPC.height * .75); //was npc.width
+                if (tail) num194 -= NPC.height / 2;
                 num193 = (num193 - (float)num194) / num193;
                 num191 *= num193;
                 num192 *= num193;
-                npc.velocity = Vector2.Zero;
-                npc.position.X = npc.position.X + num191;
-                npc.position.Y = npc.position.Y + num192;
+                NPC.velocity = Vector2.Zero;
+                NPC.position.X = NPC.position.X + num191;
+                NPC.position.Y = NPC.position.Y + num192;
                 if (directional)
                 {
                     if (num191 < 0f)
                     {
-                        npc.spriteDirection = 1;
+                        NPC.spriteDirection = 1;
                     }
                     if (num191 > 0f)
                     {
-                        npc.spriteDirection = -1;
+                        NPC.spriteDirection = -1;
                     }
                 }
             }
@@ -412,49 +414,49 @@ namespace ExoriumMod.Content.NPCs.Enemies
             {
                 if (!flag18)
                 {
-                    npc.TargetClosest(true);
-                    npc.velocity.Y = npc.velocity.Y + 0.11f;
-                    if (npc.velocity.Y > num188)
+                    NPC.TargetClosest(true);
+                    NPC.velocity.Y = NPC.velocity.Y + 0.11f;
+                    if (NPC.velocity.Y > num188)
                     {
-                        npc.velocity.Y = num188;
+                        NPC.velocity.Y = num188;
                     }
-                    if ((double)(System.Math.Abs(npc.velocity.X) + System.Math.Abs(npc.velocity.Y)) < (double)num188 * 0.4)
+                    if ((double)(System.Math.Abs(NPC.velocity.X) + System.Math.Abs(NPC.velocity.Y)) < (double)num188 * 0.4)
                     {
-                        if (npc.velocity.X < 0f)
+                        if (NPC.velocity.X < 0f)
                         {
-                            npc.velocity.X = npc.velocity.X - num189 * 1.1f;
+                            NPC.velocity.X = NPC.velocity.X - num189 * 1.1f;
                         }
                         else
                         {
-                            npc.velocity.X = npc.velocity.X + num189 * 1.1f;
+                            NPC.velocity.X = NPC.velocity.X + num189 * 1.1f;
                         }
                     }
-                    else if (npc.velocity.Y == num188)
+                    else if (NPC.velocity.Y == num188)
                     {
-                        if (npc.velocity.X < num191)
+                        if (NPC.velocity.X < num191)
                         {
-                            npc.velocity.X = npc.velocity.X + num189;
+                            NPC.velocity.X = NPC.velocity.X + num189;
                         }
-                        else if (npc.velocity.X > num191)
+                        else if (NPC.velocity.X > num191)
                         {
-                            npc.velocity.X = npc.velocity.X - num189;
+                            NPC.velocity.X = NPC.velocity.X - num189;
                         }
                     }
-                    else if (npc.velocity.Y > 4f)
+                    else if (NPC.velocity.Y > 4f)
                     {
-                        if (npc.velocity.X < 0f)
+                        if (NPC.velocity.X < 0f)
                         {
-                            npc.velocity.X = npc.velocity.X + num189 * 0.9f;
+                            NPC.velocity.X = NPC.velocity.X + num189 * 0.9f;
                         }
                         else
                         {
-                            npc.velocity.X = npc.velocity.X - num189 * 0.9f;
+                            NPC.velocity.X = NPC.velocity.X - num189 * 0.9f;
                         }
                     }
                 }
                 else
                 {
-                    if (!flies && npc.behindTiles && npc.soundDelay == 0)
+                    if (!flies && NPC.behindTiles && NPC.soundDelay == 0)
                     {
                         float num195 = num193 / 40f;
                         if (num195 < 10f)
@@ -465,8 +467,8 @@ namespace ExoriumMod.Content.NPCs.Enemies
                         {
                             num195 = 20f;
                         }
-                        npc.soundDelay = (int)num195;
-                        Main.PlaySound(SoundID.Roar, npc.position, 1);
+                        NPC.soundDelay = (int)num195;
+                        SoundEngine.PlaySound(SoundID.Dig, NPC.position);
                     }
                     num193 = (float)System.Math.Sqrt((double)(num191 * num191 + num192 * num192));
                     float num196 = System.Math.Abs(num191);
@@ -486,15 +488,15 @@ namespace ExoriumMod.Content.NPCs.Enemies
                         }
                         if (flag20)
                         {
-                            if (Main.netMode != 1 && (double)(npc.position.Y / 16f) > (Main.rockLayer + (double)Main.maxTilesY) / 2.0)
+                            if (Main.netMode != 1 && (double)(NPC.position.Y / 16f) > (Main.rockLayer + (double)Main.maxTilesY) / 2.0)
                             {
-                                npc.active = false;
-                                int num200 = (int)npc.ai[0];
-                                while (num200 > 0 && num200 < 200 && Main.npc[num200].active && Main.npc[num200].aiStyle == npc.aiStyle)
+                                NPC.active = false;
+                                int num200 = (int)NPC.ai[0];
+                                while (num200 > 0 && num200 < 200 && Main.npc[num200].active && Main.npc[num200].aiStyle == NPC.aiStyle)
                                 {
                                     int num201 = (int)Main.npc[num200].ai[0];
                                     Main.npc[num200].active = false;
-                                    npc.life = 0;
+                                    NPC.life = 0;
                                     if (Main.netMode == 2)
                                     {
                                         NetMessage.SendData(23, -1, -1, null, num200, 0f, 0f, 0f, 0, 0, 0);
@@ -503,7 +505,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
                                 }
                                 if (Main.netMode == 2)
                                 {
-                                    NetMessage.SendData(23, -1, -1, null, npc.whoAmI, 0f, 0f, 0f, 0, 0, 0);
+                                    NetMessage.SendData(23, -1, -1, null, NPC.whoAmI, 0f, 0f, 0f, 0, 0, 0);
                                 }
                             }
                             num191 = 0f;
@@ -511,82 +513,82 @@ namespace ExoriumMod.Content.NPCs.Enemies
                         }
                     }
                     bool flag21 = false;
-                    if (npc.type == 87)
+                    if (NPC.type == 87)
                     {
-                        if ((npc.velocity.X > 0f && num191 < 0f || npc.velocity.X < 0f && num191 > 0f || npc.velocity.Y > 0f && num192 < 0f || npc.velocity.Y < 0f && num192 > 0f) && System.Math.Abs(npc.velocity.X) + System.Math.Abs(npc.velocity.Y) > num189 / 2f && num193 < 300f)
+                        if ((NPC.velocity.X > 0f && num191 < 0f || NPC.velocity.X < 0f && num191 > 0f || NPC.velocity.Y > 0f && num192 < 0f || NPC.velocity.Y < 0f && num192 > 0f) && System.Math.Abs(NPC.velocity.X) + System.Math.Abs(NPC.velocity.Y) > num189 / 2f && num193 < 300f)
                         {
                             flag21 = true;
-                            if (System.Math.Abs(npc.velocity.X) + System.Math.Abs(npc.velocity.Y) < num188)
+                            if (System.Math.Abs(NPC.velocity.X) + System.Math.Abs(NPC.velocity.Y) < num188)
                             {
-                                npc.velocity *= 1.1f;
+                                NPC.velocity *= 1.1f;
                             }
                         }
-                        if (npc.position.Y > Main.player[npc.target].position.Y || (double)(Main.player[npc.target].position.Y / 16f) > Main.worldSurface || Main.player[npc.target].dead)
+                        if (NPC.position.Y > Main.player[NPC.target].position.Y || (double)(Main.player[NPC.target].position.Y / 16f) > Main.worldSurface || Main.player[NPC.target].dead)
                         {
                             flag21 = true;
-                            if (System.Math.Abs(npc.velocity.X) < num188 / 2f)
+                            if (System.Math.Abs(NPC.velocity.X) < num188 / 2f)
                             {
-                                if (npc.velocity.X == 0f)
+                                if (NPC.velocity.X == 0f)
                                 {
-                                    npc.velocity.X = npc.velocity.X - (float)npc.direction;
+                                    NPC.velocity.X = NPC.velocity.X - (float)NPC.direction;
                                 }
-                                npc.velocity.X = npc.velocity.X * 1.1f;
+                                NPC.velocity.X = NPC.velocity.X * 1.1f;
                             }
                             else
                             {
-                                if (npc.velocity.Y > -num188)
+                                if (NPC.velocity.Y > -num188)
                                 {
-                                    npc.velocity.Y = npc.velocity.Y - num189;
+                                    NPC.velocity.Y = NPC.velocity.Y - num189;
                                 }
                             }
                         }
                     }
                     if (!flag21)
                     {
-                        if (npc.velocity.X > 0f && num191 > 0f || npc.velocity.X < 0f && num191 < 0f || npc.velocity.Y > 0f && num192 > 0f || npc.velocity.Y < 0f && num192 < 0f)
+                        if (NPC.velocity.X > 0f && num191 > 0f || NPC.velocity.X < 0f && num191 < 0f || NPC.velocity.Y > 0f && num192 > 0f || NPC.velocity.Y < 0f && num192 < 0f)
                         {
-                            if (npc.velocity.X < num191)
+                            if (NPC.velocity.X < num191)
                             {
-                                npc.velocity.X = npc.velocity.X + num189;
+                                NPC.velocity.X = NPC.velocity.X + num189;
                             }
                             else
                             {
-                                if (npc.velocity.X > num191)
+                                if (NPC.velocity.X > num191)
                                 {
-                                    npc.velocity.X = npc.velocity.X - num189;
+                                    NPC.velocity.X = NPC.velocity.X - num189;
                                 }
                             }
-                            if (npc.velocity.Y < num192)
+                            if (NPC.velocity.Y < num192)
                             {
-                                npc.velocity.Y = npc.velocity.Y + num189;
+                                NPC.velocity.Y = NPC.velocity.Y + num189;
                             }
                             else
                             {
-                                if (npc.velocity.Y > num192)
+                                if (NPC.velocity.Y > num192)
                                 {
-                                    npc.velocity.Y = npc.velocity.Y - num189;
+                                    NPC.velocity.Y = NPC.velocity.Y - num189;
                                 }
                             }
-                            if ((double)System.Math.Abs(num192) < (double)num188 * 0.2 && (npc.velocity.X > 0f && num191 < 0f || npc.velocity.X < 0f && num191 > 0f))
+                            if ((double)System.Math.Abs(num192) < (double)num188 * 0.2 && (NPC.velocity.X > 0f && num191 < 0f || NPC.velocity.X < 0f && num191 > 0f))
                             {
-                                if (npc.velocity.Y > 0f)
+                                if (NPC.velocity.Y > 0f)
                                 {
-                                    npc.velocity.Y = npc.velocity.Y + num189 * 2f;
+                                    NPC.velocity.Y = NPC.velocity.Y + num189 * 2f;
                                 }
                                 else
                                 {
-                                    npc.velocity.Y = npc.velocity.Y - num189 * 2f;
+                                    NPC.velocity.Y = NPC.velocity.Y - num189 * 2f;
                                 }
                             }
-                            if ((double)System.Math.Abs(num191) < (double)num188 * 0.2 && (npc.velocity.Y > 0f && num192 < 0f || npc.velocity.Y < 0f && num192 > 0f))
+                            if ((double)System.Math.Abs(num191) < (double)num188 * 0.2 && (NPC.velocity.Y > 0f && num192 < 0f || NPC.velocity.Y < 0f && num192 > 0f))
                             {
-                                if (npc.velocity.X > 0f)
+                                if (NPC.velocity.X > 0f)
                                 {
-                                    npc.velocity.X = npc.velocity.X + num189 * 2f;
+                                    NPC.velocity.X = NPC.velocity.X + num189 * 2f;
                                 }
                                 else
                                 {
-                                    npc.velocity.X = npc.velocity.X - num189 * 2f;
+                                    NPC.velocity.X = NPC.velocity.X - num189 * 2f;
                                 }
                             }
                         }
@@ -594,73 +596,73 @@ namespace ExoriumMod.Content.NPCs.Enemies
                         {
                             if (num196 > num197)
                             {
-                                if (npc.velocity.X < num191)
+                                if (NPC.velocity.X < num191)
                                 {
-                                    npc.velocity.X = npc.velocity.X + num189 * 1.1f;
+                                    NPC.velocity.X = NPC.velocity.X + num189 * 1.1f;
                                 }
-                                else if (npc.velocity.X > num191)
+                                else if (NPC.velocity.X > num191)
                                 {
-                                    npc.velocity.X = npc.velocity.X - num189 * 1.1f;
+                                    NPC.velocity.X = NPC.velocity.X - num189 * 1.1f;
                                 }
-                                if ((double)(System.Math.Abs(npc.velocity.X) + System.Math.Abs(npc.velocity.Y)) < (double)num188 * 0.5)
+                                if ((double)(System.Math.Abs(NPC.velocity.X) + System.Math.Abs(NPC.velocity.Y)) < (double)num188 * 0.5)
                                 {
-                                    if (npc.velocity.Y > 0f)
+                                    if (NPC.velocity.Y > 0f)
                                     {
-                                        npc.velocity.Y = npc.velocity.Y + num189;
+                                        NPC.velocity.Y = NPC.velocity.Y + num189;
                                     }
                                     else
                                     {
-                                        npc.velocity.Y = npc.velocity.Y - num189;
+                                        NPC.velocity.Y = NPC.velocity.Y - num189;
                                     }
                                 }
                             }
                             else
                             {
-                                if (npc.velocity.Y < num192)
+                                if (NPC.velocity.Y < num192)
                                 {
-                                    npc.velocity.Y = npc.velocity.Y + num189 * 1.1f;
+                                    NPC.velocity.Y = NPC.velocity.Y + num189 * 1.1f;
                                 }
-                                else if (npc.velocity.Y > num192)
+                                else if (NPC.velocity.Y > num192)
                                 {
-                                    npc.velocity.Y = npc.velocity.Y - num189 * 1.1f;
+                                    NPC.velocity.Y = NPC.velocity.Y - num189 * 1.1f;
                                 }
-                                if ((double)(System.Math.Abs(npc.velocity.X) + System.Math.Abs(npc.velocity.Y)) < (double)num188 * 0.5)
+                                if ((double)(System.Math.Abs(NPC.velocity.X) + System.Math.Abs(NPC.velocity.Y)) < (double)num188 * 0.5)
                                 {
-                                    if (npc.velocity.X > 0f)
+                                    if (NPC.velocity.X > 0f)
                                     {
-                                        npc.velocity.X = npc.velocity.X + num189;
+                                        NPC.velocity.X = NPC.velocity.X + num189;
                                     }
                                     else
                                     {
-                                        npc.velocity.X = npc.velocity.X - num189;
+                                        NPC.velocity.X = NPC.velocity.X - num189;
                                     }
                                 }
                             }
                         }
                     }
                 }
-                npc.rotation = (float)System.Math.Atan2((double)npc.velocity.Y, (double)npc.velocity.X) + 1.57f;
+                NPC.rotation = (float)System.Math.Atan2((double)NPC.velocity.Y, (double)NPC.velocity.X) + 1.57f;
                 if (head)
                 {
                     if (flag18)
                     {
-                        if (npc.localAI[0] != 1f)
+                        if (NPC.localAI[0] != 1f)
                         {
-                            npc.netUpdate = true;
+                            NPC.netUpdate = true;
                         }
-                        npc.localAI[0] = 1f;
+                        NPC.localAI[0] = 1f;
                     }
                     else
                     {
-                        if (npc.localAI[0] != 0f)
+                        if (NPC.localAI[0] != 0f)
                         {
-                            npc.netUpdate = true;
+                            NPC.netUpdate = true;
                         }
-                        npc.localAI[0] = 0f;
+                        NPC.localAI[0] = 0f;
                     }
-                    if ((npc.velocity.X > 0f && npc.oldVelocity.X < 0f || npc.velocity.X < 0f && npc.oldVelocity.X > 0f || npc.velocity.Y > 0f && npc.oldVelocity.Y < 0f || npc.velocity.Y < 0f && npc.oldVelocity.Y > 0f) && !npc.justHit)
+                    if ((NPC.velocity.X > 0f && NPC.oldVelocity.X < 0f || NPC.velocity.X < 0f && NPC.oldVelocity.X > 0f || NPC.velocity.Y > 0f && NPC.oldVelocity.Y < 0f || NPC.velocity.Y < 0f && NPC.oldVelocity.Y > 0f) && !NPC.justHit)
                     {
-                        npc.netUpdate = true;
+                        NPC.netUpdate = true;
                         return;
                     }
                 }
@@ -688,20 +690,19 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.player.ZoneSnow && spawnInfo.player.ZoneRockLayerHeight)
+            if (spawnInfo.Player.ZoneSnow && spawnInfo.Player.ZoneRockLayerHeight)
             {
                 return .04f;
             }
             return 0;
         }
 
-        public override void NPCLoot()
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            Item.NewItem(npc.getRect(), ItemType<Items.Materials.Metals.RimeStone>(), Main.rand.Next(7, 14));
-            if (Main.rand.NextBool(50))
-            {
-                Item.NewItem(npc.getRect(), ItemType<Items.Accessories.FrostStone>());
-            }
+            npcLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.Metals.RimeStone>(), 1, 7, 13));
+            npcLoot.Add(ItemDropRule.Common(ItemType<Items.Accessories.FrostStone>(), 50));
+
+            base.ModifyNPCLoot(npcLoot);
         }
     }
 }

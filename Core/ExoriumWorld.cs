@@ -6,15 +6,16 @@ using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Terraria.World.Generation;
 using static Terraria.ModLoader.ModContent;
 using System;
 using ExoriumMod.Content.Tiles;
 using ExoriumMod.Content.Walls;
+using Terraria.WorldBuilding;
+using Terraria.IO;
 
 namespace ExoriumMod.Core
 {
-    public partial class ExoriumWorld : ModWorld
+    public partial class ExoriumWorld : ModSystem
     {
         public static bool downedShadowmancer = false;
         public static bool downedBlightslime = false;
@@ -22,7 +23,7 @@ namespace ExoriumMod.Core
         public static int shadowAltarCoordsX;
         public static int shadowAltarCoordsY;
 
-        public override TagCompound Save()
+        public override void SaveWorldData(TagCompound tag)/* Suggestion: Edit tag parameter rather than returning new TagCompound */
         {
             var downed = new List<string>();
             if (downedShadowmancer)
@@ -30,15 +31,12 @@ namespace ExoriumMod.Core
             if (downedBlightslime)
                 downed.Add("blightslime");
 
-            return new TagCompound
-            {
-                ["downed"] = downed,
-                ["shadowAltarCoordsX"] = shadowAltarCoordsX,
-                ["shadowAltarCoordsY"] = shadowAltarCoordsY
-            };
+            tag["downed"] = downed;
+            tag["shadowAltarCoordsX"] = shadowAltarCoordsX;
+            tag["shadowAltarCoordsY"] = shadowAltarCoordsY;
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadWorldData(TagCompound tag)
         {
             shadowAltarCoordsX = (int)tag.Get<int>("shadowAltarCoordsX");
             shadowAltarCoordsY = (int)tag.Get<int>("shadowAltarCoordsY");
@@ -48,6 +46,7 @@ namespace ExoriumMod.Core
             downedBlightslime = downed.Contains("blightslime");
         }
 
+        /* No older versions
         public override void LoadLegacy(BinaryReader reader)
         {
             int loadVersion = reader.ReadInt32();
@@ -61,9 +60,10 @@ namespace ExoriumMod.Core
             }
             else
             {
-                mod.Logger.Error("ExoriumMod: Unknown loadVersion:" + loadVersion);
+                Mod.Logger.Error("ExoriumMod: Unknown loadVersion:" + loadVersion);
             }
         }
+        */
 
         public override void NetSend(BinaryWriter writer)
         {
@@ -82,7 +82,7 @@ namespace ExoriumMod.Core
             downedBlightslime = bosses1[1];
         }
 
-        public override void Initialize()
+        public override void OnWorldLoad()
         {
             downedShadowmancer = false;
             downedBlightslime = false;
@@ -99,7 +99,7 @@ namespace ExoriumMod.Core
             int DirtRockWallRunnerIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
             if (DirtRockWallRunnerIndex != -1)
             {
-                tasks.Insert(DirtRockWallRunnerIndex + 1, new PassLegacy("Deadlands", delegate (GenerationProgress progress)
+                tasks.Insert(DirtRockWallRunnerIndex + 1, new PassLegacy("Deadlands", delegate (GenerationProgress progress, GameConfiguration config)
                   {
                       progress.Message = "Generating Deadlands";
                       WorldGeneration.Biomes.ExoriumBiomes.DeadlandsGeneration();
@@ -109,7 +109,7 @@ namespace ExoriumMod.Core
             int FinalCleanupIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Final Cleanup"));
             if (FinalCleanupIndex != -1)
             {
-                tasks.Insert(FinalCleanupIndex + 1, new PassLegacy("Exorium Structures", delegate (GenerationProgress progress)
+                tasks.Insert(FinalCleanupIndex + 1, new PassLegacy("Exorium Structures", delegate (GenerationProgress progress, GameConfiguration config)
                {
                    progress.Message = "Generating Exorium Structures";
                    WorldGeneration.Structures.ExoriumStructures.ShadowHouse();
@@ -119,7 +119,7 @@ namespace ExoriumMod.Core
             }
         }
 
-        private void ExoriumOreGeneration(GenerationProgress progress)
+        private void ExoriumOreGeneration(GenerationProgress progress, GameConfiguration config)
         {
             progress.Message = "Generating Exorium Ores";
             //BlightSteel spawn
@@ -128,7 +128,7 @@ namespace ExoriumMod.Core
                 int x = WorldGen.genRand.Next(0, Main.maxTilesX);
                 int y = WorldGen.genRand.Next((int)WorldGen.rockLayer, Main.maxTilesY); //Spawn in cavern layer
                 Tile tile = Framing.GetTileSafely(x, y);
-                if (tile.active() && tile.type == TileID.Stone)
+                if (tile.HasTile && tile.TileType == TileID.Stone)
                 {
                     WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(2, 3), WorldGen.genRand.Next(1, 3), TileType<BlightedOreTile>(), false, 0f, 0f, false, true);
                 }
@@ -139,7 +139,7 @@ namespace ExoriumMod.Core
                 int x = WorldGen.genRand.Next(0, Main.maxTilesX);
                 int y = WorldGen.genRand.Next((int)WorldGen.worldSurfaceLow, Main.maxTilesY);
                 Tile tile = Framing.GetTileSafely(x, y);
-                if (tile.active() && tile.type == TileID.IceBlock || tile.type == TileID.SnowBlock)
+                if (tile.HasTile && tile.TileType == TileID.IceBlock || tile.TileType == TileID.SnowBlock)
                 {
                     WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(6, 7), WorldGen.genRand.Next(3, 5), TileType<RimeStoneTile>(), false, 0f, 0f, false, true);
                 }
@@ -150,7 +150,7 @@ namespace ExoriumMod.Core
                 int x = WorldGen.genRand.Next(0, Main.maxTilesX);
                 int y = WorldGen.genRand.Next((int)WorldGen.worldSurfaceLow, Main.maxTilesY);
                 Tile tile = Framing.GetTileSafely(x, y);
-                if (tile.active() && (tile.type == TileID.Sandstone || tile.type == TileID.Sand || tile.type == TileID.HardenedSand))
+                if (tile.HasTile && (tile.TileType == TileID.Sandstone || tile.TileType == TileID.Sand || tile.TileType == TileID.HardenedSand))
                 {
                     WorldGen.TileRunner(x, y, (double)WorldGen.genRand.Next(6, 7), WorldGen.genRand.Next(3, 5), TileType<DuneStoneTile>(), false, 0f, 0f, false, true);
                 }

@@ -1,6 +1,8 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -11,13 +13,9 @@ namespace ExoriumMod.Content.Tiles
 	{
         public override string HighlightTexture => AssetDirectory.Tile + Name + "_Highlight";
 
-        public override bool Autoload(ref string name, ref string texture)
-        {
-			texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+		public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.tileFrameImportant[Type] = true;
 			Main.tileLavaDeath[Type] = true;
@@ -28,13 +26,13 @@ namespace ExoriumMod.Content.Tiles
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("Deadwood Bed");
 			AddMapEntry(new Color(40, 40, 40), name);
-			dustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
-			disableSmartCursor = true;
-			adjTiles = new int[] { TileID.Beds };
-			bed = true;
+			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
+			TileID.Sets.DisableSmartCursor[Type] = true;
+			AdjTiles = new int[] { TileID.Beds };
+			TileID.Sets.CanBeSleptIn[Type] = true;
 		}
 
-		public override bool HasSmartInteract()
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
@@ -46,17 +44,17 @@ namespace ExoriumMod.Content.Tiles
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 64, 32, ModContent.ItemType<Items.TileItems.DeadwoodBed>());
+			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ModContent.ItemType<Items.TileItems.DeadwoodBed>());
 		}
 
-		public override bool NewRightClick(int i, int j)
+		public override bool RightClick(int i, int j)
 		{
 			Player player = Main.LocalPlayer;
 			Tile tile = Main.tile[i, j];
-			int spawnX = i - tile.frameX / 18;
+			int spawnX = i - tile.TileFrameX / 18;
 			int spawnY = j + 2;
-			spawnX += tile.frameX >= 72 ? 5 : 2;
-			if (tile.frameY % 38 != 0)
+			spawnX += tile.TileFrameX >= 72 ? 5 : 2;
+			if (tile.TileFrameY % 38 != 0)
 			{
 				spawnY--;
 			}
@@ -64,12 +62,14 @@ namespace ExoriumMod.Content.Tiles
 			if (player.SpawnX == spawnX && player.SpawnY == spawnY)
 			{
 				player.RemoveSpawn();
-				Main.NewText("Spawn point removed!", 255, 240, 20, false);
+				if (Main.netMode != NetmodeID.Server)
+					Main.NewText("Spawn point removed!", new Color(255, 240, 20));
 			}
 			else if (Player.CheckSpawn(spawnX, spawnY))
 			{
 				player.ChangeSpawn(spawnX, spawnY);
-				Main.NewText("Spawn point set!", 255, 240, 20, false);
+				if (Main.netMode != NetmodeID.Server)
+					Main.NewText("Spawn point set!", new Color(255, 240, 20));
 			}
 			return true;
 		}
@@ -78,8 +78,8 @@ namespace ExoriumMod.Content.Tiles
 		{
 			Player player = Main.LocalPlayer;
 			player.noThrow = 2;
-			player.showItemIcon = true;
-			player.showItemIcon2 = ModContent.ItemType<Items.TileItems.DeadwoodBed>();
+			player.cursorItemIconEnabled = true;
+			player.cursorItemIconID = ModContent.ItemType<Items.TileItems.DeadwoodBed>();
 		}
 	}
 }

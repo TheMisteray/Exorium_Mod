@@ -13,13 +13,9 @@ namespace ExoriumMod.Content.Tiles
 {
     class DeadwoodSaplingTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
@@ -39,12 +35,12 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.LavaDeath = true;
             TileObjectData.newTile.RandomStyleRange = 3;
             TileObjectData.addTile(Type);
-            sapling = true;
+            TileID.Sets.TreeSapling[Type] = true;
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Sapling");
             AddMapEntry(new Color(200, 200, 200), name);
-            dustType = DustType<Dusts.DeadDust>();
-            adjTiles = new int[] { TileID.Saplings };
+            DustType = DustType<Dusts.DeadDust>();
+            AdjTiles = new int[] { TileID.Saplings };
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -54,7 +50,7 @@ namespace ExoriumMod.Content.Tiles
 
         public override void RandomUpdate(int i, int j)
         {
-            if (WorldGen.genRand.Next(20) == 0)
+            if (WorldGen.genRand.NextBool(20))
             {
                 bool isPlayerNear = WorldGen.PlayerLOS(i, j);
                 bool success = WorldGen.GrowTree(i, j);

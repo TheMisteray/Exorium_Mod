@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -18,27 +19,26 @@ namespace ExoriumMod.Content.Items.Ammo
 
         public override void SetDefaults()
         {
-            item.value = 2;
-            item.width = 12;
-            item.height = 12;
-            item.rare = 1;
-            item.maxStack = 999;
-            item.damage = 5;
-            item.consumable = true;
-            item.shoot = ProjectileType<RimeBullet>();
-            item.shootSpeed = 14;
-            item.ammo = AmmoID.Bullet;
-            item.ranged = true;
-            item.crit = 4;
+            Item.value = 2;
+            Item.width = 12;
+            Item.height = 12;
+            Item.rare = 1;
+            Item.maxStack = 999;
+            Item.damage = 5;
+            Item.consumable = true;
+            Item.shoot = ProjectileType<RimeBullet>();
+            Item.shootSpeed = 14;
+            Item.ammo = AmmoID.Bullet;
+            Item.DamageType = DamageClass.Ranged;
+            Item.crit = 4;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>());
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this, 70);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 
@@ -53,27 +53,27 @@ namespace ExoriumMod.Content.Items.Ammo
 
         public override void SetDefaults()
         {
-            projectile.width = 8;
-            projectile.height = 8;
-            projectile.aiStyle = 1;
-            projectile.friendly = true;
-            projectile.ranged = true;
-            projectile.penetrate = 1;
-            projectile.timeLeft = 2600;
-            projectile.alpha = 0;
-            projectile.light = 0.2f;
-            projectile.ignoreWater = false;
-            projectile.tileCollide = true;
-            aiType = ProjectileID.Bullet;
-            projectile.velocity.X *= 1.5f;
-            projectile.velocity.Y *= 1.5f;
+            Projectile.width = 8;
+            Projectile.height = 8;
+            Projectile.aiStyle = 1;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.penetrate = 1;
+            Projectile.timeLeft = 2600;
+            Projectile.alpha = 0;
+            Projectile.light = 0.2f;
+            Projectile.ignoreWater = false;
+            Projectile.tileCollide = true;
+            AIType = ProjectileID.Bullet;
+            Projectile.velocity.X *= 1.5f;
+            Projectile.velocity.Y *= 1.5f;
         }
 
         public override void AI()
         {
-            if (Main.rand.Next(10) == 1)
+            if (Main.rand.NextBool(10))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 67, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -88,7 +88,7 @@ namespace ExoriumMod.Content.Items.Ammo
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.Dig, projectile.position);
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
         }
     }
 }

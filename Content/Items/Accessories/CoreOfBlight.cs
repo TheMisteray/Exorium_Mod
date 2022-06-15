@@ -15,17 +15,17 @@ namespace ExoriumMod.Content.Items.Accessories
             Tooltip.SetDefault("Reduced regeneration" +
                 "\nIncreased damage when regeneration is negative" +
                 "\nDecreased damage when regeneration is positive");
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 8));
+            Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 8));
         }
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 36;
-            item.accessory = true;
-            item.value = 20000;
-            item.rare = -12;
-            item.expert = true;
+            Item.width = 32;
+            Item.height = 36;
+            Item.accessory = true;
+            Item.value = 20000;
+            Item.rare = -12;
+            Item.expert = true;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
@@ -33,11 +33,11 @@ namespace ExoriumMod.Content.Items.Accessories
             player.lifeRegen -= 2;
             if (player.lifeRegen <=0)
             {
-                player.allDamage += -0.03f * player.lifeRegen;
+                player.GetDamage(DamageClass.Generic) += -0.03f * player.lifeRegen;
             }
             if (player.lifeRegen > 0)
             {
-                player.allDamage += -0.01f * player.lifeRegen;
+                player.GetDamage(DamageClass.Generic) += -0.01f * player.lifeRegen;
             }
         }
     }

@@ -8,16 +8,12 @@ namespace ExoriumMod.Content.Walls
 {
     class DeadwoodWall : ModWall
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Wall + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Wall + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.wallHouse[Type] = true;
-            drop = ItemType<Items.WallItems.DeadwoodWall>();
+            ItemDrop = ItemType<Items.WallItems.DeadwoodWall>();
             AddMapEntry(new Color(140, 140, 140));
         }
     }

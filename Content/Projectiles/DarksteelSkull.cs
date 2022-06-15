@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,34 +15,30 @@ namespace ExoriumMod.Content.Projectiles
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.Homing[projectile.type] = true;
-            ProjectileID.Sets.CanDistortWater[projectile.type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+            ProjectileID.Sets.CanDistortWater[Projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
-            projectile.friendly = true;
-            projectile.width = 26;
-            projectile.height = 26;
-            projectile.melee = false;
-            projectile.ranged = false;
-            projectile.magic = false;
-            projectile.minion = false;
-            projectile.penetrate = 1;
-            projectile.timeLeft = 800;
-            projectile.alpha = 255;
+            Projectile.friendly = true;
+            Projectile.width = 26;
+            Projectile.height = 26;
+            Projectile.penetrate = 1;
+            Projectile.timeLeft = 800;
+            Projectile.alpha = 255;
         }
 
         public override void AI()
         {
-            if (projectile.alpha != 0)
+            if (Projectile.alpha != 0)
             {
-                projectile.alpha -= 15;
+                Projectile.alpha -= 15;
             }
-            if (projectile.localAI[0] == 0f)
+            if (Projectile.localAI[0] == 0f)
             {
-                AdjustMagnitude(ref projectile.velocity);
-                projectile.localAI[0] = 1f;
+                AdjustMagnitude(ref Projectile.velocity);
+                Projectile.localAI[0] = 1f;
             }
             Vector2 move = Vector2.Zero;
             float distance = 400f;
@@ -50,7 +47,7 @@ namespace ExoriumMod.Content.Projectiles
             {
                 if (Main.npc[k].active && !Main.npc[k].dontTakeDamage && !Main.npc[k].friendly && Main.npc[k].lifeMax > 5)
                 {
-                    Vector2 newMove = Main.npc[k].Center - projectile.Center;
+                    Vector2 newMove = Main.npc[k].Center - Projectile.Center;
                     float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
                     if (distanceTo < distance)
                     {
@@ -63,26 +60,26 @@ namespace ExoriumMod.Content.Projectiles
             if (target)
             {
                 AdjustMagnitude(ref move);
-                projectile.velocity = (10 * projectile.velocity + move) / 11f;
-                AdjustMagnitude(ref projectile.velocity);
+                Projectile.velocity = (10 * Projectile.velocity + move) / 11f;
+                AdjustMagnitude(ref Projectile.velocity);
             }
-            if (projectile.velocity != Vector2.Zero)
+            if (Projectile.velocity != Vector2.Zero)
             {
-                projectile.spriteDirection = projectile.direction;
-                if (projectile.velocity.X >=0)
+                Projectile.spriteDirection = Projectile.direction;
+                if (Projectile.velocity.X >=0)
                 {
-                    projectile.rotation = projectile.velocity.ToRotation();
+                    Projectile.rotation = Projectile.velocity.ToRotation();
                 }
                 else
                 {
-                    projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi;
+                    Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.Pi;
                 }
             }
             if (Main.rand.NextBool(3))
             {
                 int offset = Main.rand.Next(-4, 4);
-                new Vector2(projectile.position.X + offset, projectile.position.Y + offset);
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                new Vector2(Projectile.position.X + offset, Projectile.position.Y + offset);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.DarksteelDust>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -99,9 +96,9 @@ namespace ExoriumMod.Content.Projectiles
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.oldVelocity.X * 1.5f, projectile.oldVelocity.Y * 1.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.DarksteelDust>(), Projectile.oldVelocity.X * 1.5f, Projectile.oldVelocity.Y * 1.5f);
             }
-            Main.PlaySound(SoundID.NPCDeath6);
+            SoundEngine.PlaySound(SoundID.NPCDeath6);
         }
     }
 }

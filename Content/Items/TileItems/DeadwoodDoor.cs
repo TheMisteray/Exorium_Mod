@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria;
 
 namespace ExoriumMod.Content.Items.TileItems
 {
@@ -10,26 +11,25 @@ namespace ExoriumMod.Content.Items.TileItems
 
         public override void SetDefaults()
 		{
-			item.width = 14;
-			item.height = 28;
-			item.maxStack = 99;
-			item.useTurn = true;
-			item.autoReuse = true;
-			item.useAnimation = 15;
-			item.useTime = 10;
-			item.useStyle = ItemUseStyleID.SwingThrow;
-			item.consumable = true;
-			item.value = 150;
-			item.createTile = ModContent.TileType<Tiles.DeadwoodDoorClosed>();
+			Item.width = 14;
+			Item.height = 28;
+			Item.maxStack = 99;
+			Item.useTurn = true;
+			Item.autoReuse = true;
+			Item.useAnimation = 15;
+			Item.useTime = 10;
+			Item.useStyle = ItemUseStyleID.Swing;
+			Item.consumable = true;
+			Item.value = 150;
+			Item.createTile = ModContent.TileType<Tiles.DeadwoodDoorClosed>();
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
+			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ModContent.ItemType<Deadwood>(), 6);
 			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			recipe.Register();
 		}
 	}
 }

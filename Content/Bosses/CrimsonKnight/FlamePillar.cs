@@ -16,13 +16,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 16;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 1200;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            Projectile.width = 32;
+            Projectile.height = 16;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 1200;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
         }
 
         public override void AI()

@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -19,32 +20,31 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            item.damage = 18;
-            item.width = 15;
-            item.height = 15;
-            item.magic = true;
-            item.mana = 8;
-            item.useTime = 24;
-            item.useAnimation = 24;
-            item.useStyle = 5;
-            item.noMelee = true;
-            item.knockBack = 1;
-            item.value = Item.sellPrice(silver: 14);
-            item.rare = 1;
-            item.UseSound = SoundID.Item42;
-            item.shoot = ProjectileType<SandShot>();
-            item.shootSpeed = 7;
-            item.autoReuse = true;
-            item.scale = 0.9f;
+            Item.damage = 18;
+            Item.width = 15;
+            Item.height = 15;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 8;
+            Item.useTime = 24;
+            Item.useAnimation = 24;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.knockBack = 1;
+            Item.value = Item.sellPrice(silver: 14);
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item42;
+            Item.shoot = ProjectileType<SandShot>();
+            Item.shootSpeed = 7;
+            Item.autoReuse = true;
+            Item.scale = 0.9f;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 8);
             recipe.AddTile(TileID.Bookcases);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
     class SandShot : ModProjectile
@@ -58,41 +58,41 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            projectile.CloneDefaults(ProjectileID.SandBallGun);
-            aiType = ProjectileID.SandBallGun;
-            projectile.aiStyle = 1;
-            projectile.ai[1] = 0;
+            Projectile.CloneDefaults(ProjectileID.SandBallGun);
+            AIType = ProjectileID.SandBallGun;
+            Projectile.aiStyle = 1;
+            Projectile.ai[1] = 0;
         }
 
         public float projectileBounce
         {
-            get => projectile.ai[1];
-            set => projectile.ai[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             projectileBounce++;
             if (projectileBounce >= 3)
             {
-                Projectile.NewProjectile(projectile.position.X, projectile.position.Y, 0, 0, ProjectileID.SandBallFalling, 5, 5, player.whoAmI);
-                projectile.Kill();
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ProjectileID.SandBallFalling, 5, 5, player.whoAmI);
+                Projectile.Kill();
             }
             else
             {
-                projectile.ai[0] += 0.1f;
-                if (projectile.velocity.X != oldVelocity.X)
+                Projectile.ai[0] += 0.1f;
+                if (Projectile.velocity.X != oldVelocity.X)
                 {
-                    projectile.velocity.X = -oldVelocity.X / 1.5f;
+                    Projectile.velocity.X = -oldVelocity.X / 1.5f;
                 }
-                if (projectile.velocity.Y != oldVelocity.Y)
+                if (Projectile.velocity.Y != oldVelocity.Y)
                 {
-                    projectile.velocity.Y = -oldVelocity.Y / 1.5f;
+                    Projectile.velocity.Y = -oldVelocity.Y / 1.5f;
                 }
-                projectile.velocity *= 0.75f;
-                Projectile.NewProjectile(projectile.position.X, projectile.position.Y, 0, 0, ProjectileID.SandBallFalling, 5, 5, player.whoAmI);
-                Main.PlaySound(SoundID.Item10, projectile.position);
+                Projectile.velocity *= 0.75f;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ProjectileID.SandBallFalling, 5, 5, player.whoAmI);
+                SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
             }
             return false;
         }

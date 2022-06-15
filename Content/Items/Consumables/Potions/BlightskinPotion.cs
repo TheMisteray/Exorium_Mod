@@ -17,31 +17,30 @@ namespace ExoriumMod.Content.Items.Consumables.Potions
 
         public override void SetDefaults()
         {
-            item.width = 20;
-            item.height = 26;
-            item.useStyle = ItemUseStyleID.EatingUsing;
-            item.useAnimation = 15;
-            item.useTime = 15;
-            item.useTurn = true;
-            item.UseSound = SoundID.Item3;
-            item.maxStack = 30;
-            item.consumable = true;
-            item.rare = 3;
-            item.value = Item.buyPrice(gold: 1);
-            item.buffType = BuffType<Buffs.Blightskin>();
-            item.buffTime = 28800;
+            Item.width = 20;
+            Item.height = 26;
+            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
+            Item.useTurn = true;
+            Item.UseSound = SoundID.Item3;
+            Item.maxStack = 30;
+            Item.consumable = true;
+            Item.rare = 3;
+            Item.value = Item.buyPrice(gold: 1);
+            Item.buffType = BuffType<Buffs.Blightskin>();
+            Item.buffTime = 28800;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.BottledWater);
             recipe.AddIngredient(ItemType<Materials.Metals.BlightedOre>());
             recipe.AddIngredient(ItemType<Materials.Deadweed>());
             recipe.AddIngredient(ItemType<Materials.WightBone>());
             recipe.AddTile(TileID.Bottles);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

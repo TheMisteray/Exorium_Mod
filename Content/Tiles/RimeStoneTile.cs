@@ -9,17 +9,13 @@ namespace ExoriumMod.Content.Tiles
 {
     public class RimeStoneTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             TileID.Sets.Ore[Type] = true;
             Main.tileSpelunker[Type] = true;
-            Main.tileValue[Type] = 260; //above Silver
+            Main.tileOreFinderPriority[Type] = 260; //above Silver
             Main.tileMergeDirt[Type] = true;
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
@@ -29,14 +25,15 @@ namespace ExoriumMod.Content.Tiles
             name.SetDefault("RimeStone");
             AddMapEntry(new Color(194, 248, 255), name);
 
-            drop = ItemType<Items.Materials.Metals.RimeStone>();
-            soundType = 21;
-            soundStyle = 1;
-            mineResist = 1f;
-            minPick = 25;
+            ItemDrop = ItemType<Items.Materials.Metals.RimeStone>();
 
-            dustType = 1;
-            Main.dust[dustType].color = new Color(194, 248, 255);
+            HitSound = SoundID.Tink;
+
+            MineResist = 1f;
+            MinPick = 25;
+
+            DustType = 1;
+            Main.dust[DustType].color = new Color(194, 248, 255);
         }
 
         

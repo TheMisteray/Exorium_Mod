@@ -16,12 +16,12 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetDefaults()
         {
-            item.maxStack = 30;
-            item.consumable = true;
-            item.width = 24;
-            item.height = 24;
-            item.rare = -12;
-            item.expert = true;
+            Item.maxStack = 30;
+            Item.consumable = true;
+            Item.width = 24;
+            Item.height = 24;
+            Item.rare = -12;
+            Item.expert = true;
         }
 
         public override bool CanRightClick()
@@ -31,9 +31,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void OpenBossBag(Player player)
         {
-            player.QuickSpawnItem(ItemType<Items.Materials.TaintedGel>(), Main.rand.Next(50, 66));
-            player.QuickSpawnItem(ItemType<Items.Materials.Metals.BlightedOre>(), Main.rand.Next(80, 121));
-            player.QuickSpawnItem(ItemType<Items.Accessories.CoreOfBlight>());
+            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Materials.TaintedGel>(), Main.rand.Next(50, 66));
+            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Materials.Metals.BlightedOre>(), Main.rand.Next(80, 121));
+            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Accessories.CoreOfBlight>());
         }
 
         public override int BossBagNPC => NPCType<BlightedSlime>();

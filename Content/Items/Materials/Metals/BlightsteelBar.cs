@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria;
 
 namespace ExoriumMod.Content.Items.Materials.Metals
 {
@@ -17,27 +18,26 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 24;
-            item.value = 4200;
-            item.useStyle = ItemUseStyleID.SwingThrow;
-            item.rare = 2;
-            item.maxStack = 99;
-            item.useTurn = true;
-            item.useAnimation = 15;
-            item.useTime = 10;
-            item.autoReuse = true;
-            item.consumable = true;
-            item.createTile = TileType<Tiles.BlightsteelBarTile>();
-            item.placeStyle = 0;
+            Item.width = 30;
+            Item.height = 24;
+            Item.value = 4200;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.rare = 2;
+            Item.maxStack = 99;
+            Item.useTurn = true;
+            Item.useAnimation = 15;
+            Item.useTime = 10;
+            Item.autoReuse = true;
+            Item.consumable = true;
+            Item.createTile = TileType<Tiles.BlightsteelBarTile>();
+            Item.placeStyle = 0;
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<BlightedOre>(), 4);
             recipe.AddTile(TileID.Furnaces);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 

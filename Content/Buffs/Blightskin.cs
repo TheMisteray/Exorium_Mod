@@ -1,24 +1,21 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace ExoriumMod.Content.Buffs
 {
     class Blightskin : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Buff + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Buff + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blightskin");
             Description.SetDefault("Defense at the cost of regeneration");
             Main.pvpBuff[Type] = true;
             Main.buffNoSave[Type] = true;
-            canBeCleared = true;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)

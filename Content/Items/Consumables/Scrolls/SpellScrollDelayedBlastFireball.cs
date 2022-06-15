@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -19,26 +20,26 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            item.damage = 500;
-            item.useStyle = 4;
-            item.useTime = 42;
-            item.useAnimation = 42;
-            item.knockBack = 2;
-            item.rare = 9;
-            item.value = Item.buyPrice(gold: 18);
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 30;
-            item.magic = true;
-            item.mana = 50;
-            item.noMelee = true;
-            item.shootSpeed = 16f;
-            item.autoReuse = false;
-            item.shoot = ProjectileType<DelayedBlastFireball>();
-            item.consumable = true;
-            item.UseSound = SoundID.Item7;
-            item.useTurn = true;
-            item.noUseGraphic = true;
+            Item.damage = 500;
+            Item.useStyle = 4;
+            Item.useTime = 42;
+            Item.useAnimation = 42;
+            Item.knockBack = 2;
+            Item.rare = 9;
+            Item.value = Item.buyPrice(gold: 18);
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 30;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 50;
+            Item.noMelee = true;
+            Item.shootSpeed = 16f;
+            Item.autoReuse = false;
+            Item.shoot = ProjectileType<DelayedBlastFireball>();
+            Item.consumable = true;
+            Item.UseSound = SoundID.Item7;
+            Item.useTurn = true;
+            Item.noUseGraphic = true;
         }
 
         public override bool CanUseItem(Player player)
@@ -58,15 +59,15 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            projectile.width = 4;
-            projectile.height = 4;
-            projectile.aiStyle = -1;
-            projectile.friendly = true;
-            projectile.hostile = false;
-            projectile.magic = true;
-            projectile.extraUpdates = 100;
-            projectile.timeLeft = 12000;
-            projectile.penetrate = -1;
+            Projectile.width = 4;
+            Projectile.height = 4;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = true;
+            Projectile.hostile = false;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.extraUpdates = 100;
+            Projectile.timeLeft = 12000;
+            Projectile.penetrate = -1;
         }
 
         private bool stop = false;
@@ -77,9 +78,9 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    Vector2 projectilePosition = projectile.position;
-                    projectilePosition -= projectile.velocity * ((float)i * 0.25f);
-                    projectile.alpha = 255;
+                    Vector2 projectilePosition = Projectile.position;
+                    projectilePosition -= Projectile.velocity * ((float)i * 0.25f);
+                    Projectile.alpha = 255;
                     int dust = Dust.NewDust(projectilePosition, 1, 1, 6, 0f, 0f, 0, default(Color), 1f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].position = projectilePosition;
@@ -88,15 +89,15 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
                 }
             }
             else
-                projectile.velocity = Vector2.Zero;
-            if (projectile.timeLeft <= 11920)
+                Projectile.velocity = Vector2.Zero;
+            if (Projectile.timeLeft <= 11920)
             {
                 stop = true;
             }
-            if (projectile.timeLeft < 3000 && projectile.timeLeft % 1000 == 0)
+            if (Projectile.timeLeft < 3000 && Projectile.timeLeft % 1000 == 0)
             {
-                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 0, 612, projectile.damage, projectile.knockBack, Main.myPlayer, 1, 10);
-                Main.PlaySound(SoundID.Item14, projectile.position);
+                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 0, 0, 612, Projectile.damage, Projectile.knockBack, Main.myPlayer, 1, 10);
+                SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
                 Main.projectile[proj].position = Main.projectile[proj].Center;
                 Main.projectile[proj].width *= 60;
                 Main.projectile[proj].height *= 60;
@@ -126,7 +127,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             stop = true;
         }
 
-        public override bool CanDamage()
+        public override bool? CanDamage()/* Suggestion: Return null instead of false */
         {
             return !stop;
         }

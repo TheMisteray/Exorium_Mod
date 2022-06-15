@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -10,17 +11,13 @@ namespace ExoriumMod.Content.Tiles
 {
     public class DuneStoneTile : ModTile
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Tile + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Tile + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             TileID.Sets.Ore[Type] = true;
             Main.tileSpelunker[Type] = true;
-            Main.tileValue[Type] = 260; //above Silver
+            Main.tileOreFinderPriority[Type] = 260; //above Silver
             Main.tileMergeDirt[Type] = true;
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
@@ -29,17 +26,18 @@ namespace ExoriumMod.Content.Tiles
             name.SetDefault("DuneStone");
             AddMapEntry(new Color(196, 188, 22), name);
 
-            drop = ItemType<Items.Materials.Metals.DuneStone>();
-            soundType = 21;
-            soundStyle = 1;
-            mineResist = 1f;
-            minPick = 25;
+            ItemDrop = ItemType<Items.Materials.Metals.DuneStone>();
 
-            dustType = 1;
-            Main.dust[dustType].color = new Color(196, 188, 22);
+            HitSound = SoundID.Tink;
+
+            MineResist = 1f;
+            MinPick = 25;
+
+            DustType = 1;
+            Main.dust[DustType].color = new Color(196, 188, 22);
         }
 
-        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex)
+        public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
             if (Main.rand.NextBool(40))
             {

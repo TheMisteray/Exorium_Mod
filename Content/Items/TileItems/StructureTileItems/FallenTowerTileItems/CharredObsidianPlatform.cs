@@ -10,16 +10,16 @@ namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.FallenTowerTileI
 
         public override void SetDefaults()
         {
-            item.width = 8;
-            item.height = 10;
-            item.maxStack = 999;
-            item.useTurn = true;
-            item.autoReuse = true;
-            item.useAnimation = 10;
-            item.useTime = 10;
-            item.useStyle = 1;
-            item.consumable = true;
-            item.createTile = TileType<Tiles.StructureTiles.FallenTowerTiles.CharredObsidianPlatformTile>();
+            Item.width = 8;
+            Item.height = 10;
+            Item.maxStack = 999;
+            Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.useAnimation = 10;
+            Item.useTime = 10;
+            Item.useStyle = 1;
+            Item.consumable = true;
+            Item.createTile = TileType<Tiles.StructureTiles.FallenTowerTiles.CharredObsidianPlatformTile>();
         }
     }
 }

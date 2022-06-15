@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Microsoft.Xna.Framework;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -13,75 +14,75 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 8;
+            Main.projFrames[Projectile.type] = 8;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 56;
-            projectile.height = 360;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.timeLeft = 33000;
-            projectile.ignoreWater = true;
-            projectile.tileCollide = true;
-            projectile.extraUpdates = 99;
-            projectile.alpha = 255;
-            projectile.ai[0] = 0; //false
-            projectile.ai[1] = 0; //false
+            Projectile.width = 56;
+            Projectile.height = 360;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.timeLeft = 33000;
+            Projectile.ignoreWater = true;
+            Projectile.tileCollide = true;
+            Projectile.extraUpdates = 99;
+            Projectile.alpha = 255;
+            Projectile.ai[0] = 0; //false
+            Projectile.ai[1] = 0; //false
         }
 
         public bool hasTouchedGround
         {
-            get => projectile.ai[0] == 1f;
-            set => projectile.ai[0] = value ? 1f : 0f;
+            get => Projectile.ai[0] == 1f;
+            set => Projectile.ai[0] = value ? 1f : 0f;
         }
 
         public bool hasTouchedAir
         {
-            get => projectile.ai[1] == 1f;
-            set => projectile.ai[1] = value ? 1f : 0f;
+            get => Projectile.ai[1] == 1f;
+            set => Projectile.ai[1] = value ? 1f : 0f;
         }
 
         public override void AI()
         {
             if (!hasTouchedGround)
-                projectile.velocity.Y = 1;
-            else if (projectile.frame <= 1 && Main.rand.Next(200) == 0)
-                Dust.NewDust(projectile.BottomLeft, projectile.width, 1, DustType<Dusts.BlightDust>(), 0, -10, 0, default, Main.rand.NextFloat(1, 2));
+                Projectile.velocity.Y = 1;
+            else if (Projectile.frame <= 1 && Main.rand.Next(200) == 0)
+                Dust.NewDust(Projectile.BottomLeft, Projectile.width, 1, DustType<Dusts.BlightDust>(), 0, -10, 0, default, Main.rand.NextFloat(1, 2));
 
-                if (projectile.frame != 7)
-                projectile.hostile = false;
+                if (Projectile.frame != 7)
+                Projectile.hostile = false;
             else
-                projectile.hostile = true;
+                Projectile.hostile = true;
 
-            if (projectile.timeLeft >= 30000)
-                projectile.alpha = 255;
-            else if (projectile.timeLeft < 4000)
+            if (Projectile.timeLeft >= 30000)
+                Projectile.alpha = 255;
+            else if (Projectile.timeLeft < 4000)
             {
-                if (projectile.timeLeft % 400 == 0)
-                    --projectile.frame;
-                if (projectile.frame == 0)
-                    projectile.Kill();
+                if (Projectile.timeLeft % 400 == 0)
+                    --Projectile.frame;
+                if (Projectile.frame == 0)
+                    Projectile.Kill();
             }
-            else if (projectile.frame != 7)
+            else if (Projectile.frame != 7)
             {
-                if (++projectile.frameCounter >= 400)
+                if (++Projectile.frameCounter >= 400)
                 {
-                    projectile.frameCounter = 0;
-                    if (++projectile.frame == 7)
-                        Main.PlaySound(SoundID.Item89, projectile.position);
+                    Projectile.frameCounter = 0;
+                    if (++Projectile.frame == 7)
+                        SoundEngine.PlaySound(SoundID.Item89, Projectile.position);
                 }
-                projectile.alpha = 0;
+                Projectile.alpha = 0;
             }
         }
 
         //Checks only bottom tile for collision
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
             fallThrough = false;
-            Vector2 tileBottom = new Vector2(projectile.position.X + projectile.width/2, projectile.position.Y + projectile.height);
-            if (!Main.tile[tileBottom.ToTileCoordinates().X, tileBottom.ToTileCoordinates().Y].inActive())
+            Vector2 tileBottom = new Vector2(Projectile.position.X + Projectile.width/2, Projectile.position.Y + Projectile.height);
+            if (!Main.tile[tileBottom.ToTileCoordinates().X, tileBottom.ToTileCoordinates().Y].IsActuated)
                 return true;
             return false;
         }
@@ -89,9 +90,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             hasTouchedGround = true;
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
 
-            projectile.position.Y += 1;
+            Projectile.position.Y += 1;
             return false;
         }
     }

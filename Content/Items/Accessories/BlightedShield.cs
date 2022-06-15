@@ -21,15 +21,15 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 28;
-            item.height = 38;
-            item.accessory = true;
-            item.value = 4200;
-            item.rare = 1;
-            item.defense = 6;
-            item.melee = true;
-            item.damage = 42;
-            item.knockBack = 7f;
+            Item.width = 28;
+            Item.height = 38;
+            Item.accessory = true;
+            Item.value = 4200;
+            Item.rare = 1;
+            Item.defense = 6;
+            Item.DamageType = DamageClass.Melee;
+            Item.damage = 42;
+            Item.knockBack = 7f;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
@@ -41,11 +41,10 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
             recipe.AddTile(TileID.TinkerersWorkbench);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

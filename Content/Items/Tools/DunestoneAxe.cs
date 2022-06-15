@@ -13,20 +13,20 @@ namespace ExoriumMod.Content.Items.Tools
 
         public override void SetDefaults()
         {
-            item.damage = 7;
-            item.melee = true;
-            item.width = 40;
-            item.height = 40;
-            item.useTime = 26;
-            item.useAnimation = 26;
-            item.axe = 11;
-            item.useStyle = 1;
-            item.knockBack = 4;
-            item.value = 1400;
-            item.rare = 1;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-            item.scale = 1.3f;
+            Item.damage = 7;
+            Item.DamageType = DamageClass.Melee;
+            Item.width = 40;
+            Item.height = 40;
+            Item.useTime = 26;
+            Item.useAnimation = 26;
+            Item.axe = 11;
+            Item.useStyle = 1;
+            Item.knockBack = 4;
+            Item.value = 1400;
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
+            Item.scale = 1.3f;
         }
 
         public override void MeleeEffects(Player player, Rectangle hitbox)
@@ -39,12 +39,11 @@ namespace ExoriumMod.Content.Items.Tools
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 9);
             recipe.AddRecipeGroup("Wood", 3);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

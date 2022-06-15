@@ -73,7 +73,7 @@ namespace ExoriumMod.Core
                     Projectile p = Main.projectile[i];
                     if (p.active && p.type == ProjectileType<Content.Items.Weapons.Ranger.ThrowingRapierProj>() && p.ai[1] == npc.whoAmI)
                     {
-                        if (p.modProjectile is Content.Items.Weapons.Ranger.ThrowingRapierProj proj && proj.IsStickingToTarget)
+                        if (p.ModProjectile is Content.Items.Weapons.Ranger.ThrowingRapierProj proj && proj.IsStickingToTarget)
                             stuckCount++;
                     }
                 }

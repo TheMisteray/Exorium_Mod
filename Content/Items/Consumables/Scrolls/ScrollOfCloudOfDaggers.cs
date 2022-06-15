@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -20,34 +21,29 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            item.damage = 15;
-            item.useTime = 40;
-            item.useAnimation = 40;
-            item.rare = 2;
-            item.useStyle = 4;
-            item.value = Item.buyPrice(gold: 3, silver: 50);
-            item.width = 32;
-            item.height = 32;
-            item.magic = true;
-            item.mana = 20;
-            item.maxStack = 30;
-            item.noMelee = true;
-            item.shootSpeed = 14f;
-            item.autoReuse = false;
-            item.shoot = ProjectileType<DaggerCloud>();
-            item.consumable = true;
-            item.UseSound = SoundID.Item7;
-            item.noUseGraphic = true;
+            Item.damage = 15;
+            Item.useTime = 40;
+            Item.useAnimation = 40;
+            Item.rare = 2;
+            Item.useStyle = 4;
+            Item.value = Item.buyPrice(gold: 3, silver: 50);
+            Item.width = 32;
+            Item.height = 32;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 20;
+            Item.maxStack = 30;
+            Item.noMelee = true;
+            Item.shootSpeed = 14f;
+            Item.autoReuse = false;
+            Item.shoot = ProjectileType<DaggerCloud>();
+            Item.consumable = true;
+            Item.UseSound = SoundID.Item7;
+            Item.noUseGraphic = true;
         }
 
         public override bool CanUseItem(Player player)
         {
             return !player.HasBuff(BuffType<Buffs.ScrollCooldown>());
-        }
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-        {
-            return true;
         }
 
         public override void OnConsumeItem(Player player)
@@ -62,40 +58,40 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = false;
-            projectile.magic = true;
-            projectile.alpha = 255;
-            projectile.timeLeft = 360;
-            projectile.penetrate = -1;
-            projectile.tileCollide = false;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.friendly = false;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 360;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
         }
 
         private int areaSize
         {
-            get => (int)projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => (int)Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
         private int variance
         {
-            get => (int) projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => (int) Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
     public override void AI()
         {
-            if (projectile.timeLeft == 360)
+            if (Projectile.timeLeft == 360)
             {
                 areaSize = 180;
                 variance = 110;
-                Player player = Main.player[projectile.owner];
-                projectile.position = player.Center - (player.Center - Main.MouseWorld);
-                projectile.netUpdate = true;
+                Player player = Main.player[Projectile.owner];
+                Projectile.position = player.Center - (player.Center - Main.MouseWorld);
+                Projectile.netUpdate = true;
             }
             else
-                projectile.velocity = Vector2.Zero;
-            if (projectile.timeLeft % 4 == 0 && projectile.timeLeft != 0)
+                Projectile.velocity = Vector2.Zero;
+            if (Projectile.timeLeft % 4 == 0 && Projectile.timeLeft != 0)
             {
                 int Xpos = Main.rand.Next(-areaSize, areaSize + 1);
                 int Ypos = Main.rand.Next(-areaSize, areaSize + 1);
@@ -104,19 +100,19 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
                     Xpos = Main.rand.Next(-areaSize, areaSize + 1);
                     Ypos = Main.rand.Next(-areaSize, areaSize + 1);
                 }
-                Vector2 diff = (new Vector2(projectile.Center.X + Xpos, projectile.Center.Y + Ypos) - projectile.Center);
+                Vector2 diff = (new Vector2(Projectile.Center.X + Xpos, Projectile.Center.Y + Ypos) - Projectile.Center);
                 float distance = diff.Length();
                 distance = -Main.rand.NextFloat(5, 10) / distance;
                 diff *= distance;
                 diff = new Vector2(diff.X, diff.Y).RotatedByRandom(MathHelper.ToRadians(45));
-                int proj1 = Projectile.NewProjectile(projectile.Center.X + Xpos, projectile.Center.Y + Ypos, diff.X, diff.Y, ProjectileType<DaggerCloudDagger>(), projectile.damage, 0, Main.myPlayer, areaSize + 35);
-                Main.projectile[proj1].localAI[0] = projectile.Center.X;
-                Main.projectile[proj1].localAI[1] = projectile.Center.Y;
+                int proj1 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + Xpos, Projectile.Center.Y + Ypos, diff.X, diff.Y, ProjectileType<DaggerCloudDagger>(), Projectile.damage, 0, Main.myPlayer, areaSize + 35);
+                Main.projectile[proj1].localAI[0] = Projectile.Center.X;
+                Main.projectile[proj1].localAI[1] = Projectile.Center.Y;
             }
             for (int i = 0; i < 8; i++)
             {
                 double rad = (Math.PI / 180) * Main.rand.NextFloat(361);
-                int dust = Dust.NewDust(new Vector2(projectile.Center.X + (float)(Math.Cos(rad + 1.5) * (areaSize + 45)), projectile.Center.Y + (float)(Math.Sin(rad + 1.5) * (areaSize + 45))), 1, 1, 20, 0, 0, 0);
+                int dust = Dust.NewDust(new Vector2(Projectile.Center.X + (float)(Math.Cos(rad + 1.5) * (areaSize + 45)), Projectile.Center.Y + (float)(Math.Sin(rad + 1.5) * (areaSize + 45))), 1, 1, 20, 0, 0, 0);
                 //Main.dust[dust].scale *= 0.98f;
             }
         }
@@ -128,38 +124,38 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = true;
-            projectile.magic = true;
-            projectile.alpha = 20;
-            projectile.timeLeft = 1600;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.alpha = 20;
+            Projectile.timeLeft = 1600;
         }
 
         public override void AI()
         {
-            if (projectile.velocity.X >= 0)
+            if (Projectile.velocity.X >= 0)
             {
-                projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(45);
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(45);
             }
             else
             {
-                projectile.rotation = projectile.velocity.ToRotation() - MathHelper.ToRadians(225);
+                Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.ToRadians(225);
             }
-            projectile.spriteDirection = projectile.direction;
-            if (Math.Sqrt(Math.Pow(projectile.localAI[0] - projectile.Center.X, 2) + Math.Pow(projectile.localAI[1] - projectile.Center.Y, 2)) > projectile.ai[0])
+            Projectile.spriteDirection = Projectile.direction;
+            if (Math.Sqrt(Math.Pow(Projectile.localAI[0] - Projectile.Center.X, 2) + Math.Pow(Projectile.localAI[1] - Projectile.Center.Y, 2)) > Projectile.ai[0])
             {
-                projectile.velocity.X /= 1.15f;
-                projectile.velocity.Y /= 1.15f;
-                projectile.alpha += 7;
-                if (projectile.alpha >= 255)
-                    projectile.Kill();
+                Projectile.velocity.X /= 1.15f;
+                Projectile.velocity.Y /= 1.15f;
+                Projectile.alpha += 7;
+                if (Projectile.alpha >= 255)
+                    Projectile.Kill();
             }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Main.PlaySound(SoundID.Dig, projectile.position);
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             return true;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,31 +17,31 @@ namespace ExoriumMod.Content.Projectiles.Minions
         {
             DisplayName.SetDefault("Darksteel Skull");
             // This is necessary for right-click targeting
-            ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
+            ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
             // These below are needed for a minion
             // Denotes that this projectile is a pet or minion
-            Main.projPet[projectile.type] = true;
+            Main.projPet[Projectile.type] = true;
             // This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
-            ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
-            ProjectileID.Sets.Homing[projectile.type] = true;
+            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
 
         public sealed override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 28;
+            Projectile.width = 30;
+            Projectile.height = 28;
             // Makes the minion go through tiles freely
-            projectile.tileCollide = false;
+            Projectile.tileCollide = false;
 
             // These below are needed for a minion weapon
             // Only controls if it deals damage to enemies on contact (more on that later)
-            projectile.friendly = true;
+            Projectile.friendly = true;
             // Only determines the damage type
-            projectile.minion = true;
+            Projectile.minion = true;
             // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
-            projectile.minionSlots = 1f;
+            Projectile.minionSlots = 1f;
             // Needed so the minion doesn't despawn on collision with enemies or tiles
-            projectile.penetrate = -1;
+            Projectile.penetrate = -1;
         }
 
         // Here you can decide if your minion breaks things like grass or pots
@@ -59,7 +60,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             float numbskull = 0;
             #region Active check
             // This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
@@ -69,7 +70,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
             }
             if (player.HasBuff(BuffType<Buffs.Minions.DarksteelSkull>()))
             {
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
             }
             #endregion
 
@@ -80,27 +81,27 @@ namespace ExoriumMod.Content.Projectiles.Minions
             // The index is projectile.minionPos
             for (int i = 0; i <= Main.maxProjectiles; i++)
             {
-                if (Main.projectile[i].type == ProjectileType<DarksteelSkullSummon>() && Main.projectile[i].owner == projectile.owner)
+                if (Main.projectile[i].type == ProjectileType<DarksteelSkullSummon>() && Main.projectile[i].owner == Projectile.owner)
                     numbskull++;
-                if (i == projectile.whoAmI)
+                if (i == Projectile.whoAmI)
                     i = Main.maxProjectiles + 1;
             }
-            idlePosition.X += (projectile.width*2) * ((numbskull-1) - (float)(player.ownedProjectileCounts[ProjectileType<DarksteelSkullSummon>()]-1)/2);
-            projectile.position.X = idlePosition.X - projectile.width/2;
-            projectile.position.Y = idlePosition.Y - projectile.height * 1.5f;
+            idlePosition.X += (Projectile.width*2) * ((numbskull-1) - (float)(player.ownedProjectileCounts[ProjectileType<DarksteelSkullSummon>()]-1)/2);
+            Projectile.position.X = idlePosition.X - Projectile.width/2;
+            Projectile.position.Y = idlePosition.Y - Projectile.height * 1.5f;
             #endregion
 
             #region Find target
             // Starting search distance
             float distanceFromTarget = 700f;
-            Vector2 targetCenter = projectile.position;
+            Vector2 targetCenter = Projectile.position;
             bool foundTarget = false;
 
             // This code is required if your minion weapon has the targeting feature
             if (player.HasMinionAttackTargetNPC)
             {
                 NPC npc = Main.npc[player.MinionAttackTargetNPC];
-                float between = Vector2.Distance(npc.Center, projectile.Center);
+                float between = Vector2.Distance(npc.Center, Projectile.Center);
                 // Reasonable distance away so it doesn't target across multiple screens
                 if (between < 2000f)
                 {
@@ -116,10 +117,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
                     NPC npc = Main.npc[i];
                     if (npc.CanBeChasedBy())
                     {
-                        float between = Vector2.Distance(npc.Center, projectile.Center);
-                        bool closest = Vector2.Distance(projectile.Center, targetCenter) > between;
+                        float between = Vector2.Distance(npc.Center, Projectile.Center);
+                        bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;
                         bool inRange = between < distanceFromTarget;
-                        bool lineOfSight = Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height);
+                        bool lineOfSight = Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height);
                         bool closeThroughWall = between < 100f;
                         if (((closest && inRange) || !foundTarget) && (lineOfSight || closeThroughWall))
                         {
@@ -130,7 +131,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 }
             }
             #endregion
-            Vector2 delta = targetCenter - projectile.Center;
+            Vector2 delta = targetCenter - Projectile.Center;
             #region Movement
             if (foundTarget)
             {
@@ -143,8 +144,8 @@ namespace ExoriumMod.Content.Projectiles.Minions
                         delta *= 20f / magnitude;
                     else
                         delta = new Vector2(0f, 30f);
-                    Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, delta.X, delta.Y, ProjectileType<SkullShot>(), projectile.damage, projectile.knockBack, Main.myPlayer);
-                    Main.PlaySound(SoundID.Item20, projectile.position);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, delta.X, delta.Y, ProjectileType<SkullShot>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
+                    SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
                 }
             }
             #endregion
@@ -152,15 +153,15 @@ namespace ExoriumMod.Content.Projectiles.Minions
             #region Animation and visuals
             if (foundTarget)
             {
-                projectile.rotation = (float)Math.Atan2(delta.Y, delta.X);
-                projectile.spriteDirection = (int)(delta.X / Math.Abs(delta.X));
-                if (projectile.spriteDirection <= 0)
-                    projectile.rotation = (float)(Math.Atan2(delta.Y, delta.X) + Math.PI);
+                Projectile.rotation = (float)Math.Atan2(delta.Y, delta.X);
+                Projectile.spriteDirection = (int)(delta.X / Math.Abs(delta.X));
+                if (Projectile.spriteDirection <= 0)
+                    Projectile.rotation = (float)(Math.Atan2(delta.Y, delta.X) + Math.PI);
             }
             else
             {
-                projectile.spriteDirection = player.direction;
-                projectile.rotation = 0;
+                Projectile.spriteDirection = player.direction;
+                Projectile.rotation = 0;
             }
             #endregion
         }
@@ -172,25 +173,25 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.Homing[projectile.type] = true;
-            ProjectileID.Sets.MinionShot[projectile.type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+            ProjectileID.Sets.MinionShot[Projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.alpha = 255;
-            projectile.timeLeft = 300;
-            projectile.penetrate = 2;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = false;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 300;
+            Projectile.penetrate = 2;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = false;
         }
 
         public override void AI()
         {
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.DarksteelDust>(), projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+            Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.DarksteelDust>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
         }
     }
 }

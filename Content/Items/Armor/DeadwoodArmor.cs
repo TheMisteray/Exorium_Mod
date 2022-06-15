@@ -6,87 +6,80 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExoriumMod.Content.Items.Armor
 {
-    class DeadwoodArmor
+    [AutoloadEquip(EquipType.Head)]
+    class DeadwoodHelmet : ModItem
     {
+        public override string Texture => AssetDirectory.Armor + Name;
 
-        [AutoloadEquip(EquipType.Head)]
-        class DeadwoodHelmet : ModItem
+        public override void SetDefaults()
         {
-            public override string Texture => AssetDirectory.Armor + Name;
-
-            public override void SetDefaults()
-            {
-                item.width = 28;
-                item.height = 24;
-                item.rare = 0;
-                item.defense = 1;
-            }
-
-            public override bool IsArmorSet(Item head, Item body, Item legs)
-            {
-                return body.type == ItemType<DeadwoodBreastplate>() && legs.type == ItemType<DeadwoodGreaves>();
-            }
-
-            public override void UpdateArmorSet(Player player)
-            {
-                player.setBonus = "10% increased speed";
-                player.moveSpeed += 0.1f;
-            }
-
-            public override void AddRecipes()
-            {
-                ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 20);
-                recipe.AddTile(TileID.WorkBenches);
-                recipe.SetResult(this);
-                recipe.AddRecipe();
-            }
+            Item.width = 28;
+            Item.height = 24;
+            Item.rare = 0;
+            Item.defense = 1;
         }
 
-        [AutoloadEquip(EquipType.Body)]
-        class DeadwoodBreastplate : ModItem
+        public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            public override string Texture => AssetDirectory.Armor + Name;
-
-            public override void SetDefaults()
-            {
-                item.width = 30;
-                item.height = 18;
-                item.rare = 0;
-                item.defense = 1;
-            }
-
-            public override void AddRecipes()
-            {
-                ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 20);
-                recipe.AddTile(TileID.WorkBenches);
-                recipe.SetResult(this);
-                recipe.AddRecipe();
-            }
+            return body.type == ItemType<DeadwoodBreastplate>() && legs.type == ItemType<DeadwoodGreaves>();
         }
 
-        [AutoloadEquip(EquipType.Legs)]
-        class DeadwoodGreaves : ModItem
+        public override void UpdateArmorSet(Player player)
         {
-            public override string Texture => AssetDirectory.Armor + Name;
+            player.setBonus = "10% increased speed";
+            player.moveSpeed += 0.1f;
+        }
 
-            public override void SetDefaults()
-            {
-                item.width = 22;
-                item.height = 18;
-                item.rare = 0;
-                item.defense = 1;
-            }
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 20);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.Register();
+        }
+    }
 
-            public override void AddRecipes()
-            {
-                ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 25);
-                recipe.AddTile(TileID.WorkBenches);
-                recipe.SetResult(this);
-                recipe.AddRecipe();
-            }
+    [AutoloadEquip(EquipType.Body)]
+    class DeadwoodBreastplate : ModItem
+    {
+        public override string Texture => AssetDirectory.Armor + Name;
+
+        public override void SetDefaults()
+        {
+            Item.width = 30;
+            Item.height = 18;
+            Item.rare = 0;
+            Item.defense = 1;
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 20);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.Register();
+        }
+    }
+
+    [AutoloadEquip(EquipType.Legs)]
+    class DeadwoodGreaves : ModItem
+    {
+        public override string Texture => AssetDirectory.Armor + Name;
+
+        public override void SetDefaults()
+        {
+            Item.width = 22;
+            Item.height = 18;
+            Item.rare = 0;
+            Item.defense = 1;
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemType<TileItems.Deadwood>(), 25);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.Register();
         }
     }
 }

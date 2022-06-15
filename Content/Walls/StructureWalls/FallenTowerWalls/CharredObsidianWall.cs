@@ -8,16 +8,12 @@ namespace ExoriumMod.Content.Walls.StructureWalls.FallenTowerWalls
 {
     class CharredObsidianWall : ModWall
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.Wall + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.Wall + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.wallHouse[Type] = false;
-            drop = ItemType<Items.WallItems.StructureWallItems.FallenTowerWallItems.CharredObsidianWall>();
+            ItemDrop = ItemType<Items.WallItems.StructureWallItems.FallenTowerWallItems.CharredObsidianWall>();
             AddMapEntry(new Color(25, 6, 2));
         }
     }

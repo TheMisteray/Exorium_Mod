@@ -7,13 +7,9 @@ namespace ExoriumMod.Content.Buffs.Minions
 {
     class BlightedNeedleSummonBuff : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.MinionBuff + name;
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.MinionBuff + Name;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blightsteel Needle");
             Description.SetDefault("The Blightsteel Needle will fight for you \n");
@@ -37,13 +33,9 @@ namespace ExoriumMod.Content.Buffs.Minions
 
     class StuckBlightedNeedleDebuff : ModBuff
     {
-        public override bool Autoload(ref string name, ref string texture)
-        {
-            texture = AssetDirectory.MinionBuff + "BlightedNeedleSummonBuff";
-            return base.Autoload(ref name, ref texture);
-        }
+        public override string Texture => AssetDirectory.MinionBuff + "BlightedNeedleSummonBuff";
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Stuck");
             Description.SetDefault("Ouch");

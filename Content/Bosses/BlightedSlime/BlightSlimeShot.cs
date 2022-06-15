@@ -13,22 +13,22 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = false;
-            projectile.penetrate = 2;
-            projectile.timeLeft = 300;
-            projectile.hostile = true;
-            projectile.tileCollide = false;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.friendly = false;
+            Projectile.penetrate = 2;
+            Projectile.timeLeft = 300;
+            Projectile.hostile = true;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
         {
-            projectile.velocity.Y += .13f;
-            projectile.rotation += .2f;
+            Projectile.velocity.Y += .13f;
+            Projectile.rotation += .2f;
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), 0, 0);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<BlightDust>(), 0, 0);
             }
         }
     }

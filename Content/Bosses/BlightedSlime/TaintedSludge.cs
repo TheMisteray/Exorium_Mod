@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -13,43 +14,42 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Summons the Blighted Slime");
-            ItemID.Sets.SortingPriorityBossSpawns[item.type] = 13;
+            ItemID.Sets.SortingPriorityBossSpawns[Item.type] = 13;
         }
 
         public override void SetDefaults()
         {
-            item.value = 0;
-            item.width = 16;
-            item.height = 14;
-            item.rare = 1;
-            item.maxStack = 99;
-            item.useAnimation = 45;
-            item.useTime = 45;
-            item.useStyle = 4;
-            item.UseSound = SoundID.Item44;
-            item.consumable = true;
+            Item.value = 0;
+            Item.width = 16;
+            Item.height = 14;
+            Item.rare = 1;
+            Item.maxStack = 99;
+            Item.useAnimation = 45;
+            Item.useTime = 45;
+            Item.useStyle = 4;
+            Item.UseSound = SoundID.Item44;
+            Item.consumable = true;
         }
 
         public override bool CanUseItem(Player player)
         {
-            return player.GetModPlayer<BiomeHandler>().ZoneDeadlands && !NPC.AnyNPCs(NPCType<BlightedSlime>());
+            return player.InModBiome(GetInstance<Content.Biomes.DeadlandBiome>()) && !NPC.AnyNPCs(NPCType<BlightedSlime>());
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)/* Suggestion: Return null instead of false */
         {
-            Main.PlaySound(SoundID.Roar, player.position, 0);
+            SoundEngine.PlaySound(SoundID.Roar, player.position);
             NPC.SpawnOnPlayer(player.whoAmI, NPCType<BlightedSlime>());
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.Gel, 30);
             recipe.AddIngredient(ItemType<Items.Materials.WightBone>(), 15);
             recipe.AddTile(TileID.DemonAltar);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

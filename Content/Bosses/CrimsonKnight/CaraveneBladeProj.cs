@@ -21,26 +21,26 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            projectile.width = 42;
-            projectile.height = 300;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 600;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.alpha = 255;
+            Projectile.width = 42;
+            Projectile.height = 300;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 600;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.alpha = 255;
         }
 
         public float SpawnBehavior
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public bool Enrage
         {
-            get => projectile.ai[1] == 1f;
-            set => projectile.ai[1] = value ? 1f : 0f;
+            get => Projectile.ai[1] == 1f;
+            set => Projectile.ai[1] = value ? 1f : 0f;
         }
 
         public float spawnActionTimer = 600;
@@ -50,20 +50,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (spawnActionTimer > 0)
             {
                 spawnActionTimer -= 10;
-                projectile.alpha -= 25;
-                projectile.position.Y--;
+                Projectile.alpha -= 25;
+                Projectile.position.Y--;
             }
             else
             {
-                projectile.velocity.Y = 14;
+                Projectile.velocity.Y = 14;
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = GetTexture(AssetDirectory.CrimsonKnight + Name);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value;
 
-            Main.spriteBatch.Draw(tex, (projectile.Center - Main.screenPosition), null, new Color(254, 121, 2) * ((600 - spawnActionTimer)/600), projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (Projectile.Center - Main.screenPosition), null, new Color(254, 121, 2) * ((600 - spawnActionTimer)/600), Projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
             return false;
         }
 

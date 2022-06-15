@@ -13,43 +13,43 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = Main.npcFrameCount[NPCID.Ghost];
+            Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.Ghost];
             DisplayName.SetDefault("Specter");
         }
 
         public override void SetDefaults()
         {
-            npc.CloneDefaults(NPCID.Ghost);
-            animationType = NPCID.Ghost;
-            npc.damage = 44;
-            npc.defense = 3;
-            npc.lifeMax = 99;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath6;
-            npc.value = 200f;
-            npc.buffImmune[BuffID.Confused] = false;
+            NPC.CloneDefaults(NPCID.Ghost);
+            AnimationType = NPCID.Ghost;
+            NPC.damage = 44;
+            NPC.defense = 3;
+            NPC.lifeMax = 99;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath6;
+            NPC.value = 200f;
+            NPC.buffImmune[BuffID.Confused] = false;
         }
 
         public override void CustomBehavior(ref float ai)
         {
-            Vector2 dist = Main.player[npc.target].position - npc.position;
+            Vector2 dist = Main.player[NPC.target].position - NPC.position;
             float magnitude = (float)Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);
-            if (magnitude >= 270 && npc.alpha <= 255)
-                npc.alpha += 5;
-            else if (npc.alpha >= 40)
-                npc.alpha -= 5; 
+            if (magnitude >= 270 && NPC.alpha <= 255)
+                NPC.alpha += 5;
+            else if (NPC.alpha >= 40)
+                NPC.alpha -= 5; 
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
         {
-            if (npc.alpha > 240)
+            if (NPC.alpha > 240)
                 return false;
             return true;
         }
 
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
         {
-            npc.alpha = 60;
+            NPC.alpha = 60;
         }
     }
 }

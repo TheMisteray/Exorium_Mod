@@ -43,25 +43,12 @@ namespace ExoriumMod
             woodGroup.ValidItems.Add(ModContent.ItemType<Content.Items.TileItems.Deadwood>());
         }
 
-        public override void UpdateMusic(ref int music, ref MusicPriority priority)
-        {
-            if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
-            {
-                return;
-            }
-            if (Main.LocalPlayer.GetModPlayer<BiomeHandler>().ZoneDeadlands)
-            {
-                music = GetSoundSlot(SoundType.Music, "Sounds/Music/TheGrime");
-                priority = MusicPriority.BiomeLow;
-            }
-        }
-
         public override void PostSetupContent()
         {
             //Cross Content
-            BossChecklistCC();
-            CensusCC();
-            FargoMutantCC();
+            //BossChecklistCC();
+            //CensusCC();
+            //FargoMutantCC();
 
             base.PostSetupContent();
         }

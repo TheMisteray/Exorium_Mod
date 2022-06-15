@@ -21,32 +21,31 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 34;
-            item.height = 64;
-            item.accessory = true;
-            item.value = 5000;
-            item.rare = 1;
-            item.defense = -2;
+            Item.width = 34;
+            Item.height = 64;
+            Item.accessory = true;
+            Item.value = 5000;
+            Item.rare = 1;
+            Item.defense = -2;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.maxMinions++;
-            player.minionDamage += 0.07f;
-            player.meleeDamage -= .2f;
-            player.rangedDamage -= .2f;
-            player.magicDamage -= .2f;
+            player.GetDamage(DamageClass.Summon) *= 1.07f;
+            player.GetDamage(DamageClass.Melee) *= .8f;
+            player.GetDamage(DamageClass.Ranged) *= .8f;
+            player.GetDamage(DamageClass.Magic) *= .8f;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Weapons.Summoner.ShadowOrb>(), 7);
             recipe.AddIngredient(ItemType<Materials.Metals.DunestoneBar>(), 4);
             recipe.AddIngredient(ItemID.Ruby);
             recipe.AddTile(TileType<Tiles.ShadowAltarTile>());
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

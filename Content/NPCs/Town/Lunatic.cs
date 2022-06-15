@@ -4,6 +4,7 @@ using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using System.Collections.Generic;
 
 namespace ExoriumMod.Content.NPCs.Town
 {
@@ -13,44 +14,43 @@ namespace ExoriumMod.Content.NPCs.Town
         public override string Texture => AssetDirectory.TownNPC + Name;
         public override string HeadTexture => Texture + "_Head";
 
-        public override bool Autoload(ref string name)
-        {
-            name = "Lunatic";
-            return mod.Properties.Autoload;
-        }
+        public override string Name => base.Name;
 
-        public override string TownNPCName()
+        public override List<string> SetNPCNameList()
         {
-            return "Fravrick";
+            return new List<string>
+            {
+                "Fravrick"
+            };
         }
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Lunatic");
-            Main.npcFrameCount[npc.type] = 23;
-            NPCID.Sets.ExtraFramesCount[npc.type] = NPCID.Sets.ExtraFramesCount[NPCID.Wizard];
-            NPCID.Sets.AttackFrameCount[npc.type] = NPCID.Sets.AttackFrameCount[NPCID.Wizard];
-            NPCID.Sets.DangerDetectRange[npc.type] = 700;
-            NPCID.Sets.AttackType[npc.type] = NPCID.Sets.AttackType[NPCID.Wizard];
-            NPCID.Sets.AttackTime[npc.type] = 90;
-            NPCID.Sets.AttackAverageChance[npc.type] = 30;
-            NPCID.Sets.HatOffsetY[npc.type] = 8;
+            Main.npcFrameCount[NPC.type] = 23;
+            NPCID.Sets.ExtraFramesCount[NPC.type] = NPCID.Sets.ExtraFramesCount[NPCID.Wizard];
+            NPCID.Sets.AttackFrameCount[NPC.type] = NPCID.Sets.AttackFrameCount[NPCID.Wizard];
+            NPCID.Sets.DangerDetectRange[NPC.type] = 700;
+            NPCID.Sets.AttackType[NPC.type] = NPCID.Sets.AttackType[NPCID.Wizard];
+            NPCID.Sets.AttackTime[NPC.type] = 90;
+            NPCID.Sets.AttackAverageChance[NPC.type] = 30;
+            NPCID.Sets.HatOffsetY[NPC.type] = 8;
         }
 
         public override void SetDefaults()
         {
-            npc.townNPC = true;
-            npc.friendly = true;
-            npc.width = 18;
-            npc.height = 40;
-            npc.aiStyle = 7;
-            npc.damage = 10;
-            npc.defense = 15;
-            npc.lifeMax = 250;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 0.5f;
-            animationType = NPCID.Wizard;
+            NPC.townNPC = true;
+            NPC.friendly = true;
+            NPC.width = 18;
+            NPC.height = 40;
+            NPC.aiStyle = 7;
+            NPC.damage = 10;
+            NPC.defense = 15;
+            NPC.lifeMax = 250;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 0.5f;
+            AnimationType = NPCID.Wizard;
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)
@@ -79,7 +79,7 @@ namespace ExoriumMod.Content.NPCs.Town
                         return "Do you smell that?";
                 }
             }
-            if (ExoriumWorld.deadlandTiles >= 50 && Main.rand.NextBool(4))
+            if (ModContent.GetInstance<Core.Systems.TileCounters.DeadlandsBiomeTileCount>().deadlandsBlockCount >= 250 && Main.rand.NextBool(4))
             {
                 return "This place make me feel... Uncomfortable";
             }

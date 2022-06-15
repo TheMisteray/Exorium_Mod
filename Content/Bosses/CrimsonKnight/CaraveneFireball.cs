@@ -21,25 +21,25 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 1200;
-            projectile.tileCollide = false;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 1200;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
         }
 
         public bool Enrage
         {
-            get => projectile.ai[1] == 1f;
-            set => projectile.ai[1] = value ? 1f : 0f;
+            get => Projectile.ai[1] == 1f;
+            set => Projectile.ai[1] = value ? 1f : 0f;
         }
 
         public override void AI()
         {
-            projectile.velocity.Y += .20f;
-            projectile.rotation += .2f;
+            Projectile.velocity.Y += .20f;
+            Projectile.rotation += .2f;
             if (Main.rand.NextBool(3))
             {
                 //Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), 0, 0);

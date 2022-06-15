@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -18,23 +19,23 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            item.damage = 10;
-            item.width = 15;
-            item.height = 15;
-            item.magic = true;
-            item.mana = 9;
-            item.useTime = 41;
-            item.useAnimation = 41;
-            item.useStyle = 5;
-            item.noMelee = true;
-            item.knockBack = 1;
-            item.value = Item.sellPrice(silver: 20);
-            item.rare = 1;
-            item.UseSound = SoundID.Item20;
-            item.shoot = ProjectileType<ShadowBoltSpell>();
-            item.shootSpeed = 20;
-            item.autoReuse = true;
-            item.scale = 0.9f;
+            Item.damage = 10;
+            Item.width = 15;
+            Item.height = 15;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 9;
+            Item.useTime = 41;
+            Item.useAnimation = 41;
+            Item.useStyle = 5;
+            Item.noMelee = true;
+            Item.knockBack = 1;
+            Item.value = Item.sellPrice(silver: 20);
+            Item.rare = 1;
+            Item.UseSound = SoundID.Item20;
+            Item.shoot = ProjectileType<ShadowBoltSpell>();
+            Item.shootSpeed = 20;
+            Item.autoReuse = true;
+            Item.scale = 0.9f;
         }
     }
 
@@ -44,31 +45,31 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = true;
-            projectile.magic = true;
-            projectile.timeLeft = 600;
-            projectile.ignoreWater = false;
-            projectile.tileCollide = true;
-            projectile.alpha = 255;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.timeLeft = 600;
+            Projectile.ignoreWater = false;
+            Projectile.tileCollide = true;
+            Projectile.alpha = 255;
         }
 
         public override void AI()
         {
             for (int i = 0; i < 6; i++)
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Shadow>());
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.Shadow>());
         }
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.Item14, projectile.position);
+            SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int i = 0; i <= Main.rand.Next(3, 5); i++)
                 {
-                    Vector2 perturbedSpeed = new Vector2(projectile.velocity.X, projectile.velocity.Y).RotatedByRandom(MathHelper.ToRadians(360)) / 2;
-                    Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<ShadowBoltSpellShard>(), projectile.damage, projectile.knockBack, Main.myPlayer, 1);
+                    Vector2 perturbedSpeed = new Vector2(Projectile.velocity.X, Projectile.velocity.Y).RotatedByRandom(MathHelper.ToRadians(360)) / 2;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<ShadowBoltSpellShard>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 1);
                 }
             }
         }
@@ -80,27 +81,27 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = true;
-            projectile.magic = true;
-            projectile.timeLeft = 600;
-            projectile.ignoreWater = false;
-            projectile.tileCollide = true;
-            projectile.alpha = 255;
-            projectile.ai[0] = 0;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.timeLeft = 600;
+            Projectile.ignoreWater = false;
+            Projectile.tileCollide = true;
+            Projectile.alpha = 255;
+            Projectile.ai[0] = 0;
         }
 
         public override void AI()
         {
-            projectile.scale -= 0.03f;
-            projectile.width = (int)(projectile.width * projectile.scale);
-            projectile.height = (int)(projectile.height * projectile.scale);
-            projectile.velocity.Y += .5f;
+            Projectile.scale -= 0.03f;
+            Projectile.width = (int)(Projectile.width * Projectile.scale);
+            Projectile.height = (int)(Projectile.height * Projectile.scale);
+            Projectile.velocity.Y += .5f;
             for (int i = 0; i < 2; i++)
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<Dusts.Shadow>());
-            if (projectile.scale <= .01)
-                projectile.Kill();
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.Shadow>());
+            if (Projectile.scale <= .01)
+                Projectile.Kill();
         }
     }
 }
