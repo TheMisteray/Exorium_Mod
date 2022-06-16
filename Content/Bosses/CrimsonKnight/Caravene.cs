@@ -50,26 +50,30 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             //bossBag = ItemType<ShadowmancerBag>();
         }
 
+        //May want to make teleport next to player not damage when teleporting
+
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
             NPC.lifeMax = (int)(NPC.lifeMax * 0.75 * bossLifeScale);
             NPC.damage = (int)(NPC.damage * 0.7);
         }
 
-        private bool introAnimation = true;
-        private int introTicker = 180;
-
-        private bool exitAnimation = false;
-
-        private bool teleIndicator = false;
-
         private bool left = false;
-
-        private bool parry = false;
 
         private int frameX = 0;
 
         private int loopCounter = 0;
+
+        //Action trackers
+        private bool teleIndicator = false;
+        private bool parry = false;
+        private bool dashIndicator = false;
+
+        //Phase trackers
+        private bool introAnimation = true;
+        private int introTicker = 180;
+
+        private bool exitAnimation = false;
 
         //Actions
         //0 - jump
@@ -91,7 +95,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => NPC.ai[0] = value;
         }
 
-        private float wait = 0;
+        private float wait = 60;
 
         private float actionTimer;
 
@@ -247,9 +251,27 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 1:
-                    if (actionTimer <= 70)
-                        NPC.velocity = new Vector2(24, 0) * (left ? 1 : -1);
-                    if (actionTimer >= 70)
+                    if (actionTimer <= 60)
+                        dashIndicator = true;
+                    else if (actionTimer <= 150)
+                    {
+                        dashIndicator = false;
+                        NPC.velocity = new Vector2(20, 0) * (left ? 1 : -1);
+
+                        //Push out of wall
+                        Vector2 sideCheck = left ? NPC.Left : NPC.Right;
+                        if (Main.tile[sideCheck.ToTileCoordinates().X, sideCheck.ToTileCoordinates().Y].HasTile)
+                        {
+                            int counter = 0; //Limit loops to 200 just in case
+                            while (Main.tile[sideCheck.ToTileCoordinates().X, sideCheck.ToTileCoordinates().Y].HasTile && counter < 200)
+                            {
+                                NPC.position.X += (left? 2: -2);
+                                sideCheck = left ? NPC.Left : NPC.Right;
+                                counter++;
+                            }
+                        }
+                    }
+                    if (actionTimer >= 150)
                     {
                         if (Main.rand.Next(3) == 0)
                         {
@@ -280,7 +302,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         teleIndicator = true;
                     else if (actionTimer == 90)
                     {
-                        Vector2 offset = new Vector2(!left ? NPC.width : -NPC.width, -NPC.height/2);
+                        Vector2 offset = new Vector2(!left ? NPC.width : -NPC.width, -NPC.height/2.45f);
                         NPC.velocity = ((player.Center + offset) - NPC.Center) / 4;
                         NPC.noGravity = true;
                         NPC.noTileCollide = true;
@@ -290,7 +312,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         NPC.velocity = Vector2.Zero;
                     }
-                    else if (actionTimer == 100)
+                    else if (actionTimer == 140)
                     {
                         NPC.noGravity = false;
                         NPC.noTileCollide = false;
@@ -330,7 +352,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         {
                             for (int i = 0; i < 12; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -1000), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 6) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 6) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                             }
                         }
                     }
@@ -389,9 +411,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         for (int i = 0; i < 5; i++)
                         {
-                            Vector2 vel = new Vector2(0, -12);
+                            Vector2 vel = new Vector2(0, -14);
                             vel = vel.RotatedBy(MathHelper.ToRadians(-30 + (15 * i)));
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(left? NPC.width: -NPC.width, 0), vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                         }
                     }
                     if (actionTimer == 30)
@@ -458,8 +480,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         for (int i = 0; i < 7; i++)
                         {
                             Vector2 vel = new Vector2(0, -12);
-                            vel = vel.RotatedBy(MathHelper.ToRadians((-10 + (20 * i))) * NPC.spriteDirection);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom, vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            vel = vel.RotatedBy(MathHelper.ToRadians((-10 + (20 * i))) * (left? 1: -1));
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                         }
                     }
                     if (actionTimer >= 20)
@@ -616,10 +638,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator").Value;
+            Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator").Value;
 
             if (teleIndicator)
-                spriteBatch.Draw(tex, (Main.player[NPC.target].Bottom + new Vector2(!left ? tex.Width : -tex.Width, -tex.Height / 2)) - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(tex.Width, tex.Height) / 2, 1 + (0.02f * loopCounter), !left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+                spriteBatch.Draw(texTele, (Main.player[NPC.target].Bottom + new Vector2(!left ? texTele.Width : -texTele.Width, -texTele.Height / 2)) - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), !left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+
+            Texture2D texDash = Request<Texture2D>(AssetDirectory.CrimsonKnight + "DashIndicator").Value;
+
+            if (dashIndicator)
+                spriteBatch.Draw(texDash, NPC.Center + (new Vector2(left ? 30 : -30, 0) * actionTimer) - screenPos, null, new Color(255, 255, 255, 0), 0, new Vector2(texDash.Width, texDash.Height) / 2, 1, left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
             base.PostDraw(spriteBatch, screenPos, drawColor);
         }
