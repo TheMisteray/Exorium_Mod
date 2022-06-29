@@ -17,7 +17,7 @@ namespace ExoriumMod.Core
             {
                 if (Main.rand.NextBool(4) && drawInfo.shadow == 0f)
                 {
-                    int dust = Dust.NewDust(drawInfo.Center - Main.screenPosition - new Vector2(2f, 2f), Player.width + 4, Player.height + 4, DustType<Content.Dusts.Shadow>(), Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 2f);
+                    int dust = Dust.NewDust(drawInfo.Center - new Vector2(Player.width/2 + 2, Player.height/2 + 2), Player.width + 4, Player.height + 4, DustType<Content.Dusts.Shadow>(), Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 2f);
                     Main.dust[dust].noGravity = true;
 
                     drawInfo.DustCache.Add(dust);

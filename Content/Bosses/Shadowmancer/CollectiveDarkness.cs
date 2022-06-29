@@ -8,6 +8,7 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.Graphics.Effects;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
@@ -151,7 +152,27 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             Vector2 dist = new Vector2(projHitbox.Center.X - targetHitbox.Center.X, projHitbox.Center.Y - targetHitbox.Center.Y);
-            return dist.Length() < (Projectile.width/2 * Projectile.scale) + targetHitbox.Width;
+            return dist.Length() * 1.2f < (Projectile.width/2 * Projectile.scale) + targetHitbox.Width;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            var fire = Filters.Scene["ExoriumMod:ShadowmancerShade"].GetShader().Shader;
+            fire.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphereMap").Value);
+            fire.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
+            fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.01f);
+
+            SpriteBatch spriteBatch = Main.spriteBatch;
+
+            spriteBatch.End();
+            spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
+
+            spriteBatch.Draw(Request<Texture2D>(AssetDirectory.Shadowmancer + Name).Value, Projectile.Center - Main.screenPosition, null, Color.White, 0, Projectile.Size / 2, Projectile.scale * 2, 0, 0);
+
+            spriteBatch.End();
+            spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+
+            return false;
         }
 
         /// <summary>

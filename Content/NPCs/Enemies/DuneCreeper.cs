@@ -8,6 +8,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader.Utilities;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.NPCs.Enemies
 {

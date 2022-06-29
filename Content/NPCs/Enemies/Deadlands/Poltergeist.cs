@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System;
 using Microsoft.Xna.Framework;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 {
@@ -15,6 +16,15 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         {
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.Ghost];
             DisplayName.SetDefault("Specter");
+
+            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
+            {
+                SpecificallyImmuneTo = new int[] {
+                    BuffID.OnFire,
+                    BuffID.Frostburn,
+                }
+            };
+            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
         }
 
         public override void SetDefaults()

@@ -9,12 +9,26 @@ using ExoriumMod.Content.Skies;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Graphics;
+using Terraria.GameContent.Shaders;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System.Reflection;
+using System.Collections.Generic;
+using Terraria.GameContent.Dyes;
+using Terraria.GameContent.UI;
+using Terraria.UI;
+using Terraria.Localization;
+using Terraria.ModLoader.Core;
+using Terraria.Utilities;
+using Terraria.UI.Chat;
 
 namespace ExoriumMod
 {
 	public partial class ExoriumMod : Mod
 	{
         internal static ExoriumMod instance;
+
+        public static Effect SunOrbShader;
 
         public ExoriumMod()
 		{
@@ -27,13 +41,38 @@ namespace ExoriumMod
 
             if (Main.netMode != NetmodeID.Server)
             {
+                //Skies
                 SkyManager.Instance["ExoriumMod:DeadlandsSky"] = new DeadlandsSky();
                 Filters.Scene["ExoriumMod:DeadlandsSky"] = new Filter((new ScreenShaderData("FilterMiniTower")).UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryLow);
+
+                //Shader refs
+                Ref<Effect> HeatDistortEffectRef = new Ref<Effect>(Assets.Request<Effect>("Effects/HeatDistortion", AssetRequestMode.ImmediateLoad).Value);
+                Ref<Effect> screenRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShockwaveEffect", AssetRequestMode.ImmediateLoad).Value);
+                Ref<Effect> flamingSphereRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FlamingSphere", AssetRequestMode.ImmediateLoad).Value);
+                Ref<Effect> shadowmancerShadeRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShadowmancerShade", AssetRequestMode.ImmediateLoad).Value);
+
+                //Screen shader loads
+                Filters.Scene["ExoriumMod:HeatDistortion"] = new Filter(new ScreenShaderData(HeatDistortEffectRef, "Heat"), EffectPriority.High);
+                Filters.Scene["ExoriumMod:HeatDistortion"].Load();
+
+                Filters.Scene["Shockwave"] = new Filter(new ScreenShaderData(screenRef, "Shockwave" /*Must be name of pass in shader*/), EffectPriority.VeryHigh);
+                Filters.Scene["Shockwave"].Load();
+
+                //Texture shaders
+                Filters.Scene["ExoriumMod:FlamingSphere"] = new Filter(new ScreenShaderData(flamingSphereRef, "FlamingSpherePass"), EffectPriority.VeryHigh);
+                Filters.Scene["ExoriumMod:FlamingSphere"].Load();
+
+                Filters.Scene["ExoriumMod:ShadowmancerShade"] = new Filter(new ScreenShaderData(shadowmancerShadeRef, "ShadePass"), EffectPriority.VeryHigh);
+                Filters.Scene["ExoriumMod:ShadowmancerShade"].Load();
+
+                GameShaders.Misc["FlamingSphere"] = new MiscShaderData(flamingSphereRef, "FlamingSpherePass");
             }
         }
 
         public override void Unload()
         {
+            SunOrbShader = null;
+
             instance = null;
         }
 

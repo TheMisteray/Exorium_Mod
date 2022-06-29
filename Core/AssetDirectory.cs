@@ -27,6 +27,7 @@ namespace ExoriumMod.Core
         public const string Dust = Assets + "Dusts/";
 
         public const string Effect = Assets + "Effects/";
+        public const string ShaderMap = Effect + "Maps/";
 
         public const string Gore = Assets + "Gores/";
 

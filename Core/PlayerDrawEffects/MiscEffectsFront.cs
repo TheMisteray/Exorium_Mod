@@ -36,7 +36,7 @@ namespace ExoriumMod.Core.PlayerDrawEffects
                     shieldTexture.Value, // The texture to render.
                     position, // Position to render at.
                     null, // Source rectangle.
-                    Color.White, // Color.
+                    new Color(40, 140, 250), // Color.
                     0f, // Rotation.
                     shieldTexture.Size() * 0.5f, // Origin. Uses the texture's center.
                     2f, // Scale.

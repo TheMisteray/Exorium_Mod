@@ -7,6 +7,7 @@ using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -17,6 +18,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;
+
+            new NPCDebuffImmunityData
+            {
+                ImmuneToAllBuffsThatAreNotWhips = true,
+                ImmuneToWhips = true
+            };
         }
 
         public override void SetDefaults()
@@ -32,10 +39,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             NPC.HitSound = SoundID.NPCHit41;
             NPC.DeathSound = SoundID.NPCDeath43 ;
             NPC.timeLeft = NPC.activeTime * 30;
-            for (int k = 0; k < NPC.buffImmune.Length; k++)
-            {
-                NPC.buffImmune[k] = true;
-            }
             NPC.noGravity = true;
             NPC.noTileCollide = true;
         }

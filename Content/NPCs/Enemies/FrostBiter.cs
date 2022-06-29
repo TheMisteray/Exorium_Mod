@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -32,10 +33,21 @@ namespace ExoriumMod.Content.NPCs.Enemies
             NPC.value = 1200f;
             NPC.knockBackResist = 0f;
             NPC.aiStyle = -1;
-            NPC.buffImmune[BuffID.Frostburn] = true;
-            NPC.buffImmune[BuffID.Frozen] = true;
             NPC.noTileCollide = true;
             NPC.noGravity = true;
+        }
+
+        public override void SetStaticDefaults()
+        {
+            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
+            {
+                SpecificallyImmuneTo = new int[] {
+                    BuffID.Frostburn,
+                    BuffID.Frostburn2,
+                    BuffID.Frozen,
+                }
+            };
+            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
         }
 
         private int attackCounter;

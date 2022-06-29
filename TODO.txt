@@ -40,3 +40,15 @@ Deadlands Overhaul
 Smithing
 Warlock Class
 Shrine of Light
+
+1.4 Issues
+
+Shadowmancer cloak does not create dusts
+Make flame trail and blight spikes check ground in a while loop so they don't update a bajillion times per frame?
+Shield effect is white
+
+Weapons
+
+Glimmering gun: glittering gun but every color has different effects
+Starbow: shots float behind then shoot laser at mouse / same as lusterous but in helix pattern
+Fan of Colours: new patterns

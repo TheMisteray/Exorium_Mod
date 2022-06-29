@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
+using Terraria.DataStructures;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
@@ -24,6 +25,16 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             DisplayName.SetDefault("Shadowmancer");
             Main.npcFrameCount[NPC.type] = 7;
+
+            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
+            {
+                SpecificallyImmuneTo = new int[] {
+                    BuffID.OnFire,
+                    BuffID.Frostburn,
+                    BuffType<ConsumingDark>(),
+                }
+            };
+            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
         }
 
         public override void SetDefaults()
