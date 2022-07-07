@@ -27,6 +27,12 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                 }
                 i = Main.maxTilesX / 2 + (WorldGen.genRand.Next(Main.maxTilesX / 6, Main.maxTilesX / 3) * (WorldGen.genRand.NextBool() ? -1 : 1));
                 j = Main.maxTilesY - 200;
+
+                ExoriumWorld.FallenTowerRect.X = i * 16;
+                ExoriumWorld.FallenTowerRect.Y = j * 16;
+                ExoriumWorld.FallenTowerRect.Width = _fallenTowerShape.GetLength(0) * 16;
+                ExoriumWorld.FallenTowerRect.Height = _fallenTowerShape.GetLength(1) * 16;
+
                 //Check for other protected structures
                 if (WorldGen.structures.CanPlace(new Rectangle(i, j, _fallenTowerShape.GetLength(1), _fallenTowerShape.GetLength(0)), 50))
                     success = true;

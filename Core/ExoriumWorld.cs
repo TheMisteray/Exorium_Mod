@@ -20,8 +20,10 @@ namespace ExoriumMod.Core
         public static bool downedShadowmancer = false;
         public static bool downedBlightslime = false;
 
-        public static int shadowAltarCoordsX;
-        public static int shadowAltarCoordsY;
+        public static int shadowAltarCoordsX = 0;
+        public static int shadowAltarCoordsY = 0;
+
+        public static Rectangle FallenTowerRect = new Rectangle();
 
         public override void SaveWorldData(TagCompound tag)/* Suggestion: Edit tag parameter rather than returning new TagCompound */
         {
@@ -34,12 +36,18 @@ namespace ExoriumMod.Core
             tag["downed"] = downed;
             tag["shadowAltarCoordsX"] = shadowAltarCoordsX;
             tag["shadowAltarCoordsY"] = shadowAltarCoordsY;
+            tag["FallenTowerPos"] = FallenTowerRect.TopLeft();
+            tag["FallenTowerSize"] = FallenTowerRect.Size();
         }
 
         public override void LoadWorldData(TagCompound tag)
         {
             shadowAltarCoordsX = (int)tag.Get<int>("shadowAltarCoordsX");
             shadowAltarCoordsY = (int)tag.Get<int>("shadowAltarCoordsY");
+            FallenTowerRect.X = (int)tag.Get<Vector2>("FallenTowerPos").X;
+            FallenTowerRect.Y = (int)tag.Get<Vector2>("FallenTowerPos").Y;
+            FallenTowerRect.Width = (int)tag.Get<Vector2>("FallenTowerSize").X;
+            FallenTowerRect.Height = (int)tag.Get<Vector2>("FallenTowerSize").Y;
 
             var downed = tag.GetList<string>("downed");
             downedShadowmancer = downed.Contains("shadowmancer");
@@ -71,6 +79,8 @@ namespace ExoriumMod.Core
             writer.Write(shadowAltarCoordsY);
             BitsByte bosses1 = new BitsByte(downedShadowmancer, downedBlightslime);
             writer.Write(bosses1);
+
+            WriteRectangle(writer, FallenTowerRect);
         }
 
         public override void NetReceive(BinaryReader reader)
@@ -80,7 +90,19 @@ namespace ExoriumMod.Core
             BitsByte bosses1 = reader.ReadByte();
             downedShadowmancer = bosses1[0];
             downedBlightslime = bosses1[1];
+
+            ReadRectangle(reader);
         }
+
+        private void WriteRectangle(BinaryWriter writer, Rectangle rect)
+        {
+            writer.Write(rect.X);
+            writer.Write(rect.Y);
+            writer.Write(rect.Width);
+            writer.Write(rect.Height);
+        }
+
+        private Rectangle ReadRectangle(BinaryReader reader) => new Rectangle(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
 
         public override void OnWorldLoad()
         {

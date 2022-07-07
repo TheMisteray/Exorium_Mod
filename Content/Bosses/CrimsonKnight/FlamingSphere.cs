@@ -25,7 +25,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.tileCollide = false;
             Projectile.friendly = false;
             Projectile.hostile = true;
-            Projectile.scale = .02f;
         }
 
         public float Target
@@ -39,6 +38,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             get => Projectile.ai[1] == 1f;
             set => Projectile.ai[1] = value ? 1f : 0f;
         }
+
+        private float scalar;
 
         public override void AI()
         {
@@ -54,7 +55,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:HeatDistortion"].IsActive())
             {
-                Filters.Scene["ExoriumMod:HeatDistortion"].GetShader().UseTargetPosition(Projectile.Center).UseOpacity(100).UseProgress(Main.GameUpdateCount * 0.002f); //Make use game time for stoppin while paused
+                Filters.Scene["ExoriumMod:HeatDistortion"].GetShader().UseTargetPosition(Projectile.Center).UseOpacity(100).UseProgress(Main.GameUpdateCount * 0.0015f); //Make use game time for stoppin while paused
             }
 
             Player p = Main.player[(int)Target];
@@ -68,7 +69,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 trajectory.Normalize();
                 trajectory *= 4;
 
-                if (Projectile.scale >= .95f)
+                if (scalar >= .95f)
                     Projectile.velocity = trajectory;
 
                 /*
@@ -80,9 +81,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 */
             }
 
-            if (Projectile.scale < 1)
+            if (scalar < 1)
             {
-                Projectile.scale += .02f;
+                scalar += .02f;
             }
         }
 
@@ -102,7 +103,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 // Damage enemies inside the hitbox area
                 Projectile.Damage();
                 Projectile.Damage();
-                Projectile.scale = 0.01f;
+                scalar = 0.01f;
 
                 //Resize the hitbox to its original size
                 Projectile.position = Projectile.Center;
@@ -142,12 +143,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             spriteBatch.End();
             spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
 
-            spriteBatch.Draw(Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value, Projectile.Center - Main.screenPosition, null, Color.White, 0, Projectile.Size / 2, Projectile.scale * 2, 0, 0);
+            spriteBatch.Draw(Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value, Projectile.Center - Main.screenPosition, null, Color.White, 0, Projectile.Size / 2, scalar * 2, 0, 0);
 
             spriteBatch.End();
             spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
 
-            return true;
+            return false;
         }
     }
 }

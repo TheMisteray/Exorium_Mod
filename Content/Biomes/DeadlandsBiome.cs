@@ -23,10 +23,9 @@ namespace ExoriumMod.Content.Biomes
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeLow;
 
 		//Sky
-        public override void SpecialVisuals(Player player)
+        public override void SpecialVisuals(Player player, bool isActive)
         {
-			player.ManageSpecialBiomeVisuals("ExoriumMod:DeadlandsSky", player.InModBiome(GetInstance<DeadlandBiome>()));
-            base.SpecialVisuals(player);
+			player.ManageSpecialBiomeVisuals("ExoriumMod:DeadlandsSky", isActive);
         }
 
         public override void OnLeave(Player player)

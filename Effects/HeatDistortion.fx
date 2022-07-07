@@ -28,8 +28,8 @@ float4 Heat(float4 pos : SV_POSITION, float2 coords : TEXCOORD0) : COLOR0
 
 	float2 distort;
 
-	distort.x = (tex2D(uImage1, coords * uColor.x + float2(0, uProgress)).r - 0.5f) * uColor.y;
-	distort.y = (tex2D(uImage1, coords * uColor.x + float2(0, uProgress)).g - 0.5f) * uColor.y;
+	distort.x = (tex2D(uImage1, coords * uColor.x + float2(0, uTime)).r - 0.5f) * uColor.y;
+	distort.y = (tex2D(uImage1, coords * uColor.x + float2(0, uTime)).g - 0.5f) * uColor.y;
 
 	if (dotField < uColor.z)
 	{

@@ -93,6 +93,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private bool exitAnimation = false;
 
+        //Portal Locations
+        private static Vector2 topL = ExoriumWorld.FallenTowerRect.TopLeft();
+        private static Vector2 topR = ExoriumWorld.FallenTowerRect.TopRight();
+        private static Vector2 Arena_Top_Left = topL + new Vector2(250, 400);
+        private static Vector2 Arena_Middle_Left = topL + new Vector2(250, 1200);
+        private static Vector2 Arena_Bottom_Left = topL + new Vector2(250, 2000);
+        private static Vector2 Arena_Top_Right = topR + new Vector2(-250, 400);
+        private static Vector2 Arena_Middle_Right = topR + new Vector2(-250, 1200);
+        private static Vector2 Arena_Bottom_Right = topR + new Vector2(-250, 2000);
+
         //Actions
         //0 - jump
         //1 - dash
@@ -116,6 +126,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private float wait = 60;
 
         private float actionTimer;
+
+        //TODO:
+        //Shield "pops" when hit
+        //make hitbox tex larger to fit the in-game hitbox for mouse hover purposes
+
 
         public override void AI()
         {
@@ -438,7 +453,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 4:
-                    if (actionTimer > 60)
+                    if (actionTimer > 60 && actionTimer < 180)
                         parry = true;
                     if (actionTimer == 180)
                     {
@@ -715,6 +730,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
             else if (actionTimer == 60)
             {
+                shieldDown = false;
                 frameX = 3;
                 NPC.frameCounter = 0;
             }
@@ -813,18 +829,30 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spriteBatch.Draw(texDash, NPC.Center + (new Vector2(left ? 30 : -30, 0) * actionTimer) - screenPos, null, new Color(255, 255, 255, 0), 0, new Vector2(texDash.Width, texDash.Height) / 2, 1, left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             }
                 
-            if (parry)
+            //TODO: burst effect when parry is popped
+            if (frameX == 6 || (frameX == 7 && !shieldDown)) //if shield is up or going up
             {
                 if (shieldScale < 1)
-                    shieldScale += .02f;
-
-                Texture2D texShield = Request<Texture2D>(AssetDirectory.CrimsonKnight + "ShieldIndicator").Value;
-                spriteBatch.Draw(texShield, NPC.Center - screenPos, null, new Color(100, 0, 0, 0), 0, texShield.Size() / 2, shieldScale, SpriteEffects.None, 0);
+                    shieldScale += .04f;
             }
             else if (shieldScale > 0)
             {
-                shieldScale -= 0.2f;
+                shieldScale -= .04f;
             }
+
+            if (shieldScale > 0)
+            {
+                Texture2D texShield = Request<Texture2D>(AssetDirectory.CrimsonKnight + "ShieldIndicator").Value;
+                spriteBatch.Draw(texShield, NPC.Center - screenPos, null, new Color(100, 0, 0, 0), 0, texShield.Size() / 2, shieldScale, SpriteEffects.None, 0);
+            }
+
+            Texture2D texPortal = Request<Texture2D>(AssetDirectory.CrimsonKnight + "FlamingSphere").Value;
+            spriteBatch.Draw(texPortal, Arena_Top_Left - screenPos, null, new Color(100, 0, 100, 0), 0, texPortal.Size() / 2, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(texPortal, Arena_Middle_Left - screenPos, null, new Color(100, 0, 100, 0), 0, texPortal.Size() / 2, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(texPortal, Arena_Bottom_Left - screenPos, null, new Color(100, 0, 100, 0), 0, texPortal.Size() / 2, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(texPortal, Arena_Top_Right - screenPos, null, new Color(100, 0, 100, 0), 0, texPortal.Size() / 2, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(texPortal, Arena_Middle_Right - screenPos, null, new Color(100, 0, 100, 0), 0, texPortal.Size() / 2, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(texPortal, Arena_Bottom_Right - screenPos, null, new Color(100, 0, 100, 0), 0, texPortal.Size() / 2, 1, SpriteEffects.None, 0);
 
             base.PostDraw(spriteBatch, screenPos, drawColor);
         }
