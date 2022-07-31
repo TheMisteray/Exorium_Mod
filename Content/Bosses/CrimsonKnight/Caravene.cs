@@ -1269,6 +1269,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
+        public override void OnKill()
+        {
+            NPC.Transform(NPCType<CaraveneBattleIntermission>());
+            NPC.life = 99;
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value;

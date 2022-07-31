@@ -67,7 +67,7 @@ namespace ExoriumMod.Content.NPCs.Town
             int Wizard = NPC.FindFirstNPC(NPCID.Wizard);
             int Clothier = NPC.FindFirstNPC(NPCID.Clothier);
             int Guide = NPC.FindFirstNPC(NPCID.Guide);
-            if (Main.rand.Next(50) == 0)
+            if (Main.rand.Next(500) == 0)
             {
                 switch (Main.rand.Next(3))
                 {
@@ -76,12 +76,12 @@ namespace ExoriumMod.Content.NPCs.Town
                     case 1:
                         return "I hate bright colors.";
                     default:
-                        return "Do you smell that?";
+                        return "Do you... smell that?";
                 }
             }
             if (ModContent.GetInstance<Core.Systems.TileCounters.DeadlandsBiomeTileCount>().deadlandsBlockCount >= 250 && Main.rand.NextBool(4))
             {
-                return "This place make me feel... Uncomfortable";
+                return "What happened here?";
             }
             if (Wizard >= 0 && Main.rand.NextBool(7))
             {
@@ -93,7 +93,7 @@ namespace ExoriumMod.Content.NPCs.Town
             }
             if (Guide >= 0 && Main.rand.NextBool(7))
             {
-                return Main.npc[Guide].GivenName + " always refuses to talk to me. Look, it's not my fault I keep forgetting all the recipies.";
+                return Main.npc[Guide].GivenName + " always refuses to talk to me. Look, I just keep forgetting all the recipies.";
             }
             if (Main.rand.Next(3) >= 1)
             {
@@ -104,9 +104,9 @@ namespace ExoriumMod.Content.NPCs.Town
                     case 1:
                         return "Why do I wear a mask you ask? Well... I don't know.";
                     case 2:
-                        return "I feel like I'm forgetting something.";
+                        return "I feel like I'm forgetting something...";
                     case 3:
-                        return "I'm not crazy, who told you that?";
+                        return "I'm not crazy. Who told you that?";
                     default:
                         return "How did I get here?";
                 }
@@ -120,9 +120,9 @@ namespace ExoriumMod.Content.NPCs.Town
                     case 1:
                         return "No, you cannot search my pockets.";
                     case 2:
-                        return "You look like you could use a magical scroll of dubious safety and amateur craftsmanship. Which is a shame because I only sell high quality ones.";
+                        return "You look like you could use a magical scroll of dubious safety and amateur craftsmanship... Which is a shame because I only sell high quality ones.";
                     default:
-                        return "Don't ask where I get all this stuff.";
+                        return "Don't ask where I get this stuff.";
                 }
             }
         }
