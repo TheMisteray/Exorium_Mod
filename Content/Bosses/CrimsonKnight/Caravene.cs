@@ -79,7 +79,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //Action trackers
         private bool teleIndicator = false;
         private bool parry = false;
-        private bool parryTriggered = false;
+        private int parryRetaliate = 0;
         private bool shieldDown = false;
         private bool dashIndicator = false;
 
@@ -87,6 +87,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private bool endFlameSpawn = false;
         private float shieldScale = 0f;
         private float timeReachedPortal = 0f;
+        private Vector2 playerPlaceholder = Vector2.Zero;
+        private bool altBeamType = false;
+        private bool noContactDamage = false;
+        private bool showPortals = false;
+        private float portalSize = 0;
+        private float portalLoop = 0;
+        private Vector2 bladeSpawnOrigin = Vector2.Zero;
+        private int bladeSpawnQuadrant = 0;
+        private int bladeSpawnCount = 0;
+
 
         //Phase trackers
         private bool introAnimation = true;
@@ -110,6 +120,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private static List<Vector2> Arena_Portals = new List<Vector2>() { Arena_Top_Left, Arena_Middle_Left, Arena_Bottom_Left, Arena_Top_Right, Arena_Middle_Right, Arena_Bottom_Right };
         private static float Arena_Left = topL.X + 250;
         private static float Arena_Right = topR.X - 250;
+        private static List<Vector2> Current_Portals = new List<Vector2>() { Vector2.Zero, Vector2.Zero};
+        private static float maxTeleportHeight = ExoriumWorld.FallenTowerRect.Top + 160 + 240;
+        private static float minTeleportX = ExoriumWorld.FallenTowerRect.Left + 80;
+        private static float maxTeleportX = ExoriumWorld.FallenTowerRect.Right - 80;
 
         //Actions
         //0 - jump
@@ -117,7 +131,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //2 - Teleport next to player
         //3 - Send down flame ring
         //4 - parry
-        //5 - swing up with fireballs - Make this not turn around
+        //5 - Galacta knight lol
         //6 - swords come down
         //7 - sword beams
         //8 - hop down
@@ -135,10 +149,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private float actionTimer;
 
-        //TODO:
-        //Shield "pops" when hit
-
-
         public override void AI()
         {
             //Damage calculations
@@ -148,13 +158,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             parry = false;
 
             #region Targeting  
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NPC.TargetClosest(true);
             }
 
             Player player = Main.player[NPC.target];
-            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 3000)
+            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || !player.getRect().Intersects(ExoriumWorld.FallenTowerRect)) //Also stop targeting if outside of arena
             {
                 NPC.TargetClosest(true);
                 NPC.netUpdate = true;
@@ -177,11 +187,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (introAnimation)
             {
                 IntroAI();
-                return;
-            }
-            else if (parryTriggered)
-            {
-                ParryCounter();
                 return;
             }
             else if (phaseTransition)
@@ -222,7 +227,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             frameX = 7;
                             break;
                         case 5:
-                            frameX = 3;
+                            frameX = 5;
                             break;
                         case 6:
                             frameX = 5;
@@ -295,51 +300,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                     if (NPC.velocity == Vector2.Zero)
                     {
-                        if (phase == 2 && Main.rand.Next(4) == 0)
-                        {
-                            Action = 10;
-                            wait = 60;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            if (phase == 2 && Main.rand.NextBool(3))
-                            {
-                                Action = 10;
-                            }
-                            else
-                                Action = 1;
-                            wait = 30;
-                        }
-                        else if (Main.rand.Next(1) == 0)
-                        {
-                            Action = 6;
-                            wait = 20;
-
-                            if (phase == 2 && Main.rand.NextBool(2))
-                            {
-                                Action = 11;
-
-                                //Use flaming sphere if there is no flaming sphere
-                                foreach (Projectile p in Main.projectile)
-                                {
-                                    if (p.type == ProjectileType<FlamingSphere>())
-                                        Action = 6;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Action = 7;
-                            wait = 20;
-                        }
-
-                        actionTimer = -1;
+                        ChooseAttack();
                     }
                     break;
                 case 1:
                     if (actionTimer <= 60)
                         dashIndicator = true;
-                    else if (actionTimer <= 150)
+                    else if (actionTimer < 150)
                     {
                         dashIndicator = false;
                         NPC.velocity = new Vector2(20, 0) * (left ? 1 : -1);
@@ -348,7 +315,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         Vector2 swordPoint = NPC.Bottom + new Vector2(left ? NPC.width * 1.5f : -NPC.width * 1.5f, -14);
                         if (Main.tile[swordPoint.ToTileCoordinates().X, swordPoint.ToTileCoordinates().Y].WallType != WallType<Walls.StructureWalls.FallenTowerWalls.CharredObsidianWall>())
                             endFlameSpawn = true;
-                        if (phase == 2 && !endFlameSpawn)
+                        if ((phase == 2 || Main.masterMode) && !endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
@@ -380,48 +347,27 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             }
                         }
                     }
-                    if (actionTimer >= 150)
+                    else if (actionTimer == 150)
                     {
-                        if (phase == 2 && Main.rand.NextBool(6))
-                        {
-                            Action = 9;
-                            wait = 30;
-                        }
-                        else if (Main.rand.Next(3) == 0)
-                        {
-                            Action = 3;
-                            wait = 20;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 5;
-                            wait = 5;
-                        }
-                        else if (Main.rand.Next(1) == 0)
-                        {
-                            Action = 6;
+                        NPC.velocity = Vector2.Zero;
+                    }
+                    else if (actionTimer == 155 && Main.expertMode)
+                    {
+                        frameX = 3;
 
-                            if (phase == 2 && Main.rand.NextBool(2))
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            for (int i = 0; i < 5; i++)
                             {
-                                Action = 11;
-
-                                //Use flaming sphere if there is no flaming sphere
-                                foreach (Projectile p in Main.projectile)
-                                {
-                                    if (p.type == ProjectileType<FlamingSphere>())
-                                        Action = 6;
-                                }
+                                Vector2 vel = new Vector2(0, -14);
+                                vel = vel.RotatedBy(MathHelper.ToRadians(-30 + (15 * i)));
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(left ? NPC.width * 1.5f : -NPC.width * 1.5f, 0), vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                             }
-
-                            wait = 20;
                         }
-                        else
-                        {
-                            Action = 7;
-                            wait = 20;
-                        }
-
-                        actionTimer = -1;
+                    }
+                    if (actionTimer >= 180)
+                    {
+                        ChooseAttack();
                     }
                     break;
                 case 2:
@@ -430,14 +376,29 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     else if (actionTimer == 90)
                     {
                         Vector2 offset = new Vector2(!left ? NPC.width : -NPC.width, -NPC.height/2.4f);
-                        NPC.velocity = ((player.Center + offset) - NPC.Center) / 4;
+
+                        //Find point to dash to
+                        //Adjust to not leave arena
+                        Vector2 coordinatesOfDash = player.Center + offset;
+                        if (coordinatesOfDash.Y < maxTeleportHeight - NPC.height / 2)
+                            coordinatesOfDash.Y = maxTeleportHeight - NPC.height / 2;
+                        if (coordinatesOfDash.X < minTeleportX + NPC.width / 2)
+                            coordinatesOfDash.X = minTeleportX + NPC.width / 2;
+                        if (coordinatesOfDash.X > maxTeleportX - NPC.width / 2)
+                            coordinatesOfDash.X = maxTeleportX - NPC.width / 2;
+
+                        Vector2 dash = coordinatesOfDash - NPC.Center;
+
+                        NPC.velocity = dash / 4;
                         NPC.noGravity = true;
                         NPC.noTileCollide = true;
                         teleIndicator = false;
+                        noContactDamage = true;
                     }
                     else if (actionTimer == 94)
                     {
                         NPC.velocity = Vector2.Zero;
+                        noContactDamage = false;
                     }
                     else if (actionTimer == 140)
                     {
@@ -448,37 +409,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer >= 160)
                     {
-                        //0 1 4 7 9
-                        if (phase == 2 && Main.rand.NextBool(6))
-                        {
-                            Action = 9;
-                            wait = 30;
-                        }
-                        else if (Main.rand.Next(4) == 0)
-                        {
-                            jumpChoice();
-                        }
-                        else if (Main.rand.Next(3) == 0)
-                        {
-                            if (phase == 2 && Main.rand.NextBool(3))
-                            {
-                                Action = 10;
-                            }
-                            else
-                                Action = 1;
-                            wait = 20;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 4;
-                            wait = 5;
-                        }
-                        else
-                        {
-                            Action = 7;
-                            wait = 20;
-                        }
-                        actionTimer = -1;
+                        ChooseMovement();
                     }
                     break;
                 case 3:
@@ -491,279 +422,211 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 6) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                             }
                         }
+
+                        // dust telegraph
+                        for (int i = 0; i < 100; i++)
+                        {
+                            Vector2 pos = player.Center;
+                            pos.Y -= 900;
+                            pos.X -= 500;
+                            Dust.NewDust(pos, 1000, 1, DustID.SolarFlare, 0, Main.rand.NextFloat(20));
+                        }
                     }
                     else if (actionTimer == 60)
                     {
-                        if (Main.rand.NextBool(4))
-                        {
-                            jumpChoice();
-                        }
-                        else if (Main.rand.NextBool(3))
-                        {
-                            if (phase == 2 && Main.rand.NextBool(3))
-                            {
-                                Action = 10;
-                            }
-                            else
-                                Action = 1;
-                            wait = 20;
-                        }
-                        else if (Main.rand.NextBool(2))
-                        {
-                            Action = 2;
-                            wait = 5;
-                        }
-                        else
-                        {
-                            Action = 7;
-                            wait = 20;
-                        }
-                        actionTimer = -1;
+                        ChooseMovement();
                     }
                     break;
                 case 4:
-                    if (actionTimer > 60 && actionTimer < 180)
+                    if (actionTimer == 0)
+                        parryRetaliate = 0;
+                    else if (actionTimer > 60 && actionTimer < 180)
                         parry = true;
-                    if (actionTimer == 180)
+                    else if (actionTimer == 180)
                     {
                         parry = false;
                         shieldDown = true;
                         NPC.frameCounter = 0;
                     }
-                    if (actionTimer > 220)
+                    else if (actionTimer > 220)
                     {
-                        //TODO chose new action
-                        if (Main.rand.Next(3) == 0)
-                        {
-                            if (phase == 2 && Main.rand.NextBool(3))
-                            {
-                                Action = 10;
-                            }
-                            else
-                                Action = 1;
-                            wait = 5;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 3;
-                            wait = 5;
-                        }
-                        else
-                        {
-                            Action = 6;
-
-                            if (phase == 2 && Main.rand.NextBool(2))
-                            {
-                                Action = 11;
-
-                                //Use flaming sphere if there is no flaming sphere
-                                foreach (Projectile p in Main.projectile)
-                                {
-                                    if (p.type == ProjectileType<FlamingSphere>())
-                                        Action = 6;
-                                }
-                            }
-
-                            wait = 5;
-                        }
-                        actionTimer = -1;
+                        ChooseMovement();
                     }
                     break;
                 case 5:
-                    if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer == 0)
+                    if (actionTimer == 0)
                     {
-                        for (int i = 0; i < 5; i++)
+                        //Only accept negative y quadrants in phase 2
+                        do
                         {
-                            Vector2 vel = new Vector2(0, -14);
-                            vel = vel.RotatedBy(MathHelper.ToRadians(-30 + (15 * i)));
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(left? NPC.width*1.5f: -NPC.width*1.5f, 0), vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            bladeSpawnQuadrant = Main.rand.Next(1, 5);
                         }
-                    }
-                    if (actionTimer == 30)
-                    {
-                        //TODO: add move selection
-                        // 0 2 4 6
-                        if (Main.rand.Next(4) == 0)
+                        while (phase != 2 && (bladeSpawnQuadrant == 2 || bladeSpawnQuadrant == 3));
+
+                        if (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4)
                         {
-                            jumpChoice();
-                        }
-                        else if (Main.rand.Next(3) == 0)
-                        {
-                            Action = 2;
-                            wait = 5;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 4;
-                            wait = 5;
+                            bladeSpawnOrigin = new Vector2(ExoriumWorld.FallenTowerRect.Center.X, ExoriumWorld.FallenTowerRect.Bottom);
                         }
                         else
                         {
-                            Action = 6;
-
-                            if (phase == 2 && Main.rand.NextBool(2))
-                            {
-                                Action = 11;
-                                //Use flaming sphere if there is no flaming sphere
-                                foreach (Projectile p in Main.projectile)
-                                {
-                                    if (p.type == ProjectileType<FlamingSphere>())
-                                        Action = 6;
-                                }
-                            }
-
-                            wait = 20;
+                            bladeSpawnOrigin = new Vector2(ExoriumWorld.FallenTowerRect.Center.X, ExoriumWorld.FallenTowerRect.Top);
                         }
-                        actionTimer = -1;
+
+                        Vector2 offset = new Vector2(1, -1);
+                        offset *= 1800;
+                        offset = offset.RotatedBy(MathHelper.ToRadians(90 * (bladeSpawnQuadrant - 1)));
+
+                        bladeSpawnOrigin += offset;
+
+                        bladeSpawnCount = Main.expertMode ? 20 : 15;
+                        if (Main.masterMode)
+                            bladeSpawnCount -= 5;
+                        if (phase == 2)
+                            bladeSpawnCount -= 5;
+                    }
+                    else if (actionTimer > 30 && actionTimer % bladeSpawnCount == 0 && actionTimer < 360)
+                    {
+                        Vector2 spawnPoint = bladeSpawnOrigin;
+                        spawnPoint.X += Main.rand.NextFloat(-(ExoriumWorld.FallenTowerRect.Width / 2) + 80, ExoriumWorld.FallenTowerRect.Width / 2 - 80);
+
+                        Vector2 direction = new Vector2(-1, 1);
+                        direction *= 10;
+                        direction = direction.RotatedBy(MathHelper.ToRadians(90 * (bladeSpawnQuadrant - 1)));
+
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint, direction, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4)? 1f : 0f);
+                    }
+                    if (actionTimer >= 420)
+                    {
+                        ChooseFollowup();
                     }
                     break;
                 case 6:
+                    if (actionTimer == 0)
+                    {
+                        altBeamType = false;
+                        if (Main.rand.NextBool(2) && Main.masterMode)
+                            altBeamType = true;
+                        playerPlaceholder = player.Center;
+                    }
                     if ((actionTimer % 10 == 0) && Main.netMode != NetmodeID.MultiplayerClient )
                     {
-                        if (phase == 2 && Main.rand.NextBool(3))
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                        else if (phase == 2 && Main.rand.NextBool(3))
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                        else
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-
-                        if ((phase == 2 && actionTimer % 30 == 0))
+                        if (phase == 2)
                         {
-                            //create more projectiles in phase to, done this way rather than changing the first if statement so that the increased projectiles are fired in pairs so the rhthym of the attack is kept consistant
-                            if (phase == 2 && Main.rand.NextBool(3))
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                            else if (phase == 2 && Main.rand.NextBool(3))
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            if (altBeamType)
+                            {
+                                if (actionTimer % 20 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+
+                                if (actionTimer < 70)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+                            }
                             else
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            {
+                                if (actionTimer % 20 == 0)
+                                {
+                                    if (Main.rand.NextBool(2))
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    else
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+
+                                //create more projectiles in phase two, done this way rather than changing the first if statement so that the increased projectiles are fired in pairs so the rhthym of the attack is kept consistant
+                                if (actionTimer < 130)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? 300 : 400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? -300 : -400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                         }
                     }
                     if (actionTimer >= 150)
                     {
-                        //0 1 2 3
-                        if (Main.rand.Next(4) == 0)
-                        {
-                            jumpChoice();
-                        }
-                        else if (Main.rand.Next(3) == 0)
-                        {
-                            if (phase == 2 && Main.rand.NextBool(3))
-                            {
-                                Action = 10;
-                            }
-                            else
-                                Action = 1;
-                            wait = 30;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 2;
-                            wait = 30;
-                        }
-                        else
-                        {
-                            Action = 3;
-                            wait = 20;
-                        }
-                        actionTimer = -1;
+                        ChooseFollowup();
                     }
                     break;
                 case 7:
                     if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer == 0)
                     {
-                        //Check elevation level in arena
-                        if (NPC.Center.Y < topL.Y + 544)
+                        if (!Main.expertMode && phase != 2)
                         {
-                            for (int i = 0; i < 7; i += (phase == 2 ? 1 : 2))
-                            {
-                                Vector2 vel = new Vector2(left ? 1 : -1, 0);
-                                vel = vel.RotatedBy(MathHelper.ToRadians(10 * i * (left ? 1 : -1)));
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (vel * 150), vel * .01f, ProjectileType<FlametoungeBeam>(), damage, 2, Main.myPlayer, 60);
-                            }
-                        }
-                        else if (NPC.Center.Y < topL.Y + 864)
-                        {
-                            for (int i = 0; i < 7; i += (phase == 2 ? 1 : 2))
-                            {
-                                Vector2 vel = new Vector2(left ? 1 : -1, 0);
-                                vel = vel.RotatedBy(MathHelper.ToRadians(35 * (left ? -1 : 1)));
-                                if (phase != 2) // center the swords in phase 1
-                                    vel = vel.RotatedBy(MathHelper.ToRadians(5 * (left ? 1 : -1)));
-                                vel = vel.RotatedBy(MathHelper.ToRadians(10 * i * (left ? 1 : -1)));
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (vel * 150), vel * .01f, ProjectileType<FlametoungeBeam>(), damage, 2, Main.myPlayer, 60);
-                            }
+                            Vector2 vel = new Vector2(left ? 1 : -1, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (vel * 150), vel * .01f, ProjectileType<FlametoungeBeam>(), damage, 2, Main.myPlayer, 60);
                         }
                         else
                         {
-                            for (int i = 0; i < 7; i += (phase == 2 ? 1 : 2))
+                            //Check elevation level in arena
+                            if (NPC.Center.Y < topL.Y + 544)
                             {
-                                Vector2 vel = new Vector2(left ? 1 : -1, 0);
-                                vel = vel.RotatedBy(MathHelper.ToRadians(70 * (left ? -1 : 1)));
-                                if (phase != 2) // allign the swords in phase 1
-                                    vel = vel.RotatedBy(MathHelper.ToRadians(10 * (left ? 1 : -1)));
-                                vel = vel.RotatedBy(MathHelper.ToRadians(10 * i * (left ? 1 : -1)));
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (vel * 150), vel * .01f, ProjectileType<FlametoungeBeam>(), damage, 2, Main.myPlayer, 60);
+                                for (int i = 0; i < 7; i += ((phase == 2 && Main.expertMode) ? 1 : 2))
+                                {
+                                    Vector2 vel = new Vector2(left ? 1 : -1, 0);
+                                    vel = vel.RotatedBy(MathHelper.ToRadians(10 * i * (left ? 1 : -1)));
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (vel * 150), vel * .01f, ProjectileType<FlametoungeBeam>(), damage, 2, Main.myPlayer, 60);
+                                }
+                            }
+                            else if (NPC.Center.Y < topL.Y + 864)
+                            {
+                                for (int i = 0; i < 7; i += ((phase == 2 && Main.expertMode) ? 1 : 2))
+                                {
+                                    Vector2 vel = new Vector2(left ? 1 : -1, 0);
+                                    vel = vel.RotatedBy(MathHelper.ToRadians(35 * (left ? -1 : 1)));
+                                    if (phase != 2) // center the swords in phase 1
+                                        vel = vel.RotatedBy(MathHelper.ToRadians(5 * (left ? 1 : -1)));
+                                    vel = vel.RotatedBy(MathHelper.ToRadians(10 * i * (left ? 1 : -1)));
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (vel * 150), vel * .01f, ProjectileType<FlametoungeBeam>(), damage, 2, Main.myPlayer, 60);
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 7; i += ((phase == 2 && Main.expertMode) ? 1 : 2))
+                                {
+                                    Vector2 vel = new Vector2(left ? 1 : -1, 0);
+                                    vel = vel.RotatedBy(MathHelper.ToRadians(70 * (left ? -1 : 1)));
+                                    if (phase != 2) // allign the swords in phase 1
+                                        vel = vel.RotatedBy(MathHelper.ToRadians(10 * (left ? 1 : -1)));
+                                    vel = vel.RotatedBy(MathHelper.ToRadians(10 * i * (left ? 1 : -1)));
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (vel * 150), vel * .01f, ProjectileType<FlametoungeBeam>(), damage, 2, Main.myPlayer, 60);
+                                }
                             }
                         }
                     }
-                    if (actionTimer >= 20)
+                    if (actionTimer >= 40)
                     {
-                        //1 2 4 6
-                        if (Main.rand.Next(4) == 0)
-                        {
-                            if (phase == 2 && Main.rand.NextBool(3))
-                            {
-                                Action = 10;
-                            }
-                            else
-                                Action = 1;
-                            wait = 20;
-                        }
-                        else if (Main.rand.Next(3) == 0)
-                        {
-                            Action = 2;
-                            wait = 30;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 4;
-                            wait = 30;
-                        }
-                        else
-                        {
-                            Action = 6;
-
-                            if (phase == 2 && Main.rand.NextBool(2))
-                            {
-                                Action = 11;
-
-                                //Use flaming sphere if there is no flaming sphere
-                                foreach (Projectile p in Main.projectile)
-                                {
-                                    if (p.type == ProjectileType<FlamingSphere>())
-                                        Action = 6;
-                                }
-                            }
-
-                            wait = 20;
-                        }
-
-                        actionTimer = -1;
+                        ChooseFollowup();
                     }
                     break;
                 case 8:
-                    NPC.velocity = new Vector2(0, -12);
-                    NPC.noGravity = false;
-                    NPC.noTileCollide = true;
-                    if (NPC.Bottom.Y > Main.player[NPC.target].Bottom.Y)
+                    if (NPC.Bottom.Y > Main.player[NPC.target].Bottom.Y + 20 && actionTimer > 60 && actionTimer < 100)
                     {
-                        NPC.noTileCollide = false;
                         actionTimer = 100;
                     }
-                    if (actionTimer > 120)
+                    if (actionTimer == 0)
+                    {
+                        NPC.velocity = new Vector2(0, -9);
+                        NPC.noGravity = false;
+                        NPC.noTileCollide = true;
+                    }
+                    else if (actionTimer > 120)
                     {
                         NPC.noTileCollide = false;
-                        //TODO: add move selection
+                    }
+                    if (NPC.velocity == Vector2.Zero)
+                    {
+                        frameX = 0;
+                        ChooseAttack();
                     }
                     break;
                 case 9:
@@ -780,40 +643,36 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         //place along top, right, bottom, left
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 swordTip = new Vector2(NPC.Center.X + (!left ? -200 : 200), NPC.Center.Y - NPC.height - 50);
+                            Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
                             int counter = 0;
 
                             //Top and bottom
-                            for (int i = (-arena.Width / 2) + 160; i < (arena.Width / 2) - 160; i += 160)
+                            for (int i = (-arena.Width / 2) + 160; i < (arena.Width / 2) - 160; i += Main.rand.Next(40,280))
                             {
                                 if (Main.rand.NextBool(4))
                                 {
                                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.Zero, ProjectileType<GridFire>(), damage, 2, Main.myPlayer, 1, i);
-                                    //Main.projectile[proj].timeLeft = 1200 + counter;
                                 }
                                 if (Main.rand.NextBool(4))
                                 {
                                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.Zero, ProjectileType<GridFire>(), damage, 2, Main.myPlayer, 3, i);
-                                    //Main.projectile[proj].timeLeft = 1200 + counter;
                                 }
-
+                                
                                 counter += 5;
                             }
 
                             counter = 0;
 
                             //Left and right
-                            for (int i = (-arena.Height / 2) + 160; i < (arena.Height / 2) - 160; i += 160)
+                            for (int i = (-arena.Height / 2) + 160; i < (arena.Height / 2) - 160; i += Main.rand.Next(40, 280))
                             {
                                 if (Main.rand.NextBool(5))
                                 {
                                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.Zero, ProjectileType<GridFire>(), damage, 2, Main.myPlayer, 2, i);
-                                    //Main.projectile[proj].timeLeft = 1200 + counter;
                                 }
                                 if (Main.rand.NextBool(5))
                                 {
                                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.Zero, ProjectileType<GridFire>(), damage, 2, Main.myPlayer, 4, i);
-                                    //Main.projectile[proj].timeLeft = 1200 + counter;
                                 }
 
                                 counter += 5;
@@ -822,32 +681,47 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer > 180)
                     {
-                        //Action select
-                        if (Main.rand.Next(3) == 0)
-                        {
-                            Action = 1;
-                            wait = 20;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 2;
-                            wait = 5;
-                        }
-                        else if (Main.rand.Next(1) == 0)
-                        {
-                            Action = 4;
-                            wait = 20;
-                        }
-                        else
-                        {
-                            Action = 7;
-                            wait = 20;
-                        }
-
-                        actionTimer = -1;
+                        ChooseFollowup();
                     }
                     break;
                 case 10:
+                    if (actionTimer == 0)
+                    {
+                        //Set up portal locations
+                        Current_Portals.Clear();
+
+                        int portal = -1;
+                        //Check elevation level in arena
+                        if (NPC.Center.Y < topL.Y + 544)
+                        {
+                            portal = 0;
+                        }
+                        else if (NPC.Center.Y < topL.Y + 864)
+                        {
+                            portal = 1;
+                        }
+                        else
+                        {
+                            portal = 2;
+                        }
+                        if (left)
+                            portal += 3;
+
+                        Current_Portals.Add(Arena_Portals[portal]);
+
+                        for (int i = 0; i < (Main.masterMode? 3: 1); i++) //Add extra portals in master mode
+                        {
+                            Vector2 randPortal = Vector2.Zero;
+                            do
+                            {
+                                randPortal = Arena_Portals[Main.rand.Next(Arena_Portals.Count)];
+                            }
+                            while (Current_Portals.Contains(randPortal));
+                            Current_Portals.Add(randPortal);
+                        }
+
+                        showPortals = true;
+                    }
                     if (actionTimer <= 60)
                         dashIndicator = true;
                     else if (actionTimer <= 600 && timeReachedPortal == 0)
@@ -899,16 +773,28 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             endFlameSpawn = false;
 
                             //Teleport to random portal
-                            int portal = Main.rand.Next(Arena_Portals.Count);
-                            NPC.Center = Arena_Portals[portal];
-                            if (portal < 3)
+                            NPC.Center = Current_Portals[1];
+                            NPC.position.Y += 8;
+                            if (NPC.Center.X < Arena_Top_Left.X + 800) //Arbitrary point chosen here to find what side of the arena teleported to
                                 left = true;
                             else
                                 left = false;
                         }
                     }
+                    else if (actionTimer < timeReachedPortal + 30)
+                    {
+                        noContactDamage = true;
+                        NPC.velocity = Vector2.Zero;
+                        NPC.alpha = 255;
+                    }
                     else if (actionTimer < timeReachedPortal + 120) //Move out of next portal for 2 seconds
                     {
+                        if (NPC.alpha > 255)
+                            NPC.alpha -= 15;
+                        else
+                            showPortals = false;
+
+                        noContactDamage = false;
                         NPC.velocity = new Vector2(20, 0) * (left ? 1 : -1);
 
                         //Flame trail
@@ -947,50 +833,29 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             }
                         }
                     }
-                    else
+                    else if (actionTimer == timeReachedPortal + 120)
+                    {
+                        NPC.velocity = Vector2.Zero;
+                    }
+                    else if (actionTimer == timeReachedPortal + 125)
+                    {
+                        frameX = 3;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            for (int i = 0; i < 5; i++)
+                            {
+                                Vector2 vel = new Vector2(0, -14);
+                                vel = vel.RotatedBy(MathHelper.ToRadians(-30 + (15 * i)));
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(left ? NPC.width * 1.5f : -NPC.width * 1.5f, 0), vel, ProjectileType<CaraveneFireball>(), damage, 2, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            }
+                        }
+                    }
+                    else if (actionTimer >= timeReachedPortal + 150)
                     {
                         timeReachedPortal = 0;
 
-                        //Action select
-                        if (phase == 2 && Main.rand.NextBool(6))
-                        {
-                            Action = 9;
-                        }
-                        else if (Main.rand.Next(3) == 0)
-                        {
-                            Action = 3;
-                            wait = 20;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 5;
-                            wait = 5;
-                        }
-                        else if (Main.rand.Next(1) == 0)
-                        {
-                            Action = 6;
-
-                            if (phase == 2 && Main.rand.NextBool(2))
-                            {
-                                Action = 11;
-
-                                //Use flaming sphere if there is no flaming sphere
-                                foreach (Projectile p in Main.projectile)
-                                {
-                                    if (p.type == ProjectileType<FlamingSphere>())
-                                        Action = 6;
-                                }
-                            }
-
-                            wait = 20;
-                        }
-                        else
-                        {
-                            Action = 7;
-                            wait = 20;
-                        }
-
-                        actionTimer = -1;
+                        ChooseAttack();
                     }
                     break;
                 case 11:
@@ -1002,53 +867,149 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer > 180)
                     {
-                        //TODO: replace action choice later
-                        if (Main.rand.Next(4) == 0)
-                        {
-                            if (phase == 2 && Main.rand.NextBool(3))
-                            {
-                                Action = 10;
-                            }
-                            else
-                                Action = 1;
-                            wait = 20;
-                        }
-                        else if (Main.rand.Next(3) == 0)
-                        {
-                            Action = 2;
-                            wait = 30;
-                        }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Action = 4;
-                            wait = 30;
-                        }
-                        else
-                        {
-                            Action = 6;
+                        ChooseMovement();
+                    }
+                    break;
+                case 12:
+                    if (actionTimer == 30 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
+                        Vector2 toPlayer = player.Center - swordTip;
 
-                            if (phase == 2 && Main.rand.NextBool(2))
-                            {
-                                Action = 11;
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer, ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
+                    }
+                    else if (actionTimer == 40 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
+                        Vector2 toPlayer = player.Center - swordTip;
 
-                                //Use flaming sphere if there is no flaming sphere
-                                foreach (Projectile p in Main.projectile)
-                                {
-                                    if (p.type == ProjectileType<FlamingSphere>())
-                                        Action = 6;
-                                }
-                            }
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
+                    }
+                    else if (actionTimer == 50 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
+                        Vector2 toPlayer = player.Center - swordTip;
 
-                            wait = 20;
-                        }
-
-                        actionTimer = -1;
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(-20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
+                    }
+                    else if (actionTimer == 80)
+                    {
+                        frameX = 1;
+                    }
+                    else if (actionTimer > 90)
+                    {
+                        ChooseMovement();
                     }
                     break;
             }
 
             actionTimer++;
         }
+
+        #region Action Methods
+        private void ChooseMovement()
+        {
+            if (Main.rand.NextBool(2))
+            {
+                //Check elevation level in arena
+                if (NPC.Center.Y < topL.Y + 544)
+                {
+                    Action = 8;
+                    wait = 20;
+                }
+                else if (NPC.Center.Y < topL.Y + 864)
+                {
+                    if (Main.rand.NextBool(2))
+                    {
+                        Action = 8;
+                        wait = 20;
+                    }
+                    else
+                    {
+                        Action = 0;
+                        wait = 10;
+                    }
+                }
+                else
+                {
+                    Action = 0;
+                    wait = 10;
+                }
+            }
+            else
+            {
+                if (phase == 2 && Main.rand.NextBool(3))
+                {
+                    Action = 10;
+                }
+                else
+                    Action = 1;
+                wait = 90;
+            }
+
+            actionTimer = -1;
+        }
+
+        private void ChooseAttack()
+        {
+            if (Main.rand.NextBool(4) && phase == 2 && Main.expertMode)
+            {
+                Action = 9;
+                wait = 30;
+            }
+            else  if (Main.rand.NextBool(3))
+            {
+                Action = 5;
+                wait = 30;
+            }
+            else if (Main.rand.NextBool(2))
+            {
+                Action = 7;
+                wait = 20;
+            }
+            else
+            {
+                Action = 6;
+                wait = 90;
+            }
+
+            actionTimer = -1;
+        }
+        
+        private void ChooseFollowup()
+        {
+            if (Main.rand.NextBool(4) && phase == 2)
+            {
+                Action = 11;
+
+                //Use flaming sphere if there is no flaming sphere
+                foreach (Projectile p in Main.projectile)
+                {
+                    if (p.type == ProjectileType<FlamingSphere>())
+                        Action = 12;
+                }
+
+                wait = 90;
+            }
+            else if (Main.rand.NextBool(3))
+            {
+                Action = 4;
+                wait = 5;
+            }
+            else if (Main.rand.NextBool(2))
+            {
+                Action = 3;
+                wait = 20;
+            }
+            else
+            {
+                Action = 2;
+                wait = 5;
+            }
+
+            actionTimer = -1;
+        }
+        #endregion
 
         public override void FindFrame(int frameHeight)
         {
@@ -1124,102 +1085,54 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
-        private void ParryCounter()
-        {
-            if (actionTimer == 30)
-            {
-                shieldDown = true;
-                NPC.frameCounter = 0;
-            }
-            else if (actionTimer == 60)
-            {
-                shieldDown = false;
-                frameX = 3;
-                NPC.frameCounter = 0;
-            }
-            else if (actionTimer == 90)
-            {
-                Vector2 offset = new Vector2(!left ? NPC.width : -NPC.width, -NPC.height / 2.4f);
-                NPC.velocity = ((Main.player[NPC.target].Center + offset) - NPC.Center) / 4;
-                NPC.noGravity = true;
-                NPC.noTileCollide = true;
-            }
-            else if (actionTimer == 94)
-            {
-                NPC.velocity = Vector2.Zero;
-            }
-            else if (actionTimer == 95)
-            {
-                NPC.noGravity = false;
-                NPC.noTileCollide = false;
-                frameX = 1;
-                NPC.frameCounter = 0;
-            }
-            else if (actionTimer >= 95)
-            {
-                parryTriggered = false;
-                //TODO chose new action
-                if (Main.rand.Next(3) == 0)
-                {
-                    if (phase == 2 && Main.rand.NextBool(3))
-                    {
-                        Action = 10;
-                    }
-                    else
-                        Action = 1;
-                    wait = 90;
-                }
-                else if (Main.rand.Next(2) == 0)
-                {
-                    Action = 3;
-                    wait = 90;
-                }
-                else
-                {
-                    Action = 6;
-
-                    if (phase == 2 && Main.rand.NextBool(2))
-                    {
-                        Action = 11;
-
-                        //Use flaming sphere if there is no flaming sphere
-                        foreach (Projectile p in Main.projectile)
-                        {
-                            if (p.type == ProjectileType<FlamingSphere>())
-                                Action = 6;
-                        }
-                    }
-
-                    wait = 90;
-                }
-                actionTimer = -1;
-            }
-            actionTimer++;
-        }
-
         private void PhaseTransition()
         {
             if (transitionCounter == 0)
             {
+                NPC.velocity = Vector2.Zero;
                 frameX = 0;
+                dashIndicator = false;
+                teleIndicator = false;
+                parry = false;
+                shieldDown = false;
+                NPC.noTileCollide = false;
+                NPC.noGravity = false;
+                noContactDamage = false;
+
+                foreach(Projectile p in Main.projectile) //Erase all projectiles because cheap hits
+                {
+                    if (p.type == ProjectileType<FlameTrail>() ||
+                        p.type == ProjectileType<CaraveneBladeProj>() ||
+                        p.type == ProjectileType<CaraveneBladeProjHorizontal>() ||
+                        p.type == ProjectileType<CaraveneFireball>() || 
+                        p.type == ProjectileType<GridFire>() ||
+                        p.type == ProjectileType<gridCollision>() ||
+                        p.type == ProjectileType<gridShot>() ||
+                        p.type == ProjectileType<FlamingSphere>() ||
+                        p.type == ProjectileType<FireballRing>())
+                    {
+                        p.active = false;
+                        p.Kill();
+                    }
+                }
             }
-            else if (transitionCounter == 30)
+            else if (transitionCounter == 60)
             {
                 foreach (Player player in Main.player)
                 {
                     //Set each player's screen target if not set
-                    if ((player.Center - NPC.Center).Length() < 3000 && player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget == Vector2.Zero)
+                    if ((player.Center - NPC.Center).Length() < 9000 && player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget == Vector2.Zero)
                     {
                         player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget = NPC.Center;
                         player.GetModPlayer<ExoriumPlayer>().ScreenMoveTime = 250;
                     }
                 }
             }
-            else if (transitionCounter == 60)
+            else if (transitionCounter == 90)
             {
                 frameX = 5;
             }
-            else if (transitionCounter > 90 && transitionCounter < 180)
+            else if (transitionCounter > 120 && transitionCounter < 210)
             {
                 for (int i = 0; i < 20; i++)
                 {
@@ -1237,42 +1150,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             else if (transitionCounter == 290)
             {
                 phaseTransition = false;
+
+                ChooseMovement();
             }
             transitionCounter++;
         }
 
-        private void jumpChoice()
-        {
-            //Check elevation level in arena
-            if (NPC.Center.Y < topL.Y + 544)
-            {
-                Action = 8;
-                wait = 20;
-            }
-            else if (NPC.Center.Y < topL.Y + 864)
-            {
-                if (Main.rand.NextBool(2))
-                {
-                    Action = 8;
-                    wait = 20;
-                }
-                else
-                {
-                    Action = 0;
-                    wait = 10;
-                }
-            }
-            else
-            {
-                Action = 0;
-                wait = 10;
-            }
-        }
-
         public override void OnKill()
         {
-            NPC.Transform(NPCType<CaraveneBattleIntermission>());
-            NPC.life = 99;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                NPC.NewNPCDirect(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaraveneBattleIntermission>());
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1288,12 +1175,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 ySourceHeight = (5 - (int)(NPC.frameCounter / 10)) * 442;
             }
 
+            Color alphaColor = new Color(drawColor.R, drawColor.G, drawColor.B, NPC.alpha);
             if (!left)
             {
                 spriteBatch.Draw(tex,
                     new Rectangle((int)(NPC.TopLeft.X - 221) - (int)(screenPos.X), (int)(NPC.TopLeft.Y - 200) - (int)(screenPos.Y), 412, 442),
                     new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
-                    drawColor,
+                    alphaColor,
                     NPC.rotation,
                     Vector2.Zero,
                     SpriteEffects.None,
@@ -1304,7 +1192,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spriteBatch.Draw(tex,
                     new Rectangle((int)(NPC.TopLeft.X - 51) - (int)(screenPos.X), (int)(NPC.TopLeft.Y - 205) - (int)(screenPos.Y), 412, 442),
                     new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
-                    drawColor,
+                    alphaColor,
                     NPC.rotation,
                     Vector2.Zero,
                     SpriteEffects.FlipHorizontally,
@@ -1319,6 +1207,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (teleIndicator)
             {
                 Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator").Value;
+
                 spriteBatch.Draw(texTele, (Main.player[NPC.target].Bottom + new Vector2(!left ? texTele.Width : -texTele.Width, -texTele.Height / 2)) - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), !left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             }
 
@@ -1328,7 +1217,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spriteBatch.Draw(texDash, NPC.Center + (new Vector2(left ? 30 : -30, 0) * actionTimer) - screenPos, null, new Color(255, 255, 255, 0), 0, new Vector2(texDash.Width, texDash.Height) / 2, 1, left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             }
                 
-            //TODO: burst effect when parry is popped
             if (frameX == 6 || (frameX == 7 && !shieldDown)) //if shield is up or going up
             {
                 if (shieldScale < 1)
@@ -1345,10 +1233,34 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spriteBatch.Draw(texShield, NPC.Center - screenPos, null, new Color(100, 0, 0, 0), 0, texShield.Size() / 2, shieldScale, SpriteEffects.None, 0);
             }
 
-            Texture2D texPortal = Request<Texture2D>(AssetDirectory.CrimsonKnight + "FlamingSphere").Value;
-            foreach(Vector2 p in Arena_Portals)
+            
+            if (showPortals && portalSize < 1)
             {
-                spriteBatch.Draw(texPortal, p - screenPos, null, new Color(100, 0, 100, 0), 0, texPortal.Size() / 2, 1, SpriteEffects.None, 0);
+                portalSize += .02f;
+            }
+            else if (!showPortals && portalSize > 0)
+            {
+                portalSize -= .02f;
+            }
+
+            if (portalSize > 0)
+            {
+                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
+                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
+                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
+
+                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
+                foreach (Vector2 p in Current_Portals)
+                {
+                    spriteBatch.End();
+                    spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
+
+                    spriteBatch.Draw(texPortal, p - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 2.5f * portalSize, SpriteEffects.None, 0);
+
+                    spriteBatch.End();
+                    spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+                }
             }
 
             base.PostDraw(spriteBatch, screenPos, drawColor);
@@ -1375,6 +1287,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return base.CanBeHitByItem(player, item);
         }
 
+        public override bool? CanHitNPC(NPC target)
+        {
+            return !noContactDamage;
+        }
+
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             target.AddBuff(BuffID.OnFire, 300);
@@ -1395,16 +1312,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.target = player.whoAmI;
             if (parry)
             {
-                parry = false;
-                parryTriggered = true;
                 damage = 0;
-                actionTimer = -1;
-                shieldDown = false;
-                frameX = 6;
-                if ((NPC.Center - Main.player[NPC.target].Center).X > 0)
-                    left = false;
-                else
-                    left = true;
+                parryRetaliate++;
+                if (parryRetaliate % 5 == 0 & Main.netMode != NetmodeID.MultiplayerClient)
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<RiposteFireball>(), damage * 2, 1, Main.myPlayer, NPC.target, parryRetaliate / 5);
             }
             base.OnHitByItem(player, item, damage, knockback, crit);
         }
@@ -1413,19 +1324,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (parry)
             {
-                //set target to player who triggered counter unless they do not exist
-                if (Main.player[projectile.owner].active)
-                    NPC.target = projectile.owner;
-                parry = false;
-                parryTriggered = true;
                 damage = 0;
-                actionTimer = -1;
-                shieldDown = false;
-                frameX = 6;
-                if ((NPC.Center - Main.player[NPC.target].Center).X > 0)
-                    left = false;
-                else
-                    left = true;
+                parryRetaliate++;
+                if (parryRetaliate % 5 == 0 & Main.netMode != NetmodeID.MultiplayerClient)
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<RiposteFireball>(), damage * 2, 1, Main.myPlayer, NPC.target, parryRetaliate / 5);
             }
             base.OnHitByProjectile(projectile, damage, knockback, crit);
         }

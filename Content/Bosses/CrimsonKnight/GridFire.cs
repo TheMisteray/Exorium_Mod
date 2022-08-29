@@ -88,8 +88,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             else
                 Projectile.velocity.Y *= 4.5f;
 
-            if (Projectile.velocity.Length() < 1)
+            if (Projectile.velocity.Length() < 3)
+            {
                 Projectile.velocity.Normalize();
+                Projectile.velocity *= 3;
+            }
 
             if ((Projectile.Center - destination).Length() < 4)
             {
@@ -172,7 +175,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     speed = new Vector2(-4, 0);
                     break;
             }
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, speed, ProjectileType<gridShot>(), Projectile.damage, 2, Main.myPlayer);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, speed, ProjectileType<gridShot>(), Projectile.damage, 2, Main.myPlayer);
         }
     }
 
@@ -208,6 +212,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     Projectile.timeLeft = 0;
 
                     Vector2 midpos = Projectile.Center + ((Projectile.Center - p.Center) / 2);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), midpos, Vector2.Zero, ProjectileType<gridCollision>(), Projectile.damage, 3, Main.myPlayer);
                 }
             }

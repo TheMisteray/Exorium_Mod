@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.width = 34;
             Projectile.height = 28;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 360;
+            Projectile.timeLeft = 240;
             Projectile.tileCollide = true;
             Projectile.friendly = false;
             Projectile.hostile = true;

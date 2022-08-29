@@ -33,7 +33,7 @@ float4 PixelShaderFunction(float2 uv : TEXCOORD0) : COLOR0
     float2 centerToPixel = uv - centerPoint;
 
     float dist = length(centerToPixel);
-    float val = tex2D(samplerTex3, uv + float2(0, uTime)).r / 10.;
+    float val = tex2D(samplerTex3, uv + float2(0, uTime)).r / 15.;
 
     if (dist < 0.2 + val)
     {

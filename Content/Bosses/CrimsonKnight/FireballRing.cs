@@ -57,6 +57,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             Projectile.rotation += .2f;
             RotationOffset += .006f;
+            if (Main.expertMode)
+                RotationOffset += .003f;
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)

@@ -158,8 +158,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override bool PreDraw(ref Color lightColor)
         {
             var fire = Filters.Scene["ExoriumMod:ShadowmancerShade"].GetShader().Shader;
-            fire.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphereMap").Value);
             fire.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
+            fire.Parameters["sampleTexture3"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
             fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.01f);
 
             SpriteBatch spriteBatch = Main.spriteBatch;

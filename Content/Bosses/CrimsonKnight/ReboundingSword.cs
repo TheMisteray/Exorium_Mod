@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
-    internal class FlametoungeBeam : ModProjectile
+    internal class ReboundingSword : ModProjectile
     {
         public override string Texture => AssetDirectory.Invisible;
 
@@ -21,10 +21,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            Projectile.width = 300;
-            Projectile.height = 300;
+            Projectile.width = 150;
+            Projectile.height = 150;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 1800;
             Projectile.tileCollide = false;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -37,12 +37,32 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => Projectile.ai[0] = value;
         }
 
+        public bool bottom
+        {
+            get => Projectile.ai[1] == 1f;
+            set => Projectile.ai[1] = value ? 1f : 0f;
+        }
+
+        bool rebounded = false;
+
         public override void AI()
         {
-            if (Projectile.velocity.Length() < 20)
-                Projectile.velocity *= 1.04f;
             if (fadeIn > 0)
                 fadeIn--;
+
+            if (!rebounded)
+            {
+                if (bottom && Projectile.Center.Y >= ExoriumWorld.FallenTowerRect.Bottom - 80)
+                {
+                    Projectile.velocity.Y *= -1;
+                    rebounded = true;
+                }
+                else if (!bottom && Projectile.Center.Y <= ExoriumWorld.FallenTowerRect.Top + 160)
+                {
+                    Projectile.velocity.Y *= -1;
+                    rebounded = true;
+                }
+            }
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -54,9 +74,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 float _ = float.NaN;
 
                 //Check collision of line from sword center to sword end with target hitbox
-                return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - SwordTip, Projectile.Center + SwordTip, 42 * Projectile.scale, ref _);
+                return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - SwordTip, Projectile.Center + SwordTip, 21 * Projectile.scale, ref _);
             }
-            else 
+            else
                 return false;
         }
 
@@ -64,7 +84,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "CaraveneBladeProj").Value;
 
-            Main.spriteBatch.Draw(tex, (Projectile.Center - Main.screenPosition), null, new Color(254, 121, 2) * ((60 - fadeIn) / 60), Projectile.velocity.ToRotation() - MathHelper.PiOver2, new Vector2(tex.Width / 2, tex.Height / 2), 1, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(tex, (Projectile.Center - Main.screenPosition), null, new Color(254, 121, 2) * ((60 - fadeIn) / 60), Projectile.velocity.ToRotation() - MathHelper.PiOver2, new Vector2(tex.Width / 2, tex.Height / 2), .5f, SpriteEffects.None, 0f);
             return false;
         }
     }

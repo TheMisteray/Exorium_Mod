@@ -50,6 +50,7 @@ namespace ExoriumMod
                 Ref<Effect> screenRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShockwaveEffect", AssetRequestMode.ImmediateLoad).Value);
                 Ref<Effect> flamingSphereRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FlamingSphere", AssetRequestMode.ImmediateLoad).Value);
                 Ref<Effect> shadowmancerShadeRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShadowmancerShade", AssetRequestMode.ImmediateLoad).Value);
+                Ref<Effect> violetPortalRef = new Ref<Effect>(Assets.Request<Effect>("Effects/VioletPortal", AssetRequestMode.ImmediateLoad).Value);
 
                 //Screen shader loads
                 Filters.Scene["ExoriumMod:HeatDistortion"] = new Filter(new ScreenShaderData(HeatDistortEffectRef, "Heat"), EffectPriority.High);
@@ -64,6 +65,9 @@ namespace ExoriumMod
 
                 Filters.Scene["ExoriumMod:ShadowmancerShade"] = new Filter(new ScreenShaderData(shadowmancerShadeRef, "ShadePass"), EffectPriority.VeryHigh);
                 Filters.Scene["ExoriumMod:ShadowmancerShade"].Load();
+
+                Filters.Scene["ExoriumMod:VioletPortal"] = new Filter(new ScreenShaderData(violetPortalRef, "PortalPass"), EffectPriority.Medium);
+                Filters.Scene["ExoriumMod:VioletPortal"].Load();
 
                 GameShaders.Misc["FlamingSphere"] = new MiscShaderData(flamingSphereRef, "FlamingSpherePass");
             }
