@@ -11,6 +11,6 @@ This mod currently adds
 - 1 Town NPC
 - And more
 
-CREDITS
-Music by grapetape64 - Check him out! https://www.youtube.com/channel/UCcd_I7-qCv6KEwDdgoQDJlQ/featured
+CREDITS:
+Music by grapetape64
 Some spritework donations from grapetape64, Jabon, Svord, and Potato_Land
