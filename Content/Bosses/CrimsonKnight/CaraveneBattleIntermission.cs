@@ -75,8 +75,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => NPC.ai[0] = value ? 1f : 0f;
         }
 
+        public float invulnerableTime
+        {
+            get => NPC.ai[1];
+            set => NPC.ai[1] = value;
+        }
+
         private float counter = 0;
-        private float aliveCounter = 180;
 
         public override void AI()
         {
@@ -188,16 +193,21 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
-            if (aliveCounter != 0)
-                return false;
             return false;
         }
 
         public override bool? CanBeHitByItem(Player player, Item item)
         {
-            if (aliveCounter != 0)
+            if (invulnerableTime >= 0)
                 return false;
-            return base.CanBeHitByItem(player, item);
+            return true;
+        }
+
+        public override bool? CanBeHitByProjectile(Projectile projectile)
+        {
+            if (invulnerableTime >= 0)
+                return false;
+            return true;
         }
     }
 }

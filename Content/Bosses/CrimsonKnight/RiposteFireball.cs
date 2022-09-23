@@ -55,12 +55,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
 
                 Vector2 orbitPoint = originalPos;
-                Vector2 offset = new Vector2(50, 0);
+                Vector2 offset = new Vector2(300, 0);
+                Projectile.rotation += .24f;
                 counter += 2;
                 int orbitCount = 0;
                 foreach (Projectile p in Main.projectile)
                 {
-                    if (p.type == this.Type)
+                    if (p.type == ProjectileType<backupFireball>())
                         orbitCount++;
                 }
                 float rotation = (360 / orbitCount) * num;
@@ -70,7 +71,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
             else
             {
-                Projectile.scale -= .01f;
+                Projectile.scale -= .02f;
                 if (Projectile.scale <= 0)
                 {
                     Projectile.Kill();

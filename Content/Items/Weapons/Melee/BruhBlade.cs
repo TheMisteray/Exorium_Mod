@@ -34,7 +34,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 		public override void AddRecipes() 
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 999);
+			recipe.AddIngredient(ItemID.MudBlock, 999);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}

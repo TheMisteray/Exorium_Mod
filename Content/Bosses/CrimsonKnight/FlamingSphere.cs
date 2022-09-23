@@ -46,7 +46,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void AI()
         {
-            /*
             if (Projectile.timeLeft == 3600)
             {
                 if (Main.netMode != NetmodeID.Server && !Filters.Scene["ExoriumMod:HeatDistortion"].IsActive())
@@ -61,7 +60,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Filters.Scene["ExoriumMod:HeatDistortion"].GetShader().UseTargetPosition(Projectile.Center).UseOpacity(100).UseProgress(Main.GameUpdateCount * 0.0015f); //Make use game time for stoppin while paused
             }
-            */
 
             Player p = Main.player[(int)Target];
             Vector2 trajectory = Main.player[(int)Target].Center - Projectile.Center;
@@ -133,12 +131,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 killTimer--;
             }
 
-            /*
             if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:HeatDistortion"].IsActive())
             {
                 Filters.Scene["ExoriumMod:HeatDistortion"].Deactivate();
             }
-            */
 
             if (killTimer > 0)
                 return false;
@@ -171,7 +167,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             spriteBatch.Draw(Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value, Projectile.Center - Main.screenPosition, null, lightener ? Color.Red : Color.White, 0, Projectile.Size / 2, scalar * 1.8f, 0, 0);
 
             spriteBatch.End();
-            spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
 
             if (killTimer > 0)
             {
@@ -220,17 +216,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Player player = Main.player[(int)playerTarget];
                 Vector2 toPlayer = player.Center - Projectile.Center;
-                Vector2 aim = Vector2.Zero;
 
                 if (player.active && toPlayer.Length() < 500)
                 {
-                    aim = Vector2.Lerp(Vector2.Normalize(Projectile.velocity), Vector2.Normalize(toPlayer), Main.masterMode ? .06f : .03f); //Home harder in expert
+                    float playerAngle = (float)Math.Atan2(toPlayer.Y, toPlayer.X);
+                    float velocityAngle = (float)Math.Atan2(Projectile.velocity.Y,  Projectile.velocity.X);
 
-                    if (aim.ToRotation() != Projectile.velocity.ToRotation())
-                    {
-                        Projectile.netUpdate = true;
-                    }
-                    Projectile.velocity = aim * Projectile.velocity.Length();
+                    float angleBetween = playerAngle - velocityAngle;
+                    if (angleBetween > .25f)
+                        angleBetween = Main.masterMode ? .02f : .015f;
+                    else if (angleBetween < -.25f)
+                        angleBetween = Main.masterMode ? -.02f : -.015f;
+                    
+                    Projectile.velocity = Projectile.velocity.RotatedBy(angleBetween);
                 }
             }
 

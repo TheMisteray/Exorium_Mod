@@ -37,10 +37,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => Projectile.ai[0] = value;
         }
 
-        public bool bottom
+        public float bottom
         {
-            get => Projectile.ai[1] == 1f;
-            set => Projectile.ai[1] = value ? 1f : 0f;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
         bool rebounded = false;
@@ -52,12 +52,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (!rebounded)
             {
-                if (bottom && Projectile.Center.Y >= ExoriumWorld.FallenTowerRect.Bottom - 80)
+                if (bottom == 1 && Projectile.Center.Y >= ExoriumWorld.FallenTowerRect.Bottom - 80)
                 {
                     Projectile.velocity.Y *= -1;
                     rebounded = true;
                 }
-                else if (!bottom && Projectile.Center.Y <= ExoriumWorld.FallenTowerRect.Top + 160)
+                else if (bottom == 0 && Projectile.Center.Y <= ExoriumWorld.FallenTowerRect.Top + 160)
                 {
                     Projectile.velocity.Y *= -1;
                     rebounded = true;

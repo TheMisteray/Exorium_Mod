@@ -80,6 +80,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private bool teleIndicator = false;
         private bool parry = false;
         private int parryRetaliate = 0;
+        private static float Parry_Durration = 240;
         private bool shieldDown = false;
         private bool dashIndicator = false;
 
@@ -440,15 +441,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 4:
                     if (actionTimer == 0)
                         parryRetaliate = 0;
-                    else if (actionTimer > 60 && actionTimer < 180)
+                    else if (actionTimer > 60 && actionTimer < Parry_Durration)
                         parry = true;
-                    else if (actionTimer == 180)
+                    else if (actionTimer == Parry_Durration)
                     {
                         parry = false;
                         shieldDown = true;
                         NPC.frameCounter = 0;
                     }
-                    else if (actionTimer > 220)
+                    else if (actionTimer > Parry_Durration + 40)
                     {
                         ChooseMovement();
                     }
@@ -1159,7 +1160,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void OnKill()
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
-                NPC.NewNPCDirect(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaraveneBattleIntermission>());
+                NPC.NewNPCDirect(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaraveneBattleIntermission>(), default, default, 300);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1175,7 +1176,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 ySourceHeight = (5 - (int)(NPC.frameCounter / 10)) * 442;
             }
 
-            Color alphaColor = new Color(drawColor.R, drawColor.G, drawColor.B, NPC.alpha);
+            Color alphaColor;
+
+            if (NPC.alpha != 0)
+                alphaColor = new Color(drawColor.R, drawColor.G, drawColor.B, NPC.alpha);
+            else
+                alphaColor = drawColor;
             if (!left)
             {
                 spriteBatch.Draw(tex,
@@ -1309,27 +1315,47 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
         {
-            NPC.target = player.whoAmI;
             if (parry)
             {
-                damage = 0;
-                parryRetaliate++;
-                if (parryRetaliate % 5 == 0 & Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<RiposteFireball>(), damage * 2, 1, Main.myPlayer, NPC.target, parryRetaliate / 5);
+                parryRetaliate += damage;
+                if (parryRetaliate > 15 && Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    parryRetaliate = 0;
+
+                    int orbitCount = 0;
+                    foreach (Projectile p in Main.projectile)
+                    {
+                        if (p.type == this.Type)
+                            orbitCount++;
+                    }
+
+                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<RiposteFireball>(), NPC.damage, 1, Main.myPlayer, NPC.target, orbitCount);
+                    Main.projectile[proj].timeLeft = (int)(Parry_Durration - actionTimer) + 60;
+                }
             }
-            base.OnHitByItem(player, item, damage, knockback, crit);
+            base.OnHitByItem(player, item, 1, knockback, crit);
         }
 
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
         {
             if (parry)
             {
-                damage = 0;
-                parryRetaliate++;
-                if (parryRetaliate % 5 == 0 & Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<RiposteFireball>(), damage * 2, 1, Main.myPlayer, NPC.target, parryRetaliate / 5);
+                parryRetaliate += damage;
+                if (parryRetaliate > 15 && Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    int orbitCount = 0;
+                    foreach (Projectile p in Main.projectile)
+                    {
+                        if (p.type == this.Type)
+                            orbitCount++;
+                    }
+
+                    parryRetaliate = 0;
+                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileType<RiposteFireball>(), NPC.damage, 1, Main.myPlayer, NPC.target, orbitCount);
+                    Main.projectile[proj].timeLeft = (int)(Parry_Durration - actionTimer) + 60;
+                }
             }
-            base.OnHitByProjectile(projectile, damage, knockback, crit);
+            base.OnHitByProjectile(projectile, 1, knockback, crit);
         }
     }
 }
