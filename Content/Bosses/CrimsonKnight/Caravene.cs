@@ -1360,8 +1360,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
+                NPC.life += damage;
             }
-            base.OnHitByItem(player, item, 1, knockback, crit);
+            base.OnHitByItem(player, item, damage, knockback, crit);
         }
 
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
@@ -1374,8 +1375,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
+                NPC.life += damage;
             }
-            base.OnHitByProjectile(projectile, 1, knockback, crit);
+            base.OnHitByProjectile(projectile, damage, knockback, crit);
         }
     }
-}
+}   
