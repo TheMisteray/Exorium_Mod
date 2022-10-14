@@ -86,7 +86,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void AI()
         {
             #region Targeting  
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NPC.TargetClosest(true);
             }
@@ -113,8 +113,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     left = true;
             }
 
-            if (aliveCounter > 0)
-                aliveCounter--;
+            if (invulnerableTime > 0)
+            {
+                invulnerableTime--;
+                NPC.dontTakeDamage = true;
+            }
+            else
+                NPC.dontTakeDamage = false;
+
             counter++;
             if (counter >= 60)
                 counter = 0;
@@ -194,20 +200,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
             return false;
-        }
-
-        public override bool? CanBeHitByItem(Player player, Item item)
-        {
-            if (invulnerableTime >= 0)
-                return false;
-            return true;
-        }
-
-        public override bool? CanBeHitByProjectile(Projectile projectile)
-        {
-            if (invulnerableTime >= 0)
-                return false;
-            return true;
         }
     }
 }

@@ -43,9 +43,8 @@ Shrine of Light
 
 1.4 Issues
 
-Shadowmancer cloak does not create dusts
 Make flame trail and blight spikes check ground in a while loop so they don't update a bajillion times per frame?
-Shield effect is white
+Deadlands has no map background
 
 Weapons
 

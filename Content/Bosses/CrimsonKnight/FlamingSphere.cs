@@ -200,6 +200,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => Projectile.ai[0] = value;
         }
 
+        private int timer = 60;
+
         //draw stuff
         Vector2 oldPos1 = Vector2.Zero;
         Vector2 oldPos2 = Vector2.Zero;
@@ -211,26 +213,31 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void AI()
         {
-            //Minor homing in expert mode
-            if (Main.expertMode)
+            if (!(timer > 0))
             {
-                Player player = Main.player[(int)playerTarget];
-                Vector2 toPlayer = player.Center - Projectile.Center;
-
-                if (player.active && toPlayer.Length() < 500)
+                //Minor homing in expert mode
+                if (Main.expertMode)
                 {
-                    float playerAngle = (float)Math.Atan2(toPlayer.Y, toPlayer.X);
-                    float velocityAngle = (float)Math.Atan2(Projectile.velocity.Y,  Projectile.velocity.X);
+                    Player player = Main.player[(int)playerTarget];
+                    Vector2 toPlayer = player.Center - Projectile.Center;
 
-                    float angleBetween = playerAngle - velocityAngle;
-                    if (angleBetween > .25f)
-                        angleBetween = Main.masterMode ? .02f : .015f;
-                    else if (angleBetween < -.25f)
-                        angleBetween = Main.masterMode ? -.02f : -.015f;
-                    
-                    Projectile.velocity = Projectile.velocity.RotatedBy(angleBetween);
+                    if (player.active && toPlayer.Length() < 600)
+                    {
+                        float playerAngle = (float)Math.Atan2(toPlayer.Y, toPlayer.X);
+                        float velocityAngle = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
+
+                        float angleBetween = playerAngle - velocityAngle;
+                        if (angleBetween < (Main.masterMode ? -.02f : -.015f))
+                            angleBetween = Main.masterMode ? -.02f : -.015f;
+                        else if (angleBetween > (Main.masterMode ? .02f : .015f))
+                            angleBetween = Main.masterMode ? .02f : .015f;
+
+                        Projectile.velocity = Projectile.velocity.RotatedBy(angleBetween);
+                    }
                 }
             }
+            else
+                timer--;
 
             //Set draw positions
             if (Projectile.timeLeft % 5 == 0)
