@@ -37,6 +37,8 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
             AdjTiles = new int[] { TileID.Platforms };
             DustType = DustID.Obsidian;
             Main.dust[DustType].color = new Color(51, 12, 5);
+            MineResist = 5f;
+            MinPick = 210;
         }
     }
 }

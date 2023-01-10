@@ -20,7 +20,7 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
             AddMapEntry(new Color(51, 12, 5));
             DustType = DustID.Obsidian;
             HitSound = SoundID.Tink;
-            MineResist = 2f;
+            MineResist = 5f;
             MinPick = 210;
             Main.dust[DustType].color = new Color(51, 12, 5);
         }

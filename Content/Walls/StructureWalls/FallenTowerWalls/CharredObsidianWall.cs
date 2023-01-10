@@ -16,5 +16,10 @@ namespace ExoriumMod.Content.Walls.StructureWalls.FallenTowerWalls
             ItemDrop = ItemType<Items.WallItems.StructureWallItems.FallenTowerWallItems.CharredObsidianWall>();
             AddMapEntry(new Color(25, 6, 2));
         }
+
+        public override bool CanExplode(int i, int j)
+        {
+            return false;
+        }
     }
 }

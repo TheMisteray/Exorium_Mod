@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
+using Terraria.Audio;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -434,6 +435,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             }
                         }
 
+                        //SOUND explosion or swing sound
+
                         // dust telegraph
                         for (int i = 0; i < 100; i++)
                         {
@@ -461,20 +464,24 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         parry = false;
                         shieldDown = true;
                         NPC.frameCounter = 0;
+                        bool sound = false;
 
                         //Use same formula as draw to create projectiles
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
+
+                        for (int i = 0; i < parryRetaliate; i++)
                         {
-                            for (int i = 0; i < parryRetaliate; i++)
+                            Vector2 offset = new Vector2(0, 200);
+                            offset = offset.RotatedBy(MathHelper.ToRadians((360 / parryRetaliate) * i));
+                            offset = offset.RotatedBy(Main.GameUpdateCount * .0001);
+                            Vector2 toPlayer = player.Center - (NPC.Center + offset);
+                            toPlayer.Normalize();
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Vector2 offset = new Vector2(0, 200);
-                                offset = offset.RotatedBy(MathHelper.ToRadians((360 / parryRetaliate) * i));
-                                offset = offset.RotatedBy(Main.GameUpdateCount * .0001);
-                                Vector2 toPlayer = player.Center - (NPC.Center + offset);
-                                toPlayer.Normalize();
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, toPlayer * 18, ProjectileType<backupFireball>(), damage * 2, 3, Main.myPlayer, player.whoAmI);
                             }
+                            SoundEngine.PlaySound(SoundID.Item20, NPC.Center + offset);
                         }
+
                         //Reset Trackers
                         parryRetaliate = 0;
                         parryDamaged = 0;
@@ -537,6 +544,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer % 6 == 0)
                         {
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, new Vector2(0, -30).RotatedByRandom(MathHelper.Pi/16), ProjectileType<indicatorRainSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4) ? 1f : 0f);
+                            SoundEngine.PlaySound(SoundID.Item100, swordTip);
                         }
                     }
                     break;
@@ -721,6 +729,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                                 counter += 5;
                             }
                         }
+                        SoundEngine.PlaySound(SoundID.Item45, swordTip);
                     }
                     else if (actionTimer > 180)
                     {
@@ -914,22 +923,23 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 12:
+                    bool playSound = false;
                     if (actionTimer == 30 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Vector2 toPlayer = player.Center - swordTip;
-
+                        playSound = true;
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer, ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
                     }
                     else if (actionTimer == 40 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Vector2 toPlayer = player.Center - swordTip;
-
+                        playSound = true;
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
                     }
                     else if (actionTimer == 50 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Vector2 toPlayer = player.Center - swordTip;
-
+                        playSound = true;
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(-20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
                     }
                     else if (actionTimer == 80)
@@ -939,6 +949,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     else if (actionTimer > 90)
                     {
                         ChooseMovement();
+                    }
+                    if (playSound)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item100, swordTip);
                     }
                     break;
             }
