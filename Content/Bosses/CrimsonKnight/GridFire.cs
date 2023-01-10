@@ -5,7 +5,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
+using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
@@ -263,6 +263,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Vector2 dist = new Vector2(projHitbox.Center.X - targetHitbox.Center.X, projHitbox.Center.Y - targetHitbox.Center.Y);
 
             return dist.Length() < ((projHitbox.Width/2) + (targetHitbox.Width/2));
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            SpriteBatch spriteBatch = Main.spriteBatch;
+
+            spriteBatch.End();
+            ShapeBatch.Begin(spriteBatch.GraphicsDevice);
+            ShapeBatch.CircleOutline(Projectile.Center - Main.screenPosition, Projectile.Hitbox.Width / 2, 100, Projectile.timeLeft, new Color(255, 69, 0, lightColor.A));
+            ShapeBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+
+            return true;
         }
     }
 }

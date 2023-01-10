@@ -88,4 +88,44 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return false;
         }
     }
+
+    internal class indicatorRainSword : ModProjectile
+    {
+        public override string Texture => AssetDirectory.Invisible;
+
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Flametounge Swordbeam");
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 150;
+            Projectile.height = 150;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 120;
+            Projectile.tileCollide = false;
+            Projectile.alpha = 255;
+        }
+
+        public float fadeIn
+        {
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
+        }
+
+        public override void AI()
+        {
+            if (fadeIn > 0)
+                fadeIn-=5;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "CaraveneBladeProj").Value;
+
+            Main.spriteBatch.Draw(tex, (Projectile.Center - Main.screenPosition), null, new Color(254, 121, 2) * ((60 - fadeIn) / 60), Projectile.velocity.ToRotation() - MathHelper.PiOver2, new Vector2(tex.Width / 2, tex.Height / 2), .5f, SpriteEffects.None, 0f);
+            return false;
+        }
+    }
 }

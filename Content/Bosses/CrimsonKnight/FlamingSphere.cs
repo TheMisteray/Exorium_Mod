@@ -5,7 +5,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System;
+using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
@@ -43,6 +43,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private bool lightener = false;
         private float killTimer = 0;
         private bool exploded = false;
+        private float explosionRadius = 360;
 
         public override void AI()
         {
@@ -72,7 +73,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (scalar >= .95f && !Expanded)
                 Projectile.velocity = trajectory;
-            else if (Expanded)
+            else if (Expanded && !exploded && Projectile.timeLeft > 60)
             {
                 Projectile.velocity *= 0.95f;
                 Helpers.DustHelper.DustRing(Projectile.Center, DustType<Rainbow>(), 360, 6, .04f, .5f, 0, 0, 0, Color.OrangeRed, false);
@@ -85,23 +86,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Projectile.timeLeft = 240;
                 lightener = true;
             }
+
             if (Projectile.timeLeft <= 240)
             {
-                if (scalar < 1.4f)
+                Expanded = true;
+                if (scalar < 1.6f)
                     scalar += .01f;
             }
-
-            if (scalar < 1)
+            if (Projectile.timeLeft == 60)
             {
-                scalar += .02f;
-            }
-        }
-
-        public override bool PreKill(int timeLeft)
-        {
-            if (Expanded)
-            {
-                int explosionArea = 320;
+                float explosionArea = explosionRadius;
                 Vector2 oldSize = Projectile.Size;
                 // Resize the projectile hitbox to be bigger.
                 Projectile.position = Projectile.Center;
@@ -111,7 +105,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Projectile.tileCollide = false;
                 Projectile.velocity = Vector2.Zero;
                 // Damage enemies inside the hitbox area
-                Projectile.Damage();
                 Projectile.Damage();
                 scalar = 0.01f;
 
@@ -123,23 +116,21 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
 
                 exploded = true;
-                killTimer = 30;
             }
 
-            if (exploded)
+            if (scalar < 1)
             {
-                killTimer--;
+                scalar += .02f;
             }
+        }
 
+        public override bool PreKill(int timeLeft)
+        {
             if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:HeatDistortion"].IsActive())
             {
                 Filters.Scene["ExoriumMod:HeatDistortion"].Deactivate();
             }
-
-            if (killTimer > 0)
-                return false;
-            else
-                return false;
+            return base.PreKill(timeLeft);
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
@@ -154,25 +145,30 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var fire = Filters.Scene["ExoriumMod:FlamingSphere"].GetShader().Shader;
-            fire.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
-            fire.Parameters["sampleTexture3"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
-            fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.01f);
-
             SpriteBatch spriteBatch = Main.spriteBatch;
-
-            spriteBatch.End();
-            spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
-
-            spriteBatch.Draw(Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value, Projectile.Center - Main.screenPosition, null, lightener ? Color.Red : Color.White, 0, Projectile.Size / 2, scalar * 1.8f, 0, 0);
-
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-
-            if (killTimer > 0)
+            if (Projectile.timeLeft > 60)
             {
-                Texture2D blastArea = Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value;
-                Main.EntitySpriteDraw(blastArea, Projectile.Center, null, Color.OrangeRed, 0, blastArea.Size() / 2, 320 / (blastArea.Width / 2), SpriteEffects.None, 0);
+                var fire = Filters.Scene["ExoriumMod:FlamingSphere"].GetShader().Shader;
+                fire.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
+                fire.Parameters["sampleTexture3"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
+                fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.01f);
+
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
+
+                spriteBatch.Draw(Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value, Projectile.Center - Main.screenPosition, null, lightener ? Color.Red : Color.White, 0, Projectile.Size / 2, scalar * 1.8f, 0, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+
+            }
+            else
+            {
+                spriteBatch.End();
+                ShapeBatch.Begin(spriteBatch.GraphicsDevice);
+                ShapeBatch.Circle(Projectile.Center - Main.screenPosition, explosionRadius, 200, MathHelper.ToRadians(1.0f * Projectile.timeLeft), Color.Lerp(Color.Red, new Color(0, 0, 0, 0), (float)(-1 * (Projectile.timeLeft - 60)) / 60f), Color.Lerp(Color.OrangeRed, new Color(0, 0, 0, 0), (float)(-1 * (Projectile.timeLeft - 60)) / 60f));
+                ShapeBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
             }
 
             return false;
@@ -188,7 +184,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.width = 16;
             Projectile.height = 16;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 1200;
+            Projectile.timeLeft = 300;
             Projectile.tileCollide = false;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -215,24 +211,24 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (!(timer > 0))
             {
-                //Minor homing in expert mode
+                //Minor homing in expert mode (basic seek behavior)
                 if (Main.expertMode)
                 {
                     Player player = Main.player[(int)playerTarget];
-                    Vector2 toPlayer = player.Center - Projectile.Center;
+                    float sqrDist = (player.position - Projectile.position).LengthSquared();
 
-                    if (player.active && toPlayer.Length() < 600)
+                    if (sqrDist < 360000)
                     {
-                        float playerAngle = (float)Math.Atan2(toPlayer.Y, toPlayer.X);
-                        float velocityAngle = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-
-                        float angleBetween = playerAngle - velocityAngle;
-                        if (angleBetween < (Main.masterMode ? -.02f : -.015f))
-                            angleBetween = Main.masterMode ? -.02f : -.015f;
-                        else if (angleBetween > (Main.masterMode ? .02f : .015f))
-                            angleBetween = Main.masterMode ? .02f : .015f;
-
-                        Projectile.velocity = Projectile.velocity.RotatedBy(angleBetween);
+                        float speed = Projectile.velocity.Length();
+                        Vector2 desired = player.Center - Projectile.Center;
+                        desired.Normalize();
+                        desired *= 10;
+                        Vector2 seek = desired - Projectile.velocity;
+                        //divide by time and rate - rate is amount of time to take
+                        Projectile.velocity += seek / 60;
+                        Projectile.velocity.Normalize();
+                        //keep constant speed
+                        Projectile.velocity *= speed;
                     }
                 }
             }
@@ -240,7 +236,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 timer--;
 
             //Set draw positions
-            if (Projectile.timeLeft % 5 == 0)
+            if (Projectile.timeLeft % 2 == 0)
             {
                 oldPos7 = oldPos6;
                 oldPos6 = oldPos5;

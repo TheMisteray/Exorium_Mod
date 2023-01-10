@@ -16,6 +16,9 @@ using Terraria.Graphics.Effects;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
+    //TODO:
+    //Sounds
+    //
     class Caravene : ModNPC
     {
         public override string Texture => AssetDirectory.CrimsonKnight + Name + "_Hitbox";
@@ -37,6 +40,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
             };
             NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
+
+            NPCID.Sets.TrailCacheLength[Type] = 7;
+            NPCID.Sets.TrailingMode[NPC.type] = 0;
         }
 
         public override void SetDefaults()
@@ -52,13 +58,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.npcSlots = 30f;
             NPC.boss = true;
             NPC.lavaImmune = true;
-            NPC.HitSound = SoundID.NPCHit54;
-            NPC.DeathSound = SoundID.NPCDeath52;
+            NPC.HitSound = SoundID.NPCHit4;
+            //NPC.DeathSound = SoundID.NPCDeath52;
             NPC.timeLeft = NPC.activeTime * 30;
             NPC.buffImmune[BuffID.OnFire] = true;
             NPC.noGravity = false;
             NPC.noTileCollide = false;
-            //music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/BathrobeMan");
+            if (!Main.dedServ)
+                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/knight");
             //bossBag = ItemType<ShadowmancerBag>();
         }
 
@@ -159,6 +166,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             //Reset vars
             parry = false;
+            Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
 
             #region Targeting  
             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -516,11 +524,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         direction *= 10;
                         direction = direction.RotatedBy(MathHelper.ToRadians(90 * (bladeSpawnQuadrant - 1)));
 
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint, direction, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4)? 1f : 0f);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint, direction, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4)? 1f : 0f);
                     }
                     if (actionTimer >= 420)
                     {
                         ChooseFollowup();
+                    }
+
+                    if (actionTimer < 60 && actionTimer > 12) //Indicators
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer % 6 == 0)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, new Vector2(0, -30).RotatedByRandom(MathHelper.Pi/16), ProjectileType<indicatorRainSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4) ? 1f : 0f);
+                        }
                     }
                     break;
                 case 6:
@@ -636,6 +653,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         actionTimer = 100;
                     }
+                    if (NPC.Bottom.Y < Arena_Bottom_Left.Y)
+                    {
+                        actionTimer = 120;
+                    }
                     if (actionTimer == 0)
                     {
                         NPC.velocity = new Vector2(0, -9);
@@ -666,7 +687,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         //place along top, right, bottom, left
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
                             int counter = 0;
 
                             //Top and bottom
@@ -896,21 +916,18 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 12:
                     if (actionTimer == 30 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
                         Vector2 toPlayer = player.Center - swordTip;
 
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer, ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
                     }
                     else if (actionTimer == 40 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
                         Vector2 toPlayer = player.Center - swordTip;
 
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
                     }
                     else if (actionTimer == 50 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
                         Vector2 toPlayer = player.Center - swordTip;
 
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(-20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
@@ -1112,11 +1129,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (transitionCounter == 0)
             {
+                //Reset Trackers
                 NPC.velocity = Vector2.Zero;
                 frameX = 0;
+                NPC.frameCounter = 0;
                 dashIndicator = false;
                 teleIndicator = false;
                 parry = false;
+                parryDamaged = 0;
+                parryRetaliate = 0;
+                parryFireballTimer = 0;
                 shieldDown = false;
                 NPC.noTileCollide = false;
                 NPC.noGravity = false;
@@ -1166,7 +1188,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     dust.color = new Color(184, 58, 24);
                 }
             }
-            else if (transitionCounter == 200)
+            else if (transitionCounter == 210)
             {
                 frameX = 1;
             }
@@ -1206,8 +1228,26 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 alphaColor = drawColor;
             if (!left)
             {
+                //Afterimage for dash
+                if ((Action == 1 && actionTimer > 60 && actionTimer < 150) || (Action == 10 && actionTimer > 60 && (timeReachedPortal == 0 || actionTimer < timeReachedPortal + 120)) || (Action == 2 && actionTimer >= 90 && actionTimer <= 94))
+                {
+                    for (int k = NPC.oldPos.Length - 1; k >= 0; k--)
+                    {
+                        Vector2 pos = NPC.oldPos[k];
+
+                        spriteBatch.Draw(tex,
+                        new Rectangle((int)(pos.X - 221) - (int)(screenPos.X), (int)(pos.Y - 200) - (int)(screenPos.Y), 412, 442),
+                        new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
+                        Color.Red * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length),
+                        NPC.rotation,
+                        Vector2.Zero,
+                        SpriteEffects.None,
+                        0);
+                    }
+                }
+
                 spriteBatch.Draw(tex,
-                    new Rectangle((int)(NPC.TopLeft.X - 221) - (int)(screenPos.X), (int)(NPC.TopLeft.Y - 200) - (int)(screenPos.Y), 412, 442),
+                    new Rectangle((int)(NPC.position.X - 221) - (int)(screenPos.X), (int)(NPC.position.Y - 200) - (int)(screenPos.Y), 412, 442),
                     new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                     alphaColor,
                     NPC.rotation,
@@ -1217,8 +1257,25 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
             else
             {
+                if ((Action == 1 && actionTimer > 60 && actionTimer < 150) || (Action == 10 && actionTimer > 60 && (timeReachedPortal == 0 || actionTimer < timeReachedPortal + 120)) || (Action == 2 && actionTimer >= 90 && actionTimer <= 100))
+                {
+                    for (int k = NPC.oldPos.Length - 1; k >= 0; k--)
+                    {
+                        Vector2 pos = NPC.oldPos[k];
+
+                        spriteBatch.Draw(tex,
+                            new Rectangle((int)(pos.X - 51) - (int)(screenPos.X), (int)(pos.Y - 205) - (int)(screenPos.Y), 412, 442),
+                            new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
+                            Color.Red * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length),
+                            NPC.rotation,
+                            Vector2.Zero,
+                            SpriteEffects.FlipHorizontally,
+                            0);
+                    }
+                }
+
                 spriteBatch.Draw(tex,
-                    new Rectangle((int)(NPC.TopLeft.X - 51) - (int)(screenPos.X), (int)(NPC.TopLeft.Y - 205) - (int)(screenPos.Y), 412, 442),
+                    new Rectangle((int)(NPC.position.X - 51) - (int)(screenPos.X), (int)(NPC.position.Y - 205) - (int)(screenPos.Y), 412, 442),
                     new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                     alphaColor,
                     NPC.rotation,
@@ -1303,7 +1360,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     offset = offset.RotatedBy(Main.GameUpdateCount * .02);
                     spriteBatch.Draw(texFireball, NPC.Center + offset - screenPos, null, Color.White, Main.GameUpdateCount * .1f, texFireball.Size() / 2, parryFireballTimer, SpriteEffects.None, 0);
                 }
-                Main.NewText(parryRetaliate + "");
             }
 
             base.PostDraw(spriteBatch, screenPos, drawColor);
@@ -1311,7 +1367,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
-            if (introAnimation || phaseTransition)
+            if (introAnimation || phaseTransition || noContactDamage)
                 return false;
             return base.CanHitPlayer(target, ref cooldownSlot);
         }
