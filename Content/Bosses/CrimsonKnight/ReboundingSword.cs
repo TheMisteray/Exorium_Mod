@@ -1,11 +1,11 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Microsoft.Xna.Framework;
-using Terraria.ID;
+using Terraria.Audio;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
-using ExoriumMod.Content.Dusts;
+using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
@@ -56,6 +56,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 {
                     Projectile.velocity.Y *= -1;
                     rebounded = true;
+                    SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
                 }
                 else if (bottom == 0 && Projectile.Center.Y <= ExoriumWorld.FallenTowerRect.Top + 160)
                 {
@@ -86,6 +87,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             Main.spriteBatch.Draw(tex, (Projectile.Center - Main.screenPosition), null, new Color(254, 121, 2) * ((60 - fadeIn) / 60), Projectile.velocity.ToRotation() - MathHelper.PiOver2, new Vector2(tex.Width / 2, tex.Height / 2), .5f, SpriteEffects.None, 0f);
             return false;
+        }
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+            target.AddBuff(BuffID.OnFire, 300);
         }
     }
 

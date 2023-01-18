@@ -223,7 +223,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            damage *= (int)(strength + 1);
+            damage *= (int)(strength + 2);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

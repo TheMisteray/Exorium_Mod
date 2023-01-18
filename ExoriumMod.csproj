@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Gores\" />
+    <Folder Include="Assets\Items\Weapons\Summoner\Whips\" />
     <Folder Include="Backgrounds\" />
   </ItemGroup>
 </Project>

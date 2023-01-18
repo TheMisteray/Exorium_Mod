@@ -65,6 +65,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.buffImmune[BuffID.OnFire] = true;
             NPC.noGravity = false;
             NPC.noTileCollide = false;
+            NPC.alpha = 255;
             if (!Main.dedServ)
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/knight");
             //bossBag = ItemType<ShadowmancerBag>();
@@ -111,7 +112,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         //Phase trackers
         private bool introAnimation = true;
-        private int introTicker = 180;
+        private int introTicker = 9999;
+        private int introTickerMax = 0;
+        private float introPortalSize = 0;
 
         private bool exitAnimation = false;
 
@@ -917,6 +920,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75), Vector2.Zero, ProjectileType<FlamingSphere>(), damage * 2, 1, Main.myPlayer, NPC.target);
                     }
+                    if (actionTimer == 60)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item45, swordTip);
+                    }
                     else if (actionTimer > 180)
                     {
                         ChooseMovement();
@@ -1081,6 +1088,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 case 1:
                 case 3:
+                    if (NPC.frameCounter == 0)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
+                    }
+                    else if (NPC.frameCounter == 20)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((NPC.width * (left? 1: -1)), 80), Vector2.Zero, ProjectileType<SwordHitbox>(), NPC.damage, 7, Main.myPlayer);
+                    }
+                    NPC.frameCounter += 5;
+                    break;
                 case 7:
                     NPC.frameCounter += 5;
                     break;
@@ -1124,6 +1141,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //Play intro animation
         private void IntroAI()
         {
+            if (introTicker == 9999) //Set ticker based on past fights
+            {
+                introTicker = 480;
+                introTickerMax = introTicker;
+            }
+
             introTicker--;
             if (introTicker <= 0)
                 introAnimation = false;
@@ -1136,6 +1159,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget = NPC.Center;
                     player.GetModPlayer<ExoriumPlayer>().ScreenMoveTime = introTicker;
                 }
+            }
+
+            //TODO: This changes based on past fights
+            if (introTicker == introTickerMax - 180) //3 seconds after
+            {
+                //That's a nice trinket you got there
+            }
+            else if (introTicker == introTickerMax - 240)
+            {
+                //Hope you don't mind if I take it off your hands
             }
         }
 
@@ -1240,6 +1273,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 alphaColor = new Color(drawColor.R, drawColor.G, drawColor.B, NPC.alpha);
             else
                 alphaColor = drawColor;
+
+            if (introTicker > introTickerMax - 90) //Cut early for now as there was wierdness with the alpha values of the intro
+                return false;
+
             if (!left)
             {
                 //Afterimage for dash
@@ -1332,7 +1369,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spriteBatch.Draw(texShield, NPC.Center - screenPos, null, new Color(100, 0, 0, 0), 0, texShield.Size() / 2, shieldScale, SpriteEffects.None, 0);
             }
 
-            
             if (showPortals && portalSize < 1)
                 portalSize += .02f;
             else if (!showPortals && portalSize > 0)
@@ -1358,7 +1394,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
             }
 
-            //Drawing for the funny
+            //Drawing for the parry attack
             if (parry && parryFireballTimer < 1)
                 parryFireballTimer += .02f;
             else if (!parry && parryFireballTimer > 0)
@@ -1374,6 +1410,30 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     offset = offset.RotatedBy(Main.GameUpdateCount * .02);
                     spriteBatch.Draw(texFireball, NPC.Center + offset - screenPos, null, Color.White, Main.GameUpdateCount * .1f, texFireball.Size() / 2, parryFireballTimer, SpriteEffects.None, 0);
                 }
+            }
+
+            //Portal for the intro
+            if (introTicker > introTickerMax - 180)
+            {
+                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
+                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
+                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
+
+                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
+
+                if (introTicker > introTickerMax - 60 && introPortalSize < 1)
+                    introPortalSize += .02f;
+                else if (introTicker < introTickerMax - 120 && introPortalSize > 0)
+                    introPortalSize -= .02f;
+
+                if (introPortalSize > 0)
+                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * introPortalSize, SpriteEffects.None, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
             }
 
             base.PostDraw(spriteBatch, screenPos, drawColor);

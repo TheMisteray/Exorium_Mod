@@ -57,6 +57,7 @@ namespace ExoriumMod.Core
         public const string MeleeWeapon = Weapons + "Melee/";
         public const string RangerWeapon = Weapons + "Ranger/";
         public const string SummonerWeapon = Weapons + "Summoner/";
+        public const string SummonerWhip = SummonerWeapon + "Whips/";
         //Items ------------------------------
 
         public const string Liquid = Assets + "Liquids/";
@@ -67,6 +68,7 @@ namespace ExoriumMod.Core
 
         public const string Projectile = Assets + "Projectiles/";
         public const string Minion = Projectile + "Minions/";
+        public const string WhipProjectile = Projectile + "Whips/";
 
         public const string Tile = Assets + "Tiles/";
         public const string Decoration = Tile + "Decoation/";

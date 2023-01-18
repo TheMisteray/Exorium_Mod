@@ -46,7 +46,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void SetDefaults()
         {
             NPC.aiStyle = -1;
-            NPC.lifeMax = 333;
+            NPC.lifeMax = 200;
             NPC.damage = 29;
             NPC.defense = 11;
             NPC.knockBackResist = 0f;
@@ -55,8 +55,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.value = 0;
             NPC.npcSlots = 30f;
             NPC.lavaImmune = true;
-            NPC.HitSound = SoundID.NPCHit54;
-            NPC.DeathSound = SoundID.NPCDeath52;
+            NPC.HitSound = SoundID.NPCHit4;
             NPC.timeLeft = NPC.activeTime * 30;
             NPC.buffImmune[BuffID.OnFire] = true;
             NPC.noGravity = false;

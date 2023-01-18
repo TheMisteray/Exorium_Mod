@@ -225,7 +225,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         desired *= 10;
                         Vector2 seek = desired - Projectile.velocity;
                         //divide by time and rate - rate is amount of time to take
-                        Projectile.velocity += seek / 60;
+                        Projectile.velocity += seek / 15;
                         Projectile.velocity.Normalize();
                         //keep constant speed
                         Projectile.velocity *= speed;
