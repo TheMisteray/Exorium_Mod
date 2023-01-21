@@ -29,7 +29,7 @@ namespace ExoriumMod.Content.Buffs.Minions
 
     internal class SparklingWhipTag : ModBuff
     {
-        public override string Texture => AssetDirectory.Buff + Name;
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetStaticDefaults()
         {

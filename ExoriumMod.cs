@@ -51,6 +51,7 @@ namespace ExoriumMod
                 Ref<Effect> flamingSphereRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FlamingSphere", AssetRequestMode.ImmediateLoad).Value);
                 Ref<Effect> shadowmancerShadeRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShadowmancerShade", AssetRequestMode.ImmediateLoad).Value);
                 Ref<Effect> violetPortalRef = new Ref<Effect>(Assets.Request<Effect>("Effects/VioletPortal", AssetRequestMode.ImmediateLoad).Value);
+                Ref<Effect> fireAuraRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FireAura", AssetRequestMode.ImmediateLoad).Value);
 
                 //Screen shader loads
                 Filters.Scene["ExoriumMod:HeatDistortion"] = new Filter(new ScreenShaderData(HeatDistortEffectRef, "Heat"), EffectPriority.High);
@@ -68,6 +69,9 @@ namespace ExoriumMod
 
                 Filters.Scene["ExoriumMod:VioletPortal"] = new Filter(new ScreenShaderData(violetPortalRef, "PortalPass"), EffectPriority.Medium);
                 Filters.Scene["ExoriumMod:VioletPortal"].Load();
+
+                Filters.Scene["ExoriumMod:FireAura"] = new Filter(new ScreenShaderData(fireAuraRef, "P0"), EffectPriority.Low); //WHY DID I LEAVE THE PASS NAME P0 AHHHHHHHHH
+                Filters.Scene["ExoriumMod:FireAura"].Load();
 
                 GameShaders.Misc["FlamingSphere"] = new MiscShaderData(flamingSphereRef, "FlamingSpherePass");
             }
