@@ -196,7 +196,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => Projectile.ai[0] = value;
         }
 
-        private int timer = 60;
+        private int timer = 10;
 
         //draw stuff
         Vector2 oldPos1 = Vector2.Zero;
@@ -209,7 +209,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void AI()
         {
-            if (!(timer > 0))
+            if (!(timer > 0) && Projectile.timeLeft > 120)
             {
                 //Minor homing in expert mode (basic seek behavior)
                 if (Main.expertMode)
@@ -217,7 +217,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     Player player = Main.player[(int)playerTarget];
                     float sqrDist = (player.position - Projectile.position).LengthSquared();
 
-                    if (sqrDist < 360000)
+                    //1000 range
+                    if (sqrDist < 1000000)
                     {
                         float speed = Projectile.velocity.Length();
                         Vector2 desired = player.Center - Projectile.Center;
@@ -225,7 +226,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         desired *= 10;
                         Vector2 seek = desired - Projectile.velocity;
                         //divide by time and rate - rate is amount of time to take
-                        Projectile.velocity += seek / 15;
+                        Projectile.velocity += seek / 10;
                         Projectile.velocity.Normalize();
                         //keep constant speed
                         Projectile.velocity *= speed;

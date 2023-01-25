@@ -22,11 +22,12 @@ float4 PixelShaderFunction(float2 uv : TEXCOORD0) : COLOR0
 
     float2 st3 = st - float2(uTime, uTime);
 
-    color.g -= tex2D(samplerTex2, st2).x;
-    color.g += tex2D(samplerTex2, st3).x * .5;
+    color.r -= tex2D(samplerTex2, st2).x * .1;
+    color.r += tex2D(samplerTex2, st3).x * .05;
 
-    //color.b -= tex2D(samplerTex2, st2).x;
-    //color.b += tex2D(samplerTex2, st3).x * .5;
+    color.g -= .3;
+    color.g -= tex2D(samplerTex2, st2).x * .7;
+    color.g += tex2D(samplerTex2, st3).x * .35;
 
     color.b = 0;
 

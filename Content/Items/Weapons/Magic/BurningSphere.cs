@@ -111,7 +111,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                     }
 
                     Projectile.velocity = (Projectile.velocity * (inertia - 1) + (trajectory/12)) / inertia;
-                    if (Projectile.velocity.Length() > 4)
+                    if (Projectile.velocity.Length() > 5)
                     {
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= 4;
@@ -143,26 +143,11 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override bool PreDraw(ref Color lightColor)
         {
             SpriteBatch spriteBatch = Main.spriteBatch;
-            /*
+            
             var fire = Filters.Scene["ExoriumMod:FlamingSphere"].GetShader().Shader;
             fire.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
             fire.Parameters["sampleTexture3"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
             fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.01f);
-            */
-            var fire = Filters.Scene["ExoriumMod:FireAura"].GetShader().Shader;
-            fire.Parameters["fireTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "fire01").Value);
-            fire.Parameters["noiseTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "noise01").Value);
-            fire.Parameters["alphaTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "alpha01").Value);
-            fire.Parameters["frameTime"].SetValue(1);
-            fire.Parameters["scrollSpeeds"].SetValue(new Vector3(1, 5, 10));
-            fire.Parameters["scales"].SetValue(new Vector3(1,4,16));
-            fire.Parameters["padding"].SetValue(2);
-            fire.Parameters["distortion1"].SetValue(new Vector2(0,1));
-            fire.Parameters["distortion2"].SetValue(new Vector2(0, 3));
-            fire.Parameters["distortion3"].SetValue(new Vector2(0, 5));
-            fire.Parameters["distortionScale"].SetValue(1);
-            fire.Parameters["distortion3"].SetValue(2);
-
 
             spriteBatch.End();
             spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);

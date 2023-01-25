@@ -1,140 +1,46 @@
-﻿/////////////
-// GLOBALS //
-/////////////
-Texture2D fireTexture : register(t0);
-Texture2D noiseTexture : register(t1);
-Texture2D alphaTexture : register(t2);
-SamplerState SampleType;
-SamplerState SampleType2; //Uses clamp
+﻿texture sampleTexture;
+sampler2D samplerTex = sampler_state { texture = <sampleTexture>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = wrap; AddressV = wrap; };
 
-cbuffer MatrixBuffer
+texture noiseTexture;
+sampler2D noiseTex = sampler_state { texture = <noiseTexture>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = wrap; AddressV = wrap; };
+
+texture gradientTexture;
+sampler2D gradientTex= sampler_state { texture = <gradientTexture>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = wrap; AddressV = wrap; };;
+
+float4 brighter_color : hint_color = float4(1.0, 0.4, 0.0, 1.0);
+float4 middle_color : hint_color = float4(0.95, 0.2, 0.0, 1.0);
+float4 darker_color : hint_color = float4(0.64, 0.2, 0.05, 1.0);
+
+float spread = 0.5;
+float uTime;
+
+float4 MainPS(float2 uv : TEXCOORD0) : COLOR0
 {
-	matrix worldMatrix;
-	matrix viewMatrix;
-	matrix projectionMatrix;
-};
+	float4 color = tex2D(samplerTex, uv);
+	float2 uv2 = uv + float2(0.0, uTime);
 
-cbuffer NoiseBuffer
-{
-	float frameTime;
-	float3 scrollSpeeds;
-	float3 scales;
-	float padding;
-};
+	float noise_value = tex2D(noiseTex, uv2);
+	// .yx bc free gradient software can't do vertical
+	float gradient_value = tex2D(gradientTex, uv.yx).x;
 
-cbuffer DistortionBuffer
-{
-	float2 distortion1;
-	float2 distortion2;
-	float2 distortion3;
-	float distortionScale;
-	float distortionBias;
-};
+	gradient_value -= smoothstep(spread, spread + 0.5, length(uv + float2(-0.5, -0.5)) / spread);
 
-struct VertexShaderInput
-{
-	float4 position : POSITION0;
-	float2 tex : TEXCOORD0;
-};
+	float step1 = smoothstep(noise_value, 1, gradient_value);
+	float step2 = smoothstep(noise_value, 1, gradient_value - 0.2);
+	float step3 = smoothstep(noise_value, 1, gradient_value - 0.4);
 
-struct PixelShaderInput
-{
-	float4 position : SV_POSITION;
-	float2 tex : TEXCOORD0;
-	float2 texCoords1 : TEXCOORD1;
-	float2 texCoords2 : TEXCOORD2;
-	float2 texCoords3 : TEXCOORD3;
-};
+	float3 bd_color = lerp(brighter_color.rgb, darker_color.rgb, step1 - step2);
 
-PixelShaderInput MainVS(VertexShaderInput input)
-{
-	PixelShaderInput output;
+	color = float4(bd_color, step1) * color;
+	color.rgb = lerp(color.rgb, middle_color.rgb, step2 - step3);
 
-	//output.Position = mul(input.Position, WorldViewProjection);
-	//output.Color = input.Color;
-
-	// Change the position vector to be 4 units for proper matrix calculations.
-	input.position.w = 1.0f;
-
-	// Calculate the position of the vertex against the world, view, and projection matrices.
-	output.position = mul(input.position, worldMatrix);
-	output.position = mul(output.position, viewMatrix);
-	output.position = mul(output.position, projectionMatrix);
-
-	// Store the texture coordinates for the pixel shader.
-	output.tex = input.tex;
-
-	// Compute texture coordinates for first noise texture using the first scale and upward scrolling speed values.
-	output.texCoords1 = (input.tex * scales.x);
-	output.texCoords1.y = output.texCoords1.y + (frameTime * scrollSpeeds.x);
-
-	// Compute texture coordinates for second noise texture using the second scale and upward scrolling speed values.
-	output.texCoords2 = (input.tex * scales.y);
-	output.texCoords2.y = output.texCoords2.y + (frameTime * scrollSpeeds.y);
-
-	// Compute texture coordinates for third noise texture using the third scale and upward scrolling speed values.
-	output.texCoords3 = (input.tex * scales.z);
-	output.texCoords3.y = output.texCoords3.y + (frameTime * scrollSpeeds.z);
-
-	return output;
-}
-
-float4 MainPS(PixelShaderInput input) : SV_TARGET
-{
-	float4 noise1;
-	float4 noise2;
-	float4 noise3;
-	float4 finalNoise;
-	float perturb;
-	float2 noiseCoords;
-	float4 fireColor;
-	float4 alphaColor;
-
-	// Sample the same noise texture using the three different texture coordinates to get three different noise scales.
-	noise1 = noiseTexture.Sample(SampleType, input.texCoords1);
-	noise2 = noiseTexture.Sample(SampleType, input.texCoords2);
-	noise3 = noiseTexture.Sample(SampleType, input.texCoords3);
-
-	// Move the noise from the (0, 1) range to the (-1, +1) range.
-	noise1 = (noise1 - 0.5f) * 2.0f;
-	noise2 = (noise2 - 0.5f) * 2.0f;
-	noise3 = (noise3 - 0.5f) * 2.0f;
-
-	// Distort the three noise x and y coordinates by the three different distortion x and y values.
-	noise1.xy = noise1.xy * distortion1.xy;
-	noise2.xy = noise2.xy * distortion2.xy;
-	noise3.xy = noise3.xy * distortion3.xy;
-
-	// Combine all three distorted noise results into a single noise result.
-	finalNoise = noise1 + noise2 + noise3;
-	
-	// Perturb the input texture Y coordinates by the distortion scale and bias values.  
-	// The perturbation gets stronger as you move up the texture which creates the flame flickering at the top effect.
-	perturb = ((1.0f - input.tex.y) * distortionScale) + distortionBias;
-
-	// Now create the perturbed and distorted texture sampling coordinates that will be used to sample the fire color texture.
-	noiseCoords.xy = (finalNoise.xy * perturb) + input.tex.xy;
-
-	// Sample the color from the fire texture using the perturbed and distorted texture sampling coordinates.
-	// Use the clamping sample state instead of the wrap sample state to prevent flames wrapping around.
-	fireColor = fireTexture.Sample(SampleType2, noiseCoords.xy);
-
-	// Sample the alpha value from the alpha texture using the perturbed and distorted texture sampling coordinates.
-	// This will be used for transparency of the fire.
-	// Use the clamping sample state instead of the wrap sample state to prevent flames wrapping around.
-	alphaColor = alphaTexture.Sample(SampleType2, noiseCoords.xy);
-
-	// Set the alpha blending of the fire to the perturbed and distored alpha texture value.
-	fireColor.a = alphaColor;
-
-	return fireColor;
+	return color;
 }
 
 technique BasicColorDrawing
 {
-	pass P0
+	pass FlamesPass
 	{
-		VertexShader = compile vs_2_0 MainVS();
 		PixelShader = compile ps_2_0 MainPS();
 	}
 };

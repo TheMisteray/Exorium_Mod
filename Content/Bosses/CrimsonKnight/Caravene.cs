@@ -17,9 +17,6 @@ using Terraria.Audio;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
-    //TODO:
-    //Sounds
-    //
     class Caravene : ModNPC
     {
         public override string Texture => AssetDirectory.CrimsonKnight + Name + "_Hitbox";
@@ -108,6 +105,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private Vector2 bladeSpawnOrigin = Vector2.Zero;
         private int bladeSpawnQuadrant = 0;
         private int bladeSpawnCount = 0;
+        private float auraAlpha = 0;
 
 
         //Phase trackers
@@ -117,6 +115,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private float introPortalSize = 0;
 
         private bool exitAnimation = false;
+        private float exitTicker = 0;
+        private float exitPortalSize = 0;
 
         private int phase = 1;
         private bool phaseTransition = false;
@@ -184,15 +184,22 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 NPC.TargetClosest(true);
                 NPC.netUpdate = true;
                 player = Main.player[NPC.target];
-                if (!player.active || player.dead || (NPC.position - player.position).Length() > 6000)
+                if (!player.active || player.dead || (NPC.position - player.position).Length() > 6000 || !player.getRect().Intersects(ExoriumWorld.FallenTowerRect))
                 {
-                    //TODO: this still will use the same exit if the player is far
+                    if (!player.active || player.dead)//Player died
+                    {
+                        //A valiant effort
+                    }
+                    else//Player ran away
+                    {
+                        //Coward...
+                    }
                     exitAnimation = true;
-                    return;
                 }
             }
             #endregion
 
+            #region Action Choosing
             //Loop counter
             loopCounter++;
             if (loopCounter >= 20)
@@ -207,6 +214,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             else if (phaseTransition)
             {
                 PhaseTransition();
+                return;
+            }
+            else if (exitAnimation)
+            {
+                ExitAI();
                 return;
             }
             else if (wait > 0) //What to do while waiting
@@ -288,7 +300,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 phase = 2;
                 phaseTransition = true;
             }
+            #endregion
 
+            #region Actions
             //Action to make
             switch (Action)
             {
@@ -965,9 +979,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
 
             actionTimer++;
+#endregion
         }
 
-        #region Action Methods
+        #region Action Helper Methods
         private void ChooseMovement()
         {
             if (Main.rand.NextBool(2))
@@ -1172,8 +1187,22 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
+        //Play phase transition
         private void PhaseTransition()
         {
+            if (transitionCounter >= 260)
+            {
+                auraAlpha -= 9;
+                if (auraAlpha < 0)
+                    auraAlpha = 0;
+            }
+            else
+            {
+                auraAlpha += 9;
+                if (auraAlpha > 255)
+                    auraAlpha = 255;
+            }
+
             if (transitionCounter == 0)
             {
                 //Reset Trackers
@@ -1191,22 +1220,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 NPC.noGravity = false;
                 noContactDamage = false;
 
-                foreach(Projectile p in Main.projectile) //Erase all projectiles because cheap hits
-                {
-                    if (p.type == ProjectileType<FlameTrail>() ||
-                        p.type == ProjectileType<CaraveneBladeProj>() ||
-                        p.type == ProjectileType<CaraveneBladeProjHorizontal>() ||
-                        p.type == ProjectileType<CaraveneFireball>() || 
-                        p.type == ProjectileType<GridFire>() ||
-                        p.type == ProjectileType<gridCollision>() ||
-                        p.type == ProjectileType<gridShot>() ||
-                        p.type == ProjectileType<FlamingSphere>() ||
-                        p.type == ProjectileType<FireballRing>())
-                    {
-                        p.active = false;
-                        p.Kill();
-                    }
-                }
+                RemoveProjectiles();
             }
             else if (transitionCounter == 60)
             {
@@ -1248,8 +1262,45 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             transitionCounter++;
         }
 
+        //Play exit animation
+        private void ExitAI()
+        {
+            exitTicker++;
+
+            if (exitTicker > 210)
+            {
+                NPC.active = false;
+            }
+        }
+
+        //Kill all boss projectiles so no cheap hits when camera is moved
+        private void RemoveProjectiles()
+        {
+            foreach (Projectile p in Main.projectile)
+            {
+                if (p.type == ProjectileType<FlameTrail>() ||
+                    p.type == ProjectileType<CaraveneBladeProj>() ||
+                    p.type == ProjectileType<CaraveneBladeProjHorizontal>() ||
+                    p.type == ProjectileType<CaraveneFireball>() ||
+                    p.type == ProjectileType<GridFire>() ||
+                    p.type == ProjectileType<gridCollision>() ||
+                    p.type == ProjectileType<gridShot>() ||
+                    p.type == ProjectileType<FlamingSphere>() ||
+                    p.type == ProjectileType<FireballRing>() || 
+                    p.type == ProjectileType<ReboundingSword>() ||
+                    p.type == ProjectileType<backupFireball>() ||
+                    p.type == ProjectileType<ReboundingSword>() ||
+                    p.type == ProjectileType<FlametoungeBeam>())
+                {
+                    p.timeLeft = 1;
+                    p.Kill();
+                }
+            }
+        }
+
         public override void OnKill()
         {
+            RemoveProjectiles();
             if (Main.netMode != NetmodeID.MultiplayerClient)
                 NPC.NewNPCDirect(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaraveneBattleIntermission>(), default, default, 300);
         }
@@ -1260,6 +1311,26 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             int ySourceHeight = (int)(NPC.frameCounter / 10) * 442;
             int xSourceHeight = (int)(frameX * 412);
+
+            //Fire Aura
+            var fire = Filters.Scene["ExoriumMod:FireAura"].GetShader().Shader;
+            fire.Parameters["noiseTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
+            fire.Parameters["gradientTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "basicGradient").Value);
+            fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
+
+            if (true)
+            {
+                Texture2D auraTex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "Aura").Value;
+                Color alpha = new Color(255, 255, 255, auraAlpha);
+
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
+
+                spriteBatch.Draw(auraTex, NPC.Center - screenPos + new Vector2(0, -150), null, Color.White, 0, auraTex.Size() / 2, 1.8f, 0, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+            }
 
             //ShieldDown needs frames to loop backwards
             if (frameX == 7 && shieldDown)
@@ -1274,7 +1345,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             else
                 alphaColor = drawColor;
 
-            if (introTicker > introTickerMax - 90) //Cut early for now as there was wierdness with the alpha values of the intro
+            if (introTicker > introTickerMax - 90 || exitTicker > 90) //Cut early for now as there was wierdness with the alpha values of the intro
                 return false;
 
             if (!left)
@@ -1431,6 +1502,30 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 if (introPortalSize > 0)
                     spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * introPortalSize, SpriteEffects.None, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+            }
+
+            //Portal for despawn
+            if (exitTicker > 60)
+            {
+                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
+                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
+                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
+
+                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
+
+                if (exitTicker > 60 && exitTicker < 120 && exitPortalSize < 1)
+                    exitPortalSize += .02f;
+                else if (exitTicker > 130 && exitPortalSize > 0)
+                    exitPortalSize -= .02f;
+
+                if (exitPortalSize > 0)
+                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * exitPortalSize, SpriteEffects.None, 0);
 
                 spriteBatch.End();
                 spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);

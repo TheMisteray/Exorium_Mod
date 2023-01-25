@@ -70,7 +70,7 @@ namespace ExoriumMod
                 Filters.Scene["ExoriumMod:VioletPortal"] = new Filter(new ScreenShaderData(violetPortalRef, "PortalPass"), EffectPriority.Medium);
                 Filters.Scene["ExoriumMod:VioletPortal"].Load();
 
-                Filters.Scene["ExoriumMod:FireAura"] = new Filter(new ScreenShaderData(fireAuraRef, "P0"), EffectPriority.Low); //WHY DID I LEAVE THE PASS NAME P0 AHHHHHHHHH
+                Filters.Scene["ExoriumMod:FireAura"] = new Filter(new ScreenShaderData(fireAuraRef, "FlamesPass"), EffectPriority.Low); //WHY DID I LEAVE THE PASS NAME P0 AHHHHHHHHH
                 Filters.Scene["ExoriumMod:FireAura"].Load();
 
                 GameShaders.Misc["FlamingSphere"] = new MiscShaderData(flamingSphereRef, "FlamingSpherePass");
