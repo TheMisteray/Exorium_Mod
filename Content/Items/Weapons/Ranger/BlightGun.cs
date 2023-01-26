@@ -28,7 +28,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Item.useAnimation = 24;
             Item.useStyle = 5;
             Item.noMelee = true;
-            Item.knockBack = 6;
+            Item.knockBack = 4;
             Item.value = Item.sellPrice(silver: 68); ;
             Item.rare = 2;
             Item.UseSound = SoundID.Item11;

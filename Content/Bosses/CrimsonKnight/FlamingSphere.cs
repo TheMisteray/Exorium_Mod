@@ -113,7 +113,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Projectile.Size = new Vector2(50);
                 Projectile.Center = Projectile.position;
 
-                SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+                SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
                 exploded = true;
             }
