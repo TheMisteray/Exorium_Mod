@@ -452,8 +452,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             }
                         }
 
-                        //SOUND explosion or swing sound
-
                         // dust telegraph
                         for (int i = 0; i < 100; i++)
                         {

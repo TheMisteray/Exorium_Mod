@@ -20,8 +20,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         {
             Item.damage = 19;
             Item.DamageType = DamageClass.Melee;
-            Item.width = 10;
-            Item.height = 10;
+            Item.width = 50;
+            Item.height = 50;
             Item.useTime = 28;
             Item.useAnimation = 28;
             Item.useStyle = 1;

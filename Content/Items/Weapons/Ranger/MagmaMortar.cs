@@ -33,7 +33,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Item.useStyle = 5;
             Item.noMelee = true;
             Item.knockBack = 7;
-            Item.value = Item.sellPrice(gold: 2, silver: 20); ;
+            Item.value = Item.sellPrice(gold: 2, silver: 20);
             Item.rare = 3;
             Item.UseSound = SoundID.Item61;
             Item.autoReuse = true;
@@ -63,7 +63,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
     {
         public override string Texture => AssetDirectory.CrimsonKnight + "FlamingSphere";
 
-        public override void SetStaticDefaults()
+        public override void SetDefaults()
         {
             Projectile.width = 32;
             Projectile.height = 32;
@@ -88,17 +88,23 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                     Vector2 positionUp = Projectile.Center + new Vector2(i, 0);
                     Vector2 positionDown = Projectile.Center + new Vector2(i, 0);
                     Vector2 truePosition = Projectile.Center + new Vector2(i, 0);
+
+                    bool startInTile = Main.tile[truePosition.ToTileCoordinates().X, truePosition.ToTileCoordinates().Y].HasTile;
                     for (int j = 0; j < 10; j++)
                     {
-                        if (Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasTile)
+                        //If leaves or enters solid
+                        if ((!startInTile && Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasTile) ||
+                            startInTile && !Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasTile)
                         {
+                            if (startInTile)
+                                Projectile.rotation = MathHelper.Pi;
                             truePosition = positionUp;
                             return;
                         }
                         else
                             positionUp += new Vector2(0, -16);
 
-                        if (Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasTile)
+                        if (!startInTile && Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasTile)
                         {
                             truePosition = positionDown;
                             return;
@@ -110,6 +116,20 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), truePosition, Vector2.Zero, ProjectileType<LingeringFlame>(), Projectile.damage, 0, Projectile.owner);
                 }
             }
+
+            //Dust
+            for (int i = 0; i < 20; i++)
+            {
+                int dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.SolarFlare, -i * .5f, 0f, 0, default, 1 + Main.rand.NextFloat(-.5f, .5f));
+                Dust d1 = Main.dust[dust];
+                d1.noGravity = true;
+                d1.color = new Color(184, 58, 24);
+                dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.SolarFlare, i * .5f, 0f, 0, default, 1 + Main.rand.NextFloat(-.5f, .5f));
+                d1 = Main.dust[dust];
+                d1.noGravity = true;
+                d1.color = new Color(184, 58, 24);
+            }
+
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
             base.Kill(timeLeft);
@@ -142,6 +162,10 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 8;
+        }
+
+        public override void SetDefaults()
+        {
             Projectile.width = 34;
             Projectile.height = 28;
             Projectile.friendly = true;
