@@ -34,7 +34,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Item.noMelee = true;
             Item.knockBack = 7;
             Item.value = Item.sellPrice(gold: 2, silver: 20);
-            Item.rare = 3;
+            Item.rare = 4;
             Item.UseSound = SoundID.Item61;
             Item.autoReuse = true;
             Item.shoot = ProjectileType<MagmaBlob>();

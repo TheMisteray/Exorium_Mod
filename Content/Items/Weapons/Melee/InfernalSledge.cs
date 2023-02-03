@@ -34,7 +34,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Item.useAnimation = 28;
             Item.useStyle = 1;
             Item.knockBack = 6;
-            Item.rare = 3;
+            Item.rare = 4;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = false;
             Item.value = Item.sellPrice(gold: 2, silver: 20);
@@ -268,6 +268,11 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
             Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Torch, null, 0, default, 2);
             dust.noGravity = true;
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.OnFire, 420);
         }
     }
 }

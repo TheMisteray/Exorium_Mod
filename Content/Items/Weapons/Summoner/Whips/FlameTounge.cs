@@ -37,7 +37,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
             Item.DefaultToWhip(ProjectileType<FlameToungeProjectile>(), 20, 2, 4, 40);
 
             Item.shootSpeed = 4;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.LightRed;
             Item.channel = true;
             Item.UseSound = null;
         }
