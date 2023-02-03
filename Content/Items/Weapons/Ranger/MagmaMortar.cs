@@ -18,18 +18,18 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Launchs Explosive Blobs of Lava\n" +
-                "Uses 5 gel per use");
+            Tooltip.SetDefault("Launches explosive blobs of lava\n" +
+                "Consumes 5 gel per use");
         }
 
         public override void SetDefaults()
         {
-            Item.damage = 21;
+            Item.damage = 27;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 46;
             Item.height = 36;
-            Item.useTime = 45;
-            Item.useAnimation = 45;
+            Item.useTime = 60;
+            Item.useAnimation = 60;
             Item.useStyle = 5;
             Item.noMelee = true;
             Item.knockBack = 7;
@@ -38,7 +38,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Item.UseSound = SoundID.Item61;
             Item.autoReuse = true;
             Item.shoot = ProjectileType<MagmaBlob>();
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 14f;
             Item.useAmmo = AmmoID.Gel;
         }
 
@@ -54,8 +54,18 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             int index = player.FindItem(ItemID.Gel);
             if (index != -1) //Should never be the case, but just so there are no problems
-                player.inventory[index].stack -= 4;
+            {
+                if (player.inventory[index].stack >= 5)
+                    player.inventory[index].stack -= 4;
+                else
+                    player.inventory[index].stack = 1;
+            }
             base.OnConsumeAmmo(ammo, player);
+        }
+
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(-10, 0);
         }
     }
 
@@ -65,8 +75,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Projectile.width = 32;
-            Projectile.height = 32;
+            Projectile.width = 24;
+            Projectile.height = 24;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.timeLeft = 300;
@@ -74,55 +84,61 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void AI()
         {
-            Projectile.velocity.Y -= .02f;
-            Projectile.velocity.X *= .998f;
+            Projectile.velocity.Y += .16f;
+            Projectile.velocity.X *= .99f;
         }
 
         public override void Kill(int timeLeft)
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                for (int i = -112; i <= 112; i+=16)
+                for (int i = -112; i <= 112; i+=32)
                 {
                     //Checks for tiles
                     Vector2 positionUp = Projectile.Center + new Vector2(i, 0);
                     Vector2 positionDown = Projectile.Center + new Vector2(i, 0);
                     Vector2 truePosition = Projectile.Center + new Vector2(i, 0);
 
+                    bool found = false;
                     bool startInTile = Main.tile[truePosition.ToTileCoordinates().X, truePosition.ToTileCoordinates().Y].HasTile;
-                    for (int j = 0; j < 10; j++)
+                    /*for (int j = 0; j < 10; j++)
                     {
+                        if (found)
+                            continue;
                         //If leaves or enters solid
-                        if ((!startInTile && Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasTile) ||
-                            startInTile && !Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasTile)
+                        if ((!startInTile && Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasUnactuatedTile) ||
+                            startInTile && !Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasUnactuatedTile)
                         {
                             if (startInTile)
                                 Projectile.rotation = MathHelper.Pi;
                             truePosition = positionUp;
+                            found = true;
                         }
                         else
                             positionUp += new Vector2(0, -16);
 
-                        if (!startInTile && Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasTile)
+                        if (!startInTile && Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasUnactuatedTile ||
+                            startInTile && !Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasUnactuatedTile)
                         {
                             truePosition = positionDown;
+                            found = true;
                         }
                         else
                             positionDown += new Vector2(0, 16);
-                    }
+                    }*/
 
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), truePosition, Vector2.Zero, ProjectileType<LingeringFlame>(), Projectile.damage, 0, Projectile.owner);
                 }
             }
 
             //Dust
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 40; i++)
             {
-                int dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.SolarFlare, -i * .5f, 0f, 0, default, 1 + Main.rand.NextFloat(-.5f, .5f));
+                int dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.SolarFlare, -i * .3f, 0f, 0, default, 1);
                 Dust d1 = Main.dust[dust];
                 d1.noGravity = true;
                 d1.color = new Color(184, 58, 24);
-                dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.SolarFlare, i * .5f, 0f, 0, default, 1 + Main.rand.NextFloat(-.5f, .5f));
+                dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.SolarFlare, i * .3f, 0f, 0, default, 1);
                 d1 = Main.dust[dust];
                 d1.noGravity = true;
                 d1.color = new Color(184, 58, 24);
@@ -145,7 +161,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             spriteBatch.End();
             spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
 
-            spriteBatch.Draw(Request<Texture2D>(AssetDirectory.CrimsonKnight + "FlamingSphere").Value, Projectile.Center - Main.screenPosition, null, Color.White, 0, Projectile.Size / 2, .4f, 0, 0);
+            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "FlamingSphere").Value;
+            spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, .3f, 0, 0);
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
@@ -169,15 +186,25 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.timeLeft = 180;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
 
         public override void AI()
         {
             if (Projectile.timeLeft < 60)
             {
-                Projectile.alpha -= 3;
+                Projectile.alpha += 4;
+            }
+
+            Projectile.frameCounter++;
+
+            //Frame loop
+            if (Projectile.frameCounter >= 8)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = (Projectile.frame + 1) % 3;
             }
         }
     }

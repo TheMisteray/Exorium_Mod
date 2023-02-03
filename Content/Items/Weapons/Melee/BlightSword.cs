@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blighted Greatsword");
-            Tooltip.SetDefault("A massive two-handed weapon \n" +
+            Tooltip.SetDefault("A massive two-handed weapon\n" +
                 "Hold to charge a stronger swing");
         }
 
