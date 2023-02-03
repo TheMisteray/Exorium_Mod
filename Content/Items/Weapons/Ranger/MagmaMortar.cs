@@ -99,7 +99,6 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                             if (startInTile)
                                 Projectile.rotation = MathHelper.Pi;
                             truePosition = positionUp;
-                            return;
                         }
                         else
                             positionUp += new Vector2(0, -16);
@@ -107,7 +106,6 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                         if (!startInTile && Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasTile)
                         {
                             truePosition = positionDown;
-                            return;
                         }
                         else
                             positionDown += new Vector2(0, 16);
