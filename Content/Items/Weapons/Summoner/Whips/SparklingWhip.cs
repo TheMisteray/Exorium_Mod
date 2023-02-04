@@ -257,6 +257,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 			Projectile.friendly = true;
 			Projectile.tileCollide = true;
 			Projectile.ignoreWater = false;
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		public override void AI()

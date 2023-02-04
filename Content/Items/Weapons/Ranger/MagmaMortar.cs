@@ -19,6 +19,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Launches explosive blobs of lava\n" +
+                "Sets fires nearby\n" +
                 "Consumes 5 gel per use");
         }
 
@@ -98,36 +99,49 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                     Vector2 positionUp = Projectile.Center + new Vector2(i, 0);
                     Vector2 positionDown = Projectile.Center + new Vector2(i, 0);
                     Vector2 truePosition = Projectile.Center + new Vector2(i, 0);
+                    Vector2 origin = truePosition;
 
                     bool found = false;
-                    bool startInTile = Main.tile[truePosition.ToTileCoordinates().X, truePosition.ToTileCoordinates().Y].HasTile;
-                    /*for (int j = 0; j < 10; j++)
+                    bool flip = false;
+                    Tile start = Main.tile[truePosition.ToTileCoordinates().X, truePosition.ToTileCoordinates().Y];
+                    bool startInTile = start.HasUnactuatedTile && Main.tileSolid[(int)start.BlockType];
+                    for (int j = 0; j < 10; j++)
                     {
                         if (found)
                             continue;
                         //If leaves or enters solid
-                        if ((!startInTile && Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasUnactuatedTile) ||
-                            startInTile && !Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y].HasUnactuatedTile)
+                        Tile tile = Main.tile[positionUp.ToTileCoordinates().X, positionUp.ToTileCoordinates().Y];
+                        Tile tileDown = Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y];
+                        if ((!startInTile && tile.HasUnactuatedTile) && Main.tileSolid[((int)tile.BlockType)] ||
+                            startInTile && !tile.HasUnactuatedTile)
                         {
-                            if (startInTile)
-                                Projectile.rotation = MathHelper.Pi;
+                            if (!startInTile)
+                            {
+                                positionUp += new Vector2(0, 16);
+                                flip = true;
+                            }
                             truePosition = positionUp;
                             found = true;
                         }
                         else
                             positionUp += new Vector2(0, -16);
 
-                        if (!startInTile && Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasUnactuatedTile ||
-                            startInTile && !Main.tile[positionDown.ToTileCoordinates().X, positionDown.ToTileCoordinates().Y].HasUnactuatedTile)
+                        if (!startInTile && tileDown.HasUnactuatedTile && Main.tileSolid[((int)tileDown.BlockType)] ||
+                            startInTile && !tileDown.HasUnactuatedTile)
                         {
+                            if (!startInTile)
+                                positionDown += new Vector2(0, -16);
+                            else
+                                flip = true;
                             truePosition = positionDown;
                             found = true;
                         }
                         else
                             positionDown += new Vector2(0, 16);
-                    }*/
+                    }
 
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), truePosition, Vector2.Zero, ProjectileType<LingeringFlame>(), Projectile.damage, 0, Projectile.owner);
+                    if (found)
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), truePosition, Vector2.Zero, ProjectileType<LingeringFlame>(), Projectile.damage, 0, Projectile.owner, flip? 1:0);
                 }
             }
 
@@ -168,6 +182,17 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
             return false;
         }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.OnFire, 420);
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            fallThrough = false;
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+        }
     }
 
     class LingeringFlame : ModProjectile
@@ -206,6 +231,14 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 Projectile.frameCounter = 0;
                 Projectile.frame = (Projectile.frame + 1) % 3;
             }
+
+            if (Projectile.ai[0] == 1)
+                Projectile.rotation = MathHelper.Pi;
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.OnFire, 420);
         }
     }
 }

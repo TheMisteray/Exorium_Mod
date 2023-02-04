@@ -24,10 +24,12 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
         public override void SetStaticDefaults()
         {
             //CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-            Tooltip.SetDefault("8 summon tag damage\n"
+            Tooltip.SetDefault("7 summon tag damage\n"
                 + "Your summons will focus struck enemies\n" +
                 "It flails of it's own accord\n" +
-                "Hold to control it");
+                "Lights targets ablaze and slightly lowers their defense\n" +
+                "Your summons amplify this burn effect" + 
+                "Hold to control the tounge");
         }
 
         public override void SetDefaults()
@@ -228,6 +230,8 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
+            target.AddBuff(BuffType<SparklingWhipTag>(), 420);
             target.AddBuff(BuffID.OnFire, 420);
         }
     }
