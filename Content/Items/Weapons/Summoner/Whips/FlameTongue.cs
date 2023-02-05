@@ -36,7 +36,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
         {
             // Projectile method quickly sets the whip's properties.
             // Mouse over to see its parameters.
-            Item.DefaultToWhip(ProjectileType<FlameToungeProjectile>(), 20, 2, 4, 40);
+            Item.DefaultToWhip(ProjectileType<FlameToungeProjectile>(), 12, 2, 4, 40);
 
             Item.shootSpeed = 4;
             Item.rare = ItemRarityID.LightRed;

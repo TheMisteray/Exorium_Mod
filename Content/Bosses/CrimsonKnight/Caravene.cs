@@ -1158,21 +1158,21 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 introTicker = 480;
                 introTickerMax = introTicker;
+
+                foreach (Player player in Main.player)
+                {
+                    //Set each player's screen target if not set
+                    if ((player.Center - NPC.Center).Length() < 3000 && player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget == Vector2.Zero)
+                    {
+                        player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget = NPC.Center;
+                        player.GetModPlayer<ExoriumPlayer>().ScreenMoveTime = introTicker;
+                    }
+                }
             }
 
             introTicker--;
             if (introTicker <= 0)
                 introAnimation = false;
-            
-            foreach (Player player in Main.player)
-            {
-                //Set each player's screen target if not set
-                if ((player.Center - NPC.Center).Length() < 3000 && player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget == Vector2.Zero)
-                {
-                    player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget = NPC.Center;
-                    player.GetModPlayer<ExoriumPlayer>().ScreenMoveTime = introTicker;
-                }
-            }
 
             //TODO: This changes based on past fights
             if (introTicker == introTickerMax - 180) //3 seconds after

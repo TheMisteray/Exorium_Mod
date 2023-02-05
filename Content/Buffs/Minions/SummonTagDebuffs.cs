@@ -14,14 +14,14 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public bool markedBySparklingWhip;
 
-        public bool markedByFlameTounge;
+        public bool markedByFlameTongue;
 
-        public bool flameToungeBurn;
+        public bool flameTongueBurn;
 
         public override void ResetEffects(NPC npc)
         {
             markedBySparklingWhip = false;
-            markedByFlameTounge = false;
+            markedByFlameTongue = false;
         }
 
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -31,17 +31,21 @@ namespace ExoriumMod.Content.Buffs.Minions
             {
                 if (markedBySparklingWhip)
                     damage += 8;
-                if (markedBySparklingWhip)
+                if (markedByFlameTongue)
                 {
                     damage += 7;
-                    npc.AddBuff(BuffType<FlameToungeBurn>(), 90);
+                    npc.AddBuff(BuffType<FlameTongueBurn>(), 90);
                 }
             }
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
-            if (flameToungeBurn)
+            if (markedByFlameTongue)
+            {
+                npc.defense -= 5;
+            }
+            if (flameTongueBurn)
             {
                 npc.lifeRegen -= 40;
             }
@@ -65,7 +69,7 @@ namespace ExoriumMod.Content.Buffs.Minions
         }
     }
 
-    class FlameToungeTag : ModBuff
+    class FlameTongueTag : ModBuff
     {
         public override string Texture => AssetDirectory.Invisible;
 
@@ -76,17 +80,17 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<SummonTagDebuffs>().markedByFlameTounge = true;
+            npc.GetGlobalNPC<SummonTagDebuffs>().markedByFlameTongue = true;
         }
     }
 
-    class FlameToungeBurn : ModBuff
+    class FlameTongueBurn : ModBuff
     {
         public override string Texture => AssetDirectory.Invisible;
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<SummonTagDebuffs>().flameToungeBurn = true;
+            npc.GetGlobalNPC<SummonTagDebuffs>().flameTongueBurn = true;
         }
     }
 }
