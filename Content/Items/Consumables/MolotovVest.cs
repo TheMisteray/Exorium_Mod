@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Consumables
 {
@@ -16,7 +17,7 @@ namespace ExoriumMod.Content.Items.Consumables
         {
             Tooltip.SetDefault("\"A masterful invention\"\n" +
                 "Don't use near any structures you care about");
-            base.SetStaticDefaults();
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 9;
         }
 
         public override void SetDefaults()

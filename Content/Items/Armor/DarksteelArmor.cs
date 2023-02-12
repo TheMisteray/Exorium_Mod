@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Armor
 {
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Armor
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("4% increased damage");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
@@ -64,6 +66,7 @@ namespace ExoriumMod.Content.Items.Armor
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("5% increased movement speed");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
@@ -97,6 +100,7 @@ namespace ExoriumMod.Content.Items.Armor
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("15% increased movement speed");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

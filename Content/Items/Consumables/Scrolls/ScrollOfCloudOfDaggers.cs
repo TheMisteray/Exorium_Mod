@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Consumables.Scrolls
 {
@@ -17,6 +18,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
         {
             Tooltip.SetDefault("Casts Cloud of Daggers");
             DisplayName.SetDefault("Spell Scroll: Cloud of Daggers");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 
         public override void SetDefaults()

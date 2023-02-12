@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using System;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -19,6 +20,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Tooltip.SetDefault("Inflicts Frostburn \n" +
                 "Striking targets has a chance to build up energy up to 5 times \n" +
                 "Right click to release the built up energy");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

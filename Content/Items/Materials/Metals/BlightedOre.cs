@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -11,6 +12,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blightsteel Ore");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
         }
 
         public override void SetDefaults()

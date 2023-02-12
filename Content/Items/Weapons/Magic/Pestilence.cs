@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         {
             DisplayName.SetDefault("Tome of Pestilence");
             Tooltip.SetDefault("Shoots a trail of blight specks");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

@@ -11,6 +11,7 @@ using ExoriumMod.Helpers;
 using ReLogic.Content;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
+using ExoriumMod.Content.Biomes;
 
 namespace ExoriumMod.Content.Bosses.BlightedSlime
 {
@@ -610,8 +611,11 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.Add(
-            new FlavorTextBestiaryInfoElement("A mass formed of an ooze-like substance quite similar to the metal it coagulated into upon defeat. It shares the same desire to devour as others of its ilk."));
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+            new FlavorTextBestiaryInfoElement("A mass formed of an ooze-like substance quite similar to the metal it coagulated into upon defeat. It shares the same desire to devour as others of its ilk."),
+            new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<DeadlandBiome>().ModBiomeBestiaryInfoElement)
+            });
         }
     }
 }

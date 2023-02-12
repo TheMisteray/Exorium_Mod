@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -11,6 +12,7 @@ namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.ShadowmancerTile
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Becomes impassable in the presence of Shadowmancers");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

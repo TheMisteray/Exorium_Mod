@@ -6,6 +6,7 @@ using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
 using ExoriumMod.Helpers;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -17,6 +18,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         {
             DisplayName.SetDefault("Mildew");
             Tooltip.SetDefault("Launches specks of blight");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

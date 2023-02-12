@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             DisplayName.SetDefault("Scourge");
             Tooltip.SetDefault("Right click to fire a wild shotgun blast");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

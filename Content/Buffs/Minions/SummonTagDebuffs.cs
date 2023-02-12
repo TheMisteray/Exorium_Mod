@@ -34,7 +34,8 @@ namespace ExoriumMod.Content.Buffs.Minions
                 if (markedByFlameTongue)
                 {
                     damage += 7;
-                    npc.AddBuff(BuffType<FlameTongueBurn>(), 90);
+                    if (npc.buffTime[BuffID.OnFire] > 0)
+                        npc.AddBuff(BuffType<FlameTongueBurn>(), npc.buffTime[BuffID.OnFire]);
                 }
             }
         }

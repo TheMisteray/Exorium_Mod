@@ -11,6 +11,7 @@ using Terraria.Graphics.Effects;
 using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.InteropServices;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -22,6 +23,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         {
             DisplayName.SetDefault("Fan of Colors");
             Tooltip.SetDefault("Throw a fan of colored knives");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

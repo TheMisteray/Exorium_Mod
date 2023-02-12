@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -7,6 +8,11 @@ namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.FallenTowerTileI
     class CharredObsidian : ModItem
     {
         public override string Texture => AssetDirectory.TileItem + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
+        }
 
         public override void SetDefaults()
         {

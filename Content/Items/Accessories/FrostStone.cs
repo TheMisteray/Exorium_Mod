@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 
 namespace ExoriumMod.Content.Items.Accessories
@@ -11,6 +12,7 @@ namespace ExoriumMod.Content.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Your melee attacks inflict frostburn");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

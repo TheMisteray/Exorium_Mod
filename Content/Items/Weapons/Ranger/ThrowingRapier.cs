@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -20,6 +21,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Tooltip.SetDefault("\"Anything works if you roll a 20\"\n" +
                 "If the tip of the rapier hits the enemy it will stick\n" +
                 "Otherwise it will bounce");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 250;
         }
 
         public override void SetDefaults()

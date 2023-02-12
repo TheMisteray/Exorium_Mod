@@ -5,12 +5,18 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
     class Firebolt : ModItem
     {
         public override string Texture => AssetDirectory.MagicWeapon + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

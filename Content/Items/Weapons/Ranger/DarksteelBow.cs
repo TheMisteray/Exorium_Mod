@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -15,6 +16,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Has a chance to fire a Darksteel arrow, dealing double damage");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

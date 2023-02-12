@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 
 namespace ExoriumMod.Content.Items.Misc
@@ -10,6 +11,7 @@ namespace ExoriumMod.Content.Items.Misc
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Unlocks dark chests");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -13,6 +14,7 @@ namespace ExoriumMod.Content.Items.Consumables.Potions
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("12 defense \nGreatly reduced life regeneration");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 12;
         }
 
         public override void SetDefaults()

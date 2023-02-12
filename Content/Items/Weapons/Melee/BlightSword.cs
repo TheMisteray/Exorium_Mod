@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -18,6 +19,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             DisplayName.SetDefault("Blighted Greatsword");
             Tooltip.SetDefault("A massive two-handed weapon\n" +
                 "Hold to charge a stronger swing");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

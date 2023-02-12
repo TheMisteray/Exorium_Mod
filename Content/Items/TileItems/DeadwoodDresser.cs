@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.TileItems
 {
@@ -9,7 +10,12 @@ namespace ExoriumMod.Content.Items.TileItems
     {
         public override string Texture => AssetDirectory.TileItem + Name;
 
-		public override void SetDefaults()
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
+
+        public override void SetDefaults()
 		{
 			Item.width = 26;
 			Item.height = 22;

@@ -2,12 +2,18 @@
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.ShadowmancerTileItems
 {
     class DarkBrick : ModItem
     {
         public override string Texture => AssetDirectory.TileItem + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
+        }
 
         public override void SetDefaults()
         {

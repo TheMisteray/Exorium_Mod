@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -15,6 +16,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
             Tooltip.SetDefault("Summons the Blighted Slime");
             ItemID.Sets.SortingPriorityBossSpawns[Item.type] = 13;
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
         }
 
         public override void SetDefaults()
@@ -47,7 +49,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.Gel, 30);
-            recipe.AddIngredient(ItemType<Items.Materials.WightBone>(), 15);
+            recipe.AddIngredient(ItemType<Items.Materials.WightBone>(), 5);
             recipe.AddTile(TileID.DemonAltar);
             recipe.Register();
         }

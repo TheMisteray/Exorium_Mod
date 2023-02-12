@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -16,7 +17,8 @@ namespace ExoriumMod.Content.Items.Accessories
                 "-2 defense \n" +
                 "7% increased minion damage \n" +
                 "+1 max minions \n" +
-                "A staple spell focus for apprentice Shadowmancers and some more foolhardy Necromancers");
+                "A staple spell focus for apprentice Shadowmancers");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

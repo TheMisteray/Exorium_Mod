@@ -4,12 +4,18 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Tools
 {
     class RimestoneAxe : ModItem
     {
         public override string Texture => AssetDirectory.Tool + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

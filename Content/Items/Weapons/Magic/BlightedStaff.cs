@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
@@ -17,6 +18,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             DisplayName.SetDefault("Withered Staff");
             Item.staff[Item.type] = true;
             Tooltip.SetDefault("Bursts into blight specks on impact");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

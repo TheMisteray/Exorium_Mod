@@ -1,5 +1,7 @@
-﻿using ExoriumMod.Core;
+﻿using ExoriumMod.Content.Biomes;
+using ExoriumMod.Core;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -48,6 +50,15 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
             npcLoot.Add(ItemDropRule.Common(ItemType<Items.Accessories.BlightedManacle>(), 40));
 
             base.ModifyNPCLoot(npcLoot);
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+                new FlavorTextBestiaryInfoElement("The word \"Wight\" meant \"Person\" in days long since past. The name now refers to evil undead who were once mortals, their passing likely connected to the fate of the land they reside in."),
+                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<DeadlandBiome>().ModBiomeBestiaryInfoElement),
+            });
         }
     }
 }

@@ -7,6 +7,7 @@ using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
@@ -18,6 +19,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         {
             Item.staff[Item.type] = true;
             Tooltip.SetDefault("Shoots bursts of homing skulls");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

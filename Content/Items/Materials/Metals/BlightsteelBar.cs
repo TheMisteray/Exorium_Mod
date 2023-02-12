@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Materials.Metals
 {
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
         {
             DisplayName.SetDefault("Blightsteel Bar"); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.
             Tooltip.SetDefault("It bites at your skin");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 
         public override void SetDefaults()

@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Materials.Metals
 {
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
         {
             DisplayName.SetDefault("Darksteel Alloy");
             Tooltip.SetDefault("Not the real stuff, but It'll do for now");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
         public override void SetDefaults()
         {

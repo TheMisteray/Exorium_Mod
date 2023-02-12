@@ -3,12 +3,18 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.TileItems
 {
     class DeadwoodChest : ModItem
     {
         public override string Texture => AssetDirectory.TileItem + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

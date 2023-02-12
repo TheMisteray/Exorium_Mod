@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         {
             Tooltip.SetDefault("Instantly kills non-boss creatures with 50 hp or less (100 in expert mode) \n" +
                 "Heals the player whenever something is killed this way");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
@@ -40,7 +42,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 target.checkDead();
                 target.StrikeNPC(Main.expertMode ? 100 : 50, 0, 0, true);
                 NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, target.whoAmI, Main.expertMode ? 100 : 50, 0, 0, 1);
-                player.HealEffect(Main.expertMode ? 2 : 1, true);
+                player.HealEffect(10, true);
                 SoundEngine.PlaySound(SoundID.Item20, player.position);
             }
         }

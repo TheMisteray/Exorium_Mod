@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Accessories
                 "\nIt grants 6 defense, increased regeneration, and immunity to fire and frostburn while it has health remaining" +
                 "\nWhenever you take damage the cloak also takes that much damage" +
                 "\nIf the cloak is destroyed it must regenerate fully before its effects return");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
         {
             Tooltip.SetDefault("Casts Delayed Blast Fireball");
             DisplayName.SetDefault("Spell Scroll: Delayed Blast Fireball");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 
         public override void SetDefaults()

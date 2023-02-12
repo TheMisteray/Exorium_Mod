@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
         {
             Tooltip.SetDefault("Casts Magic Missiles");
             DisplayName.SetDefault("Spell Scroll: Magic Missiles");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 
         public override void SetDefaults()

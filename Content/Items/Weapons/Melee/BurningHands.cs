@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -19,6 +20,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 "Uses Mana and can't be used with mana sickness\n" +
                 "Right click to shoot a flaming fist\n" +
                 "(Right click does not use mana)");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

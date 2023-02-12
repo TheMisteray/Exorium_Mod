@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.WallItems
 {
@@ -13,6 +14,8 @@ namespace ExoriumMod.Content.Items.WallItems
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Incredibly light");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 400;
+
         }
 
         public override void SetDefaults()

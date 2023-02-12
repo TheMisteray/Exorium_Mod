@@ -9,6 +9,7 @@ using ExoriumMod.Core;
 using ExoriumMod.Helpers;
 using Terraria.Audio;
 using ExoriumMod.Content.Buffs.Minions;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 {
@@ -22,7 +23,8 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 			Tooltip.SetDefault("8 summon tag damage\n"
 				+"Your summons will focus struck enemies\n"
 				+"Incredibly heavy, may break");
-		}
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
 		public override void SetDefaults()
 		{

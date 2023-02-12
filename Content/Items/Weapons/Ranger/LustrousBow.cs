@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using System;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -17,6 +18,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             Tooltip.SetDefault("Converts arrows into beams of colored light" +
                 "\n Beams redirect towrds your cursor");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

@@ -7,6 +7,8 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.ItemDropRules;
+using ExoriumMod.Content.Biomes;
+using Terraria.GameContent.Bestiary;
 
 namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 {
@@ -3331,6 +3333,15 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         {
             npcLoot.Add(ItemDropRule.Common(ItemType<Items.Accessories.WightQuiver>(), 40));
             npcLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.WightBone>(), 3));
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+                new FlavorTextBestiaryInfoElement("Neither dead or alive, a wight exists in a transitional state between one world and the next. The bright spark of life is gone, and they yearn to take what they lack."),
+                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<DeadlandBiome>().ModBiomeBestiaryInfoElement),
+            });
         }
     }
 }

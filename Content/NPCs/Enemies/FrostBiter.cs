@@ -4,6 +4,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -209,6 +210,15 @@ namespace ExoriumMod.Content.NPCs.Enemies
             headType = NPCType<FrostBiterHead>();
             speed = 5.5f;
             turnSpeed = 0.045f;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundSnow,
+                new FlavorTextBestiaryInfoElement("")
+            });
         }
     }
 

@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             Tooltip.SetDefault("A glass sphere filled with an acidic substance" +
                 "\nCovers hit enemies with acid");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
         }
 
         public override void SetDefaults()

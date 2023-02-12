@@ -227,6 +227,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         public virtual void StatinaryAttack() { }
 
         public virtual void MovingAttack() { }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
+            });
+        }
     }
 
     internal class AmethystGemsparkling : Gemsparkling

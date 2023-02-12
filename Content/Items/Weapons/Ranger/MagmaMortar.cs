@@ -5,10 +5,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
-using System;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -21,6 +20,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Tooltip.SetDefault("Launches explosive blobs of lava\n" +
                 "Sets fires nearby\n" +
                 "Consumes 5 gel per use");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

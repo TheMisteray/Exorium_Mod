@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Terraria.ModLoader.Utilities;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 
 namespace ExoriumMod.Content.NPCs.Enemies
 {
@@ -3445,6 +3446,15 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             return SpawnCondition.DesertCave.Chance * .04f;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundDesert,
+                new FlavorTextBestiaryInfoElement("")
+            });
         }
     }
 

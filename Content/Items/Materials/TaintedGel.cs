@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 
 namespace ExoriumMod.Content.Items.Materials
@@ -10,6 +11,7 @@ namespace ExoriumMod.Content.Items.Materials
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("The ooze of deadlands");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 
         public override void SetDefaults()

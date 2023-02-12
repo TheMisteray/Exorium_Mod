@@ -3,6 +3,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
+using ReLogic.Content;
 
 namespace ExoriumMod.Content.Items.Armor
 {
@@ -10,6 +12,11 @@ namespace ExoriumMod.Content.Items.Armor
     class DeadwoodHelmet : ModItem
     {
         public override string Texture => AssetDirectory.Armor + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {
@@ -26,8 +33,8 @@ namespace ExoriumMod.Content.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "10% increased speed";
-            player.moveSpeed += 0.1f;
+            player.setBonus = "15% increased movement speed";
+            player.moveSpeed += 0.15f;
         }
 
         public override void AddRecipes()
@@ -43,6 +50,11 @@ namespace ExoriumMod.Content.Items.Armor
     class DeadwoodBreastplate : ModItem
     {
         public override string Texture => AssetDirectory.Armor + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {
@@ -65,6 +77,11 @@ namespace ExoriumMod.Content.Items.Armor
     class DeadwoodGreaves : ModItem
     {
         public override string Texture => AssetDirectory.Armor + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

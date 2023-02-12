@@ -12,6 +12,7 @@ using System;
 using Terraria.Enums;
 using Terraria.DataStructures;
 using ReLogic.Content;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -22,6 +23,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Charges up small lasers");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

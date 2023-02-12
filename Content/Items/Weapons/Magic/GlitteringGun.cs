@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("\"Or was it the glimmering gun...\"");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

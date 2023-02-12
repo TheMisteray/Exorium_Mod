@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Armor
 {
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Armor
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("20% chance not to consume ammo \n5% Increased melee speed");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
@@ -59,6 +61,7 @@ namespace ExoriumMod.Content.Items.Armor
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("4% Increased melee and ranged damage");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
@@ -89,6 +92,11 @@ namespace ExoriumMod.Content.Items.Armor
     class RimestoneGreaves : ModItem
     {
         public override string Texture => AssetDirectory.Armor + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

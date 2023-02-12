@@ -10,9 +10,9 @@ namespace ExoriumMod.Core
     {
         public override void OnKill(NPC npc)
         {
-            if ((npc.type == NPCID.SnowFlinx || npc.type == NPCID.SpikedIceSlime) && Main.rand.NextBool(40))
+            if ((npc.type == NPCID.SnowFlinx || npc.type == NPCID.SpikedIceSlime) && Main.rand.NextBool(200))
                 Item.NewItem(npc.GetSource_Loot(), npc.getRect(), ItemType<Content.Items.Weapons.Summoner.IceCream>());
-            if ((npc.type == NPCID.IceSlime || npc.type == NPCID.ZombieEskimo) && Main.rand.NextBool(200))
+            if ((npc.type == NPCID.IceSlime || npc.type == NPCID.ZombieEskimo) && Main.rand.NextBool(500))
                 Item.NewItem(npc.GetSource_Loot(), npc.getRect(), ItemType<Content.Items.Weapons.Summoner.IceCream>());
         }
     }

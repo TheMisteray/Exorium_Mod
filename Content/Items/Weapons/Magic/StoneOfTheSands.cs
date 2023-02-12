@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
@@ -18,6 +19,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             DisplayName.SetDefault("Stone of the Sands");
             Tooltip.SetDefault("Creates a ring of sand balls that rotate aroung you \n" +
                 "Right click to shoot them forward");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

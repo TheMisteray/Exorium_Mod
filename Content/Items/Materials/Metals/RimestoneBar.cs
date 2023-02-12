@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Materials.Metals
 {
@@ -13,6 +14,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A chilly crystalline bar");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 
         public override void SetDefaults()

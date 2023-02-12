@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Armor
 {
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Armor
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("+40 maximum mana \n+1 max minions");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
@@ -60,6 +62,7 @@ namespace ExoriumMod.Content.Items.Armor
         {
             DisplayName.SetDefault("Dunestone Splint");
             Tooltip.SetDefault("4% increased magic and summon damage");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
@@ -90,6 +93,11 @@ namespace ExoriumMod.Content.Items.Armor
     class DunestoneGreaves : ModItem
     {
         public override string Texture => AssetDirectory.Armor + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

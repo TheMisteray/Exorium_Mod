@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 
 namespace ExoriumMod.Content.Items.Accessories
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Accessories
                 "\nIncreased damage when regeneration is negative" +
                 "\nDecreased damage when regeneration is positive");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 8));
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

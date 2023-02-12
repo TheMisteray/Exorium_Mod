@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -11,6 +12,7 @@ namespace ExoriumMod.Content.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Reduced regeneration \n10% chance not to consume ammo\n6% increased arrow damage");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

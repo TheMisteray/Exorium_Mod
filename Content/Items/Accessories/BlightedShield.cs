@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -17,6 +18,7 @@ namespace ExoriumMod.Content.Items.Accessories
                 "\n25% decreased speed" +
                 "\nAllows the player to dash into the enemy" +
                 "\nDouble tap a direction");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

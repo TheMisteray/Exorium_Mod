@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -12,7 +13,8 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A hard stone with a sandy feel");
+            Tooltip.SetDefault("A hard stone with a coarse feel");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 
         public override void SetDefaults()

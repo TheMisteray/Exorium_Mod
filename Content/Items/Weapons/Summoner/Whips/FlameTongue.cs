@@ -6,18 +6,15 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria.GameContent;
 using ExoriumMod.Core;
-using ExoriumMod.Helpers;
 using Terraria.Audio;
 using ExoriumMod.Content.Buffs.Minions;
 using System;
-using Terraria.GameContent.Drawing;
-using Terraria.Graphics.Effects;
 using static Terraria.ModLoader.ModContent;
-using Mono.Cecil;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 {
-    internal class FlameTounge : ModItem
+    internal class FlameTongue : ModItem
     {
         public override string Texture => AssetDirectory.SummonerWhip + Name;
 
@@ -29,14 +26,15 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
                 "It flails of it's own accord\n" +
                 "Lights targets ablaze and slightly lowers their defense\n" +
                 "Your summons amplify this burn effect" + 
-                "Hold to control the tounge");
+                "Hold to control the tongue");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
         {
             // Projectile method quickly sets the whip's properties.
             // Mouse over to see its parameters.
-            Item.DefaultToWhip(ProjectileType<FlameToungeProjectile>(), 12, 2, 4, 40);
+            Item.DefaultToWhip(ProjectileType<FlameTongueProjectile>(), 12, 2, 4, 40);
 
             Item.shootSpeed = 4;
             Item.rare = ItemRarityID.LightRed;
@@ -50,7 +48,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
         }
     }
 
-    public class FlameToungeProjectile : ModProjectile
+    public class FlameTongueProjectile : ModProjectile
     {
         public override string Texture => AssetDirectory.WhipProjectile + Name;
         private const float AimResponsiveness = 0.1f;
@@ -231,7 +229,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
-            target.AddBuff(BuffType<SparklingWhipTag>(), 420);
+            target.AddBuff(BuffType<FlameTongueTag>(), 420);
             target.AddBuff(BuffID.OnFire, 420);
         }
     }

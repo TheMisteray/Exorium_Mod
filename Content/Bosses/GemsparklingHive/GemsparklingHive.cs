@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
 using Terraria.DataStructures;
+using ExoriumMod.Content.Biomes;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -395,8 +396,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.Add(
-            new FlavorTextBestiaryInfoElement("This hollowed out rock is home to a species of living gemstones. To harvest its gemstones on its surface you will have to deal with its inhabitants."));
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+            new FlavorTextBestiaryInfoElement("This hollowed out rock is home to a species of living gemstones. To harvest its gemstones on its surface you will have to deal with its inhabitants."),
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
+            });
         }
     }
 }

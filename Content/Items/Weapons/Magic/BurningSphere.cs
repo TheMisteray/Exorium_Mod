@@ -9,6 +9,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
 using System;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
@@ -19,6 +20,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Conjure a slowly moving sphere of flames");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

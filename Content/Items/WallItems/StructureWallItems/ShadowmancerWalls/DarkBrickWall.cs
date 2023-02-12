@@ -3,13 +3,18 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
-
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.WallItems.StructureWallItems.ShadowmancerWalls
 {
     class DarkBrickWall : ModItem
     {
         public override string Texture => AssetDirectory.WallItem + Name;
+
+        public override void SetStaticDefaults()
+        {
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 400;
+        }
 
         public override void SetDefaults()
         {

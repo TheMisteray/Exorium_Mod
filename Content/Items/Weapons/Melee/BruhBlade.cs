@@ -2,6 +2,7 @@ using ExoriumMod.Core;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -13,7 +14,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 		{
 			DisplayName.SetDefault("BruhBlade"); //Bruh
 			Tooltip.SetDefault("Bruh.");
-		}
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
 		public override void SetDefaults() 
 		{

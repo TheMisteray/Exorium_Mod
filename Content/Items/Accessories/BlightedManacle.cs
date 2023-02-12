@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -13,6 +14,7 @@ namespace ExoriumMod.Content.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Reduced regeneration");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

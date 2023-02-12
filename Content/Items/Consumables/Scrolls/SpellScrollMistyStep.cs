@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Consumables.Scrolls
 {
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             Tooltip.SetDefault("Casts Misty Step \n" +
                 "Teleports you to anywhere your character can see, but not through blocks");
             DisplayName.SetDefault("Spell Scroll: Misty Step");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 
         public override void SetDefaults()

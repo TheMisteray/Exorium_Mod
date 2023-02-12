@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Tools
 {
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Tools
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Diseased Pickaxe");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,6 +17,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             Tooltip.SetDefault("Casts Acid Arrows \n" +
                 "Your wooden arrows become tipped with acid for a short time");
             DisplayName.SetDefault("Spell Scroll: Acid Arrows");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 
         public override void SetDefaults()

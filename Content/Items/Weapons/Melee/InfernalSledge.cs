@@ -11,6 +11,7 @@ using Terraria.Graphics.Effects;
 using System;
 using ExoriumMod.Helpers;
 using Microsoft.Win32;
+using Terraria.GameContent.Creative;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -22,6 +23,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         {
             Tooltip.SetDefault("A hammer with an explosive impact\n" +
                 "Hold longer for a stronger slam");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

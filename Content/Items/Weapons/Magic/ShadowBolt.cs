@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -15,6 +16,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Shoots shadowbolts that split apart on impact");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

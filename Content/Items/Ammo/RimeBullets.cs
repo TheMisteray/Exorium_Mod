@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -15,6 +16,7 @@ namespace ExoriumMod.Content.Items.Ammo
         {
             Tooltip.SetDefault("Chance to inflict Frostburn");
             DisplayName.SetDefault("Rime Bullet");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
         }
 
         public override void SetDefaults()

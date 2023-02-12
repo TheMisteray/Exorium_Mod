@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -14,6 +15,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
         {
             Tooltip.SetDefault("Casts Fireball");
             DisplayName.SetDefault("Spell Scroll: Fireball");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 
         public override void SetDefaults()

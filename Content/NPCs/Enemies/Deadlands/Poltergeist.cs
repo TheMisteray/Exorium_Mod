@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using System;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
+using ExoriumMod.Content.Biomes;
 
 namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 {
@@ -60,6 +62,15 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
         {
             NPC.alpha = 60;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+                new FlavorTextBestiaryInfoElement("The confused, invisible spirit of an individual with no sense of how they died."),
+                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<DeadlandBiome>().ModBiomeBestiaryInfoElement),
+            });
         }
     }
 }
