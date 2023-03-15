@@ -52,10 +52,14 @@ namespace ExoriumMod
                 Ref<Effect> shadowmancerShadeRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShadowmancerShade", AssetRequestMode.ImmediateLoad).Value);
                 Ref<Effect> violetPortalRef = new Ref<Effect>(Assets.Request<Effect>("Effects/VioletPortal", AssetRequestMode.ImmediateLoad).Value);
                 Ref<Effect> fireAuraRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FireAura", AssetRequestMode.ImmediateLoad).Value);
+                Ref<Effect> caraveneTitleRef = new Ref<Effect>(Assets.Request<Effect>("Effects/CaraveneTitle", AssetRequestMode.ImmediateLoad).Value);
 
                 //Screen shader loads
                 Filters.Scene["ExoriumMod:HeatDistortion"] = new Filter(new ScreenShaderData(HeatDistortEffectRef, "Heat"), EffectPriority.High);
                 Filters.Scene["ExoriumMod:HeatDistortion"].Load();
+
+                Filters.Scene["ExoriumMod:CaraveneTitle"] = new Filter(new ScreenShaderData(caraveneTitleRef, "ScreenTextPass"), EffectPriority.VeryHigh);
+                Filters.Scene["ExoriumMod:CaraveneTitle"].Load();
 
                 Filters.Scene["Shockwave"] = new Filter(new ScreenShaderData(screenRef, "Shockwave" /*Must be name of pass in shader*/), EffectPriority.VeryHigh);
                 Filters.Scene["Shockwave"].Load();

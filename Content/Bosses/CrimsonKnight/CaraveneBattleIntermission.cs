@@ -62,6 +62,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.buffImmune[BuffID.OnFire] = true;
             NPC.noGravity = false;
             NPC.noTileCollide = false;
+            NPC.dontTakeDamage = true;
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)

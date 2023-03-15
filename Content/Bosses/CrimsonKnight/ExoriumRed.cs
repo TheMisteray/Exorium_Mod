@@ -494,7 +494,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, toPlayer * 18, ProjectileType<backupFireball>(), damage * 2, 3, Main.myPlayer, player.whoAmI);
                             }
-                            SoundEngine.PlaySound(SoundID.Item20);
+                            SoundEngine.PlaySound(SoundID.Item20, NPC.Center + offset);
                         }
 
                         //Reset Trackers
@@ -1156,24 +1156,28 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (introTicker == 9999) //Boss Card
             {
-                introTicker = 480;
+                introTicker = 150;
                 introTickerMax = introTicker;
 
-                
+                if (Main.netMode != NetmodeID.Server && !Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
+                {
+                    Texture2D heatMap = Request<Texture2D>(AssetDirectory.ShaderMap + "HeatDistortMap").Value;
+                    Texture2D text = Request<Texture2D>(AssetDirectory.ShaderMap + "CaraveneIntroCard").Value;
+
+                    Filters.Scene.Activate("ExoriumMod:CaraveneTitle", NPC.Center).GetShader().UseImage(heatMap, 2).UseImage(text, 1);
+                }
             }
 
             introTicker--;
             if (introTicker <= 0)
                 introAnimation = false;
 
-            //TODO: This changes based on past fights
-            if (introTicker == introTickerMax - 180) //3 seconds after
+            if (introTicker == introTickerMax - 90)
             {
-                //That's a nice trinket you got there
-            }
-            else if (introTicker == introTickerMax - 240)
-            {
-                //Hope you don't mind if I take it off your hands
+                if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
+                {
+                    Filters.Scene["ExoriumMod:CaraveneTitle"].Deactivate();
+                }
             }
         }
 
