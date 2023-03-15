@@ -17,10 +17,10 @@ using Terraria.Audio;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
-    class Caravene : ModNPC
+    class ExoriumRed : ModNPC
     {
-        public override string Texture => AssetDirectory.CrimsonKnight + Name + "_Hitbox";
-        public override string BossHeadTexture => AssetDirectory.CrimsonKnight + Name + "_Head_Boss";
+        public override string Texture => AssetDirectory.CrimsonKnight + "Caravene" + "_Hitbox";
+        public override string BossHeadTexture => AssetDirectory.CrimsonKnight + "Caravene" + "_Head_Boss";
 
         public override void SetStaticDefaults()
         {
@@ -473,14 +473,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         parryDamaged = 0;
                     }
                     else if (actionTimer > 60 && actionTimer < Parry_Durration)
-                    {
                         parry = true;
-                        NPC.defense = 999;
-                    }
                     else if (actionTimer == Parry_Durration)
                     {
                         parry = false;
-                        NPC.defense = NPC.defDefense;
                         shieldDown = true;
                         NPC.frameCounter = 0;
                         bool sound = false;
@@ -1158,20 +1154,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //Play intro animation
         private void IntroAI()
         {
-            if (introTicker == 9999) //Set ticker based on past fights
+            if (introTicker == 9999) //Boss Card
             {
                 introTicker = 480;
                 introTickerMax = introTicker;
 
-                foreach (Player player in Main.player)
-                {
-                    //Set each player's screen target if not set
-                    if ((player.Center - NPC.Center).Length() < 3000 && player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget == Vector2.Zero)
-                    {
-                        player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget = NPC.Center;
-                        player.GetModPlayer<ExoriumPlayer>().ScreenMoveTime = introTicker;
-                    }
-                }
+                
             }
 
             introTicker--;
@@ -1309,7 +1297,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value;
+            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "Caravene").Value;
 
             int ySourceHeight = (int)(NPC.frameCounter / 10) * 442;
             int xSourceHeight = (int)(frameX * 412);
@@ -1413,32 +1401,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            //Portal for despawn
-            if (exitTicker > 60)
-            {
-                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
-                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
-                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
-                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
-
-                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
-
-                if (exitTicker > 60 && exitTicker < 120 && exitPortalSize < 1)
-                    exitPortalSize += .02f;
-                else if (exitTicker > 130 && exitPortalSize > 0)
-                    exitPortalSize -= .02f;
-
-                if (exitPortalSize > 0)
-                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * exitPortalSize, SpriteEffects.None, 0);
-
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
-            }
-            if (exitTicker > 0) //Cut out all other draw calls if despawning
-                return;
-
             if (teleIndicator)
             {
                 Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator").Value;
@@ -1530,6 +1492,30 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 if (introPortalSize > 0)
                     spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * introPortalSize, SpriteEffects.None, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+            }
+
+            //Portal for despawn
+            if (exitTicker > 60)
+            {
+                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
+                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
+                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
+
+                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
+
+                if (exitTicker > 60 && exitTicker < 120 && exitPortalSize < 1)
+                    exitPortalSize += .02f;
+                else if (exitTicker > 130 && exitPortalSize > 0)
+                    exitPortalSize -= .02f;
+
+                if (exitPortalSize > 0)
+                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * exitPortalSize, SpriteEffects.None, 0);
 
                 spriteBatch.End();
                 spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);

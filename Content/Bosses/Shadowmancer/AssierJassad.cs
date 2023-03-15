@@ -596,7 +596,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-                new FlavorTextBestiaryInfoElement("This one appears to have been performing with a ritual altar... To limited success. It is still a mystery what evactly they hoped to accomplish, not that it matters now with them gone."),
+                new FlavorTextBestiaryInfoElement("This one appears to have been experimenting with a strange ritual altar. To... Limited success. It is still a mystery what exactly they hoped to accomplish. Not that it matters now with them gone."),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
             });
         }
