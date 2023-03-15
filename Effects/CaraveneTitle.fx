@@ -24,20 +24,24 @@ float4 MainPS(float2 uv : TEXCOORD0) : COLOR0
 {
 	float4 OriginalColor = tex2D(uImage0, uv);
 	float4 textArea = tex2D(uImage1, uv);
+	float4 redness = float4(1., 1., 1., 0.);
 
-	float st = uv + float2(uProgress, uProgress);
-	float normalVal = tex2D(uImage2, st).r;
-	float invertedNormal = normalVal - .5;
-	invertedNormal *= -1.;
-	invertedNormal += .5;
+	float2 st = uv + float2(uProgress, uProgress);
+	float2 st2 = uv - float2(uProgress, uProgress);
 
 	if (textArea.r > 0.)
 	{
 		//Dark red to bright orange
-		textArea.r -= invertedNormal * 0.3;
-		textArea.g -= 0.4;
-		textArea.g -= normalVal * 0.6;
-		textArea.b = 0;
+		redness.r = 0;
+		redness.r += tex2D(uImage2, st).x * .1;
+		redness.r -= tex2D(uImage2, st2).x * .05;
+
+		redness.g = .5;
+		redness.g += tex2D(uImage2, st).x * .5;
+		redness.g -= tex2D(uImage2, st2).x * .25;
+		redness.g = min(redness.g, 1);
+
+		textArea -= redness;
 	}
 
 	if (uIntensity <= 60)

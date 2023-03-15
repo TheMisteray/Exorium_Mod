@@ -1174,7 +1174,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
             {
-                Filters.Scene["ExoriumMod:CaraveneTitle"].GetShader().UseTargetPosition(NPC.Center).UseIntensity(introTicker - (introTickerMax - 150)/*Time until shader end*/).UseProgress(Main.GameUpdateCount * 0.015f); //Make use game time for stoppin while paused
+                Filters.Scene["ExoriumMod:CaraveneTitle"].GetShader().UseTargetPosition(NPC.Center).UseIntensity(introTicker - (introTickerMax - 150)/*Time until shader end*/).UseProgress(Main.GameUpdateCount * 0.01f); //Make use game time for stoppin while paused
             }
             if (introTicker == introTickerMax - 150)
             {
@@ -1479,30 +1479,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     offset = offset.RotatedBy(Main.GameUpdateCount * .02);
                     spriteBatch.Draw(texFireball, NPC.Center + offset - screenPos, null, Color.White, Main.GameUpdateCount * .1f, texFireball.Size() / 2, parryFireballTimer, SpriteEffects.None, 0);
                 }
-            }
-
-            //Portal for the intro
-            if (introTicker > introTickerMax - 180)
-            {
-                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
-                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
-                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
-                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
-
-                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
-
-                if (introTicker > introTickerMax - 60 && introPortalSize < 1)
-                    introPortalSize += .02f;
-                else if (introTicker < introTickerMax - 120 && introPortalSize > 0)
-                    introPortalSize -= .02f;
-
-                if (introPortalSize > 0)
-                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * introPortalSize, SpriteEffects.None, 0);
-
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
             }
 
             //Portal for despawn
