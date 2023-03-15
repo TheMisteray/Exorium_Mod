@@ -1156,15 +1156,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (introTicker == 9999) //Boss Card
             {
-                introTicker = 150;
+                introTicker = 250;
                 introTickerMax = introTicker;
 
                 if (Main.netMode != NetmodeID.Server && !Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
                 {
-                    Texture2D heatMap = Request<Texture2D>(AssetDirectory.ShaderMap + "HeatDistortMap").Value;
-                    Texture2D text = Request<Texture2D>(AssetDirectory.ShaderMap + "CaraveneIntroCard").Value;
+                    Texture2D heatMap = Request<Texture2D>(AssetDirectory.ShaderMap + "HeatDistortMap", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                    Texture2D text = Request<Texture2D>(AssetDirectory.Effect + "CaraveneIntroCard", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-                    Filters.Scene.Activate("ExoriumMod:CaraveneTitle", NPC.Center).GetShader().UseImage(heatMap, 2).UseImage(text, 1);
+                    Filters.Scene.Activate("ExoriumMod:CaraveneTitle", NPC.Center).GetShader().UseImage(text).UseImage(heatMap, 1).UseTargetPosition(NPC.Center).UseIntensity(introTicker).UseProgress(Main.GameUpdateCount * 0.0015f);
                 }
             }
 
@@ -1172,7 +1172,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (introTicker <= 0)
                 introAnimation = false;
 
-            if (introTicker == introTickerMax - 90)
+            if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
+            {
+                Filters.Scene["ExoriumMod:CaraveneTitle"].GetShader().UseTargetPosition(NPC.Center).UseIntensity(introTicker - (introTickerMax - 150)/*Time until shader end*/).UseProgress(Main.GameUpdateCount * 0.015f); //Make use game time for stoppin while paused
+            }
+            if (introTicker == introTickerMax - 150)
             {
                 if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
                 {

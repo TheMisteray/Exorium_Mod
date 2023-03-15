@@ -51,9 +51,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 if (Main.netMode != NetmodeID.Server && !Filters.Scene["ExoriumMod:HeatDistortion"].IsActive())
                 {
-                    Texture2D heatMap = Request<Texture2D>(AssetDirectory.ShaderMap + "HeatDistortMap").Value;
+                    Texture2D heatMap = Request<Texture2D>(AssetDirectory.ShaderMap + "HeatDistortMap", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-                    Filters.Scene.Activate("ExoriumMod:HeatDistortion", Projectile.Center).GetShader().UseColor(2, 1, .2f).UseTargetPosition(Projectile.Center).UseImage(heatMap, 1);
+                    Filters.Scene.Activate("ExoriumMod:HeatDistortion", Projectile.Center).GetShader().UseColor(2, 1, .2f).UseTargetPosition(Projectile.Center).UseImage(heatMap);
                 }
             }
 
