@@ -1,4 +1,5 @@
 ﻿using ExoriumMod.Core;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Creative;
@@ -38,7 +39,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             return player.InModBiome(GetInstance<Content.Biomes.DeadlandBiome>()) && !NPC.AnyNPCs(NPCType<BlightedSlime>());
         }
 
-        public override bool? UseItem(Player player)/* Suggestion: Return null instead of false */
+        public override Nullable<bool> UseItem(Player player)/* tModPorter Suggestion: Return null instead of false *//* Suggestion: Return null instead of false */
         {
             SoundEngine.PlaySound(SoundID.Roar, player.position);
             NPC.SpawnOnPlayer(player.whoAmI, NPCType<BlightedSlime>());

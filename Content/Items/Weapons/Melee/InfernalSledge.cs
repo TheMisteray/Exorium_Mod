@@ -183,7 +183,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             player.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
         }
 
-        public override bool? CanDamage()
+        public override Nullable<bool> CanDamage()/* tModPorter Suggestion: Return null instead of true */
         {
             return false;
         }

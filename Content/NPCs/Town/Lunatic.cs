@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.NPCs.Town
 
         public override string Name => base.Name;
 
-        public override List<string> SetNPCNameList()
+        public override List<string> SetNPCNameList()/* tModPorter Suggestion: Return a list of names */
         {
             return new List<string>
             {

@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Creative;
@@ -129,7 +130,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             stop = true;
         }
 
-        public override bool? CanDamage()/* Suggestion: Return null instead of false */
+        public override Nullable<bool> CanDamage()/* tModPorter Suggestion: Return null instead of true *//* Suggestion: Return null instead of false */
         {
             return !stop;
         }

@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using ExoriumMod.Helpers;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -211,7 +212,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.velocity = aim;
         }
 
-        public override bool? CanDamage()/* Suggestion: Return null instead of false */
+        public override Nullable<bool> CanDamage()/* tModPorter Suggestion: Return null instead of true *//* Suggestion: Return null instead of false */
         {
             return Projectile.frame == 6 && Projectile.timeLeft == 30;
         }

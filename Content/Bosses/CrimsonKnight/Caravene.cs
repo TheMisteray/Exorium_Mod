@@ -498,7 +498,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, toPlayer * 18, ProjectileType<backupFireball>(), damage * 2, 3, Main.myPlayer, player.whoAmI);
                             }
-                            SoundEngine.PlaySound(SoundID.Item20, NPC.Center + offset);
+                            SoundEngine.PlaySound(SoundID.Item20);
                         }
 
                         //Reset Trackers

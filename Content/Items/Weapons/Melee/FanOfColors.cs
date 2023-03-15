@@ -153,7 +153,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             return Projectile.localAI[0] <= 0;
         }
 
-        public override bool? CanDamage()/* Suggestion: Return null instead of false */
+        public override Nullable<bool> CanDamage()/* tModPorter Suggestion: Return null instead of true *//* Suggestion: Return null instead of false */
         {
             return Projectile.localAI[0] <= 0;
         }

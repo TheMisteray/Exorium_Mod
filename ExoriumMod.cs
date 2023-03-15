@@ -84,7 +84,7 @@ namespace ExoriumMod
             instance = null;
         }
 
-        public override void AddRecipeGroups()
+        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */
         {
             RecipeGroup woodGroup = RecipeGroup.recipeGroups[RecipeGroup.recipeGroupIDs["Wood"]];
             woodGroup.ValidItems.Add(ModContent.ItemType<Content.Items.TileItems.Deadwood>());

@@ -348,7 +348,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
             }
         }
 
-        public override bool? CanDamage()/* Suggestion: Return null instead of false */
+        public override Nullable<bool> CanDamage()/* tModPorter Suggestion: Return null instead of true *//* Suggestion: Return null instead of false */
         {
             return (IsStickingToTarget && HitTicker % TICKS_PER_HIT == 0) || (!IsStickingToTarget && bufferTime <= 0);
         }

@@ -1,5 +1,6 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -57,7 +58,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
             return false;
         }
 
-        public override bool? UseItem(Player player)/* Suggestion: Return null instead of false */
+        public override Nullable<bool> UseItem(Player player)/* tModPorter Suggestion: Return null instead of false *//* Suggestion: Return null instead of false */
         {
             if (player.altFunctionUse == 2)
             {
