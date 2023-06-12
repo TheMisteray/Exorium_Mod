@@ -161,7 +161,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             else if (time == 420)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                    NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<ExoriumRed>());
+                    NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<ExoriumRed>(), 0, 6);
                 NPC.active = false;
             }
         }

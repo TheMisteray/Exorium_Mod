@@ -84,4 +84,59 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             target.AddBuff(BuffID.OnFire, 300);
         }
     }
+
+    class FlamePillar : ModProjectile
+    {
+        public override string Texture => AssetDirectory.CrimsonKnight + Name;
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 60;
+            Projectile.height = 300;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 240;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = false;
+            Projectile.alpha = 255;
+        }
+        
+        public float Timer
+        {
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
+        }
+
+        public override void AI()
+        {
+            Timer++;
+
+            if (Timer == 120)
+                Projectile.hostile = true;
+            else if (Timer > 120)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0, -10, 0, default, 2.5f);
+                }
+            }
+        }
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+            target.AddBuff(BuffID.OnFire, 600);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            if (Timer < 120)
+            {
+                Texture2D tex = Request<Texture2D>(Texture).Value;
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition, new Rectangle(tex.Width / 2, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(Projectile.width / 2, Projectile.height), (Timer % 60) / 60, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition, new Rectangle(tex.Width / 2, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(Projectile.width / 2, Projectile.height), ((Timer + 20) % 60) / 60, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition, new Rectangle(tex.Width / 2, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(Projectile.width / 2, Projectile.height), ((Timer + 40) % 60) / 60, SpriteEffects.None, 0);
+            }
+            return false;
+        }
+    }
 }

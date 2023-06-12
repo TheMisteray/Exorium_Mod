@@ -1287,7 +1287,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     p.type == ProjectileType<CaraveneBladeProj>() ||
                     p.type == ProjectileType<CaraveneBladeProjHorizontal>() ||
                     p.type == ProjectileType<CaraveneFireball>() ||
-                    p.type == ProjectileType<GridFire>() ||
                     p.type == ProjectileType<gridCollision>() ||
                     p.type == ProjectileType<gridShot>() ||
                     p.type == ProjectileType<FlamingSphere>() ||

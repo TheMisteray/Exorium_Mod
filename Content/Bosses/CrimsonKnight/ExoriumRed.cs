@@ -107,6 +107,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private int bladeSpawnQuadrant = 0;
         private int bladeSpawnCount = 0;
         private float auraAlpha = 0;
+        private bool[] teleportLocations = new bool[6]{ false, false, false, false, false, false };
 
 
         //Phase trackers
@@ -142,16 +143,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         //Actions
         //0 - jump
-        //1 - dash
+        //1 - dash                              -Untested
         //2 - Teleport next to player
-        //3 - Send down flame ring
-        //4 - parry
+        //3 - Send down flame ring -Rift        -Untested/Unfinished
+        //4 - parry                             -Done
         //5 - Galacta knight lol
-        //6 - swords come down
+        //6 - swords come down                  -Done
         //7 - sword beams
         //8 - hop down
         //9 - flame breath
-        //10 - portal dash
+        //10 - portal dash                      -Untested
         //11 - Burning Sphere
         //12 - enrage
         public float Action
@@ -348,7 +349,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if ((phase == 2 || Main.masterMode) && !endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
+
+                                if (actionTimer % 30 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                }
+                            }
                             if (Main.rand.NextBool(2))
                             {
                                 if (left)
@@ -402,10 +410,77 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     break;
                 case 2:
                     if (actionTimer == 0)
+                    {
                         teleIndicator = true;
+                        int spots = 2;
+                        if (phase == 2 || Main.expertMode)
+                            spots++;
+                        if (phase == 2 && Main.expertMode)
+                            spots++;
+                        if (phase == 2 && Main.masterMode)
+                            spots++;
+
+                        for (int i = 0; i < 6; i++)
+                            teleportLocations[i] = false;
+
+                        for (int i = 0; i < spots; i++) //Choose sports for teleports
+                        {
+                            int choose = 0;
+                            do
+                            {
+                                choose = Main.rand.Next(6);
+                            }
+                            while (teleportLocations[choose] != false);
+                            teleportLocations[choose] = true;
+                        }
+
+                        NPC.noGravity = true;
+                        NPC.noTileCollide = true;
+                        noContactDamage = true;
+                    }
                     else if (actionTimer == 90)
                     {
-                        Vector2 offset = new Vector2(!left ? NPC.width : -NPC.width, -NPC.height/2.4f);
+                        //Choose offest based on teleport location
+                        Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                        Vector2 location;
+                        if (teleportLocations[0]) //Draw at locations of Teleport locations (all relative to player)
+                        {
+                            location = new Vector2(-texTele.Width, Arena_Top_Left.Y + 20);
+                            CreateCloneProjectile(location, 0);
+                        }
+                        if (teleportLocations[1]) //Draw at locations of Teleport locations (all relative to player)
+                        {
+                            location = new Vector2(-texTele.Width, Arena_Top_Left.Y + 544);
+                            CreateCloneProjectile(location, 1);
+                        }
+                        if (teleportLocations[2]) //Draw at locations of Teleport locations (all relative to player)
+                        {
+                            location = new Vector2(-texTele.Width, Arena_Top_Left.Y + 864);
+                            CreateCloneProjectile(location, 2);
+                        }
+                        if (teleportLocations[3]) //Draw at locations of Teleport locations (all relative to player)
+                        {
+                            location = new Vector2(texTele.Width, Arena_Top_Left.Y + 20);
+                            CreateCloneProjectile(location, 3);
+                        }
+                        if (teleportLocations[4]) //Draw at locations of Teleport locations (all relative to player)
+                        {
+                            location = new Vector2(texTele.Width, Arena_Top_Left.Y + 544);
+                            CreateCloneProjectile(location, 4);
+                        }
+                        if (teleportLocations[5]) //Draw at locations of Teleport locations (all relative to player)
+                        {
+                            location = new Vector2(texTele.Width, Arena_Top_Left.Y + 864);
+                            CreateCloneProjectile(location, 5);
+                        }
+                    }
+                    else if (actionTimer == 180)
+                    {
+                        NPC.velocity = Vector2.Zero;
+                        noContactDamage = false;
+
+                        //Teleport 
+                        Vector2 offset = new Vector2(left ? NPC.width : -NPC.width, -NPC.height / 2.4f);//Reversed from normal
 
                         //Find point to dash to
                         //Adjust to not leave arena
@@ -417,27 +492,17 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if (coordinatesOfDash.X > maxTeleportX - NPC.width / 2)
                             coordinatesOfDash.X = maxTeleportX - NPC.width / 2;
 
-                        Vector2 dash = coordinatesOfDash - NPC.Center;
-
-                        NPC.velocity = dash / 4;
-                        NPC.noGravity = true;
-                        NPC.noTileCollide = true;
+                        NPC.Center = coordinatesOfDash;
                         teleIndicator = false;
-                        noContactDamage = true;
                     }
-                    else if (actionTimer == 94)
-                    {
-                        NPC.velocity = Vector2.Zero;
-                        noContactDamage = false;
-                    }
-                    else if (actionTimer == 140)
+                    else if (actionTimer == 220)
                     {
                         NPC.noGravity = false;
                         NPC.noTileCollide = false;
                         frameX = 1;
                         NPC.frameCounter = 0;
                     }
-                    else if (actionTimer >= 160)
+                    else if (actionTimer >= 250)
                     {
                         ChooseMovement();
                     }
@@ -445,24 +510,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 3:
                     if (actionTimer == 5)
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            for (int i = 0; i < 12; i++)
-                            {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 6) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                            }
-                        }
-
-                        // dust telegraph
-                        for (int i = 0; i < 100; i++)
-                        {
-                            Vector2 pos = player.Center;
-                            pos.Y -= 900;
-                            pos.X -= 500;
-                            Dust.NewDust(pos, 1000, 1, DustID.SolarFlare, 0, Main.rand.NextFloat(20));
-                        }
+                        //Swingup Effect
+                        frameX = 3;
                     }
-                    else if (actionTimer == 60)
+                    else if (actionTimer == 30)
+                    {
+                        frameX = 1;
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(206 * (left ? 1 : -1), 0), Vector2.Zero, ProjectileType<InfernalRift>(), damage, 1, Main.myPlayer, Arena_Top_Left.Y, Arena_Bottom_Left.Y);
+                    }
+                    else if (actionTimer > 240)
                     {
                         ChooseMovement();
                     }
@@ -594,44 +651,59 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     if ((actionTimer % 5 == 0) && Main.netMode != NetmodeID.MultiplayerClient )
                     {
                         Vector2 dummy = new Vector2(0, 1);
-                        if (((phase == 2 && Main.expertMode) || Main.masterMode) && Main.rand.NextBool()) //Makes projectiles start at the sides which is harder to read
+                        if (phase == 2 && Main.expertMode && !Main.masterMode) //Makes projectiles start at the sides which is harder to read
                             dummy = new Vector2(1, 0);
                         if (altBeamType)
                         {
-                            if (actionTimer % 20 == 0 && phase == 2)
+                            if (actionTimer % 20 == 0 && phase == 2 && !Main.masterMode)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                             }
 
-                            if (actionTimer < 140)
+                            if (actionTimer <= 140)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-
-
-                                if (Main.masterMode && actionTimer % 35 == 0) //Extra in gaps in master mode
+                                if (actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+
+                                if (Main.masterMode && phase == 2 && actionTimer % 10 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+                                else if (Main.expertMode && actionTimer % 35 == 0) //Extra in gaps in master mode
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
                         }
                         else
                         {
-                            if (actionTimer % 20 == 0 && phase == 2)
+                            if (actionTimer % 20 == 0 && phase == 2 && !Main.masterMode)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                             }
 
-                            if (actionTimer < 140) //Rotations are negative to reverse sides
+                            if (actionTimer <= 140) //Rotations are negative to reverse sides
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-
-                                if (Main.masterMode && actionTimer % 35 == 0)
+                                if (actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+
+                                if (Main.masterMode && phase == 2 && actionTimer % 10 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+                                else if (Main.expertMode && actionTimer % 35 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
                         }
@@ -824,7 +896,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if (phase == 2 && !endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
+
+                                if (actionTimer % 20 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                }
+                            }
                             if (Main.rand.NextBool(2))
                             {
                                 if (left)
@@ -892,7 +971,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if (phase == 2 && !endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
+
+                                if (actionTimer % 20 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                }
+                            }
                             if (Main.rand.NextBool(2))
                             {
                                 if (left)
@@ -1104,6 +1190,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             actionTimer = -1;
         }
+
+        private void CreateCloneProjectile(Vector2 location, int index)
+        {
+            //Projectile
+            for (int i = 0; i < 50; i++)
+            {
+                Vector2 rad = new Vector2(0, Main.rand.NextFloat(30));
+                Vector2 shootPoint = rad.RotatedBy(Main.rand.NextFloat(0, MathHelper.TwoPi));
+                Dust dust = Dust.NewDustPerfect(location, DustID.SolarFlare, shootPoint, 1, default, 1 + Main.rand.NextFloat(-.5f, .5f));
+                dust.noGravity = true;
+                dust.color = new Color(184, 58, 24);
+            }
+        }
         #endregion
 
         public override void FindFrame(int frameHeight)
@@ -1188,6 +1287,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     Filters.Scene.Activate("ExoriumMod:CaraveneTitle", NPC.Center).GetShader().UseImage(text).UseImage(heatMap, 1).UseTargetPosition(NPC.Center).UseIntensity(introTicker).UseProgress(Main.GameUpdateCount * 0.0015f);
                 }
             }
+            Main.musicFade[Main.curMusic] = 1f; //Want volume to be at max for a bit
 
             introTicker--;
             if (introTicker <= 0)
@@ -1430,11 +1530,69 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            //Portal for despawn
+            if (exitTicker > 60)
+            {
+                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
+                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
+                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
+
+                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
+
+                if (exitTicker > 60 && exitTicker < 120 && exitPortalSize < 1)
+                    exitPortalSize += .02f;
+                else if (exitTicker > 130 && exitPortalSize > 0)
+                    exitPortalSize -= .02f;
+
+                if (exitPortalSize > 0)
+                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * exitPortalSize, SpriteEffects.None, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+            }
+            if (exitTicker > 0) //Cut out all other draw calls if despawning
+                return;
+
             if (teleIndicator)
             {
                 Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator").Value;
+                Player p = Main.player[NPC.target];
 
-                spriteBatch.Draw(texTele, (Main.player[NPC.target].Bottom + new Vector2(!left ? texTele.Width : -texTele.Width, -texTele.Height / 2)) - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), !left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+                if (teleportLocations[0]) //Draw at locations of Teleport locations (all relative to player)
+                {
+                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 20);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                }
+                if (teleportLocations[1]) //Draw at locations of Teleport locations (all relative to player)
+                {
+                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 544);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                }
+                if (teleportLocations[2]) //Draw at locations of Teleport locations (all relative to player)
+                {
+                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 864);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                }
+                if (teleportLocations[3]) //Draw at locations of Teleport locations (all relative to player)
+                {
+                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 20);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                }
+                if (teleportLocations[4]) //Draw at locations of Teleport locations (all relative to player)
+                {
+                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 544);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                }
+                if (teleportLocations[5]) //Draw at locations of Teleport locations (all relative to player)
+                {
+                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 864);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                }
+
+                //spriteBatch.Draw(texTele, (Main.player[NPC.target].Bottom + new Vector2(!left ? texTele.Width : -texTele.Width, -texTele.Height / 2)) - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), !left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             }
 
             if (dashIndicator)
@@ -1501,31 +1659,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     spriteBatch.Draw(texFireball, NPC.Center + offset - screenPos, null, Color.White, Main.GameUpdateCount * .1f, texFireball.Size() / 2, parryFireballTimer, SpriteEffects.None, 0);
                 }
             }
-
-            //Portal for despawn
-            if (exitTicker > 60)
-            {
-                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
-                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
-                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
-                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
-
-                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
-
-                if (exitTicker > 60 && exitTicker < 120 && exitPortalSize < 1)
-                    exitPortalSize += .02f;
-                else if (exitTicker > 130 && exitPortalSize > 0)
-                    exitPortalSize -= .02f;
-
-                if (exitPortalSize > 0)
-                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * exitPortalSize, SpriteEffects.None, 0);
-
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
-            }
-
             base.PostDraw(spriteBatch, screenPos, drawColor);
         }
 
