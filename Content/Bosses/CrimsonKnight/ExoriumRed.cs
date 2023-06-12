@@ -41,6 +41,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             NPCID.Sets.TrailCacheLength[Type] = 7;
             NPCID.Sets.TrailingMode[NPC.type] = 0;
+            NPCID.Sets.TeleportationImmune[Type] = true;
         }
 
         public override void SetDefaults()
@@ -48,11 +49,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
             NPC.damage = 29;
-            NPC.defense = 11;
+            NPC.defense = 7;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
-            //NPC.value = Item.buyPrice(0, 7, 7, 7);
+            NPC.value = Item.buyPrice(0, 25, 0, 0);
             NPC.npcSlots = 30f;
             NPC.boss = true;
             NPC.lavaImmune = true;
@@ -64,7 +65,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.noTileCollide = false;
             NPC.alpha = 255;
             if (!Main.dedServ)
-                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/knight");
+                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/ExoriumRed");
             //bossBag = ItemType<ShadowmancerBag>();
         }
 
@@ -467,10 +468,29 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 4:
-                    if (actionTimer == 0)
+                    if (actionTimer < 60)
                     {
-                        parryDamaged = 0;
-                        parryDamaged = 0;
+                        if (actionTimer == 0)
+                        {
+                            parryDamaged = 0;
+                            parryDamaged = 0;
+                        }
+
+                        //Sword projectiles
+                        Vector2 trajectory = new Vector2(0, 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer % 2 == 0)
+                        {
+                            if (phase == 1 && actionTimer % 4 == 0)
+                            {
+                                trajectory = trajectory.RotatedBy(((2 * Math.PI) / 15) * actionTimer / 4);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + trajectory * 200, trajectory * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
+                            }
+                            else if (phase == 2) //Double later
+                            {
+                                trajectory = trajectory.RotatedBy(((2 * Math.PI) / 30) * actionTimer / 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + trajectory * 200, trajectory * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
+                            }
+                        }
                     }
                     else if (actionTimer > 60 && actionTimer < Parry_Durration)
                         parry = true;
@@ -487,7 +507,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         {
                             Vector2 offset = new Vector2(0, 200);
                             offset = offset.RotatedBy(MathHelper.ToRadians((360 / parryRetaliate) * i));
-                            offset = offset.RotatedBy(Main.GameUpdateCount * .0001);
+                            offset = offset.RotatedBy(Main.GameUpdateCount * .02);
                             Vector2 toPlayer = player.Center - (NPC.Center + offset);
                             toPlayer.Normalize();
                             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -567,55 +587,56 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     if (actionTimer == 0)
                     {
                         altBeamType = false;
-                        if (Main.rand.NextBool(2) && Main.masterMode)
+                        if (Main.rand.NextBool())
                             altBeamType = true;
                         playerPlaceholder = player.Center;
                     }
-                    if ((actionTimer % 10 == 0) && Main.netMode != NetmodeID.MultiplayerClient )
+                    if ((actionTimer % 5 == 0) && Main.netMode != NetmodeID.MultiplayerClient )
                     {
-                        if (phase == 2)
+                        Vector2 dummy = new Vector2(0, 1);
+                        if (((phase == 2 && Main.expertMode) || Main.masterMode) && Main.rand.NextBool()) //Makes projectiles start at the sides which is harder to read
+                            dummy = new Vector2(1, 0);
+                        if (altBeamType)
                         {
-                            if (altBeamType)
+                            if (actionTimer % 20 == 0 && phase == 2)
                             {
-                                if (actionTimer % 20 == 0)
-                                {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                }
-
-                                if (actionTimer < 70)
-                                {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                }
-                            }
-                            else
-                            {
-                                if (actionTimer % 20 == 0)
-                                {
-                                    if (Main.rand.NextBool(2))
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    else
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                }
-
-                                //create more projectiles in phase two, done this way rather than changing the first if statement so that the increased projectiles are fired in pairs so the rhthym of the attack is kept consistant
-                                if (actionTimer < 130)
-                                {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                }
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                             }
 
+                            if (actionTimer < 140)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+
+
+                                if (Main.masterMode && actionTimer % 35 == 0) //Extra in gaps in master mode
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+                            }
                         }
                         else
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? 300 : 400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? -300 : -400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            if (actionTimer % 20 == 0 && phase == 2)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            }
+
+                            if (actionTimer < 140) //Rotations are negative to reverse sides
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+
+                                if (Main.masterMode && actionTimer % 35 == 0)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                }
+                            }
                         }
                     }
-                    if (actionTimer >= 150)
+                    if (actionTimer >= 170)
                     {
                         ChooseFollowup();
                     }
@@ -1065,7 +1086,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 wait = 90;
             }
-            else if (Main.rand.NextBool(3))
+            else if (Main.rand.NextBool(3) && !(phase == 1 && (Main.rand.NextBool()))) //Less common in phase 1
             {
                 Action = 4;
                 wait = 5;

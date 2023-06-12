@@ -41,6 +41,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             NPCID.Sets.TrailCacheLength[Type] = 7;
             NPCID.Sets.TrailingMode[NPC.type] = 0;
+            NPCID.Sets.TeleportationImmune[Type] = true;
         }
 
         public override void SetDefaults()
@@ -52,12 +53,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
-            //NPC.value = Item.buyPrice(0, 7, 7, 7);
             NPC.npcSlots = 30f;
             NPC.boss = true;
             NPC.lavaImmune = true;
             NPC.HitSound = SoundID.NPCHit4;
-            //NPC.DeathSound = SoundID.NPCDeath52;
             NPC.timeLeft = NPC.activeTime * 30;
             NPC.buffImmune[BuffID.OnFire] = true;
             NPC.noGravity = false;
@@ -472,6 +471,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         parryDamaged = 0;
                         parryDamaged = 0;
                     }
+                    else if (actionTimer < 60)
+                    {
+
+                    }
                     else if (actionTimer > 60 && actionTimer < Parry_Durration)
                     {
                         parry = true;
@@ -491,7 +494,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         {
                             Vector2 offset = new Vector2(0, 200);
                             offset = offset.RotatedBy(MathHelper.ToRadians((360 / parryRetaliate) * i));
-                            offset = offset.RotatedBy(Main.GameUpdateCount * .0001);
+                            offset = offset.RotatedBy(Main.GameUpdateCount * .02);
                             Vector2 toPlayer = player.Center - (NPC.Center + offset);
                             toPlayer.Normalize();
                             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -1069,7 +1072,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 wait = 90;
             }
-            else if (Main.rand.NextBool(3))
+            else if (Main.rand.NextBool(3) && !(phase == 1 && (Main.rand.NextBool()))) //Less common in phase 1
             {
                 Action = 4;
                 wait = 5;
@@ -1313,26 +1316,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             int ySourceHeight = (int)(NPC.frameCounter / 10) * 442;
             int xSourceHeight = (int)(frameX * 412);
-
-            //Fire Aura
-            var fire = Filters.Scene["ExoriumMod:FireAura"].GetShader().Shader;
-            fire.Parameters["noiseTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
-            fire.Parameters["gradientTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "basicGradient").Value);
-            fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
-
-            if (true)
-            {
-                Texture2D auraTex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "Aura").Value;
-                Color alpha = new Color(255, 255, 255, auraAlpha);
-
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
-
-                spriteBatch.Draw(auraTex, NPC.Center - screenPos + new Vector2(0, -150), null, Color.White, 0, auraTex.Size() / 2, 1.8f, 0, 0);
-
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-            }
 
             //ShieldDown needs frames to loop backwards
             if (frameX == 7 && shieldDown)

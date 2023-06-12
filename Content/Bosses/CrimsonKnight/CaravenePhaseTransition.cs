@@ -19,7 +19,7 @@ using Steamworks;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
-    internal class CaraveneBattleIntermission : ModNPC
+    internal class CaravenePhaseTransition : ModNPC
     {
         public override string Texture => AssetDirectory.CrimsonKnight + "Caravene" + "_Hitbox";
 
@@ -42,7 +42,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.TeleportationImmune[Type] = true;
-            NPCID.Sets.ActsLikeTownNPC[Type] = true;
         }
 
         public override void SetDefaults()
@@ -77,17 +76,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => NPC.ai[0] = value ? 1f : 0f;
         }
 
-        public float invulnerableTime
+        public float time
         {
             get => NPC.ai[1];
             set => NPC.ai[1] = value;
         }
 
         private float counter = 0;
-        private bool Despawn = false;
-        private float despawnTime;
         private bool invisible = false;
-        private float portalSize;
+        private float frameX = 0;
 
         public override void AI()
         {
@@ -119,88 +116,54 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     left = true;
             }
 
-            if (invulnerableTime > 0 || Despawn)
-            {
-                invulnerableTime--;
-                NPC.dontTakeDamage = true;
-            }
-            else
-                NPC.dontTakeDamage = false;
-
             counter++; //For animations
             if (counter >= 60)
+            {
                 counter = 0;
+                if (frameX == 5) //Jank way to keep animations smooth
+                    frameX = 4;
+            }
 
-            if (invulnerableTime > 5000)
-                Despawn = true;
-
-            if (Despawn)
+            time++;
+            if (time == 0)
             {
-                despawnTime++;
-                if (despawnTime == 30)
+                //Upset
+            }
+            else if (time == 60)
+            {
+                //Fluff
+            }
+            else if (time == 120)
+            {
+                //You asked for it
+            }
+            else if (time == 180)
+            {
+                frameX = 5;
+                counter = 0;
+            }
+            else if (time > 180 && time < 240)
+            {
+                counter++;
+            }
+            else if (time >= 240 && time < 420)
+            {
+                counter++;
+                for (int i = 0; i < 20; i++)
                 {
-                    //Say stuff
-                }
-                else if (despawnTime == 80)
-                {
-                    //Say stuff
-                }
-                else if (despawnTime == 180)
-                {
-                    invisible = true;
-                }
-                else if (despawnTime == 240)
-                {
-                    NPC.active = false;
+                    Vector2 rad = new Vector2(0, Main.rand.NextFloat(30));
+                    Vector2 shootPoint = rad.RotatedBy(Main.rand.NextFloat(0, MathHelper.TwoPi));
+                    Dust dust = Dust.NewDustPerfect(NPC.Center, DustID.SolarFlare, shootPoint, 1, default, 1 + Main.rand.NextFloat(-.5f, .5f));
+                    dust.noGravity = true;
+                    dust.color = new Color(184, 58, 24);
                 }
             }
-        }
-
-        public override string GetChat()
-        {
-            if (!Despawn)
-                return "Okay! Okay!!! You can keep it... Say, you're pretty good. How about we call this a truce for now?";
-            return "";
-        }
-
-        public override void SetChatButtons(ref string button, ref string button2)
-        {
-            if (!Despawn)
-                button = "Accept Truce";
-        }
-
-        public override void OnChatButtonClicked(bool firstButton, ref bool shop)
-        {
-            if (firstButton)
+            else if (time == 420)
             {
-                foreach (Player p in Main.player)
-                {
-                    if (p.active && !p.dead && Main.netMode != NetmodeID.MultiplayerClient && !Despawn)
-                        p.QuickSpawnItem(NPC.GetSource_DropAsItem(), ItemType<CrimsonKnightBag>());
-                    Despawn = true;
-                    invulnerableTime = 9999;//Use this as alternative way of communicating despawn over net
-
-                    //closes dialouge, may need testing
-                    Main.player[Main.myPlayer].SetTalkNPC(-1);
-                    Main.player[Main.myPlayer].sign = -1;
-                    Main.npcChatCornerItem = 0;
-                    Main.editSign = false;
-                    Main.npcChatText = "";
-                    SoundEngine.PlaySound(SoundID.MenuClose, NPC.Center);
-                    Main.player[Main.myPlayer].releaseMount = false;
-                }
-                //TODO: add bag dropping, netsend truce data, and exit animation
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<ExoriumRed>());
+                NPC.active = false;
             }
-        }
-
-        public override bool CanGoToStatue(bool toKingStatue)
-        {
-            return false;
-        }
-
-        public override bool CanChat()
-        {
-            return !Despawn;
         }
 
         public override void FindFrame(int frameHeight)
@@ -213,7 +176,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "Caravene").Value;
 
             int ySourceHeight = (int)(counter / 10) * 442;
-            int xSourceHeight = (int)(0 * 412);
+            int xSourceHeight = (int)(frameX * 412);
             if (! invisible)
             {
                 if (!left)
@@ -239,37 +202,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         0);
                 }
             }
-
-            //Portal
-            if (Despawn && despawnTime >= 120)
-            {
-                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
-                portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
-                portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
-                portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
-
-                Texture2D texPortal = Request<Texture2D>(AssetDirectory.ShaderMap + "Portal").Value;
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
-
-                if (despawnTime < 180)
-                    portalSize += .02f;
-                else
-                    portalSize -= .02f;
-
-                if (portalSize > 0)
-                    spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * portalSize, SpriteEffects.None, 0);
-
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.Additive, SamplerState.PointWrap, default, default, default, Main.GameViewMatrix.ZoomMatrix);
-            }
-
             return false;
-        }
-
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {
-            base.PostDraw(spriteBatch, screenPos, drawColor);
         }
 
         public override bool? CanHitNPC(NPC target)
@@ -280,12 +213,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
             return false;
-        }
-
-        public override void OnKill()
-        {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-                NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaravenePhaseTransition>());
         }
     }
 }
