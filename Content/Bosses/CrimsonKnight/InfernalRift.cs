@@ -9,6 +9,7 @@ using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
+using System;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -62,7 +63,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 {
                     progressValue = MathHelper.Lerp(progressValue, 1, .1f);
                 }
-                else if (Projectile.timeLeft <= 30 && progressValue > 0)
+                else if (Projectile.timeLeft <= 31 && progressValue > 0)
                 {
                     progressValue -= 1 / 30f;
                 }
@@ -72,7 +73,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 //Create Spirits
                 float dist = towerYMin - towerYMax;
-                int count = 10;
+                int count = 16;
                 float interval = dist / count;
                 bool[] leftSpirits = new bool[count];
                 bool[] rightSpirits = new bool[count];
@@ -91,7 +92,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             else
                             {
                                 leftSpirits[i] = true;
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, towerYMax + interval * i), new Vector2(-1, 0), ProjectileType<RiftSpirit>(), Projectile.damage / 2, 3, Main.myPlayer, 0);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X - 40, towerYMax + interval * i + 160), new Vector2(-1, 0), ProjectileType<RiftSpirit>(), Projectile.damage / 2, 3, Main.myPlayer, -1);
                             }
                         }
                         else
@@ -107,7 +108,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             else
                             {
                                 rightSpirits[i] = true;
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, towerYMax + interval * i), new Vector2(1, 0), ProjectileType<RiftSpirit>(), Projectile.damage / 2, 3, Main.myPlayer, 1);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X + 40, towerYMax + interval * i + 160), new Vector2(1, 0), ProjectileType<RiftSpirit>(), Projectile.damage / 2, 3, Main.myPlayer, 1);
                             }
                         }
                         else
@@ -140,8 +141,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            Projectile.width = 1;
-            Projectile.height = 1;
+            Projectile.width = 80;
+            Projectile.height = 40;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 300;
             Projectile.tileCollide = true;
@@ -149,9 +150,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.hostile = true;
         }
 
-        public float direction
+        public int direction
         {
-            get => Projectile.ai[0];
+            get => (int)Projectile.ai[0];
             set => Projectile.ai[0] = value;
         }
 
@@ -162,12 +163,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Projectile.velocity.X *= 1.02f;
             }
 
-            if (++Projectile.frameCounter >= 60 / Projectile.velocity.X)
+            if (++Projectile.frameCounter >= 60 / Math.Abs(Projectile.velocity.X))
             {
                 Projectile.frameCounter = 0;
                 if (++Projectile.frame >= Main.projFrames[Projectile.type])
                     Projectile.frame = 0;
             }
+
+            Projectile.spriteDirection = direction;
         }
 
         public override void Kill(int timeLeft)

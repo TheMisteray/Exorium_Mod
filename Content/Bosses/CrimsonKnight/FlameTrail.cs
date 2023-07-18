@@ -38,12 +38,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => Projectile.ai[0] = value ? 1f : 0f;
         }
 
-        public bool hasTouchedAir
-        {
-            get => Projectile.ai[1] == 1f;
-            set => Projectile.ai[1] = value ? 1f : 0f;
-        }
-
         public override void AI()
         {
             if (!hasTouchedGround)
@@ -67,7 +61,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Vector2 tileBottom = new Vector2(Projectile.position.X + Projectile.width / 2, Projectile.position.Y + Projectile.height);
             if (!Main.tile[tileBottom.ToTileCoordinates().X, tileBottom.ToTileCoordinates().Y].IsActuated)
                 return true;
-            return false;
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac); ;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -95,7 +89,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.height = 300;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 240;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.alpha = 255;
@@ -107,19 +101,33 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => Projectile.ai[0] = value;
         }
 
+        public bool hasTouchedGround
+        {
+            get => Projectile.ai[1] == 1f;
+            set => Projectile.ai[1] = value ? 1f : 0f;
+        }
+
         public override void AI()
         {
-            Timer++;
+            if (!hasTouchedGround)
+                Projectile.velocity.Y = 1;
 
-            if (Timer == 120)
+            if (Timer == 0)//Move to appropriate location
+            {
+                Projectile.position += new Vector2(-Projectile.width/2, -Projectile.height/2);
+            }
+            else if (Timer == 120)
                 Projectile.hostile = true;
             else if (Timer > 120)
             {
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0, -10, 0, default, 2.5f);
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0, -10, 0, default, 2.5f);
+                    Main.dust[dust].noGravity = true;
                 }
             }
+
+            Timer++;
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
@@ -132,10 +140,28 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Timer < 120)
             {
                 Texture2D tex = Request<Texture2D>(Texture).Value;
-                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition, new Rectangle(tex.Width / 2, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(Projectile.width / 2, Projectile.height), (Timer % 60) / 60, SpriteEffects.None, 0);
-                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition, new Rectangle(tex.Width / 2, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(Projectile.width / 2, Projectile.height), ((Timer + 20) % 60) / 60, SpriteEffects.None, 0);
-                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition, new Rectangle(tex.Width / 2, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(Projectile.width / 2, Projectile.height), ((Timer + 40) % 60) / 60, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(tex.Width / 2, tex.Height), ((Timer + 40) % 60) / 60 * 3, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(tex.Width / 2, tex.Height), ((Timer + 20) % 60) / 60 * 3, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, 0, new Vector2(tex.Width / 2, tex.Height), (Timer % 60) / 60 * 3, SpriteEffects.None, 0);
             }
+            return false;
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            fallThrough = false;
+            Vector2 tileBottom = new Vector2(Projectile.position.X + Projectile.width / 2, Projectile.position.Y + Projectile.height);
+            if (!Main.tile[tileBottom.ToTileCoordinates().X, tileBottom.ToTileCoordinates().Y].IsActuated)
+                return true;
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac); ;
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            hasTouchedGround = true;
+            Projectile.velocity = Vector2.Zero;
+
+            Projectile.position.Y += 1;
             return false;
         }
     }

@@ -143,16 +143,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         //Actions
         //0 - jump
-        //1 - dash                              -Untested
-        //2 - Teleport next to player
-        //3 - Send down flame ring -Rift        -Untested/Unfinished
+        //1 - dash                              -Done
+        //2 - Teleport next to player           -Unfinished
+        //3 - Send down flame ring -Rift        -Done
         //4 - parry                             -Done
         //5 - Galacta knight lol
         //6 - swords come down                  -Done
         //7 - sword beams
         //8 - hop down
         //9 - flame breath
-        //10 - portal dash                      -Untested
+        //10 - portal dash                      -Done
         //11 - Burning Sphere
         //12 - enrage
         public float Action
@@ -346,13 +346,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         Vector2 swordPoint = NPC.Bottom + new Vector2(left ? NPC.width * 1.5f : -NPC.width * 1.5f, -14);
                         if (Main.tile[swordPoint.ToTileCoordinates().X, swordPoint.ToTileCoordinates().Y].WallType != WallType<Walls.StructureWalls.FallenTowerWalls.CharredObsidianWall>())
                             endFlameSpawn = true;
-                        if ((phase == 2 || Main.masterMode) && !endFlameSpawn)
+                        if (!endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
 
-                                if (actionTimer % 30 == 0)
+                                if ((phase == 2 || Main.masterMode) && actionTimer % 30 == 0)
                                 {
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
                                 }
@@ -409,6 +409,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 2:
+                    Vector2 trueLocation = Vector2.Zero;
                     if (actionTimer == 0)
                     {
                         teleIndicator = true;
@@ -440,38 +441,58 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer == 90)
                     {
+                        //Choose the teleport spot
+                        int teleportLocal;
+                        do
+                        {
+                            teleportLocal = Main.rand.Next(6);
+                        }
+                        while (teleportLocations[teleportLocal]);
+
                         //Choose offest based on teleport location
                         Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
                         Vector2 location;
                         if (teleportLocations[0]) //Draw at locations of Teleport locations (all relative to player)
                         {
-                            location = new Vector2(-texTele.Width, Arena_Top_Left.Y + 20);
+                            location = new Vector2(player.Center.X - texTele.Width, Arena_Top_Left.Y + 20);
                             CreateCloneProjectile(location, 0);
+                            if (teleportLocal == 0)
+                                trueLocation = location;
                         }
                         if (teleportLocations[1]) //Draw at locations of Teleport locations (all relative to player)
                         {
-                            location = new Vector2(-texTele.Width, Arena_Top_Left.Y + 544);
+                            location = new Vector2(player.Center.X - texTele.Width, Arena_Top_Left.Y + 544);
                             CreateCloneProjectile(location, 1);
+                            if (teleportLocal == 1)
+                                trueLocation = location;
                         }
                         if (teleportLocations[2]) //Draw at locations of Teleport locations (all relative to player)
                         {
-                            location = new Vector2(-texTele.Width, Arena_Top_Left.Y + 864);
+                            location = new Vector2(player.Center.X - texTele.Width, Arena_Top_Left.Y + 864);
                             CreateCloneProjectile(location, 2);
+                            if (teleportLocal == 2)
+                                trueLocation = location;
                         }
                         if (teleportLocations[3]) //Draw at locations of Teleport locations (all relative to player)
                         {
-                            location = new Vector2(texTele.Width, Arena_Top_Left.Y + 20);
+                            location = new Vector2(player.Center.X + texTele.Width, Arena_Top_Left.Y + 20);
                             CreateCloneProjectile(location, 3);
+                            if (teleportLocal == 3)
+                                trueLocation = location;
                         }
                         if (teleportLocations[4]) //Draw at locations of Teleport locations (all relative to player)
                         {
-                            location = new Vector2(texTele.Width, Arena_Top_Left.Y + 544);
+                            location = new Vector2(player.Center.X + texTele.Width, Arena_Top_Left.Y + 544);
                             CreateCloneProjectile(location, 4);
+                            if (teleportLocal == 4)
+                                trueLocation = location;
                         }
                         if (teleportLocations[5]) //Draw at locations of Teleport locations (all relative to player)
                         {
-                            location = new Vector2(texTele.Width, Arena_Top_Left.Y + 864);
+                            location = new Vector2(player.Center.X + texTele.Width, Arena_Top_Left.Y + 864);
                             CreateCloneProjectile(location, 5);
+                            if (teleportLocal == 5)
+                                trueLocation = location;
                         }
                     }
                     else if (actionTimer == 180)
@@ -479,30 +500,17 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         NPC.velocity = Vector2.Zero;
                         noContactDamage = false;
 
-                        //Teleport 
-                        Vector2 offset = new Vector2(left ? NPC.width : -NPC.width, -NPC.height / 2.4f);//Reversed from normal
-
-                        //Find point to dash to
-                        //Adjust to not leave arena
-                        Vector2 coordinatesOfDash = player.Center + offset;
-                        if (coordinatesOfDash.Y < maxTeleportHeight - NPC.height / 2)
-                            coordinatesOfDash.Y = maxTeleportHeight - NPC.height / 2;
-                        if (coordinatesOfDash.X < minTeleportX + NPC.width / 2)
-                            coordinatesOfDash.X = minTeleportX + NPC.width / 2;
-                        if (coordinatesOfDash.X > maxTeleportX - NPC.width / 2)
-                            coordinatesOfDash.X = maxTeleportX - NPC.width / 2;
-
-                        NPC.Center = coordinatesOfDash;
+                        NPC.Center = trueLocation;
                         teleIndicator = false;
                     }
-                    else if (actionTimer == 220)
+                    else if (actionTimer == 200)
                     {
                         NPC.noGravity = false;
                         NPC.noTileCollide = false;
                         frameX = 1;
                         NPC.frameCounter = 0;
                     }
-                    else if (actionTimer >= 250)
+                    else if (actionTimer >= 230)
                     {
                         ChooseMovement();
                     }
@@ -517,7 +525,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         frameX = 1;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(206 * (left ? 1 : -1), 0), Vector2.Zero, ProjectileType<InfernalRift>(), damage, 1, Main.myPlayer, Arena_Top_Left.Y, Arena_Bottom_Left.Y);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(206 * (left ? 1 : -1), 0), Vector2.Zero, ProjectileType<InfernalRift>(), damage, 1, Main.myPlayer, topL.Y, ExoriumWorld.FallenTowerRect.BottomLeft().Y);
                     }
                     else if (actionTimer > 240)
                     {
@@ -893,7 +901,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         Vector2 swordPoint = NPC.Bottom + new Vector2(left ? NPC.width * 1.5f : -NPC.width * 1.5f, -14);
                         if (Main.tile[swordPoint.ToTileCoordinates().X, swordPoint.ToTileCoordinates().Y].WallType != WallType<Walls.StructureWalls.FallenTowerWalls.CharredObsidianWall>())
                             endFlameSpawn = true;
-                        if (phase == 2 && !endFlameSpawn)
+                        if (!endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
@@ -1563,33 +1571,33 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 if (teleportLocations[0]) //Draw at locations of Teleport locations (all relative to player)
                 {
-                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 20);
+                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y - 40 - p.Center.Y);
                     spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
                 }
                 if (teleportLocations[1]) //Draw at locations of Teleport locations (all relative to player)
                 {
-                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 544);
+                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 280 - p.Center.Y);
                     spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
                 }
                 if (teleportLocations[2]) //Draw at locations of Teleport locations (all relative to player)
                 {
-                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 864);
+                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 588 - p.Center.Y);
                     spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
                 }
                 if (teleportLocations[3]) //Draw at locations of Teleport locations (all relative to player)
                 {
-                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 20);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y - 40 - p.Center.Y);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.None, 0);
                 }
                 if (teleportLocations[4]) //Draw at locations of Teleport locations (all relative to player)
                 {
-                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 544);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 280 - p.Center.Y);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.None, 0);
                 }
                 if (teleportLocations[5]) //Draw at locations of Teleport locations (all relative to player)
                 {
-                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 864);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
+                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 588 - p.Center.Y);
+                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.None, 0);
                 }
 
                 //spriteBatch.Draw(texTele, (Main.player[NPC.target].Bottom + new Vector2(!left ? texTele.Width : -texTele.Width, -texTele.Height / 2)) - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), !left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);

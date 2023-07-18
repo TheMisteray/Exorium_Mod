@@ -53,9 +53,9 @@ float4 MainPS(float4 pos : SV_POSITION, float2 coords : TEXCOORD0) : COLOR0
 	{
 		float2 sampleCoords;
 		if (xDist < 0)//Grab from direction to opening
-			sampleCoords.x = coords.x + ((uColor.x * uProgress + uColor.y) * .5f);
+			sampleCoords.x = coords.x + ((uColor.x * uProgress) * .5f);
 		else
-			sampleCoords.x = coords.x - ((uColor.x * uProgress + uColor.y) * .5f);
+			sampleCoords.x = coords.x - ((uColor.x * uProgress) * .5f);
 		sampleCoords.y = coords.y;
 
 		return tex2D(uImage0, sampleCoords);
