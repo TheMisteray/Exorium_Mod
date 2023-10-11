@@ -13,7 +13,6 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Reduced regeneration");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -23,8 +24,8 @@ namespace ExoriumMod.Content.Tiles
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2); //this style already takes care of direction for us
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 			TileObjectData.addTile(Type);
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Deadwood Bed");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Deadwood Bed");
 			AddMapEntry(new Color(40, 40, 40), name);
 			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
 			TileID.Sets.DisableSmartCursor[Type] = true;

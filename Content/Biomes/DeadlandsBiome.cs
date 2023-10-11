@@ -43,7 +43,7 @@ namespace ExoriumMod.Content.Biomes
 		// Use SetStaticDefaults to assign the display name
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("The Deadlands");
+			// DisplayName.SetDefault("The Deadlands");
 		}
 
 		// Calculate when the biome is active.

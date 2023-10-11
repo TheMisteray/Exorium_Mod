@@ -11,9 +11,9 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sand Aegis");
-            Description.SetDefault("The sand aegis will protect you \n" +
-                "Sand aegis grant 1 defense each");
+            // DisplayName.SetDefault("Sand Aegis");
+            /* Description.SetDefault("The sand aegis will protect you \n" +
+                "Sand aegis grant 1 defense each"); */
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

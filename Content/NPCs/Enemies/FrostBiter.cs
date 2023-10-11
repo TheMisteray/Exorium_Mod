@@ -62,7 +62,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             attackCounter = reader.ReadInt32();
         }
 
-        public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(NPC.HitInfo hit)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -111,7 +111,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             NPC.noGravity = true;
         }
 
-        public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(NPC.HitInfo hit)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -166,7 +166,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             tail = true;
         }
 
-        public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(NPC.HitInfo hit)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -198,7 +198,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Frost Biter");
+            // DisplayName.SetDefault("Frost Biter");
         }
 
         public override void Init()

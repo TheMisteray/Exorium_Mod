@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sand Wisp");
-            Description.SetDefault("The sand wisp will fight for you");
+            // DisplayName.SetDefault("Sand Wisp");
+            // Description.SetDefault("The sand wisp will fight for you");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

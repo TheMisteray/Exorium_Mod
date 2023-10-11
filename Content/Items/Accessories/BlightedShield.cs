@@ -14,10 +14,6 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Reduced regeneration" +
-                "\n25% decreased speed" +
-                "\nAllows the player to dash into the enemy" +
-                "\nDouble tap a direction");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

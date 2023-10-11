@@ -13,8 +13,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tome of Pestilence");
-            Tooltip.SetDefault("Shoots a trail of blight specks");
+            // DisplayName.SetDefault("Tome of Pestilence");
+            // Tooltip.SetDefault("Shoots a trail of blight specks");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

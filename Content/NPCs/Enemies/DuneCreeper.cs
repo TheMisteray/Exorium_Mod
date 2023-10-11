@@ -19,7 +19,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dune Creeper");
+            // DisplayName.SetDefault("Dune Creeper");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.WallCreeper];
         }
 
@@ -3464,7 +3464,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dune Creeper");
+            // DisplayName.SetDefault("Dune Creeper");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.WallCreeperWall];
         }
 

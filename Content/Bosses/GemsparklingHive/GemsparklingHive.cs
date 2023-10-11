@@ -317,14 +317,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             NPC.frameCounter++;
         }
 
-        public override bool StrikeNPC(ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
+        public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
         {
             if (aiState != 1)
-                effectiveDamageTaken += (float)damage;
+                effectiveDamageTaken += (float)modifiers.FinalDamage.Flat;
             if (aiState != 0)
-                knockback = 0;
+                modifiers.Knockback.Flat = 0;
             NPC.life = NPC.lifeMax;
-            return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
+            base.ModifyIncomingHit(ref modifiers);
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -357,8 +357,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 aiState = 0;
                 if (numSparks == 0)
                 {
-                    NPC.StrikeNPC(9999, 0, 0, true);
-                    NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, NPC.whoAmI, 9999, 0, 0, 1);
+                    NPC.HitInfo hit = new NPC.HitInfo();
+                    hit.Damage = 9999;
+                    NPC.StrikeNPC(hit, true);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                        NetMessage.SendStrikeNPC(NPC, hit);
                 }
             }
         }

@@ -21,8 +21,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Fan of Colors");
-            Tooltip.SetDefault("Throw a fan of colored knives");
+            // DisplayName.SetDefault("Fan of Colors");
+            // Tooltip.SetDefault("Throw a fan of colored knives");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

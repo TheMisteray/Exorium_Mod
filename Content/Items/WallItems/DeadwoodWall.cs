@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Items.WallItems
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Incredibly light");
+            // Tooltip.SetDefault("Incredibly light");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 400;
 
         }

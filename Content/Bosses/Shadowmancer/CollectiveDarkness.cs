@@ -218,7 +218,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadow Bolt");
+            // DisplayName.SetDefault("Shadow Bolt");
         }
 
         public override void SetDefaults()
@@ -274,7 +274,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadow");
+            // DisplayName.SetDefault("Shadow");
             Main.projFrames[Projectile.type] = 4;
         }
 
@@ -419,7 +419,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Darkness");
+            // DisplayName.SetDefault("Darkness");
         }
 
         public override void SetDefaults()

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
@@ -24,11 +25,11 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.CoordinateHeights = new[] { 18 };
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-            ModTranslation name = CreateMapEntryName();
+            LocalizedText name = CreateMapEntryName();
             AddMapEntry(new Color(90, 90, 90), name);
             TileID.Sets.DisableSmartCursor[Type] = true;
             AdjTiles = new int[] { TileID.WorkBenches };
-            DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
+            DustType = DustType<Dusts.DeadwoodTreeDust>();
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

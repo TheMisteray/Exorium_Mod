@@ -21,8 +21,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A hammer with an explosive impact\n" +
-                "Hold longer for a stronger slam");
+            /* Tooltip.SetDefault("A hammer with an explosive impact\n" +
+                "Hold longer for a stronger slam"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -65,7 +65,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Infernal Sledge");
+            // DisplayName.SetDefault("Infernal Sledge");
             ProjectileID.Sets.NeedsUUID[Projectile.type] = true;
         }
 
@@ -225,7 +225,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Infernal Sledge");
+            // DisplayName.SetDefault("Infernal Sledge");
             ProjectileID.Sets.NeedsUUID[Projectile.type] = true;
         }
 
@@ -272,7 +272,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             dust.noGravity = true;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 420);
         }

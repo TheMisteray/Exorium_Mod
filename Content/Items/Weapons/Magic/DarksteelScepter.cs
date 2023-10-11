@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void SetStaticDefaults()
         {
             Item.staff[Item.type] = true;
-            Tooltip.SetDefault("Shoots bursts of homing skulls");
+            // Tooltip.SetDefault("Shoots bursts of homing skulls");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

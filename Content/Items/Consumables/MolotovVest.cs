@@ -15,8 +15,8 @@ namespace ExoriumMod.Content.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("\"A masterful invention\"\n" +
-                "Don't use near any structures you care about");
+            /* Tooltip.SetDefault("\"A masterful invention\"\n" +
+                "Don't use near any structures you care about"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 9;
         }
 

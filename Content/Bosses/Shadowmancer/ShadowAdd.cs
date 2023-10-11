@@ -17,7 +17,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadow");
+            // DisplayName.SetDefault("Shadow");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.Wraith];
         }
 
@@ -75,9 +75,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             if (NPC.ai[2] == -1 && Main.netMode != NetmodeID.MultiplayerClient) //Killed by collective Darkness
             {
-                NPC.StrikeNPC(333, 0, 0, true);
+                NPC.HitInfo hit = new NPC.HitInfo();
+                hit.Damage = 333;
+                hit.Crit = true;
+                NPC.StrikeNPC(hit);
                 if (Main.netMode != NetmodeID.SinglePlayer)
-                    NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, NPC.whoAmI, 333, 0, 0, 1);
+                    NetMessage.SendStrikeNPC(NPC, hit);
                 NPC.active = false;
                 NPC.life = -1;
             }

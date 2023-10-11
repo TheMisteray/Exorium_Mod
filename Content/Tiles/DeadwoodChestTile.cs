@@ -40,16 +40,19 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Deadwood Chest");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Deadwood Chest");
             AddMapEntry(new Color(90, 90, 90), name, MapChestName);
             TileID.Sets.DisableSmartCursor[Type] = true;
             AdjTiles = new int[] { TileID.Containers };
-            ContainerName.SetDefault("Deadwood Chest");
-            ChestDrop = ItemType<Items.TileItems.DeadwoodChest>();
             DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
 
             TileID.Sets.BasicChest[Type] = true;
+        }
+
+        public override LocalizedText DefaultContainerName(int frameX, int frameY)
+        {
+            return CreateMapEntryName();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].TileFrameX / 36);
@@ -90,7 +93,6 @@ namespace ExoriumMod.Content.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ChestDrop);
             Chest.DestroyChest(i, j);
         }
 

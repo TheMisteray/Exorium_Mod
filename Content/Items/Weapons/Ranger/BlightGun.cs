@@ -15,8 +15,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Scourge");
-            Tooltip.SetDefault("Right click to fire a wild shotgun blast");
+            // DisplayName.SetDefault("Scourge");
+            // Tooltip.SetDefault("Right click to fire a wild shotgun blast");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

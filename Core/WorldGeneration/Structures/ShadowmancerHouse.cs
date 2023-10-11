@@ -3,6 +3,7 @@ using Terraria;
 using static Terraria.ModLoader.ModContent;
 using ExoriumMod.Content.Tiles;
 using ExoriumMod.Content.Walls.StructureWalls.ShadowmancerWalls;
+using Terraria.WorldBuilding;
 
 namespace ExoriumMod.Core.WorldGeneration.Structures
 {
@@ -24,7 +25,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                 i = Main.maxTilesX / 2 + (WorldGen.genRand.Next(-Main.maxTilesX / 6, Main.maxTilesX / 6));
                 j = (Main.maxTilesY / 5) * 2 + (WorldGen.genRand.Next(-Main.maxTilesY / 12, Main.maxTilesY / 6));
                 //Check for other protected structures
-                if (WorldGen.structures.CanPlace(new Rectangle(i, j, _shadowhouseShape.GetLength(1), _shadowhouseShape.GetLength(0)), 50))
+                if (GenVars.structures.CanPlace(new Rectangle(i, j, _shadowhouseShape.GetLength(1), _shadowhouseShape.GetLength(0)), 50))
                     success = true;
                 else
                     attempts++;
@@ -90,7 +91,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                 }
             }
             //Protect from other generation
-            WorldGen.structures.AddStructure(new Rectangle(i, j, _shadowhouseShape.GetLength(1), _shadowhouseShape.GetLength(0)), 50);
+            GenVars.structures.AddStructure(new Rectangle(i, j, _shadowhouseShape.GetLength(1), _shadowhouseShape.GetLength(0)), 50);
         }
 
         public static void FillCrates()

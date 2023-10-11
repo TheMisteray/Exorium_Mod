@@ -16,7 +16,6 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
             Main.tileSolid[Type] = true;
             Main.tileMerge[TileID.Ash][this.Type] = true;
             Main.tileBlockLight[Type] = true;
-            ItemDrop = ItemType<Items.TileItems.StructureTileItems.FallenTowerTileItems.CharredObsidian>();
             AddMapEntry(new Color(51, 12, 5));
             DustType = DustID.Obsidian;
             HitSound = SoundID.Tink;

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -22,11 +23,10 @@ namespace ExoriumMod.Content.Tiles
             DustType = 1;
             Main.dust[DustType].color = new Color(54, 54, 42);
 
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Blightsteel Ore");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Blightsteel Ore");
             AddMapEntry(new Color(75,75,0), name);
 
-            ItemDrop = ItemType<Items.Materials.Metals.BlightedOre>();
             HitSound = SoundID.Tink;
             MineResist = 3f;
             MinPick = 65;

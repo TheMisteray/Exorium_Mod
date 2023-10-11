@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("A Dancing Sword");
-            Description.SetDefault("The Dancing Sword has a mind of its own");
+            // DisplayName.SetDefault("A Dancing Sword");
+            // Description.SetDefault("The Dancing Sword has a mind of its own");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

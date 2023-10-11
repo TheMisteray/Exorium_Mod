@@ -39,19 +39,22 @@ namespace ExoriumMod.Content.Tiles
 			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 			TileObjectData.addTile(Type);
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Deadwood Dresser");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Deadwood Dresser");
 			AddMapEntry(new Color(90, 90, 90), name);
 			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
 			TileID.Sets.DisableSmartCursor[Type] = true;
 			AdjTiles = new int[] { TileID.Dressers };
-			ContainerName.SetDefault("Deadwood Dresser");
-			DresserDrop = ModContent.ItemType<Items.TileItems.DeadwoodDresser>();
 
 			TileID.Sets.BasicDresser[Type] = true;
 		}
 
-		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
+        public override LocalizedText DefaultContainerName(int frameX, int frameY)
+        {
+            return CreateMapEntryName();
+        }
+
+        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
@@ -237,7 +240,6 @@ namespace ExoriumMod.Content.Tiles
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 48, 32, DresserDrop);
 			Chest.DestroyChest(i, j);
 		}
 	}

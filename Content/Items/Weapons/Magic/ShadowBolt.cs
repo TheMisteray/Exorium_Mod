@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Shoots shadowbolts that split apart on impact");
+            // Tooltip.SetDefault("Shoots shadowbolts that split apart on impact");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

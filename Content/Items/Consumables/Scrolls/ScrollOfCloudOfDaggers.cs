@@ -16,8 +16,8 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Casts Cloud of Daggers");
-            DisplayName.SetDefault("Spell Scroll: Cloud of Daggers");
+            // Tooltip.SetDefault("Casts Cloud of Daggers");
+            // DisplayName.SetDefault("Spell Scroll: Cloud of Daggers");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 

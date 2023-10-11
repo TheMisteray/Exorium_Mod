@@ -17,9 +17,9 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Launches explosive blobs of lava\n" +
+            /* Tooltip.SetDefault("Launches explosive blobs of lava\n" +
                 "Sets fires nearby\n" +
-                "Consumes 5 gel per use");
+                "Consumes 5 gel per use"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -183,7 +183,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 420);
         }
@@ -236,7 +236,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 Projectile.rotation = MathHelper.Pi;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 420);
         }

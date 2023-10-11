@@ -15,9 +15,9 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Withered Staff");
+            // DisplayName.SetDefault("Withered Staff");
             Item.staff[Item.type] = true;
-            Tooltip.SetDefault("Bursts into blight specks on impact");
+            // Tooltip.SetDefault("Bursts into blight specks on impact");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

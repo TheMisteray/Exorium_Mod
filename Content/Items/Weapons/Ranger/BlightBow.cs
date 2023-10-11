@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightsteel Bow");
+            // DisplayName.SetDefault("Blightsteel Bow");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

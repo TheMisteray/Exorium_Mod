@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -15,8 +16,8 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Treasure Bag (Blighted Slime)");
-            Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
+            // DisplayName.SetDefault("Treasure Bag (Blighted Slime)");
+            // Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
 
             ItemID.Sets.BossBag[Type] = true;
@@ -40,11 +41,11 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             return true;
         }
 
-        public override void OpenBossBag(Player player)
+        public override void ModifyItemLoot(ItemLoot itemLoot)
         {
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Materials.TaintedGel>(), Main.rand.Next(50, 66));
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Materials.Metals.BlightedOre>(), Main.rand.Next(80, 121));
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Accessories.CoreOfBlight>());
+			itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<BlightedSlime>()));
+			itemLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.TaintedGel>(), 1, 50, 66));
+			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Accessories.CoreOfBlight>(), 1));
         }
 
 		public override Color? GetAlpha(Color lightColor)
@@ -126,7 +127,5 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
 			return true;
 		}
-
-		public override int BossBagNPC => NPCType<BlightedSlime>();
     }
 }

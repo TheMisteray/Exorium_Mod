@@ -5,6 +5,7 @@ using ExoriumMod.Content.Walls.StructureWalls.FallenTowerWalls;
 using ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles;
 using ExoriumMod.Content.Tiles;
 using Terraria.ID;
+using Terraria.WorldBuilding;
 
 namespace ExoriumMod.Core.WorldGeneration.Structures
 {
@@ -34,7 +35,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                 ExoriumWorld.FallenTowerRect.Height = _fallenTowerShape.GetLength(0) * 16;
 
                 //Check for other protected structures
-                if (WorldGen.structures.CanPlace(new Rectangle(i, j, _fallenTowerShape.GetLength(1), _fallenTowerShape.GetLength(0)), 50))
+                if (GenVars.structures.CanPlace(new Rectangle(i, j, _fallenTowerShape.GetLength(1), _fallenTowerShape.GetLength(0)), 50))
                     success = true;
                 else
                     attempts++;
@@ -109,7 +110,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
             }
 
             //Protect from other generation
-            WorldGen.structures.AddStructure(new Rectangle(i, j, _fallenTowerShape.GetLength(1), _fallenTowerShape.GetLength(0)), 50);
+            GenVars.structures.AddStructure(new Rectangle(i, j, _fallenTowerShape.GetLength(1), _fallenTowerShape.GetLength(0)), 50);
         }
 
         private static readonly int[,] _fallenTowerShape = {

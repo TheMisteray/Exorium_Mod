@@ -13,7 +13,6 @@ namespace ExoriumMod.Content.Walls.StructureWalls.FallenTowerWalls
         public override void SetStaticDefaults()
         {
             Main.wallHouse[Type] = false;
-            ItemDrop = ItemType<Items.WallItems.StructureWallItems.FallenTowerWallItems.CharredObsidianWall>();
             AddMapEntry(new Color(25, 6, 2));
         }
 

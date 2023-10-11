@@ -110,7 +110,7 @@ namespace ExoriumMod.Core
             downedBlightslime = false;
         }
 
-        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWright)
+        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
             int ShiniesIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Shinies"));
             if (ShiniesIndex != -1)
@@ -148,7 +148,7 @@ namespace ExoriumMod.Core
             for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 12E-05); i++)
             {
                 int x = WorldGen.genRand.Next(0, Main.maxTilesX);
-                int y = WorldGen.genRand.Next((int)WorldGen.rockLayer, Main.maxTilesY); //Spawn in cavern layer
+                int y = WorldGen.genRand.Next((int)GenVars.rockLayer, Main.maxTilesY); //Spawn in cavern layer
                 Tile tile = Framing.GetTileSafely(x, y);
                 if (tile.HasTile && tile.TileType == TileID.Stone)
                 {
@@ -159,7 +159,7 @@ namespace ExoriumMod.Core
             for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 5E-04); i++)
             {
                 int x = WorldGen.genRand.Next(0, Main.maxTilesX);
-                int y = WorldGen.genRand.Next((int)WorldGen.worldSurfaceLow, Main.maxTilesY);
+                int y = WorldGen.genRand.Next((int)GenVars.worldSurfaceLow, Main.maxTilesY);
                 Tile tile = Framing.GetTileSafely(x, y);
                 if (tile.HasTile && tile.TileType == TileID.IceBlock || tile.TileType == TileID.SnowBlock)
                 {
@@ -170,7 +170,7 @@ namespace ExoriumMod.Core
             for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 6E-04); i++)
             {
                 int x = WorldGen.genRand.Next(0, Main.maxTilesX);
-                int y = WorldGen.genRand.Next((int)WorldGen.worldSurfaceLow, Main.maxTilesY);
+                int y = WorldGen.genRand.Next((int)GenVars.worldSurfaceLow, Main.maxTilesY);
                 Tile tile = Framing.GetTileSafely(x, y);
                 if (tile.HasTile && (tile.TileType == TileID.Sandstone || tile.TileType == TileID.Sand || tile.TileType == TileID.HardenedSand))
                 {

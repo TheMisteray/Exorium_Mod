@@ -17,9 +17,9 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blighted Greatsword");
-            Tooltip.SetDefault("A massive two-handed weapon\n" +
-                "Hold to charge a stronger swing");
+            // DisplayName.SetDefault("Blighted Greatsword");
+            /* Tooltip.SetDefault("A massive two-handed weapon\n" +
+                "Hold to charge a stronger swing"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -62,7 +62,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blighted Sword");
+            // DisplayName.SetDefault("Blighted Sword");
             Main.projFrames[Projectile.type] = 7;
             ProjectileID.Sets.NeedsUUID[Projectile.type] = true;
         }
@@ -224,9 +224,9 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             hitbox.Height = Projectile.width;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage *= (int)(strength + 2);
+            modifiers.FinalDamage *= (int)(strength + 2);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

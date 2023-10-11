@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -48,18 +49,54 @@ namespace ExoriumMod.Content.Tiles
                 spriteEffects = SpriteEffects.FlipHorizontally;
         }
 
-        public override bool Drop(int i, int j)
+        public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
             PlantStage stage = GetStage(i, j);
 
-            if (stage == PlantStage.Grown)
+            Vector2 worldPosition = new Vector2(i, j).ToWorldCoordinates();
+            Player nearestPlayer = Main.player[Player.FindClosest(worldPosition, 16, 16)];
+
+            int herbItemType = ModContent.ItemType<Items.Materials.Deadweed>();
+            int herbItemStack = 1;
+
+            int seedItemType = ModContent.ItemType<Items.TileItems.DeadweedSeeds>();
+            int seedItemStack = 1;
+
+            if (stage == PlantStage.Growing)
             {
-                Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.TileItems.DeadweedSeeds>(), 2);
-                Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.Materials.Deadweed>());
+                // Default yields, only when growing
+                seedItemStack = 1;
+
+                if (nearestPlayer.active && nearestPlayer.HeldItem.type == ItemID.StaffofRegrowth)
+                {
+                    // Increased yields with Staff of Regrowth, even when not fully grown
+                    herbItemStack = 1;
+                    seedItemStack = Main.rand.Next(1, 2);
+                }
             }
-            else if (stage == PlantStage.Growing)
-                Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j).ToWorldCoordinates(), ModContent.ItemType<Items.TileItems.DeadweedSeeds>());
-            return false;
+            else if (stage == PlantStage.Grown)
+            {
+                // Default yields, only when fully grown
+                herbItemStack = 1;
+                seedItemStack = 2;
+
+                if (nearestPlayer.active && nearestPlayer.HeldItem.type == ItemID.StaffofRegrowth)
+                {
+                    // Increased yields with Staff of Regrowth, even when not fully grown
+                    herbItemStack = Main.rand.Next(1, 2);
+                    seedItemStack = Main.rand.Next(1, 4);
+                }
+            }
+
+            if (herbItemType > 0 && herbItemStack > 0)
+            {
+                yield return new Item(herbItemType, herbItemStack);
+            }
+
+            if (seedItemType > 0 && seedItemStack > 0)
+            {
+                yield return new Item(seedItemType, seedItemStack);
+            }
         }
 
         public override void RandomUpdate(int i, int j)

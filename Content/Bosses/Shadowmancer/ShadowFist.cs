@@ -56,7 +56,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Projectile.Kill();
         }

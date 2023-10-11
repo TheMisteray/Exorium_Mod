@@ -13,11 +13,6 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("20% reduced magic, melee and ranged damage \n" +
-                "-2 defense \n" +
-                "7% increased minion damage \n" +
-                "+1 max minions \n" +
-                "A staple spell focus for apprentice Shadowmancers");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

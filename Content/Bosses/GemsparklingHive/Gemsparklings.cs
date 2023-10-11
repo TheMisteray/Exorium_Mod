@@ -512,11 +512,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             return base.CanHitPlayer(target, ref cooldownSlot);
         }
 
-        public override bool StrikeNPC(ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
+        public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
         {
             if (NPC.ai[1] == 2)
-                damage -= 10;
-            return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
+                modifiers.FinalDamage -= 10;
+            base.ModifyIncomingHit(ref modifiers);
         }
 
         public override void OnKill()

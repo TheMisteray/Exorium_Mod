@@ -10,7 +10,7 @@ namespace ExoriumMod.Content.Items.Materials
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A withered plant");
+            // Tooltip.SetDefault("A withered plant");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 

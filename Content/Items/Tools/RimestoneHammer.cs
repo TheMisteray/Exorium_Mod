@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.Items.Tools
             Item.scale = 1.3f;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Main.rand.Next(5) == 1)
             {

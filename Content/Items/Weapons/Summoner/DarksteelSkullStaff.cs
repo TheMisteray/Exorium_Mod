@@ -16,8 +16,8 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Summons a Darksteel skull to fight for you \n" +
-                "Each skull grants +3% summon damage");
+            /* Tooltip.SetDefault("Summons a Darksteel skull to fight for you \n" +
+                "Each skull grants +3% summon damage"); */
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

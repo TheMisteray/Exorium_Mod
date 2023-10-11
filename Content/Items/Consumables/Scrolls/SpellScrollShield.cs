@@ -15,9 +15,9 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Casts Shield \n" +
-                "Increases defense for a short time");
-            DisplayName.SetDefault("Spell Scroll: Shield");
+            /* Tooltip.SetDefault("Casts Shield \n" +
+                "Increases defense for a short time"); */
+            // DisplayName.SetDefault("Spell Scroll: Shield");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 

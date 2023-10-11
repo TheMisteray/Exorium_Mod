@@ -17,9 +17,9 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Inflicts Frostburn \n" +
+            /* Tooltip.SetDefault("Inflicts Frostburn \n" +
                 "Striking targets has a chance to build up energy up to 5 times \n" +
-                "Right click to release the built up energy");
+                "Right click to release the built up energy"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -77,7 +77,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             return false;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.Frostburn, 200, true);
             if (frost <= 26)
@@ -145,7 +145,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             DustHelper.DustCircle(Projectile.Center, DustType<Dusts.Rainbow>(), Projectile.width / 2, (float)Math.Pow(Projectile.ai[0], 2), 1, 0, 0, 0, Color.LightBlue, false);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.Frostburn, 200 * (int)Projectile.ai[0], true);
         }

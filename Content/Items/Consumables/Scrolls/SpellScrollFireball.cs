@@ -13,8 +13,8 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Casts Fireball");
-            DisplayName.SetDefault("Spell Scroll: Fireball");
+            // Tooltip.SetDefault("Casts Fireball");
+            // DisplayName.SetDefault("Spell Scroll: Fireball");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 

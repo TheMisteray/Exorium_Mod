@@ -5,6 +5,8 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System.Collections.Generic;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent;
 
 namespace ExoriumMod.Content.NPCs.Town
 {
@@ -15,6 +17,8 @@ namespace ExoriumMod.Content.NPCs.Town
         public override string HeadTexture => Texture + "_Head";
 
         public override string Name => base.Name;
+        public const string ShopName = "Shop";
+        private static Profiles.StackedNPCProfile NPCProfile;
 
         public override List<string> SetNPCNameList()/* tModPorter Suggestion: Return a list of names */
         {
@@ -24,9 +28,14 @@ namespace ExoriumMod.Content.NPCs.Town
             };
         }
 
+        public override ITownNPCProfile TownNPCProfile()
+        {
+            return NPCProfile;
+        }
+
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Lunatic");
+            // DisplayName.SetDefault("Lunatic");
             Main.npcFrameCount[NPC.type] = 23;
             NPCID.Sets.ExtraFramesCount[NPC.type] = NPCID.Sets.ExtraFramesCount[NPCID.Wizard];
             NPCID.Sets.AttackFrameCount[NPC.type] = NPCID.Sets.AttackFrameCount[NPCID.Wizard];
@@ -53,7 +62,7 @@ namespace ExoriumMod.Content.NPCs.Town
             AnimationType = NPCID.Wizard;
         }
 
-        public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+        public override bool CanTownNPCSpawn(int numTownNPCs)/* tModPorter Suggestion: Copy the implementation of NPC.SpawnAllowed_Merchant in vanilla if you to count money, and be sure to set a flag when unlocked, so you don't count every tick. */
         {
             if (numTownNPCs > 2)
             {
@@ -67,7 +76,7 @@ namespace ExoriumMod.Content.NPCs.Town
             int Wizard = NPC.FindFirstNPC(NPCID.Wizard);
             int Clothier = NPC.FindFirstNPC(NPCID.Clothier);
             int Guide = NPC.FindFirstNPC(NPCID.Guide);
-            if (Main.rand.Next(500) == 0)
+            if (Main.rand.NextBool(500))
             {
                 switch (Main.rand.Next(3))
                 {
@@ -127,21 +136,72 @@ namespace ExoriumMod.Content.NPCs.Town
             }
         }
 
+        /*
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				// Sets the preferred biomes of this town NPC listed in the bestiary.
+				// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+
+				// Sets your NPC's flavor text in the bestiary.
+				new FlavorTextBestiaryInfoElement("Hailing from a mysterious greyscale cube world, the Example Person is here to help you understand everything about tModLoader."),
+
+				// You can add multiple elements if you really wanted to
+				// You can also use localization keys (see Localization/en-US.lang)
+				new FlavorTextBestiaryInfoElement("Mods.ExampleMod.Bestiary.ExamplePerson")
+            });
+        }*/
+
         public override void SetChatButtons(ref string button, ref string button2)
         {
             button = Language.GetTextValue("LegacyInterface.28");
         }
 
-        public override void OnChatButtonClicked(bool firstButton, ref bool shop)
+        public override void OnChatButtonClicked(bool firstButton, ref string shopName)
         {
             if (firstButton)
             {
-                shop = true;
+                shopName = ShopName;
             }
         }
 
-        public override void SetupShop(Chest shop, ref int nextSlot)
+        public override void AddShops()
         {
+            var npcShop = new NPCShop(Type, ShopName)
+                .Add(ItemID.Amethyst)
+                .Add(ItemID.Topaz)
+                .Add<Items.Weapons.Magic.Firebolt>()
+                .Add<Items.Accessories.RitualBone>()
+                .Add<Items.Consumables.Scrolls.ScrollOfMagicMissiles>()
+                .Add<Items.Consumables.Scrolls.SpellScrollShield>()
+                .Add<Items.Consumables.Scrolls.ScrollOfCloudOfDaggers>(Condition.DownedEarlygameBoss)
+                .Add<Items.Consumables.Scrolls.SpellScrollAcidArrow>()
+                .Add<Items.Consumables.Scrolls.SpellScrollMistyStep>()
+                .Add<Items.Consumables.Scrolls.SpellScrollFireball>(Condition.DownedSkeletron)
+                .Add<Items.Consumables.Scrolls.SpellScrollDelayedBlastFireball>(Condition.DownedCultist);
+
+            npcShop.Register();
+        }
+
+        public override void ModifyActiveShop(string shopName, Item[] items)
+        {
+            if (shopName == ShopName)
+            {
+                items[0].shopCustomPrice = Item.buyPrice(0, 0, 50, 0);
+                items[1].shopCustomPrice = Item.buyPrice(0, 0, 50, 0);
+                items[2].shopCustomPrice = Item.buyPrice(0, 1, 5, 0);
+                items[3].shopCustomPrice = Item.buyPrice(0, 0, 50, 0);
+                items[4].shopCustomPrice = Item.buyPrice(0, 0, 30, 0);
+                items[5].shopCustomPrice = Item.buyPrice(0, 1, 50, 0);
+                items[6].shopCustomPrice = Item.buyPrice(0, 1, 0, 0);
+                items[7].shopCustomPrice = Item.buyPrice(0, 1, 7, 0);
+                items[8].shopCustomPrice = Item.buyPrice(0, 3, 0, 0);
+                items[9].shopCustomPrice = Item.buyPrice(0, 3, 0, 0);
+                items[10].shopCustomPrice = Item.buyPrice(0, 18, 0, 0);
+            }
+            /*
             shop.item[nextSlot].SetDefaults(ItemID.Amethyst);
             shop.item[nextSlot].shopCustomPrice = Item.buyPrice(0, 0, 50, 0);
             nextSlot++;
@@ -183,7 +243,7 @@ namespace ExoriumMod.Content.NPCs.Town
                 shop.item[nextSlot].SetDefaults(ItemType<Items.Consumables.Scrolls.SpellScrollDelayedBlastFireball>());
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(0, 18, 0, 0);
                 nextSlot++;
-            }
+            }*/
         }
 
         public override bool CanGoToStatue(bool toKingStatue)

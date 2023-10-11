@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mini Blighted Slime");
-            Description.SetDefault("The mini blightslime will fight for you");
+            // DisplayName.SetDefault("Mini Blighted Slime");
+            // Description.SetDefault("The mini blightslime will fight for you");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

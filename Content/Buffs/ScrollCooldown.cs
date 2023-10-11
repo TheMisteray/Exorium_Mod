@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Scroll Cooldown");
-            Description.SetDefault("You cannot use Spell Scrolls");
+            // DisplayName.SetDefault("Scroll Cooldown");
+            // Description.SetDefault("You cannot use Spell Scrolls");
             Main.pvpBuff[Type] = false;
             Main.buffNoSave[Type] = false;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

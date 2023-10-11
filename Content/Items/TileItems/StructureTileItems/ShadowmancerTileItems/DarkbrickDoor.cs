@@ -11,7 +11,7 @@ namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.ShadowmancerTile
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Becomes impassable in the presence of Shadowmancers");
+            // Tooltip.SetDefault("Becomes impassable in the presence of Shadowmancers");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

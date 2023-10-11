@@ -32,7 +32,6 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
             AddMapEntry(new Color(51, 12, 5));
-            ItemDrop = ItemType<Items.TileItems.StructureTileItems.FallenTowerTileItems.CharredObsidianPlatform>();
             TileID.Sets.DisableSmartCursor[Type] = true;
             AdjTiles = new int[] { TileID.Platforms };
             DustType = DustID.Obsidian;

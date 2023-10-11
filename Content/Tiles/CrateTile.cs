@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using System;
+using System.ComponentModel;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -38,14 +39,20 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Crate");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Crate");
             AddMapEntry(new Color(200, 200, 200), name);
             TileID.Sets.DisableSmartCursor[Type] = true;
-            ContainerName.SetDefault("Crate");
-            DresserDrop = ModContent.ItemType<Items.TileItems.StructureTileItems.ShadowmancerTileItems.Crate>();
+
+            //Keeping one instance of this just in case
+            //ContainerName/* tModPorter Note: Removed. Override DefaultContainerName instead */.SetDefault("Crate");
 
             TileID.Sets.BasicDresser[Type] = true;
+        }
+
+        public override LocalizedText DefaultContainerName(int frameX, int frameY)
+        {
+            return CreateMapEntryName();
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
@@ -204,7 +211,7 @@ namespace ExoriumMod.Content.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 48, 32, DresserDrop);
+            //Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 48, 32, ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */);
             Chest.DestroyChest(i, j);
         }
     }

@@ -17,7 +17,6 @@ namespace ExoriumMod.Content.Tiles
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
-            ItemDrop = ItemType<Items.TileItems.AshenDust>();
             AddMapEntry(new Color(90, 90, 90));
             DustType = DustType<Dusts.DeadDust>();
         }

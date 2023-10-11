@@ -41,9 +41,9 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
             TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
             TileObjectData.newTile.StyleHorizontal = true;
-            ModTranslation name = CreateMapEntryName();
+            LocalizedText name = CreateMapEntryName();
             TileObjectData.addTile(Type);
-            name.SetDefault("Shadow Altar");
+            // name.SetDefault("Shadow Altar");
             AddMapEntry(new Color(20, 20, 20), name);
             TileID.Sets.DisableSmartCursor[Type] = true;
             MinPick = 10000;
@@ -56,7 +56,6 @@ namespace ExoriumMod.Content.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ChestDrop);
             Chest.DestroyChest(i, j);
         }
 

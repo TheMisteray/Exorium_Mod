@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Items.Armor
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("+40 maximum mana \n+1 max minions");
+            // Tooltip.SetDefault("+40 maximum mana \n+1 max minions");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -60,8 +60,8 @@ namespace ExoriumMod.Content.Items.Armor
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dunestone Splint");
-            Tooltip.SetDefault("4% increased magic and summon damage");
+            // DisplayName.SetDefault("Dunestone Splint");
+            // Tooltip.SetDefault("4% increased magic and summon damage");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

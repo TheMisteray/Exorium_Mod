@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Shoots rings of energy");
+            // Tooltip.SetDefault("Shoots rings of energy");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -76,14 +76,13 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             DustHelper.DustRing(Projectile.Center, DustType<Dusts.Rainbow>(), Projectile.width * Projectile.scale / 2, 0, .14f, .16f, 0, 0, 0, Color.Lime, false);
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Projectile.position = Projectile.Center;
             Projectile.scale -= .25f;
             Projectile.Center = Projectile.position;
             if (Projectile.scale <= 0)
                 Projectile.Kill();
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

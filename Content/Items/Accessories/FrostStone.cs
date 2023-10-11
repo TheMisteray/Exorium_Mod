@@ -11,7 +11,6 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Your melee attacks inflict frostburn");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

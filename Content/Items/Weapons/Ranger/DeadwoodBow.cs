@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Incredibly light");
+            // Tooltip.SetDefault("Incredibly light");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

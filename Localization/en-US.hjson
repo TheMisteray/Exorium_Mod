@@ -1,0 +1,1029 @@
+Mods: {
+	ExoriumMod: {
+		Biomes: {
+			DeadlandBiome: {
+				DisplayName: The Deadlands
+				TownNPCDialogueName: the Deadland Biome
+			}
+		}
+
+		NPCs: {
+			BlightedSlime.DisplayName: Blighted Slime
+			Caravene.DisplayName: Crimson Knight
+			CaraveneBattleIntermission.DisplayName: Crimson Knight
+			CaravenePhaseTransition.DisplayName: Crimson Knight
+			ExoriumRed.DisplayName: Crimson Knight
+			AmberGemsparkling.DisplayName: Amber Gemsparkling
+			AmethystGemsparkling.DisplayName: Amethyst Gemsparkling
+			DiamondGemsparkling.DisplayName: Diamond Gemsparkling
+			EmeraldGemsparkling.DisplayName: Emerald Gemsparkling
+			GemsparklingHive.DisplayName: Gemsparkling Hive
+			RubyGemsparkling.DisplayName: Ruby Gemsparkling
+			SapphireGemsparkling.DisplayName: Sapphire Gemsparkling
+			SuspiciousLookingGeode.DisplayName: Suspicious Looking Geode
+			TopazGemsparkling.DisplayName: Topaz Gemsparkling
+			AssierJassad.DisplayName: Shadowmancer
+			MirrorEntity.DisplayName: Shadowmancer
+			ShadowAdd.DisplayName: Shadow
+			Poltergeist.DisplayName: Specter
+			WightArcher.DisplayName: Wight Archer
+			WightWarrior.DisplayName: Wight Warrior
+			DuneCreeper.DisplayName: Dune Creeper
+			DuneCreeperWall.DisplayName: Dune Creeper
+			FrostBiterBody.DisplayName: Frost Biter
+			FrostBiterHead.DisplayName: Frost Biter Head
+			FrostBiterTail.DisplayName: Frost Biter
+
+			Lunatic: {
+				DisplayName: Lunatic
+
+				TownNPCMood: {
+					Content: I am content.
+					NoHome: I hate not having a home.
+					FarFromHome: I am too far from home.
+					LoveSpace: I love having so much space.
+					DislikeCrowded: I dislike how crowded I am.
+					HateCrowded: I hate how crowded I am.
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+		}
+
+		Items: {
+			BlightedSlimeBag: {
+				DisplayName: Treasure Bag (Blighted Slime)
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+			}
+
+			TaintedSludge: {
+				DisplayName: Tainted Sludge
+				Tooltip: Summons the Blighted Slime
+			}
+
+			CrimsonKnightBag: {
+				DisplayName: Treasure Bag (Crimson Knight)
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+			}
+
+			ShadowmancerBag: {
+				DisplayName: Treasure Bag (Shadowmancer)
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+			}
+
+			BlightedManacle: {
+				DisplayName: Blighted Manacle
+				Tooltip: Reduced regeneration
+			}
+
+			BlightedShield: {
+				DisplayName: Blighted Shield
+				Tooltip:
+					'''
+					Reduced regeneration
+					25% decreased speed
+					Allows the player to dash into the enemy
+					Double tap a direction
+					'''
+			}
+
+			CoreOfBlight: {
+				DisplayName: Core of Blight
+				Tooltip:
+					'''
+					Reduced regeneration
+					Increased damage when regeneration is negative
+					Decreased damage when regeneration is positive
+					'''
+			}
+
+			FrostStone: {
+				DisplayName: Frost Stone
+				Tooltip: Your melee attacks inflict frostburn
+			}
+
+			GloomAmulet: {
+				DisplayName: Gloom Amulet
+				Tooltip:
+					'''
+					20% reduced magic, melee and ranged damage 
+					-2 defense 
+					7% increased minion damage 
+					+1 max minions 
+					A staple spell focus for apprentice Shadowmancers
+					'''
+			}
+
+			RitualBone: {
+				DisplayName: Ritual Bone
+				Tooltip: It seems that it is trying to lead you somewhere.
+			}
+
+			ShadowmancerCloak: {
+				DisplayName: Shadowmancer Cloak
+				Tooltip:
+					'''
+					Veils you in shadow
+					The cloak has 40 health which can regenerate over time
+					It grants 6 defense, increased regeneration, and immunity to fire and frostburn while it has health remaining
+					Whenever you take damage the cloak also takes that much damage
+					If the cloak is destroyed it must regenerate fully before its effects return
+					'''
+			}
+
+			WightQuiver: {
+				DisplayName: Wight Quiver
+				Tooltip:
+					'''
+					Reduced regeneration 
+					10% chance not to consume ammo
+					6% increased arrow damage
+					'''
+			}
+
+			RimeBullets: {
+				DisplayName: Rime Bullet
+				Tooltip: Chance to inflict Frostburn
+			}
+
+			BlightedChestplate: {
+				DisplayName: Blightsteel Breastplate
+				Tooltip:
+					'''
+
+					6% decreased movement speed
+					3% increased damage
+					Decreased regeneration
+					'''
+			}
+
+			BlightedHelm: {
+				DisplayName: Blightsteel Crown
+				Tooltip:
+					'''
+					2% decreased movement speed
+					2% increased damage
+					Decreased regeneration
+					'''
+			}
+
+			BlightedLeggings: {
+				DisplayName: Blightsteel Leggings
+				Tooltip:
+					'''
+					3% decreased movement speed
+					2% increased damage
+					Decreased regeneration
+					'''
+			}
+
+			DarksteelBreastplate: {
+				DisplayName: Darksteel Breastplate
+				Tooltip: 5% increased movement speed
+			}
+
+			DarksteelHelm: {
+				DisplayName: Darksteel Helm
+				Tooltip: 4% increased damage
+			}
+
+			DarksteelLeggings: {
+				DisplayName: Darksteel Leggings
+				Tooltip: 15% increased movement speed
+			}
+
+			DeadwoodBreastplate: {
+				DisplayName: Deadwood Breastplate
+				Tooltip: ""
+			}
+
+			DeadwoodGreaves: {
+				DisplayName: Deadwood Greaves
+				Tooltip: ""
+			}
+
+			DeadwoodHelmet: {
+				DisplayName: Deadwood Helmet
+				Tooltip: ""
+			}
+
+			DunestoneChainmail: {
+				DisplayName: Dunestone Splint
+				Tooltip: 4% increased magic and summon damage
+			}
+
+			DunestoneGreaves: {
+				DisplayName: Dunestone Greaves
+				Tooltip: ""
+			}
+
+			DunestoneHelmet: {
+				DisplayName: Dunestone Helmet
+				Tooltip:
+					'''
+					+40 maximum mana 
+					+1 max minions
+					'''
+			}
+
+			RimestoneChainmail: {
+				DisplayName: Rimestone Chainmail
+				Tooltip: 4% Increased melee and ranged damage
+			}
+
+			RimestoneGreaves: {
+				DisplayName: Rimestone Greaves
+				Tooltip: ""
+			}
+
+			RimestoneHelmet: {
+				DisplayName: Rimestone Helmet
+				Tooltip:
+					'''
+					20% chance not to consume ammo 
+					5% Increased melee speed
+					'''
+			}
+
+			MolotovVest: {
+				DisplayName: Molotov Vest
+				Tooltip:
+					'''
+					"A masterful invention"
+					Don't use near any structures you care about
+					'''
+			}
+
+			BlightskinPotion: {
+				DisplayName: Blightskin Potion
+				Tooltip:
+					'''
+					12 defense 
+					Greatly reduced life regeneration
+					'''
+			}
+
+			ScrollOfCloudOfDaggers: {
+				DisplayName: Spell Scroll: Cloud of Daggers
+				Tooltip: Casts Cloud of Daggers
+			}
+
+			ScrollOfMagicMissiles: {
+				DisplayName: Spell Scroll: Magic Missiles
+				Tooltip: Casts Magic Missiles
+			}
+
+			SpellScrollAcidArrow: {
+				DisplayName: Spell Scroll: Acid Arrows
+				Tooltip:
+					'''
+					Casts Acid Arrows 
+					Your wooden arrows become tipped with acid for a short time
+					'''
+			}
+
+			SpellScrollDelayedBlastFireball: {
+				DisplayName: Spell Scroll: Delayed Blast Fireball
+				Tooltip: Casts Delayed Blast Fireball
+			}
+
+			SpellScrollFireball: {
+				DisplayName: Spell Scroll: Fireball
+				Tooltip: Casts Fireball
+			}
+
+			SpellScrollMistyStep: {
+				DisplayName: Spell Scroll: Misty Step
+				Tooltip:
+					'''
+					Casts Misty Step 
+					Teleports you to anywhere your character can see, but not through blocks
+					'''
+			}
+
+			SpellScrollShield: {
+				DisplayName: Spell Scroll: Shield
+				Tooltip:
+					'''
+					Casts Shield 
+					Increases defense for a short time
+					'''
+			}
+
+			Deadweed: {
+				DisplayName: Deadweed
+				Tooltip: A withered plant
+			}
+
+			BlightedOre: {
+				DisplayName: Blightsteel Ore
+				Tooltip: ""
+			}
+
+			BlightsteelBar: {
+				DisplayName: Blightsteel Bar
+				Tooltip: It bites at your skin
+			}
+
+			DarksteelBar: {
+				DisplayName: Darksteel Alloy
+				Tooltip: Not the real stuff, but It'll do for now
+			}
+
+			DuneStone: {
+				DisplayName: Dune Stone
+				Tooltip: ""
+			}
+
+			DunestoneBar: {
+				DisplayName: Dunestone Bar
+				Tooltip: A hard stone with a coarse feel
+			}
+
+			RimeStone: {
+				DisplayName: Rime Stone
+				Tooltip: ""
+			}
+
+			RimestoneBar: {
+				DisplayName: Rimestone Bar
+				Tooltip: A chilly crystalline bar
+			}
+
+			TaintedGel: {
+				DisplayName: Tainted Gel
+				Tooltip: The ooze of deadlands
+			}
+
+			WightBone: {
+				DisplayName: Wight Bone
+				Tooltip: ""
+			}
+
+			DarkKey: {
+				DisplayName: Dark Key
+				Tooltip: Unlocks dark chests
+			}
+
+			AshenDust: {
+				DisplayName: Ashen Dust
+				Tooltip: ""
+			}
+
+			DeadweedSeeds: {
+				DisplayName: Deadweed Seeds
+				Tooltip: ""
+			}
+
+			Deadwood: {
+				DisplayName: Deadwood
+				Tooltip: Light and porous wood
+			}
+
+			DeadwoodBed: {
+				DisplayName: Deadwood Bed
+				Tooltip: ""
+			}
+
+			DeadwoodBookshelf: {
+				DisplayName: Deadwood Bookshelf
+				Tooltip: ""
+			}
+
+			DeadwoodChest: {
+				DisplayName: Deadwood Chest
+				Tooltip: ""
+			}
+
+			DeadwoodDoor: {
+				DisplayName: Deadwood Door
+				Tooltip: ""
+			}
+
+			DeadwoodDresser: {
+				DisplayName: Deadwood Dresser
+				Tooltip: ""
+			}
+
+			DeadwoodPlatform: {
+				DisplayName: Deadwood Platform
+				Tooltip: Incredibly light
+			}
+
+			DeadwoodTable: {
+				DisplayName: Deadwood Table
+				Tooltip: ""
+			}
+
+			DeadwoodWorkbench: {
+				DisplayName: Deadwood Workbench
+				Tooltip: ""
+			}
+
+			CharredObsidian: {
+				DisplayName: Charred Obsidian
+				Tooltip: ""
+			}
+
+			CharredObsidianPlatform: {
+				DisplayName: Charred Obsidian Platform
+				Tooltip: ""
+			}
+
+			Crate: {
+				DisplayName: Crate
+				Tooltip: ""
+			}
+
+			DarkBrick: {
+				DisplayName: Dark Brick
+				Tooltip: ""
+			}
+
+			DarkbrickDoor: {
+				DisplayName: Darkbrick Door
+				Tooltip: Becomes impassable in the presence of Shadowmancers
+			}
+
+			DarkChest: {
+				DisplayName: Dark Chest
+				Tooltip: ""
+			}
+
+			BlightedHamaxe: {
+				DisplayName: Frayed Hamaxe
+				Tooltip: ""
+			}
+
+			BlightedPickaxe: {
+				DisplayName: Diseased Pickaxe
+				Tooltip: ""
+			}
+
+			DarksteelPicksaw: {
+				DisplayName: Darksteel Picksaw
+				Tooltip: ""
+			}
+
+			DeadwoodHammer: {
+				DisplayName: Deadwood Hammer
+				Tooltip: ""
+			}
+
+			DunestoneAxe: {
+				DisplayName: Dunestone Axe
+				Tooltip: ""
+			}
+
+			DunestoneHammer: {
+				DisplayName: Dunestone Hammer
+				Tooltip: ""
+			}
+
+			DunestonePickaxe: {
+				DisplayName: Dunestone Pickaxe
+				Tooltip: ""
+			}
+
+			RimestoneAxe: {
+				DisplayName: Rimestone Axe
+				Tooltip: ""
+			}
+
+			RimestoneHammer: {
+				DisplayName: Rimestone Hammer
+				Tooltip: ""
+			}
+
+			RimestonePickaxe: {
+				DisplayName: Rimestone Pickaxe
+				Tooltip: ""
+			}
+
+			DeadwoodWall: {
+				DisplayName: Deadwood Wall
+				Tooltip: Incredibly light
+			}
+
+			CharredObsidianWall: {
+				DisplayName: Charred Obsidian Wall
+				Tooltip: ""
+			}
+
+			DarkBrickWall: {
+				DisplayName: Dark Brick Wall
+				Tooltip: ""
+			}
+
+			BlightedStaff: {
+				DisplayName: Withered Staff
+				Tooltip: Bursts into blight specks on impact
+			}
+
+			BurningSphere: {
+				DisplayName: Burning Sphere
+				Tooltip: Conjure a slowly moving sphere of flames
+			}
+
+			DarksteelScepter: {
+				DisplayName: Darksteel Scepter
+				Tooltip: Shoots bursts of homing skulls
+			}
+
+			Firebolt: {
+				DisplayName: Firebolt
+				Tooltip: ""
+			}
+
+			GlitteringGun: {
+				DisplayName: Glittering Gun
+				Tooltip: '''"Or was it the glimmering gun..."'''
+			}
+
+			Pestilence: {
+				DisplayName: Tome of Pestilence
+				Tooltip: Shoots a trail of blight specks
+			}
+
+			PulseRinger: {
+				DisplayName: Pulse Ringer
+				Tooltip: Shoots rings of energy
+			}
+
+			SettlingSands: {
+				DisplayName: Settling Sands
+				Tooltip:
+					'''
+					Launches bouncing sand balls 
+					"This is a horrible idea"
+					'''
+			}
+
+			ShadowBolt: {
+				DisplayName: Shadow Bolt
+				Tooltip: Shoots shadowbolts that split apart on impact
+			}
+
+			StoneOfTheSands: {
+				DisplayName: Stone of the Sands
+				Tooltip:
+					'''
+					Creates a ring of sand balls that rotate aroung you 
+					Right click to shoot them forward
+					'''
+			}
+
+			BlightedPike: {
+				DisplayName: Mildew
+				Tooltip: Launches specks of blight
+			}
+
+			BlightSword: {
+				DisplayName: Blighted Greatsword
+				Tooltip:
+					'''
+					A massive two-handed weapon
+					Hold to charge a stronger swing
+					'''
+			}
+
+			BruhBlade: {
+				DisplayName: BruhBlade
+				Tooltip: Bruh.
+			}
+
+			BurningHands: {
+				DisplayName: Burning Hands
+				Tooltip:
+					'''
+					Unleash flames from your fingertips
+					Uses Mana and can't be used with mana sickness
+					Right click to shoot a flaming fist
+					(Right click does not use mana)
+					'''
+			}
+
+			DarksteelBlade: {
+				DisplayName: Darksteel Blade
+				Tooltip: Shoots a homing skull
+			}
+
+			DeadwoodSword: {
+				DisplayName: Deadwood Sword
+				Tooltip: Incredibly light
+			}
+
+			FanOfColors: {
+				DisplayName: Fan of Colors
+				Tooltip: Throw a fan of colored knives
+			}
+
+			FrostedBoomerang: {
+				DisplayName: Frosted Chackram
+				Tooltip: Inflicts Frostburn
+			}
+
+			InfernalSledge: {
+				DisplayName: Infernal Sledge
+				Tooltip:
+					'''
+					A hammer with an explosive impact
+					Hold longer for a stronger slam
+					'''
+			}
+
+			NineLivesStealer: {
+				DisplayName: Nine Lives Stealer
+				Tooltip:
+					'''
+					Instantly kills non-boss creatures with 50 hp or less (100 in expert mode) 
+					Heals the player whenever something is killed this way
+					'''
+			}
+
+			RimestoneBlade: {
+				DisplayName: Rimestone Blade
+				Tooltip:
+					'''
+					Inflicts Frostburn 
+					Striking targets has a chance to build up energy up to 5 times 
+					Right click to release the built up energy
+					'''
+			}
+
+			AcidOrb: {
+				DisplayName: Acid Orb
+				Tooltip:
+					'''
+					A glass sphere filled with an acidic substance
+					Covers hit enemies with acid
+					'''
+			}
+
+			BlightBow: {
+				DisplayName: Blightsteel Bow
+				Tooltip: ""
+			}
+
+			BlightGun: {
+				DisplayName: Scourge
+				Tooltip: Right click to fire a wild shotgun blast
+			}
+
+			DarksteelBow: {
+				DisplayName: Darksteel Bow
+				Tooltip: Has a chance to fire a Darksteel arrow, dealing double damage
+			}
+
+			DeadwoodBow: {
+				DisplayName: Deadwood Bow
+				Tooltip: Incredibly light
+			}
+
+			IonRay: {
+				DisplayName: Ion Ray
+				Tooltip: Charges up small lasers
+			}
+
+			LustrousBow: {
+				DisplayName: Lustrous Bow
+				Tooltip:
+					'''
+					Converts arrows into beams of colored light
+					 Beams redirect towrds your cursor
+					'''
+			}
+
+			MagmaMortar: {
+				DisplayName: Magma Mortar
+				Tooltip:
+					'''
+					Launches explosive blobs of lava
+					Sets fires nearby
+					Consumes 5 gel per use
+					'''
+			}
+
+			RimestoneBow: {
+				DisplayName: Rimestone Bow
+				Tooltip: Has a chance to shoot additional frostburn arrows
+			}
+
+			ThrowingRapier: {
+				DisplayName: Throwing Rapier
+				Tooltip:
+					'''
+					"Anything works if you roll a 20"
+					If the tip of the rapier hits the enemy it will stick
+					Otherwise it will bounce
+					'''
+			}
+
+			BlightedPinStaff: {
+				DisplayName: Blighted Pin Staff
+				Tooltip:
+					'''
+					Summons a Blightsteel Needle to fight for you 
+					Needles stick for 15 seconds after striking an enemy 
+					If 4 or more needles are stuck to the same enemy, that enemy takes additional damage over time
+					Two needles occupy one minion slot
+					'''
+			}
+
+			BlightslimeStaff: {
+				DisplayName: Blightslime Staff
+				Tooltip: Summons a tiny blight slime to fight for you
+			}
+
+			DancingSword: {
+				DisplayName: Dancing Sword
+				Tooltip: Summons a sword with a mind of it's own
+			}
+
+			DarksteelSkullStaff: {
+				DisplayName: Darksteel Skull Staff
+				Tooltip:
+					'''
+					Summons a Darksteel skull to fight for you 
+					Each skull grants +3% summon damage
+					'''
+			}
+
+			IceCream: {
+				DisplayName: Ice Cream
+				Tooltip: Please eat it INSIDE your room.
+			}
+
+			SandWispStaff: {
+				DisplayName: Sand Wisp Staff
+				Tooltip: Summons a small sand spirit to fight for you
+			}
+
+			ShadowOrb: {
+				DisplayName: Shadow Orb
+				Tooltip:
+					'''
+					Produces a shadow on impact that will do your bidding
+					Shadows have a small chance to inflict consuming dark
+					'''
+			}
+
+			FlameTongue: {
+				DisplayName: Flame Tongue
+				Tooltip:
+					'''
+					7 summon tag damage
+					Your summons will focus struck enemies
+					It flails of it's own accord
+					Lights targets ablaze and slightly lowers their defense
+					Your summons amplify this burn effectHold to control the tongue
+					'''
+			}
+
+			SparklingWhip: {
+				DisplayName: Sparkling Whip
+				Tooltip:
+					'''
+					8 summon tag damage
+					Your summons will focus struck enemies
+					Incredibly heavy, may break
+					'''
+			}
+		}
+
+		Projectiles: {
+			BlightedSpike.DisplayName: Blighted Spike
+			BlightedThorn.DisplayName: Blighted Thorn
+			BlightSlimeShot.DisplayName: Blight Slime Shot
+			SpikePlacer.DisplayName: Spike Placer
+			backupFireball.DisplayName: backup Fireball
+			CaraveneBladeProj.DisplayName: Flametounge SwordBeam
+			CaraveneBladeProjHorizontal.DisplayName: Flametounge SwordBeam
+			CaraveneClone.DisplayName: Image of Red
+			CaraveneFireball.DisplayName: Fireball
+			FireballRing.DisplayName: Fireball
+			FlamePillar.DisplayName: Flame Pillar
+			FlametoungeBeam.DisplayName: Flametounge Swordbeam
+			FlameTrail.DisplayName: Flame Trail
+			FlamingSphere.DisplayName: Flaming Sphere
+			gridCollision.DisplayName: Explosion
+			GridFire.DisplayName: Fireball
+			gridShot.DisplayName: Fireblast
+			indicatorRainSword.DisplayName: Flametounge Swordbeam
+			InfernalRift.DisplayName: Infernal Rift
+			ReboundingSword.DisplayName: Flametounge Swordbeam
+			RiftSpirit.DisplayName: Rift Spirit
+			SwordHitbox.DisplayName: Flametounge
+			AmberPulse.DisplayName: Amber Pulse
+			DiamondBeam.DisplayName: Diamond Beam
+			EmeraldSpike.DisplayName: Emerald Spike
+			GemDart.DisplayName: Gem Dart
+			RubyCrystal.DisplayName: Ruby Crystal
+			TopazBeam.DisplayName: Topaz Beam
+			AbsorbedShadow.DisplayName: Darkness
+			CollectiveDarkness.DisplayName: Collective Darkness
+			CollectiveFragment.DisplayName: Shadow Bolt
+			Hex.DisplayName: Hex
+			RotatingShade.DisplayName: Shadow
+			ShadowBlade.DisplayName: Shadow Blade
+			ShadowBolt.DisplayName: Shadow Bolt
+			ShadowFist.DisplayName: Shadow Fist
+			ShadowOrb.DisplayName: Shadow Orb
+			RimeBullet.DisplayName: Rimestone Bullet
+			DaggerCloud.DisplayName: Dagger Cloud
+			DaggerCloudDagger.DisplayName: Dagger Cloud Dagger
+			DelayedBlastFireball.DisplayName: Delayed Blast Fireball
+			BlightHail.DisplayName: Blight Hail
+			BlightShot.DisplayName: Blight Shot
+			BurningSphereProjectile.DisplayName: Burning Sphere
+			DarksteelSkullMagic.DisplayName: Darksteel Skull Magic
+			DuneBall.DisplayName: Dune Ball
+			EnergyRing.DisplayName: Energy Ring
+			FireboltProj.DisplayName: Firebolt Proj
+			SandShot.DisplayName: Bouncing Sand
+			ShadowBoltSpell.DisplayName: Shadow Bolt Spell
+			ShadowBoltSpellShard.DisplayName: Shadow Bolt Spell Shard
+			SparkleShot.DisplayName: Sparkle Shot
+			BlightedPikeProj.DisplayName: Blighted Pike Proj
+			BlightHailMelee.DisplayName: Blight Hail Melee
+			BurningHand.DisplayName: Burning Hand
+			ColorKnife.DisplayName: Color Knife
+			DarksteelSkullMelee.DisplayName: Darksteel Skull Melee
+			HeldInfernalSledge.DisplayName: Infernal Sledge
+			InfernalTrails.DisplayName: Infernal Sledge
+			RimeBladeProj.DisplayName: Rime Blade Proj
+			RimeBoomerang.DisplayName: Frosted Chackram
+			SwungBlightedSword.DisplayName: Blighted Sword
+			AcidOrbProj.DisplayName: Acid Orb Proj
+			DarksteelArrow.DisplayName: Darksteel Arrow
+			IonBeam.DisplayName: Ion Beam
+			LingeringFlame.DisplayName: Lingering Flame
+			LustrousBeam.DisplayName: Lustrous Beam
+			MagmaBlob.DisplayName: Magma Blob
+			ThrowingRapierProj.DisplayName: Throwing Rapier Proj
+			FlameTongueProjectile.DisplayName: Flame Tounge
+			SparklingWhipHead.DisplayName: Sparkling Whip Head
+			SparklingWhipProjectile.DisplayName: SparklingWhip
+			DarksteelSkull.DisplayName: Darksteel Skull
+			Fireball.DisplayName: Fireball
+			BlightedNeedleSummon.DisplayName: Blighsteel Needle
+			BlightSlime.DisplayName: Blight Slime
+			DancingSwordSummon.DisplayName: DancingSword
+			DarksteelSkullSummon.DisplayName: Darksteel Skull
+			Gum.DisplayName: Gum
+			SandAegis.DisplayName: Sand Aegis
+			SandWisp.DisplayName: Sand Wisp
+			ShadowOrbSummon.DisplayName: Shadow Orb Summon
+			ShadowSummon.DisplayName: Shadow
+			SkullShot.DisplayName: Skull Shot
+			Wum.DisplayName: Wum
+			InfernoBeam.DisplayName: Inferno Beam
+		}
+
+		Buffs: {
+			AcidArrows: {
+				DisplayName: Acid Arrows
+				Description: Your wooden arrows inflict acid
+			}
+
+			Blightskin: {
+				DisplayName: Blightskin
+				Description: Defense at the cost of regeneration
+			}
+
+			CausticAcid: {
+				DisplayName: Caustic Acid
+				Description: Your flesh boils and burns
+			}
+
+			ConsumingDark: {
+				DisplayName: Consuming Dark
+				Description: The darkness drains the life from you
+			}
+
+			BlightedNeedleSummonBuff: {
+				DisplayName: Blightsteel Needle
+				Description:
+					'''
+					The Blightsteel Needle will fight for you 
+
+					'''
+			}
+
+			BlightSlime: {
+				DisplayName: Mini Blighted Slime
+				Description: The mini blightslime will fight for you
+			}
+
+			DancingSwordSummonBuff: {
+				DisplayName: A Dancing Sword
+				Description: The Dancing Sword has a mind of its own
+			}
+
+			DarksteelSkull: {
+				DisplayName: Mordite Skull
+				Description:
+					'''
+					The Darksteel skull will fight for you 
+					Each skull gives +3% summon damage
+					'''
+			}
+
+			FlameTongueBurn: {
+				DisplayName: Mods.ExoriumMod.BuffName.FlameTongueBurn
+				Description: Mods.ExoriumMod.BuffDescription.FlameTongueBurn
+			}
+
+			FlameTongueTag: {
+				DisplayName: Mods.ExoriumMod.BuffName.FlameTongueTag
+				Description: Mods.ExoriumMod.BuffDescription.FlameTongueTag
+			}
+
+			SandAegis: {
+				DisplayName: Sand Aegis
+				Description:
+					'''
+					The sand aegis will protect you 
+					Sand aegis grant 1 defense each
+					'''
+			}
+
+			SandWisp: {
+				DisplayName: Sand Wisp
+				Description: The sand wisp will fight for you
+			}
+
+			ShadowSummon: {
+				DisplayName: Shadow
+				Description: The shadow serves you
+			}
+
+			SparklingWhipTag: {
+				DisplayName: Mods.ExoriumMod.BuffName.SparklingWhipTag
+				Description: Mods.ExoriumMod.BuffDescription.SparklingWhipTag
+			}
+
+			StuckBlightedNeedleDebuff: {
+				DisplayName: Stuck
+				Description: Ouch
+			}
+
+			WumBuff: {
+				DisplayName: Wum
+				Description: Here to save the world
+			}
+
+			ScrollCooldown: {
+				DisplayName: Scroll Cooldown
+				Description: You cannot use Spell Scrolls
+			}
+
+			Shield: {
+				DisplayName: Shield
+				Description: Increased Defense
+			}
+
+			ThrowingRapierDamage: {
+				DisplayName: 20!!!
+				Description: Mods.ExoriumMod.Buffs.ThrowingRapierDamage.Description
+			}
+		}
+
+		Tiles: {
+			CrateTile: {
+				ContainerName: Crate
+				MapEntry: Crate
+			}
+
+			DarkChestTile: {
+				ContainerName: Dark Chest
+				MapEntry: Dark Chest
+			}
+
+			DeadwoodChestTile: {
+				ContainerName: Deadwood Chest
+				MapEntry: Deadwood Chest
+			}
+
+			DeadwoodDresserTile: {
+				ContainerName: Deadwood Dresser
+				MapEntry: Deadwood Dresser
+			}
+
+			BlightedOreTile.MapEntry: Blightsteel Ore
+			DarkChestTile_Locked.MapEntry: Locked Dark Chest
+			DeadwoodBedTile.MapEntry: Deadwood Bed
+			DeadwoodBookshelfTile.MapEntry: Deadwood Bookcase
+			DeadwoodDoorClosed.MapEntry: Deadwood Door
+			DeadwoodDoorOpen.MapEntry: Deadwood Door
+			DeadwoodSaplingTile.MapEntry: Sapling
+			DeadwoodTableTile.MapEntry: Deadwood Table
+			DeadwoodWorkbenchTile.MapEntry: Mods.ExoriumMod.MapObject.DeadwoodWorkbenchTile
+			DuneStoneTile.MapEntry: DuneStone
+			RimeStoneTile.MapEntry: RimeStone
+			ShadowAltarTile.MapEntry: Shadow Altar
+			DarkbrickDoorOpen.MapEntry: Darkbrick Door Open
+			DarkbrickDoorClosed.MapEntry: Darkbrick Door Closed
+		}
+	}
+}

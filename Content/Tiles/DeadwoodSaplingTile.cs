@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
@@ -36,8 +37,8 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.RandomStyleRange = 3;
             TileObjectData.addTile(Type);
             TileID.Sets.TreeSapling[Type] = true;
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Sapling");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Sapling");
             AddMapEntry(new Color(200, 200, 200), name);
             DustType = DustType<Dusts.DeadDust>();
             AdjTiles = new int[] { TileID.Saplings };

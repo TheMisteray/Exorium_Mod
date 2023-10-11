@@ -11,7 +11,6 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Reduced regeneration \n10% chance not to consume ammo\n6% increased arrow damage");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

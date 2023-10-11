@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Has a chance to shoot additional frostburn arrows");
+            // Tooltip.SetDefault("Has a chance to shoot additional frostburn arrows");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

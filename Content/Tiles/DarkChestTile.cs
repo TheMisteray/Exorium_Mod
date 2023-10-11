@@ -40,18 +40,21 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Dark Chest");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Dark Chest");
             AddMapEntry(new Color(240, 240, 240), name, MapChestName);
-            name = CreateMapEntryName(Name + "_Locked"); // With multiple map entries, you need unique translation keys.
-            name.SetDefault("Locked Dark Chest");
-            AddMapEntry(new Color(240, 240, 240), name, MapChestName);
+            LocalizedText namelocked = CreateMapEntryName(); // With multiple map entries, you need unique translation keys.
+            // name.SetDefault("Locked Dark Chest");
+            AddMapEntry(new Color(240, 240, 240), namelocked, MapChestName); //Clearly still an issue here but since this object is unused at the moment I'm gonna fix other things for now
             TileID.Sets.DisableSmartCursor[Type] = true;
             AdjTiles = new int[] { TileID.Containers };
-            ContainerName.SetDefault("Dark Chest");
-            ChestDrop = ItemType<Items.TileItems.StructureTileItems.ShadowmancerTileItems.DarkChest>();
 
             TileID.Sets.BasicChest[Type] = true;
+        }
+
+        public override LocalizedText DefaultContainerName(int frameX, int frameY)
+        {
+            return CreateMapEntryName();
         }
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].TileFrameX / 36);
@@ -91,7 +94,6 @@ namespace ExoriumMod.Content.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ChestDrop);
             Chest.DestroyChest(i, j);
         }
 
@@ -152,7 +154,7 @@ namespace ExoriumMod.Content.Tiles
                     {
                         if (Main.netMode == 1)
                         {
-                            NetMessage.SendData(MessageID.Unlock, -1, -1, null, player.whoAmI, 1f, (float)left, (float)top);
+                            NetMessage.SendData(MessageID.LockAndUnlock, -1, -1, null, player.whoAmI, 1f, (float)left, (float)top);
                         }
                     }
                 }

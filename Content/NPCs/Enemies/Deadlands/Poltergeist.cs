@@ -17,7 +17,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.Ghost];
-            DisplayName.SetDefault("Specter");
+            // DisplayName.SetDefault("Specter");
 
             NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
             {
@@ -59,7 +59,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
             return true;
         }
 
-        public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             NPC.alpha = 60;
         }

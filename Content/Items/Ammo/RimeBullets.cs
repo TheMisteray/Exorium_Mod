@@ -14,8 +14,6 @@ namespace ExoriumMod.Content.Items.Ammo
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Chance to inflict Frostburn");
-            DisplayName.SetDefault("Rime Bullet");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
         }
 
@@ -50,7 +48,7 @@ namespace ExoriumMod.Content.Items.Ammo
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Rimestone Bullet");
+            // DisplayName.SetDefault("Rimestone Bullet");
         }
 
         public override void SetDefaults()
@@ -79,9 +77,9 @@ namespace ExoriumMod.Content.Items.Ammo
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            damage -= 1;
+            hit.Damage -= 1;
             if (Main.rand.Next(0, 3) == 1)
             {
                 target.AddBuff((BuffID.Frostburn), 200, false);

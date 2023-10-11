@@ -12,8 +12,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("BruhBlade"); //Bruh
-			Tooltip.SetDefault("Bruh.");
+			// DisplayName.SetDefault("BruhBlade"); //Bruh
+			// Tooltip.SetDefault("Bruh.");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

@@ -15,8 +15,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A glass sphere filled with an acidic substance" +
-                "\nCovers hit enemies with acid");
+            /* Tooltip.SetDefault("A glass sphere filled with an acidic substance" +
+                "\nCovers hit enemies with acid"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
         }
 
@@ -92,7 +92,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffType<Buffs.CausticAcid>(), 900);
         }

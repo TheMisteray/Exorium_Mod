@@ -13,8 +13,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Frosted Chackram");
-            Tooltip.SetDefault("Inflicts Frostburn");
+            // DisplayName.SetDefault("Frosted Chackram");
+            // Tooltip.SetDefault("Inflicts Frostburn");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -48,7 +48,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Frosted Chackram");
+            // DisplayName.SetDefault("Frosted Chackram");
         }
 
         public override void SetDefaults()
@@ -69,14 +69,15 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.Frostburn, 300, true);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(BuffID.Frostburn, 300, true);
+            if (info.PvP)
+                target.AddBuff(BuffID.Frostburn, 300, true);
         }
 
         public override void Kill(int timeLeft)

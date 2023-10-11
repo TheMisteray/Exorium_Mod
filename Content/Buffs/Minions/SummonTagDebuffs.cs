@@ -24,16 +24,16 @@ namespace ExoriumMod.Content.Buffs.Minions
             markedByFlameTongue = false;
         }
 
-        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             // Only player attacks should benefit from summon tag, hence the NPC and trap checks.
             if (!projectile.npcProj && !projectile.trap && (projectile.minion || ProjectileID.Sets.MinionShot[projectile.type]))
             {
                 if (markedBySparklingWhip)
-                    damage += 8;
+                    modifiers.FlatBonusDamage += 8;
                 if (markedByFlameTongue)
                 {
-                    damage += 7;
+                    modifiers.FlatBonusDamage += 7;
                     if (npc.buffTime[BuffID.OnFire] > 0)
                         npc.AddBuff(BuffType<FlameTongueBurn>(), npc.buffTime[BuffID.OnFire]);
                 }

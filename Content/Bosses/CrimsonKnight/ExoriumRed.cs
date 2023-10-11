@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crimson Knight");
+            // DisplayName.SetDefault("Crimson Knight");
             Main.npcFrameCount[NPC.type] = 6;
 
             //Always draw so visuals don't fail while offscreen
@@ -71,9 +71,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         //May want to make teleport next to player not damage when teleporting
 
-        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.75 * bossLifeScale);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.75 * balance);
             NPC.damage = (int)(NPC.damage * 0.7);
         }
 
@@ -1691,12 +1691,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return base.CanBeHitByItem(player, item);
         }
 
-        public override bool? CanHitNPC(NPC target)
+        public override bool CanHitNPC(NPC target)/* tModPorter Suggestion: Return true instead of null */
         {
             return !noContactDamage;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(BuffID.OnFire, 300);
         }
@@ -1711,34 +1711,34 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return true;
         }
 
-        public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
             if (parry)
             {
-                parryDamaged += damage;
+                parryDamaged += damageDone;
                 if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
-                NPC.life += damage;
+                NPC.life += damageDone;
             }
-            base.OnHitByItem(player, item, damage, knockback, crit);
+            base.OnHitByItem(player, item, hit, damageDone);
         }
 
-        public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             if (parry)
             {
-                parryDamaged += damage;
+                parryDamaged += damageDone;
                 if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
-                NPC.life += damage;
+                NPC.life += damageDone;
             }
-            base.OnHitByProjectile(projectile, damage, knockback, crit);
+            base.OnHitByProjectile(projectile, hit, damageDone);
         }
     }
 }   

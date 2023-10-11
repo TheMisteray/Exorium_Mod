@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Flametounge Swordbeam");
+            // DisplayName.SetDefault("Flametounge Swordbeam");
         }
 
         public override void SetDefaults()

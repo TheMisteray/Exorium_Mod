@@ -12,10 +12,6 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Core of Blight");
-            Tooltip.SetDefault("Reduced regeneration" +
-                "\nIncreased damage when regeneration is negative" +
-                "\nDecreased damage when regeneration is positive");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 8));
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }

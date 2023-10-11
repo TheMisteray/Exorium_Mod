@@ -16,7 +16,6 @@ namespace ExoriumMod.Content.Tiles
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
-            ItemDrop = ItemType<Items.TileItems.StructureTileItems.ShadowmancerTileItems.DarkBrick>();
             AddMapEntry(new Color(100, 100, 100));
             DustType = 54;
             HitSound = SoundID.Tink;

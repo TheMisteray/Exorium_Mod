@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Darksteel Skull");
+            // DisplayName.SetDefault("Darksteel Skull");
             // This is necessary for right-click targeting
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
             // These below are needed for a minion

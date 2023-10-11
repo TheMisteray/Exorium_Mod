@@ -16,9 +16,9 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stone of the Sands");
-            Tooltip.SetDefault("Creates a ring of sand balls that rotate aroung you \n" +
-                "Right click to shoot them forward");
+            // DisplayName.SetDefault("Stone of the Sands");
+            /* Tooltip.SetDefault("Creates a ring of sand balls that rotate aroung you \n" +
+                "Right click to shoot them forward"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

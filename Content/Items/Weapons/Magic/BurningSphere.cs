@@ -19,7 +19,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Conjure a slowly moving sphere of flames");
+            // Tooltip.SetDefault("Conjure a slowly moving sphere of flames");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -60,7 +60,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Burning Sphere");
+            // DisplayName.SetDefault("Burning Sphere");
             ProjectileID.Sets.NeedsUUID[Projectile.type] = true;
         }
 
@@ -169,7 +169,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                 return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 600);
         }

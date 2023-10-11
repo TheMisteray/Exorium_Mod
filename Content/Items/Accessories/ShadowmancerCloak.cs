@@ -12,11 +12,6 @@ namespace ExoriumMod.Content.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Veils you in shadow" +
-                "\nThe cloak has 40 health which can regenerate over time" +
-                "\nIt grants 6 defense, increased regeneration, and immunity to fire and frostburn while it has health remaining" +
-                "\nWhenever you take damage the cloak also takes that much damage" +
-                "\nIf the cloak is destroyed it must regenerate fully before its effects return");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

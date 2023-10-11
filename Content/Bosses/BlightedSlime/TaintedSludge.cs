@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Summons the Blighted Slime");
+            // Tooltip.SetDefault("Summons the Blighted Slime");
             ItemID.Sets.SortingPriorityBossSpawns[Item.type] = 13;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
         }
@@ -39,11 +39,11 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             return player.InModBiome(GetInstance<Content.Biomes.DeadlandBiome>()) && !NPC.AnyNPCs(NPCType<BlightedSlime>());
         }
 
-        public override Nullable<bool> UseItem(Player player)/* tModPorter Suggestion: Return null instead of false *//* Suggestion: Return null instead of false */
+        public override Nullable<bool> UseItem(Player player)
         {
             SoundEngine.PlaySound(SoundID.Roar, player.position);
             NPC.SpawnOnPlayer(player.whoAmI, NPCType<BlightedSlime>());
-            return true;
+            return null;
         }
 
         public override void AddRecipes()

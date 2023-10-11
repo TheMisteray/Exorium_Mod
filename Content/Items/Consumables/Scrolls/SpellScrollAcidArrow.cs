@@ -14,9 +14,9 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Casts Acid Arrows \n" +
-                "Your wooden arrows become tipped with acid for a short time");
-            DisplayName.SetDefault("Spell Scroll: Acid Arrows");
+            /* Tooltip.SetDefault("Casts Acid Arrows \n" +
+                "Your wooden arrows become tipped with acid for a short time"); */
+            // DisplayName.SetDefault("Spell Scroll: Acid Arrows");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 

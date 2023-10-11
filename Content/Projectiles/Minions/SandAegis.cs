@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sand Aegis");
+            // DisplayName.SetDefault("Sand Aegis");
             // This is necessary for right-click targeting
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 

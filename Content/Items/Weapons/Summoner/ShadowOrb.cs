@@ -15,8 +15,8 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Produces a shadow on impact that will do your bidding" +
-                "\nShadows have a small chance to inflict consuming dark");
+            /* Tooltip.SetDefault("Produces a shadow on impact that will do your bidding" +
+                "\nShadows have a small chance to inflict consuming dark"); */
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 50;

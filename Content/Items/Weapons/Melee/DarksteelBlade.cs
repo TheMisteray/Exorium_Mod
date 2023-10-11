@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override string Texture => AssetDirectory.MeleeWeapon + Name;
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Shoots a homing skull");
+            // Tooltip.SetDefault("Shoots a homing skull");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

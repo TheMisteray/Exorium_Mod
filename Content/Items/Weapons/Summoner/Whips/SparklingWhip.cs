@@ -20,9 +20,9 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
         public override void SetStaticDefaults()
 		{
 			//CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-			Tooltip.SetDefault("8 summon tag damage\n"
+			/* Tooltip.SetDefault("8 summon tag damage\n"
 				+"Your summons will focus struck enemies\n"
-				+"Incredibly heavy, may break");
+				+"Incredibly heavy, may break"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -78,7 +78,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 		{
 			// This makes the projectile use whip collision detection and allows flasks to be applied to it.
 			ProjectileID.Sets.IsAWhip[Type] = true;
-			DisplayName.SetDefault("SparklingWhip");
+			// DisplayName.SetDefault("SparklingWhip");
 		}
 
 		public override void SetDefaults()
@@ -103,7 +103,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 			set => Projectile.ai[1] = value ? 1f : 0f;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
 			target.AddBuff(ModContent.BuffType<SparklingWhipTag>(), 300);

@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Wum");
+            // DisplayName.SetDefault("Wum");
             // Sets the amount of frames this minion has on its spritesheet
             Main.projFrames[Projectile.type] = 18;
             // this is necessary for right-click targeting

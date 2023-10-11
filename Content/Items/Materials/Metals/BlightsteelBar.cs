@@ -13,8 +13,8 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightsteel Bar"); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("It bites at your skin");
+            // DisplayName.SetDefault("Blightsteel Bar"); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.
+            // Tooltip.SetDefault("It bites at your skin");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 

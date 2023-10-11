@@ -19,7 +19,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Image of Red");
+            // DisplayName.SetDefault("Image of Red");
         }
 
         public override void SetDefaults()

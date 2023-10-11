@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Consuming Dark");
-            Description.SetDefault("The darkness drains the life from you");
+            // DisplayName.SetDefault("Consuming Dark");
+            // Description.SetDefault("The darkness drains the life from you");
             Main.debuff[Type] = true;
             Main.pvpBuff[Type] = true;
             Main.buffNoSave[Type] = true;

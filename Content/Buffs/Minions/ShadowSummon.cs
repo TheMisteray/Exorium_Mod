@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadow");
-            Description.SetDefault("The shadow serves you");
+            // DisplayName.SetDefault("Shadow");
+            // Description.SetDefault("The shadow serves you");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

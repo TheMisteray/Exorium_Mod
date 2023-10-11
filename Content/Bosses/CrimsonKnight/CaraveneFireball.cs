@@ -16,11 +16,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
     {
         public override string Texture => AssetDirectory.CrimsonKnight + Name;
 
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Fireball");
-        }
-
         public override void SetDefaults()
         {
             Projectile.width = 32;
@@ -48,7 +43,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, Enrage ? 600 : 300);
         }

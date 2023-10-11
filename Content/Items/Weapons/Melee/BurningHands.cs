@@ -16,10 +16,10 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Unleash flames from your fingertips\n" +
+            /* Tooltip.SetDefault("Unleash flames from your fingertips\n" +
                 "Uses Mana and can't be used with mana sickness\n" +
                 "Right click to shoot a flaming fist\n" +
-                "(Right click does not use mana)");
+                "(Right click does not use mana)"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -157,7 +157,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 420);
         }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -21,11 +22,9 @@ namespace ExoriumMod.Content.Tiles
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
 
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("RimeStone");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("RimeStone");
             AddMapEntry(new Color(194, 248, 255), name);
-
-            ItemDrop = ItemType<Items.Materials.Metals.RimeStone>();
 
             HitSound = SoundID.Tink;
 

@@ -16,10 +16,10 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Summons a Blightsteel Needle to fight for you \n" +
+            /* Tooltip.SetDefault("Summons a Blightsteel Needle to fight for you \n" +
                 "Needles stick for 15 seconds after striking an enemy \n" +
                 "If 4 or more needles are stuck to the same enemy, that enemy takes additional damage over time\n" +
-                "Two needles occupy one minion slot");
+                "Two needles occupy one minion slot"); */
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

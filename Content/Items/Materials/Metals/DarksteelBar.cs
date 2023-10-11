@@ -13,8 +13,8 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Darksteel Alloy");
-            Tooltip.SetDefault("Not the real stuff, but It'll do for now");
+            // DisplayName.SetDefault("Darksteel Alloy");
+            // Tooltip.SetDefault("Not the real stuff, but It'll do for now");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
         public override void SetDefaults()

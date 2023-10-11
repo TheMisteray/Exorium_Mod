@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sand Wisp");
+            // DisplayName.SetDefault("Sand Wisp");
             // Sets the amount of frames this minion has on its spritesheet
             Main.projFrames[Projectile.type] = 4;
             // This is necessary for right-click targeting

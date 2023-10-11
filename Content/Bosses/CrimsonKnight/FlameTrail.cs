@@ -73,7 +73,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return false;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 300);
         }
@@ -130,7 +130,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Timer++;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 600);
         }

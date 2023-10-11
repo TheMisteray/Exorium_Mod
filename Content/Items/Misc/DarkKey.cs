@@ -10,7 +10,7 @@ namespace ExoriumMod.Content.Items.Misc
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Unlocks dark chests");
+            // Tooltip.SetDefault("Unlocks dark chests");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

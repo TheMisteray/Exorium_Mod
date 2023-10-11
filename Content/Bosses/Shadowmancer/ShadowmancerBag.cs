@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,9 +17,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Treasure Bag (Shadowmancer)");
-            Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
-
             ItemID.Sets.BossBag[Type] = true;
             ItemID.Sets.PreHardmodeLikeBossBag[Type] = true;
 
@@ -40,28 +38,14 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             return true;
         }
 
-        public override void OpenBossBag(Player player)
+        public override void ModifyItemLoot(ItemLoot itemLoot)
         {
-            if (Main.rand.NextBool(1))
-                player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), Main.rand.Next(1, 3));
-            else
-                player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), Main.rand.Next(1, 3));
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Ranger.AcidOrb>(), Main.rand.Next(21, 43));
-            switch (Main.rand.Next(3))
-            {
-                case 0:
-                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Magic.ShadowBolt>());
-                    break;
-                case 1:
-                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Melee.NineLivesStealer>());
-                    break;
-                case 2:
-                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Summoner.ShadowOrb>(), Main.rand.Next(18, 24));
-                    break;
-            }
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Accessories.ShadowmancerCloak>());
+            itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<AssierJassad>()));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), 2, 1, 3)).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), 1, 1, 3));
+			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Magic.ShadowBolt>(), 3)).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.NineLivesStealer>(), 2).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Summoner.ShadowOrb>(), 1, 12, 20)));
+			itemLoot.Add(ItemDropRule.Common(ItemType<Items.Weapons.Ranger.AcidOrb>(), 1, 31, 52));
+			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Accessories.ShadowmancerCloak>(), 1));
         }
-
 
 		public override Color? GetAlpha(Color lightColor)
 		{
@@ -142,6 +126,5 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
 			return true;
 		}
-		public override int BossBagNPC => NPCType<AssierJassad>();
     }
 }

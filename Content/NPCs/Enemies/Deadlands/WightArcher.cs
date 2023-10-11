@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Wight Archer");
+            // DisplayName.SetDefault("Wight Archer");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.SkeletonArcher];
         }
 

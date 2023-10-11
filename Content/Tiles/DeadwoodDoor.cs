@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -64,14 +65,15 @@ namespace ExoriumMod.Content.Tiles
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 			TileID.Sets.HousingWalls[Type] = true; //needed for non-solid blocks to count as walls
 			TileID.Sets.HasOutlines[Type] = true;
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Deadwood Door");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Deadwood Door");
 			AddMapEntry(new Color(90, 90, 90), name);
 			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
 			TileID.Sets.DisableSmartCursor[Type] = true;
 			AdjTiles = new int[] { TileID.OpenDoor };
-			CloseDoorID = ModContent.TileType<DeadwoodDoorClosed>();
-		}
+			TileID.Sets.CloseDoorID[Type] = ModContent.TileType<DeadwoodDoorClosed>();
+
+        }
 
 		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
@@ -131,14 +133,14 @@ namespace ExoriumMod.Content.Tiles
 			TileObjectData.addAlternate(0);
 			TileObjectData.addTile(Type);
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Deadwood Door");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Deadwood Door");
 			AddMapEntry(new Color(90, 90, 90), name);
 			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
 			TileID.Sets.DisableSmartCursor[Type] = true;
 			AdjTiles = new int[] { TileID.ClosedDoor };
-			OpenDoorID = ModContent.TileType<DeadwoodDoorOpen>();
-		}
+			TileID.Sets.OpenDoorID[Type] = ModContent.TileType<DeadwoodDoorOpen>();
+        }
 
 		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{

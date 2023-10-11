@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blighsteel Needle");
+            // DisplayName.SetDefault("Blighsteel Needle");
             // This is necessary for right-click targeting
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 
@@ -335,15 +335,15 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 target.AddBuff(BuffType<Buffs.Minions.StuckBlightedNeedleDebuff>(), 90);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (!(bufferTime > 0))
             {
                 TargetWhoAmI = target.whoAmI; // Set the target whoAmI
                 Projectile.velocity = (target.Center - Projectile.Center); // Change velocity based on delta center of targets (difference between entity centers)
                 IsStickingToTarget = true; // we are sticking to a target
-                Main.npc[TargetWhoAmI].HitEffect(0, damage);
-                damage = 0;
+                Main.npc[TargetWhoAmI].HitEffect(0, damageDone);
+                hit.Damage = 0;
                 UpdateStuckNeedles(target);
             }
         }

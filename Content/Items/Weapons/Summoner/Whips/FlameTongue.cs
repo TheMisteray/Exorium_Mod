@@ -21,12 +21,12 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
         public override void SetStaticDefaults()
         {
             //CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-            Tooltip.SetDefault("7 summon tag damage\n"
+            /* Tooltip.SetDefault("7 summon tag damage\n"
                 + "Your summons will focus struck enemies\n" +
                 "It flails of it's own accord\n" +
                 "Lights targets ablaze and slightly lowers their defense\n" +
                 "Your summons amplify this burn effect" + 
-                "Hold to control the tongue");
+                "Hold to control the tongue"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -57,7 +57,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
         {
             // Projectile makes the projectile use whip collision detection and allows flasks to be applied to it.
             ProjectileID.Sets.IsAWhip[Type] = true;
-            DisplayName.SetDefault("Flame Tounge");
+            // DisplayName.SetDefault("Flame Tounge");
         }
 
         public override void SetDefaults()
@@ -226,7 +226,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
             target.AddBuff(BuffType<FlameTongueTag>(), 420);

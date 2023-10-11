@@ -15,11 +15,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
     {
         public override string Texture => AssetDirectory.Invisible;
 
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Flametounge");
-        }
-
         public override void SetDefaults()
         {
             Projectile.width = 220;
@@ -30,7 +25,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.friendly = false;
             Projectile.hostile = true;
         }
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 900);
         }

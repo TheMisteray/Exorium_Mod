@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -22,11 +23,9 @@ namespace ExoriumMod.Content.Tiles
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
 
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("DuneStone");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("DuneStone");
             AddMapEntry(new Color(196, 188, 22), name);
-
-            ItemDrop = ItemType<Items.Materials.Metals.DuneStone>();
 
             HitSound = SoundID.Tink;
 

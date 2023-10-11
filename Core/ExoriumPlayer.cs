@@ -59,7 +59,7 @@ namespace ExoriumMod.Core
             base.PostUpdateEquips();
         }
 
-        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
         {
             if (morditeArmor && Main.rand.NextBool(6))
             {
@@ -73,10 +73,10 @@ namespace ExoriumMod.Core
                 }
             }
             if (shadowCloak && !deadCloak)
-                cloakHP -= damage;
+                cloakHP -= hurtInfo.Damage;
         }
 
-        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             if (morditeArmor && Main.rand.NextBool(6))
             {
@@ -90,7 +90,7 @@ namespace ExoriumMod.Core
                 }
             }
             if (shadowCloak && !deadCloak)
-                cloakHP -= damage;
+                cloakHP -= hurtInfo.Damage;
         }
 
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
@@ -102,13 +102,13 @@ namespace ExoriumMod.Core
             return true;
         }
 
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Item, consider using OnHitNPC instead */
         {
             if (item.DamageType == DamageClass.Melee && frostStone)
                 target.AddBuff(BuffID.Frostburn, 120);
         }
 
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Projectile, consider using OnHitNPC instead */
         {
             if (proj.DamageType == DamageClass.Melee && frostStone)
                 target.AddBuff(BuffID.Frostburn, 120);
@@ -164,7 +164,7 @@ namespace ExoriumMod.Core
             }
         }
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
             ScreenMoveTime = 0;
             ScreenMoveTarget = Vector2.Zero;

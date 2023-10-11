@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("DancingSword");
+            // DisplayName.SetDefault("DancingSword");
             // This is necessary for right-click targeting
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 
@@ -283,10 +283,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (AIState == 2) //Slow spin
-                damage /= 2;
+                hit.Damage /= 2;
         }
     }
 }

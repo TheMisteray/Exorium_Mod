@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Has a chance to fire a Darksteel arrow, dealing double damage");
+            // Tooltip.SetDefault("Has a chance to fire a Darksteel arrow, dealing double damage");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -77,9 +77,9 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             AIType = ProjectileID.WoodenArrowFriendly;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage *= 2;
+            modifiers.FinalDamage *= 2;
         }
 
         public override void AI()

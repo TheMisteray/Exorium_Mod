@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -23,8 +24,8 @@ namespace ExoriumMod.Content.Tiles
 			TileObjectData.newTile.CoordinateHeights = new[] { 18, 18};
 			TileObjectData.addTile(Type);
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Deadwood Table");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Deadwood Table");
 			AddMapEntry(new Color(90, 90, 90), name);
 			DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
 			TileID.Sets.DisableSmartCursor[Type] = true;

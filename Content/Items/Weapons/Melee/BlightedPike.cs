@@ -16,8 +16,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mildew");
-            Tooltip.SetDefault("Launches specks of blight");
+            // DisplayName.SetDefault("Mildew");
+            // Tooltip.SetDefault("Launches specks of blight");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

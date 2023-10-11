@@ -13,7 +13,6 @@ namespace ExoriumMod.Content.Walls.StructureWalls.ShadowmancerWalls
         public override void SetStaticDefaults()
         {
             Main.wallHouse[Type] = false;
-            ItemDrop = ItemType<Items.WallItems.StructureWallItems.ShadowmancerWalls.DarkBrickWall>();
             AddMapEntry(new Color(40, 40, 40));
         }
     }

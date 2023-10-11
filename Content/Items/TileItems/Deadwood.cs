@@ -12,7 +12,7 @@ namespace ExoriumMod.Content.Items.TileItems
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Light and porous wood");
+            // Tooltip.SetDefault("Light and porous wood");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
         }
 

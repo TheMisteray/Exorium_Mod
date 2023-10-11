@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.GameContent.Bestiary;
+using Steamworks;
 
 namespace ExoriumMod.Content.Bosses.Shadowmancer
 {
@@ -16,7 +17,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadowmancer");
+            // DisplayName.SetDefault("Shadowmancer");
             Main.npcFrameCount[NPC.type] = 7;
         }
 
@@ -44,9 +45,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         {
             if (NPC.ai[2] == -1 && Main.netMode != NetmodeID.MultiplayerClient) //Killed by collective Darkness
             {
-                NPC.StrikeNPC(333, 0, 0, true);
+                NPC.HitInfo hit = new NPC.HitInfo();
+                hit.Damage = 333;
+                hit.Crit = true;
+                NPC.StrikeNPC(hit);
                 if (Main.netMode != NetmodeID.SinglePlayer)
-                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, null, NPC.whoAmI, 333, 0, 0, 1);
+                    NetMessage.SendStrikeNPC(NPC, hit);
                 NPC.active = false;
                 NPC.life = -1;
             }
@@ -88,9 +92,9 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             set => NPC.ai[3] = value;
         }
 
-        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.7 * bossLifeScale);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.7 * balance);
             NPC.damage = (int)(NPC.damage * 0.8);
         }
 

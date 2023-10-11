@@ -23,7 +23,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadowmancer");
+            // DisplayName.SetDefault("Shadowmancer");
             Main.npcFrameCount[NPC.type] = 7;
 
             NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
@@ -62,9 +62,9 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/BathrobeMan");
         }
 
-        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.7 * bossLifeScale);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.7 * balance);
             NPC.damage = (int)(NPC.damage * 0.8);
         }
 
@@ -566,25 +566,23 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<ShadowmancerBag>()));
+            npcLoot.Add(ItemDropRule.BossBag(ItemType<ShadowmancerBag>()));
 
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
 
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Weapons.Ranger.AcidOrb>(), 1, 31, 52));
 
-            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), 2, 1, 3)).OnFailedRoll(ItemDropRule.Common(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), 1, 1, 3));
+            notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), 2, 1, 3)).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), 1, 1, 3));
 
-            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Weapons.Magic.ShadowBolt>(), 3)).OnFailedRoll(notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Weapons.Melee.NineLivesStealer>(), 2)).OnFailedRoll(notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Weapons.Summoner.ShadowOrb>(), 1, 12, 20))));
+            notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Magic.ShadowBolt>(), 3)).OnFailedRoll(notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.NineLivesStealer>(), 2)).OnFailedRoll(notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Summoner.ShadowOrb>(), 1, 12, 20))));
 
             npcLoot.Add(notExpertRule);
-
-            base.ModifyNPCLoot(npcLoot);
         }
 
-        public override bool StrikeNPC(ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
+        public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
         {
             showHP = true;
-            return base.StrikeNPC(ref damage, defense, ref knockback, hitDirection, ref crit);
+            base.ModifyIncomingHit(ref modifiers);
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)

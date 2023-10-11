@@ -25,7 +25,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crimson Knight");
+            // DisplayName.SetDefault("Crimson Knight");
             Main.npcFrameCount[NPC.type] = 6;
 
             //Always draw so visuals don't fail while offscreen
@@ -64,9 +64,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.dontTakeDamage = true;
         }
 
-        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.75 * bossLifeScale);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.75 * balance);
             NPC.damage = (int)(NPC.damage * 0.7);
         }
 
@@ -205,7 +205,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return false;
         }
 
-        public override bool? CanHitNPC(NPC target)
+        public override bool CanHitNPC(NPC target)/* tModPorter Suggestion: Return true instead of null */
         {
             return false;
         }

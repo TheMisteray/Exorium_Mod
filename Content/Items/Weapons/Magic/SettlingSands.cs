@@ -15,8 +15,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Launches bouncing sand balls \n" +
-                "\"This is a horrible idea\"");
+            /* Tooltip.SetDefault("Launches bouncing sand balls \n" +
+                "\"This is a horrible idea\""); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -55,7 +55,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bouncing Sand");
+            // DisplayName.SetDefault("Bouncing Sand");
         }
 
         public override void SetDefaults()

@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Fireball");
+            // DisplayName.SetDefault("Fireball");
         }
 
         public override void SetDefaults()
@@ -135,7 +135,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 600);
         }
@@ -186,7 +186,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Fireblast");
+            // DisplayName.SetDefault("Fireblast");
         }
 
         public override void SetDefaults()
@@ -232,7 +232,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Explosion");
+            // DisplayName.SetDefault("Explosion");
         }
 
         public override void SetDefaults()

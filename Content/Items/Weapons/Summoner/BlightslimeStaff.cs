@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Summons a tiny blight slime to fight for you");
+            // Tooltip.SetDefault("Summons a tiny blight slime to fight for you");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

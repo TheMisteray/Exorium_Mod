@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A chilly crystalline bar");
+            // Tooltip.SetDefault("A chilly crystalline bar");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 

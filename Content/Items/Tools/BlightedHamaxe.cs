@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Items.Tools
         public override string Texture => AssetDirectory.Tool + Name;
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Frayed Hamaxe");
+            // DisplayName.SetDefault("Frayed Hamaxe");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

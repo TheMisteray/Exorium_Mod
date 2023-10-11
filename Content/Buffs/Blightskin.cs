@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightskin");
-            Description.SetDefault("Defense at the cost of regeneration");
+            // DisplayName.SetDefault("Blightskin");
+            // Description.SetDefault("Defense at the cost of regeneration");
             Main.pvpBuff[Type] = true;
             Main.buffNoSave[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

@@ -15,8 +15,8 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Casts Magic Missiles");
-            DisplayName.SetDefault("Spell Scroll: Magic Missiles");
+            // Tooltip.SetDefault("Casts Magic Missiles");
+            // DisplayName.SetDefault("Spell Scroll: Magic Missiles");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 

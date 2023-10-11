@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Items.Armor
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("20% chance not to consume ammo \n5% Increased melee speed");
+            // Tooltip.SetDefault("20% chance not to consume ammo \n5% Increased melee speed");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -60,7 +60,7 @@ namespace ExoriumMod.Content.Items.Armor
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("4% Increased melee and ranged damage");
+            // Tooltip.SetDefault("4% Increased melee and ranged damage");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

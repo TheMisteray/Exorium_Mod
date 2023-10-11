@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Items.Tools
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Diseased Pickaxe");
+            // DisplayName.SetDefault("Diseased Pickaxe");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

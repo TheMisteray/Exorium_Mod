@@ -14,7 +14,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shadow");
+            // DisplayName.SetDefault("Shadow");
             // Sets the amount of frames this minion has on its spritesheet
             Main.projFrames[Projectile.type] = 4;
             // This is necessary for right-click targeting
@@ -62,7 +62,7 @@ namespace ExoriumMod.Content.Projectiles.Minions
         private float shadow;
         private float attackCool = 0;
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Main.rand.Next(15) == 0)
             {

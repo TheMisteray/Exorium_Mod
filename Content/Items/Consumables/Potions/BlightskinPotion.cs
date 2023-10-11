@@ -13,7 +13,6 @@ namespace ExoriumMod.Content.Items.Consumables.Potions
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("12 defense \nGreatly reduced life regeneration");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 12;
         }
 

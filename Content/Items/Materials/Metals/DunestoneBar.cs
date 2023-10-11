@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A hard stone with a coarse feel");
+            // Tooltip.SetDefault("A hard stone with a coarse feel");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 

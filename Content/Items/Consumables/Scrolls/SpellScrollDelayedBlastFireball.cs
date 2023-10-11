@@ -16,8 +16,8 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Casts Delayed Blast Fireball");
-            DisplayName.SetDefault("Spell Scroll: Delayed Blast Fireball");
+            // Tooltip.SetDefault("Casts Delayed Blast Fireball");
+            // DisplayName.SetDefault("Spell Scroll: Delayed Blast Fireball");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 
@@ -114,23 +114,20 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             stop = true;
+            hit.Damage = 0;
+            hit.Knockback = 0;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            damage = 0;
-            knockback = 0;
+            if (info.PvP)
+                stop = true;
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
-        {
-            stop = true;
-        }
-
-        public override Nullable<bool> CanDamage()/* tModPorter Suggestion: Return null instead of true *//* Suggestion: Return null instead of false */
+        public override Nullable<bool> CanDamage()
         {
             return !stop;
         }

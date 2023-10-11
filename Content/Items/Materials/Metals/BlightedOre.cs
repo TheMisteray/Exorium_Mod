@@ -11,7 +11,7 @@ namespace ExoriumMod.Content.Items.Materials.Metals
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightsteel Ore");
+            // DisplayName.SetDefault("Blightsteel Ore");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
         }
 

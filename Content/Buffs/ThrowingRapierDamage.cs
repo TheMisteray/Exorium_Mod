@@ -10,8 +10,8 @@ namespace ExoriumMod.Content.Buffs
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("20!!!");
-			Description.SetDefault("");
+			// DisplayName.SetDefault("20!!!");
+			// Description.SetDefault("");
 		}
 
 		public override void Update(NPC npc, ref int buffIndex)

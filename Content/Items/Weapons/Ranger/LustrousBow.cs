@@ -16,8 +16,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Converts arrows into beams of colored light" +
-                "\n Beams redirect towrds your cursor");
+            /* Tooltip.SetDefault("Converts arrows into beams of colored light" +
+                "\n Beams redirect towrds your cursor"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

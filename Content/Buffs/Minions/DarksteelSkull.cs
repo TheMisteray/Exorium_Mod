@@ -11,9 +11,9 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mordite Skull");
-            Description.SetDefault("The Darksteel skull will fight for you \n" +
-                "Each skull gives +3% summon damage");
+            // DisplayName.SetDefault("Mordite Skull");
+            /* Description.SetDefault("The Darksteel skull will fight for you \n" +
+                "Each skull gives +3% summon damage"); */
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

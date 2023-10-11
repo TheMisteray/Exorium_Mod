@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,8 +17,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Treasure Bag (Crimson Knight)");
-            Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
+            // DisplayName.SetDefault("Treasure Bag (Crimson Knight)");
+            // Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
 
             ItemID.Sets.BossBag[Type] = true;
             ItemID.Sets.PreHardmodeLikeBossBag[Type] = true;
@@ -40,27 +41,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return true;
         }
 
-        public override void OpenBossBag(Player player)
+        public override void ModifyItemLoot(ItemLoot itemLoot)
         {
-            switch (Main.rand.Next(4))
-            {
-                case 0:
-                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Magic.BurningSphere>());
-                    break;
-                case 1:
-                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Melee.InfernalSledge>());
-                    break;
-                case 2:
-                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Summoner.Whips.FlameTongue>());
-                    break;
-                case 3:
-                    player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Weapons.Ranger.MagmaMortar>());
-                    break;
-            }
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemID.GoldCoin, 15); //Boss that drops has no gold value so gold is given this way
-            //player.QuickSpawnItem(player.GetSource_OpenItem(Type), ItemType<Items.Accessories.ShadowmancerCloak>());
+            itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<Caravene>()));
+            int[] items = new int[4] { ItemType<Items.Weapons.Magic.BurningSphere>(), ItemType<Items.Weapons.Melee.InfernalSledge>(), ItemType<Items.Weapons.Summoner.Whips.FlameTongue>(), ItemType<Items.Weapons.Ranger.MagmaMortar>() };
+            itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, items));
         }
-
 
         public override Color? GetAlpha(Color lightColor)
         {
@@ -141,6 +127,5 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             return true;
         }
-        public override int BossBagNPC => NPCType<Caravene>();
     }
 }

@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Wum");
-            Description.SetDefault("Here to save the world");
+            // DisplayName.SetDefault("Wum");
+            // Description.SetDefault("Here to save the world");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

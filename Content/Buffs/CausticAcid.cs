@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Caustic Acid");
-            Description.SetDefault("Your flesh boils and burns");
+            // DisplayName.SetDefault("Caustic Acid");
+            // Description.SetDefault("Your flesh boils and burns");
             Main.debuff[Type] = true;
             Main.pvpBuff[Type] = true;
             Main.buffNoSave[Type] = true;

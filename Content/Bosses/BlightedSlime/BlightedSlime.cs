@@ -48,9 +48,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/SlimyGrime");
         }
          
-        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.7 * bossLifeScale);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.7 * balance);
             NPC.damage = (int)(NPC.damage * 0.8f);
         }
 
@@ -591,7 +591,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<BlightedSlimeBag>()));
+            npcLoot.Add(ItemDropRule.BossBag(ItemType<BlightedSlimeBag>()));
 
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
 
@@ -599,8 +599,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Materials.Metals.BlightedOre>(), 1, 80, 120));
 
             npcLoot.Add(notExpertRule);
-
-            base.ModifyNPCLoot(npcLoot);
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)

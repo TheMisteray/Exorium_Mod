@@ -14,9 +14,9 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
         public override string Texture => AssetDirectory.SpellScroll + Name;
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Casts Misty Step \n" +
-                "Teleports you to anywhere your character can see, but not through blocks");
-            DisplayName.SetDefault("Spell Scroll: Misty Step");
+            /* Tooltip.SetDefault("Casts Misty Step \n" +
+                "Teleports you to anywhere your character can see, but not through blocks"); */
+            // DisplayName.SetDefault("Spell Scroll: Misty Step");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 10;
         }
 

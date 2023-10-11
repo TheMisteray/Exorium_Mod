@@ -18,9 +18,9 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("\"Anything works if you roll a 20\"\n" +
+            /* Tooltip.SetDefault("\"Anything works if you roll a 20\"\n" +
                 "If the tip of the rapier hits the enemy it will stick\n" +
-                "Otherwise it will bounce");
+                "Otherwise it will bounce"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 250;
         }
 
@@ -169,12 +169,12 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             //line from proj center out along blade
             Vector2 line = new Vector2(0, Projectile.width);

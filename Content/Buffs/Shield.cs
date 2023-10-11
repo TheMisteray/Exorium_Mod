@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Shield");
-            Description.SetDefault("Increased Defense");
+            // DisplayName.SetDefault("Shield");
+            // Description.SetDefault("Increased Defense");
             Main.pvpBuff[Type] = true;
             Main.buffNoSave[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

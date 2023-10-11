@@ -15,7 +15,6 @@ namespace ExoriumMod.Content.Tiles
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
-            ItemDrop = ItemType<Items.TileItems.Deadwood>();
             AddMapEntry(new Color(40, 40, 40));
             DustType = ModContent.DustType<Dusts.DeadwoodTreeDust>();
             Main.dust[DustType].color = new Color(40, 40, 40);

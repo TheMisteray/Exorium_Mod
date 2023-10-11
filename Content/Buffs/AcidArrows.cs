@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Acid Arrows");
-            Description.SetDefault("Your wooden arrows inflict acid");
+            // DisplayName.SetDefault("Acid Arrows");
+            // Description.SetDefault("Your wooden arrows inflict acid");
             Main.pvpBuff[Type] = true;
             Main.buffNoSave[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

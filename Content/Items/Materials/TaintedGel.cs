@@ -10,7 +10,7 @@ namespace ExoriumMod.Content.Items.Materials
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The ooze of deadlands");
+            // Tooltip.SetDefault("The ooze of deadlands");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         }
 

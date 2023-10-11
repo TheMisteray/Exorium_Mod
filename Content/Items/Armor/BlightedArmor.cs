@@ -13,10 +13,6 @@ namespace ExoriumMod.Content.Items.Armor
         public override string Texture => AssetDirectory.Armor + Name;
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightsteel Crown");
-            Tooltip.SetDefault("2% decreased movement speed"
-                + "\n2% increased damage"
-                + "\nDecreased regeneration");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -66,10 +62,6 @@ namespace ExoriumMod.Content.Items.Armor
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightsteel Breastplate");
-            Tooltip.SetDefault("\n6% decreased movement speed" +
-                "\n3% increased damage"
-                + "\nDecreased regeneration");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -105,10 +97,6 @@ namespace ExoriumMod.Content.Items.Armor
         public override string Texture => AssetDirectory.Armor + Name;
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightsteel Leggings");
-            Tooltip.SetDefault("3% decreased movement speed" +
-                "\n2% increased damage"
-                + "\nDecreased regeneration");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

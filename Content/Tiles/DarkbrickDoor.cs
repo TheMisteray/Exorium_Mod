@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
@@ -48,12 +49,13 @@ namespace ExoriumMod.Content.Tiles
             TileObjectData.addAlternate(0);
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("");
             AddMapEntry(new Color(50, 50, 50), name);
             TileID.Sets.DisableSmartCursor[Type] = true;
             AdjTiles = new int[] { TileID.ClosedDoor };
-            OpenDoorID = TileType<DarkbrickDoorOpen>();
+            //OpenDoorID/* tModPorter Note: Removed. Use TileID.Sets.OpenDoorID instead */ = TileType<DarkbrickDoorOpen>();
+            TileID.Sets.OpenDoorID[Type] = TileType<DarkbrickDoorOpen>();
             MinPick = 110;
         }
 
@@ -143,12 +145,13 @@ namespace ExoriumMod.Content.Tiles
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
             TileID.Sets.HousingWalls[Type] = true; //needed for non-solid blocks to count as walls
             TileID.Sets.HasOutlines[Type] = true;
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("");
             AddMapEntry(new Color(50, 50, 50), name);
             TileID.Sets.DisableSmartCursor[Type] = true;
             AdjTiles = new int[] { TileID.OpenDoor };
-            CloseDoorID = TileType<DarkbrickDoorClosed>();
+            //CloseDoorID/* tModPorter Note: Removed. Use TileID.Sets.CloseDoorID instead */ = TileType<DarkbrickDoorClosed>();
+            TileID.Sets.CloseDoorID[Type] = (TileType<DarkbrickDoorClosed>());
             MinPick = 110;
         }
 

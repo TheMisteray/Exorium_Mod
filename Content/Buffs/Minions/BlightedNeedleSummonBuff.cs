@@ -11,8 +11,8 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blightsteel Needle");
-            Description.SetDefault("The Blightsteel Needle will fight for you \n");
+            // DisplayName.SetDefault("Blightsteel Needle");
+            // Description.SetDefault("The Blightsteel Needle will fight for you \n");
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
@@ -37,8 +37,8 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stuck");
-            Description.SetDefault("Ouch");
+            // DisplayName.SetDefault("Stuck");
+            // Description.SetDefault("Ouch");
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
             Main.pvpBuff[Type] = true;

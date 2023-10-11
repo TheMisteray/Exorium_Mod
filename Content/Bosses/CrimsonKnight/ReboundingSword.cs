@@ -16,7 +16,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Flametounge Swordbeam");
+            // DisplayName.SetDefault("Flametounge Swordbeam");
         }
 
         public override void SetDefaults()
@@ -89,7 +89,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return false;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 300);
         }
@@ -101,7 +101,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Flametounge Swordbeam");
+            // DisplayName.SetDefault("Flametounge Swordbeam");
         }
 
         public override void SetDefaults()

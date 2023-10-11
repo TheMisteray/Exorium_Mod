@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Please eat it INSIDE your room.");
+            // Tooltip.SetDefault("Please eat it INSIDE your room.");
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
