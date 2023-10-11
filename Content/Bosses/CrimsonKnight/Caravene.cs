@@ -30,14 +30,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             //Always draw so visuals don't fail while offscreen
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.OnFire,
-                    BuffID.OnFire3,
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Shimmer] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
 
             NPCID.Sets.TrailCacheLength[Type] = 7;
             NPCID.Sets.TrailingMode[NPC.type] = 0;

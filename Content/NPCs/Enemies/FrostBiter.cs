@@ -40,15 +40,9 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetStaticDefaults()
         {
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.Frostburn,
-                    BuffID.Frostburn2,
-                    BuffID.Frozen,
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
+
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frozen] = true;
         }
 
         private int attackCounter;

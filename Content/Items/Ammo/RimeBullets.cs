@@ -86,7 +86,7 @@ namespace ExoriumMod.Content.Items.Ammo
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
         }

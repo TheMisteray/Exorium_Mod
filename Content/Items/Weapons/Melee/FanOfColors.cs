@@ -158,7 +158,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             return Projectile.localAI[0] <= 0;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }

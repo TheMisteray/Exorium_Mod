@@ -269,10 +269,10 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 			Projectile.velocity.X *= .988f;
 		}
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
 			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
-            base.Kill(timeLeft);
+            base.OnKill(timeLeft);
         }
     }
 }

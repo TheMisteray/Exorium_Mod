@@ -53,7 +53,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 8; i++)
             {
@@ -64,7 +64,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, v2, ProjectileType<GemDart>(), Projectile.damage, 1, Main.myPlayer, 0);
                 }
             }
-            base.Kill(timeLeft);
+            base.OnKill(timeLeft);
         }
 
         public override void PostDraw(Color lightColor)

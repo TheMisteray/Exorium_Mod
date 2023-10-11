@@ -89,7 +89,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
             Projectile.velocity.X *= .99f;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -160,7 +160,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
-            base.Kill(timeLeft);
+            base.OnKill(timeLeft);
         }
 
         public override bool PreDraw(ref Color lightColor)

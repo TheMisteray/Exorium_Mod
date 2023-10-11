@@ -26,15 +26,9 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             // DisplayName.SetDefault("Shadowmancer");
             Main.npcFrameCount[NPC.type] = 7;
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.OnFire,
-                    BuffID.Frostburn,
-                    BuffType<ConsumingDark>(),
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Shimmer] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
         }
 
         public override void SetDefaults()

@@ -19,14 +19,8 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.Ghost];
             // DisplayName.SetDefault("Specter");
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.OnFire,
-                    BuffID.Frostburn,
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
         }
 
         public override void SetDefaults()

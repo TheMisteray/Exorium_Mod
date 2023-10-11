@@ -30,14 +30,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             //Always draw so visuals don't fail while offscreen
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
 
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.OnFire,
-                    BuffID.OnFire3,
-                }
-            };
-            NPCID.Sets.DebuffImmunitySets[Type] = debuffData;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Shimmer] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
 
             NPCID.Sets.TrailCacheLength[Type] = 7;
             NPCID.Sets.TrailingMode[NPC.type] = 0;
@@ -145,10 +139,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //0 - jump
         //1 - dash                              -Done
         //2 - Teleport next to player           -Unfinished
-        //3 - Send down flame ring -Rift        -Done
+        //3 - Rift                              -Done
         //4 - parry                             -Done
         //5 - Galacta knight lol
-        //6 - swords come down                  -Done
+        //6 - swords shower                     -Done
         //7 - sword beams
         //8 - hop down
         //9 - flame breath

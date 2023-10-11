@@ -157,7 +157,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Vector2 speed = Vector2.Zero;
             switch (direction)

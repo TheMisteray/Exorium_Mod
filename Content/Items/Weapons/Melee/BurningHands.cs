@@ -162,7 +162,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             target.AddBuff(BuffID.OnFire, 420);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Projectile.ai[1] == 0)
             {

@@ -23,7 +23,7 @@ namespace ExoriumMod.Content.Projectiles
             Dust.NewDust(Projectile.Center, 0, 0, 6, 0f, 0f, 0, default(Color), 1f);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             int explosionArea = 320;
             Vector2 oldSize = Projectile.Size;

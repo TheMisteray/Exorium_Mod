@@ -85,7 +85,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             //TODO: extra effects at high power.
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCDeath6, Projectile.position);
             Vector2 dustSpeed = new Vector2(0, 10 * Projectile.scale);
@@ -146,7 +146,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 #endregion
 
             }
-            base.Kill(timeLeft);
+            base.OnKill(timeLeft);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -249,7 +249,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Vector2 dustSpeed = new Vector2(0, 5);
             for (int i = 0; i < 10; i++)
@@ -257,7 +257,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Vector2 perturbedDustSpeed = dustSpeed.RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 361)));
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<Shadow>(), perturbedDustSpeed.X * Main.rand.NextFloat(), perturbedDustSpeed.Y * Main.rand.NextFloat());
             }
-            base.Kill(timeLeft);
+            base.OnKill(timeLeft);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -386,7 +386,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             Projectile.Center = position + rotatedOffset;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCDeath6, Projectile.position);
             Vector2 dustSpeed = new Vector2(0, 5);
@@ -402,7 +402,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Main.npc[npc].ai[3] = Main.rand.Next(-7, 3);
                 Main.npc[npc].netUpdate = true;
             }
-            base.Kill(timeLeft);
+            base.OnKill(timeLeft);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -507,7 +507,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             //Increase power
             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -515,7 +515,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 Main.projectile[(int)darkWhoAmI].ai[0] += powerIncrease;
                 Main.projectile[(int)darkWhoAmI].netUpdate = true;
             }
-            base.Kill(timeLeft);
+            base.OnKill(timeLeft);
         }
 
         public override bool PreDraw(ref Color lightColor)

@@ -150,7 +150,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             target.AddBuff(BuffID.Frostburn, 200 * (int)Projectile.ai[0], true);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i <= Projectile.ai[0] * 10; i++)
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, 0, 0);

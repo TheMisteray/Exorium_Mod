@@ -63,7 +63,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustType<Dusts.Shadow>());
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
             if (Main.netMode != NetmodeID.MultiplayerClient)
