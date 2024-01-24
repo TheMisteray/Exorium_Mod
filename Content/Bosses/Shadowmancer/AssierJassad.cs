@@ -29,6 +29,8 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Shimmer] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
         }
 
         public override void SetDefaults()

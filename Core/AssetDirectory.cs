@@ -13,6 +13,11 @@ namespace ExoriumMod.Core
         public const string Background = Assets + "Backgrounds/";
         public const string MapBackground = Background + "Map/";
 
+        public const string Bestiary = Assets + "Bestiary/";
+        public const string BestiaryBackground = Bestiary + "Backgrounds/";
+        public const string BestiaryEnemyImage = Bestiary + "EnemyAlts/";
+        public const string BestiaryIcon = Bestiary + "Icons/";
+
         public const string Invisible = Assets + "Invisible";
 
         public const string Boss = Assets + "Bosses/";
@@ -27,7 +32,9 @@ namespace ExoriumMod.Core
         public const string Dust = Assets + "Dusts/";
 
         public const string Effect = Assets + "Effects/";
+        public const string Glow = Effect + "Glows/";
         public const string ShaderMap = Effect + "Maps/";
+        public const string Trail = Effect + "Trails/";
 
         public const string Gore = Assets + "Gores/";
 

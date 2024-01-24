@@ -36,6 +36,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPCID.Sets.TrailCacheLength[Type] = 7;
             NPCID.Sets.TrailingMode[NPC.type] = 0;
             NPCID.Sets.TeleportationImmune[Type] = true;
+
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
         }
 
         public override void SetDefaults()
@@ -145,7 +151,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //6 - swords shower                     -Done
         //7 - sword beams
         //8 - hop down
-        //9 - flame breath
+        //9 - Laser Pinwheel                    -Unfinished
         //10 - portal dash                      -Done
         //11 - Burning Sphere
         //12 - enrage
@@ -799,6 +805,39 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer == 30)
                     {
+                        Vector2 unit = Vector2.UnitX;
+                        bool turnLeft = false;
+                        if (Main.expertMode && Main.rand.NextBool())//Chance for diagonal beams in expert
+                            unit = unit.RotatedBy(MathHelper.PiOver4);
+                        if (Main.rand.NextBool())
+                            turnLeft = true;
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            for (int i = 0; i < 4; i++)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, unit.RotatedBy(MathHelper.PiOver4 * i), ProjectileType<InfernoBeam>(), damage * 2, 5, -1, 0, turnLeft ? 1 : 0);
+                                if ((phase == 2 && Main.expertMode) || Main.masterMode)//Double beams
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, unit.RotatedBy(MathHelper.PiOver4 * i + MathHelper.PiOver4/2), ProjectileType<InfernoBeam>(), damage * 2, 5, -1, 0, turnLeft ? 1 : 0);
+                                }
+                            }
+                        }
+                    }
+                    else if (actionTimer > 30 && actionTimer <= 330)
+                    {
+
+                    }
+                    else if (actionTimer > 330)
+                    {
+                        ChooseFollowup();
+                    }
+                    /*
+                    if (actionTimer == 0)
+                    {
+                        frameX = 5;
+                    }
+                    else if (actionTimer == 30)
+                    {
                         //Flames shoot from arena walls, if they come in contact with each other they explode into flame\
                         Rectangle arena = ExoriumWorld.FallenTowerRect;
 
@@ -818,7 +857,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                                 {
                                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.Zero, ProjectileType<GridFire>(), damage, 2, Main.myPlayer, 3, i);
                                 }
-                                
+
                                 counter += 5;
                             }
 
@@ -845,6 +884,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         ChooseFollowup();
                     }
+                    */
                     break;
                 case 10:
                     if (actionTimer == 0)

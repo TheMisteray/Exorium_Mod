@@ -14,6 +14,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -36,6 +37,18 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPCID.Sets.TrailCacheLength[Type] = 7;
             NPCID.Sets.TrailingMode[NPC.type] = 0;
             NPCID.Sets.TeleportationImmune[Type] = true;
+
+            var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            { // Influences how the NPC looks in the Bestiary
+//CustomTexturePath = AssetDirectory.CrimsonKnight + Name, // If the NPC is multiple parts like a worm, a custom texture for the Bestiary is encouraged.
+                Position = new Vector2(40f, 24f),
+                PortraitPositionXOverride = 50f,
+                PortraitPositionYOverride = 50f,
+                Scale = .15f
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
         }
 
         public override void SetDefaults()
@@ -1389,10 +1402,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            //Portal for despawn
-            if (exitTicker > 60)
+            if (NPC.IsABestiaryIconDummy) { return; }
+
+                //Portal for despawn
+                if (exitTicker > 60)
             {
-                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                var portal = Terraria.Graphics.Effects.Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
                 portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
                 portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
                 portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
@@ -1451,7 +1466,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (portalSize > 0)
             {
-                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                var portal = Terraria.Graphics.Effects.Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
                 portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
                 portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
                 portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
@@ -1487,10 +1502,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
             }
 
-            //Portal for the intro
+            //Portal for the introe
             if (introTicker > introTickerMax - 180)
             {
-                var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
+                var portal = Terraria.Graphics.Effects.Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
                 portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
                 portal.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
                 portal.Parameters["uProgress"].SetValue(Main.GameUpdateCount * .003f);
@@ -1512,6 +1527,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
 
             base.PostDraw(spriteBatch, screenPos, drawColor);
+        }
+
+        public override Color? GetAlpha(Color drawColor)
+        {
+            if (NPC.IsABestiaryIconDummy)
+            {
+                // This is required because we have NPC.alpha = 255, in the bestiary it would look transparent
+                return NPC.GetBestiaryEntryColor();
+            }
+            return base.GetAlpha(drawColor);
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -1583,6 +1608,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 NPC.life += damageDone;
             }
             base.OnHitByProjectile(projectile, hit, damageDone);
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+                new FlavorTextBestiaryInfoElement("This one appears to have been experimenting with a strange ritual altar. To... Limited success. It is still a mystery what exactly they hoped to accomplish. Not that it matters now with them gone."),
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
+            });
         }
     }
 }   

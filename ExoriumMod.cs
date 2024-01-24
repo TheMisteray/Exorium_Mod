@@ -21,6 +21,7 @@ using Terraria.Localization;
 using Terraria.ModLoader.Core;
 using Terraria.Utilities;
 using Terraria.UI.Chat;
+using Terraria.ModLoader.IO;
 
 namespace ExoriumMod
 {
@@ -88,6 +89,7 @@ namespace ExoriumMod
                 Filters.Scene["ExoriumMod:FireAura"].Load();
 
                 GameShaders.Misc["FlamingSphere"] = new MiscShaderData(flamingSphereRef, "FlamingSpherePass");
+                GameShaders.Misc["ExoriumMod:LaserEffect"] = new MiscShaderData(laserEffectRef, "TrailPass");
             }
         }
 

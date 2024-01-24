@@ -275,8 +275,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.Add(
-            new FlavorTextBestiaryInfoElement("An illusory clone conjured by the \"Mirror Image\" spell. It is substantially weaker than its creator, and is likey meant as a distraction."));
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
+            new FlavorTextBestiaryInfoElement("An illusory clone conjured by the \"Mirror Image\" spell. It is substantially weaker than its creator, and is likely meant as a distraction.")
+            });
         }
     }
 }

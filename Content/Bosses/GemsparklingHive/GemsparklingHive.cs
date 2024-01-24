@@ -9,6 +9,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
 using Terraria.DataStructures;
 using ExoriumMod.Content.Biomes;
+using Terraria.WorldBuilding;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -25,6 +26,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 ImmuneToAllBuffsThatAreNotWhips = true,
                 ImmuneToWhips = true
             };
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
         }
 
         public override void SetDefaults()
@@ -319,12 +321,24 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
         {
-            if (aiState != 1)
-                effectiveDamageTaken += (float)modifiers.FinalDamage.Flat;
             if (aiState != 0)
                 modifiers.Knockback.Flat = 0;
             NPC.life = NPC.lifeMax;
             base.ModifyIncomingHit(ref modifiers);
+        }
+
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            if (aiState != 1)
+                effectiveDamageTaken += damageDone;
+            base.OnHitByItem(player, item, hit, damageDone);
+        }
+
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            if (aiState != 1)
+                effectiveDamageTaken += damageDone;
+            base.OnHitByProjectile(projectile, hit, damageDone);
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -401,8 +415,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-            new FlavorTextBestiaryInfoElement("This hollowed out rock is home to a species of living gemstones. To harvest its gemstones on its surface you will have to deal with its inhabitants."),
-            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
+            new FlavorTextBestiaryInfoElement("This hollowed out rock is home to a species of living gemstones. To harvest the gemstones on its surface you will have to deal with its inhabitants."),
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
             });
         }
     }

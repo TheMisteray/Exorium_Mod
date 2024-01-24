@@ -120,6 +120,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                             SoundEngine.PlaySound(SoundID.MaxMana, Projectile.Center);
                         }
                     }
+                    Lighting.AddLight(Projectile.Center + Projectile.velocity, .15f * strength, .105f * strength, 0);
                 }
                 // Move to swing
                 else if (state == 0f)
@@ -145,12 +146,12 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                     }
                     //Extra projectiles in random directins for effect
                     /* THIS CRASHES THE GAME FOR SOME REASON?!?!?!
-                    for (float i = 0; i < MathHelper.Pi * 2; i += (MathHelper.Pi * 2) / (3 + strength))
+                    for (float i = 0; i < MathHelper.TwoPi; i += ((MathHelper.TwoPi) / (3 + strength)))
                     {
                         Vector2 trajectory = Projectile.velocity * (3 + .5f * strength);
-                        trajectory = trajectory.RotatedBy(i);
-                        int projExtra = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 64, trajectory, ProjectileType<InfernalTrails>(), Projectile.damage, 1, Projectile.owner, Projectile.velocity.X, Projectile.velocity.Y);
+                        int projExtra = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 64, trajectory.RotatedBy(i), ProjectileType<InfernalTrails>(), Projectile.damage, 1, Projectile.owner, Projectile.velocity.X, Projectile.velocity.Y);
                         Main.projectile[projExtra].timeLeft = 20;
+                        Main.projectile[projExtra].damage = 0;
                     }*/
                     //dust
                     DustHelper.DustCircle(Projectile.Center + Projectile.velocity * 64, DustID.Torch, 3, 20 + strength * 10, 1, .2f, 0, 0, Color.White, true);
@@ -159,6 +160,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                     SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
                     state = 2f;
                 }
+                Lighting.AddLight(Projectile.Center + Projectile.velocity, .2f * strength, .14f * strength, 0);
             }
             else if (state == 2f)
             {

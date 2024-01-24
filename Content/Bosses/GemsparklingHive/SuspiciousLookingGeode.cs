@@ -5,6 +5,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using Terraria.GameContent.Bestiary;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -46,6 +48,17 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 return .005f;
             }
             return 0;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            // Makes it so whenever you beat the boss associated with it, it will also get unlocked immediately
+            int associatedNPCType = NPCType<GemsparklingHive>();
+            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
+
+            bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
+            });
         }
     }
 }

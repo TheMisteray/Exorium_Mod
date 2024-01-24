@@ -87,6 +87,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             Projectile.velocity.Y += .16f;
             Projectile.velocity.X *= .99f;
+            Lighting.AddLight(Projectile.Center, 1, .7f, 0);
         }
 
         public override void OnKill(int timeLeft)
@@ -234,6 +235,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
             if (Projectile.ai[0] == 1)
                 Projectile.rotation = MathHelper.Pi;
+
+            Lighting.AddLight(Projectile.Center, .75f * (255 - Projectile.alpha / 255), .45f * (255 - Projectile.alpha / 255), 0);
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

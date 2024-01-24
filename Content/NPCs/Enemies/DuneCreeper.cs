@@ -21,6 +21,13 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             // DisplayName.SetDefault("Dune Creeper");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.WallCreeper];
+
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Velocity = 1f, // Draws the NPC in the bestiary as if its walking -1 tiles in the x direction
+                Direction = -1
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetDefaults()
@@ -3466,6 +3473,10 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             // DisplayName.SetDefault("Dune Creeper");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.WallCreeperWall];
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true
+            };
         }
 
         public override void SetDefaults()

@@ -130,6 +130,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                     }
                 }
             }
+
+            Lighting.AddLight(Projectile.Center, 1.5f * scalar, 1.05f * scalar, 0);
         }
 
         private void UpdatePlayerVisuals(Player player, Vector2 playerHandPos)

@@ -24,6 +24,16 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;
+
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Scale = .5f,
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 46f
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
+
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
         }
 
         public override void SetDefaults()
@@ -44,6 +54,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             NPC.alpha = 15;
             NPC.scale = 2f;
             NPC.timeLeft = NPC.activeTime * 30;
+            SpawnModBiomes = new int[1] { ModContent.GetInstance<DeadlandBiome>().Type };
             if (!Main.dedServ)
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/SlimyGrime");
         }

@@ -96,8 +96,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.Add(
-            new FlavorTextBestiaryInfoElement("This undead takes the appearance of a humanoid shadow. It feeds on the vitality of living creatures."));
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
+            new FlavorTextBestiaryInfoElement("This undead takes the appearance of a humanoid shadow. It feeds on the vitality of living creatures.")
+            });
         }
     }
 }

@@ -21,6 +21,12 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Velocity = 1f, // Draws the NPC in the bestiary as if its walking -1 tiles in the x direction
+                Direction = -1
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetDefaults()
@@ -34,6 +40,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
             NPC.DeathSound = SoundID.NPCDeath6;
             NPC.value = 200f;
             NPC.buffImmune[BuffID.Confused] = false;
+            SpawnModBiomes = new int[1] { ModContent.GetInstance<DeadlandBiome>().Type };
         }
 
         public override void CustomBehavior(ref float ai)

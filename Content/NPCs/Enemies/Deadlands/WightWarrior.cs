@@ -17,6 +17,13 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         {
             // DisplayName.SetDefault("Wight Warrior");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.ArmoredSkeleton];
+
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Velocity = 1f, // Draws the NPC in the bestiary as if its walking -1 tiles in the x direction
+                Direction = -1
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetDefaults()
@@ -34,6 +41,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
             AIType = NPCID.ArmoredSkeleton;
             NPC.buffImmune[BuffID.Confused] = false;
             AnimationType = NPCID.ArmoredSkeleton;
+            SpawnModBiomes = new int[1] { ModContent.GetInstance<DeadlandBiome>().Type };
         }
 
         public override void OnKill()

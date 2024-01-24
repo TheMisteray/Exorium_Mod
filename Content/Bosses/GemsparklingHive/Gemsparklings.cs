@@ -230,10 +230,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
+            int associatedNPCType = NPCType<GemsparklingHive>();
+            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
-            });
+        });
         }
     }
 
@@ -285,6 +287,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (NPC.IsABestiaryIconDummy) //Chain still draws if player near spawn pos so this needs to cut it
+                return base.PreDraw(spriteBatch, screenPos, drawColor);
             Vector2 hiveCenter = Main.npc[(int)hiveWhoAmI].Center;
             Vector2 center = NPC.Center;
             Vector2 distToHive = hiveCenter - center;

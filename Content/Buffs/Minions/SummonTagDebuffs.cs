@@ -26,17 +26,19 @@ namespace ExoriumMod.Content.Buffs.Minions
 
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            // Only player attacks should benefit from summon tag, hence the NPC and trap checks.
-            if (!projectile.npcProj && !projectile.trap && (projectile.minion || ProjectileID.Sets.MinionShot[projectile.type]))
+            // Only player attacks should benefit from this buff, hence the NPC and trap checks.
+            if (projectile.npcProj || projectile.trap || !projectile.IsMinionOrSentryRelated)
+                return;
+
+            // SummonTagDamageMultiplier scales down tag damage for some specific minion and sentry projectiles for balance purposes.
+            var projTagMultiplier = ProjectileID.Sets.SummonTagDamageMultiplier[projectile.type];
+            if (npc.HasBuff<SparklingWhipTag>())
+                modifiers.FlatBonusDamage += SparklingWhipTag.TagDamage * projTagMultiplier;
+            if (npc.HasBuff<FlameTongueTag>())
             {
-                if (markedBySparklingWhip)
-                    modifiers.FlatBonusDamage += 8;
-                if (markedByFlameTongue)
-                {
-                    modifiers.FlatBonusDamage += 7;
-                    if (npc.buffTime[BuffID.OnFire] > 0)
-                        npc.AddBuff(BuffType<FlameTongueBurn>(), npc.buffTime[BuffID.OnFire]);
-                }
+                modifiers.FlatBonusDamage += FlameTongueTag.TagDamage * projTagMultiplier;
+                if (npc.buffTime[BuffID.OnFire] > 0) //Apply increased burn
+                    npc.AddBuff(BuffType<FlameTongueBurn>(), npc.buffTime[BuffID.OnFire]);
             }
         }
 
@@ -56,6 +58,7 @@ namespace ExoriumMod.Content.Buffs.Minions
     class SparklingWhipTag : ModBuff
     {
         public override string Texture => AssetDirectory.Invisible;
+        public static readonly int TagDamage = 8;
 
         public override void SetStaticDefaults()
         {
@@ -64,25 +67,28 @@ namespace ExoriumMod.Content.Buffs.Minions
             BuffID.Sets.IsATagBuff[Type] = true;
         }
 
+        /*
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.GetGlobalNPC<SummonTagDebuffs>().markedBySparklingWhip = true;
-        }
+        }*/
     }
 
     class FlameTongueTag : ModBuff
     {
         public override string Texture => AssetDirectory.Invisible;
+        public static readonly int TagDamage = 7;
 
         public override void SetStaticDefaults()
         {
             BuffID.Sets.IsATagBuff[Type] = true;
         }
 
+        /*
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.GetGlobalNPC<SummonTagDebuffs>().markedByFlameTongue = true;
-        }
+        }*/
     }
 
     class FlameTongueBurn : ModBuff

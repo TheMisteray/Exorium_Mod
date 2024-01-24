@@ -137,7 +137,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 				aim = -Vector2.UnitY;
 			}
 
-			// Change a portion of the Prism's current velocity so that it points to the mouse. This gives smooth movement over time.
 			aim = Vector2.Normalize(Vector2.Lerp(Vector2.Normalize(Projectile.velocity), aim, TurnResponsiveness));
 
 			if (aim != Projectile.velocity)

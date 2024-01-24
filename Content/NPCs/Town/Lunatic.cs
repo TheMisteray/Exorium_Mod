@@ -7,6 +7,8 @@ using static Terraria.ModLoader.ModContent;
 using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent;
+using Terraria.GameContent.Personalities;
+using ExoriumMod.Content.Biomes;
 
 namespace ExoriumMod.Content.NPCs.Town
 {
@@ -33,7 +35,7 @@ namespace ExoriumMod.Content.NPCs.Town
             return NPCProfile;
         }
 
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaults() //TODO:A lot to make this work like a 1.4 npc
         {
             // DisplayName.SetDefault("Lunatic");
             Main.npcFrameCount[NPC.type] = 23;
@@ -44,6 +46,28 @@ namespace ExoriumMod.Content.NPCs.Town
             NPCID.Sets.AttackTime[NPC.type] = 90;
             NPCID.Sets.AttackAverageChance[NPC.type] = 30;
             NPCID.Sets.HatOffsetY[NPC.type] = 8;
+
+            // Influences how the NPC looks in the Bestiary
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Velocity = 1f,
+                Direction = -1
+            };
+
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+
+            // Set Example Person's biome and neighbor preferences with the NPCHappiness hook. You can add happiness text and remarks with localization (See an example in ExampleMod/Localization/en-US.lang).
+            // NOTE: The following code uses chaining - a style that works due to the fact that the SetXAffection methods return the same NPCHappiness instance they're called on.
+            NPC.Happiness
+                .SetBiomeAffection<ForestBiome>(AffectionLevel.Like)
+                .SetBiomeAffection<SnowBiome>(AffectionLevel.Like)
+                .SetBiomeAffection<DeadlandBiome>(AffectionLevel.Hate)
+                .SetNPCAffection(NPCID.Wizard, AffectionLevel.Like)
+                .SetNPCAffection(NPCID.Clothier, AffectionLevel.Love)
+                .SetNPCAffection(NPCID.Guide, AffectionLevel.Dislike)
+                .SetNPCAffection(NPCID.Dryad, AffectionLevel.Dislike)
+                .SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Love)
+            ;
         }
 
         public override void SetDefaults()
@@ -136,23 +160,18 @@ namespace ExoriumMod.Content.NPCs.Town
             }
         }
 
-        /*
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
 				// Sets the preferred biomes of this town NPC listed in the bestiary.
 				// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
-				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
 
 				// Sets your NPC's flavor text in the bestiary.
-				new FlavorTextBestiaryInfoElement("Hailing from a mysterious greyscale cube world, the Example Person is here to help you understand everything about tModLoader."),
-
-				// You can add multiple elements if you really wanted to
-				// You can also use localization keys (see Localization/en-US.lang)
-				new FlavorTextBestiaryInfoElement("Mods.ExampleMod.Bestiary.ExamplePerson")
+				new FlavorTextBestiaryInfoElement("A strange figure that approached you one night. It's not clear what his deal is, or if he knows either. Fravrick seems to be suffering from some form of memory loss, and becuase of this can't seem to remember where the magical knick-knacks he sells come from."),
             });
-        }*/
+        }
 
         public override void SetChatButtons(ref string button, ref string button2)
         {

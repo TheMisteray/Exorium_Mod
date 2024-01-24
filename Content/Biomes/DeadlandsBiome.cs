@@ -5,6 +5,8 @@ using Terraria.Graphics.Capture;
 using Terraria.ModLoader;
 using ExoriumMod.Core.Systems.TileCounters;
 using static Terraria.ModLoader.ModContent;
+using ExoriumMod.Core;
+using Mono.Cecil;
 
 namespace ExoriumMod.Content.Biomes
 {
@@ -12,7 +14,6 @@ namespace ExoriumMod.Content.Biomes
 	{
 		// Select all the scenery
 		public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("ExoriumMod/DeadlandsWater"); // Sets a water style for when inside this biome
-
 		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>("ExoriumMod/DeadlandsSurfaceBGStyle");
 		//public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;
 
@@ -35,13 +36,13 @@ namespace ExoriumMod.Content.Biomes
 			base.OnLeave(player);
         }
 
-        // Populate the Bestiary Filter
-        public override string BestiaryIcon => base.BestiaryIcon;
-		public override string BackgroundPath => base.BackgroundPath;
-		public override Color? BackgroundColor => base.BackgroundColor;
+		// Populate the Bestiary Filter
+		public override string BestiaryIcon => AssetDirectory.BestiaryIcon + "BestiaryDeadlandsIcon";
+		public override string BackgroundPath => AssetDirectory.BestiaryBackground + "BestiaryDeadlandsBackground";
+		public override Color? BackgroundColor => new Color(.7f, .7f, .7f);
+        public override string MapBackground => BackgroundPath;
 
-		// Use SetStaticDefaults to assign the display name
-		public override void SetStaticDefaults()
+        public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("The Deadlands");
 		}

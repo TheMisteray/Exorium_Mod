@@ -40,9 +40,17 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetStaticDefaults()
         {
-
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frozen] = true;
+
+            var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            { // Influences how the NPC looks in the Bestiary
+                CustomTexturePath = AssetDirectory.BestiaryEnemyImage + "FrostBiter_Bestiary", // If the NPC is multiple parts like a worm, a custom texture for the Bestiary is encouraged.
+                Position = new Vector2(40f, 24f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 12f
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
         }
 
         private int attackCounter;
@@ -87,6 +95,14 @@ namespace ExoriumMod.Content.NPCs.Enemies
     internal class FrostBiterBody : FrostBiter
     {
         public override string Texture => AssetDirectory.EnemyNPC + Name;
+
+        public override void SetStaticDefaults()
+        {
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
+            };
+        }
         public override void SetDefaults()
         {
             NPC.width = 30;
