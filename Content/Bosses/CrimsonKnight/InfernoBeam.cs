@@ -22,25 +22,17 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override string Texture => AssetDirectory.CrimsonKnight + Name;
 
         private const float MAX_CHARGE = 50f;
-        private const float LIFE_TIME = 300;
+        private const float LIFE_TIME = 480;
         private const float BEAM_LENGTH = 1600f;
         private const int SOUND_INTERVAL = 30;
         private float TURN_SPEED = 0.001f;
 
         public bool BeBrighter => Projectile.ai[0] > 0f;
 
-        public PrimDrawer LaserDrawer { get; private set; } = null;
-
         public float LifeCounter
         {
             get => Projectile.ai[0];
             set => Projectile.ai[0] = value;
-        }
-
-        public float Charge
-        {
-            get => Projectile.localAI[0];
-            set => Projectile.localAI[0] = value;
         }
 
         public bool TurnLeft
@@ -49,18 +41,22 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => Projectile.ai[1] = value ? 1f : 0f;
         }
 
-        public override void SendExtraAI(BinaryWriter writer)
+        public float Charge
         {
-            base.SendExtraAI(writer);
-
-            writer.Write(Projectile.localAI[0]);
+            get => Projectile.ai[2];
+            set => Projectile.ai[2] = value;
         }
 
-        public override void ReceiveExtraAI(BinaryReader reader)
+        public float AnchorX
         {
-            base.ReceiveExtraAI(reader);
+            get => Projectile.localAI[0];
+            set => Projectile.localAI[0] = value;
+        }
 
-            Projectile.localAI[0] = reader.ReadSingle();
+        public float AnchorY
+        {
+            get => Projectile.localAI[1];
+            set => Projectile.localAI[1] = value;
         }
 
         public bool IsAtMaxCharge => Charge == MAX_CHARGE;
@@ -73,6 +69,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.hostile = true;
+            Projectile.timeLeft = 300;
 
             Projectile.netImportant = true;
         }
@@ -85,7 +82,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (!IsAtMaxCharge) return false;
+            if (!IsAtMaxCharge || LifeCounter > LIFE_TIME - 30) return false;
 
             Vector2 unit = Projectile.velocity;
             unit.Normalize();
@@ -97,6 +94,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void AI()
         {
+            if (Projectile.timeLeft == 300)
+            {
+                AnchorX = Projectile.position.X;
+                AnchorY = Projectile.position.Y;
+                Main.NewText("re");
+            }
+
+            Projectile.position = new Vector2(AnchorX, AnchorY);
             Projectile.timeLeft = 2;
 
             //Turn after damage begins
@@ -119,7 +124,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private void Update()
         {
-            if (TURN_SPEED < .03f)
+            if (TURN_SPEED < .01f)
                 TURN_SPEED *= 1.02f;
             if (TurnLeft)
                 Projectile.velocity = Projectile.velocity.RotatedBy(TURN_SPEED);
@@ -144,83 +149,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
-        public float WidthFunction(float trailInterpolant)
-        {
-            // Grow rapidly from the start to full length. Any more than this notably distorts the texture.
-            float baseWidth = Projectile.scale * Projectile.width;
-            return baseWidth;
-        }
-
-        public Color ColorFunction(float trailInterpolant) => Color.Lerp(new(255, 51, 51, 100), new(255, 190, 61, 100), trailInterpolant);
         public override bool PreDraw(ref Color lightColor)
         {
             Vector2 unitVel = Projectile.velocity;
             unitVel.Normalize();
-            if (Charge == MAX_CHARGE)
-                DrawHelper.DrawLaser(Request<Texture2D>(AssetDirectory.CrimsonKnight + "InfernoBeamGuide").Value, Projectile.Center, unitVel, 10, -1.57f, 1f, BEAM_LENGTH, default, 30, BEAM_LENGTH);
+            if (IsAtMaxCharge)
+                DrawHelper.DrawLaser(Request<Texture2D>(AssetDirectory.CrimsonKnight + "InfernoBeam").Value, Projectile.Center, unitVel, 10, new Rectangle(0, 0, 44, 44), new Rectangle(0, 48, 44, 60) ,new Rectangle(0, 112, 44, 44), -1.57f, 1f, BEAM_LENGTH, new Color(254, 121, 2) * ((60 - Math.Max(LifeCounter + 60 - LIFE_TIME, 0)) / 60), 0, BEAM_LENGTH);
             else
-            {
-                // This should never happen, but just in case.
-                if (Projectile.velocity == Vector2.Zero)
-                    return false;
-
-                // If it isnt set, set the prim instance.
-                LaserDrawer ??= new(WidthFunction, ColorFunction, GameShaders.Misc["ExoriumMod:LaserEffect"]);
-
-                // Get the laser end position.
-                Vector2 laserEnd = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitY) * BEAM_LENGTH;
-
-                // Create 8 points that span across the draw distance from the projectile center.
-
-                // This allows the drawing to be pushed back, which is needed due to the shader fading in at the start to avoid
-                // sharp lines.
-                Vector2 initialDrawPoint = Projectile.Center - Projectile.velocity * 80f;
-                Vector2[] baseDrawPoints = new Vector2[8];
-                for (int i = 0; i < baseDrawPoints.Length; i++)
-                    baseDrawPoints[i] = Vector2.Lerp(initialDrawPoint, laserEnd, i / (float)(baseDrawPoints.Length - 1f));
-
-                // Set shader parameters. This one takes a fademap and a color.
-
-                // The laser should fade to white in the middle.
-                Color brightColor = new(194, 255, 242, 100);
-                var shaderData = GameShaders.Misc["ExoriumMod:LaserEffect"];
-                shaderData.UseColor(brightColor);
-                shaderData.UseImage0(ModContent.Request<Texture2D>(AssetDirectory.Trail + "GenericLaser"));
-                shaderData.Apply();
-
-                /*
-                Effect laser = GameShaders.Misc["ExoriumMod:LaserEffect"].Shader;
-                laser.Parameters["uColor"].SetValue(brightColor);
-                GameShaders.Misc["ExoriumMod:LaserEffect"].UseColor(brightColor);
-                // GameShaders.Misc["FargoswiltasSouls:MutantDeathray"].UseImage1(); cannot be used due to only accepting vanilla paths.
-                Texture2D laserTrail = ModContent.Request<Texture2D>(AssetDirectory.Trail + "GenericLaser").Value;
-                GameShaders.Misc["ExoriumMod:LaserEffect"].UseImage0(AssetDirectory.Trail + "GenericLaser");
-                // Draw a big glow above the start of the laser, to help mask the intial fade in due to the immense width.
-                */
-
-                Texture2D glowTexture = ModContent.Request<Texture2D>(AssetDirectory.Glow + "GlowRing").Value;
-
-                Vector2 glowDrawPosition = Projectile.Center - Projectile.velocity * (BeBrighter ? 90f : 180f);
-
-                Main.EntitySpriteDraw(glowTexture, glowDrawPosition - Main.screenPosition, null, brightColor, Projectile.rotation, glowTexture.Size() * 0.5f, Projectile.scale * 0.4f, SpriteEffects.None, 0);
-
-                SpriteBatch spriteBatch = Main.spriteBatch;
-
-                spriteBatch.End();
-                spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, GameShaders.Misc["ExoriumMod:LaserEffect"].Shader, Main.GameViewMatrix.ZoomMatrix);
-
-                DrawHelper.DrawLaser(ModContent.Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value, Projectile.Center + unitVel, unitVel, 10, -1.57f, 1f, BEAM_LENGTH, default, 30, BEAM_LENGTH);
-                LaserDrawer.DrawPrims(baseDrawPoints.ToList(), -Main.screenPosition, 60);
-
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-            }
+                DrawHelper.DrawLaser(Request<Texture2D>(AssetDirectory.CrimsonKnight + "InfernoBeamGuide").Value, Projectile.Center, unitVel, 10, new Rectangle(0, 0, 22, 22), new Rectangle(0, 24, 22, 30), new Rectangle(0, 56, 22, 22) , - 1.57f, 1f, BEAM_LENGTH, new Color(254, 121, 2) * ((60 - Math.Max(LifeCounter + 60 - LIFE_TIME, 0)) / 60), 0, BEAM_LENGTH);
             return false;
-        }
-
-        public override void PostDraw(Color lightColor)
-        {
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
     }
 }

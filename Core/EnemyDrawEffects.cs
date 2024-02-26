@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ExoriumMod.Content.Dusts;
+using ExoriumMod.Helpers;
 
 namespace ExoriumMod.Core
 {
@@ -10,6 +11,14 @@ namespace ExoriumMod.Core
     {
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
+            if (infernoFire)
+            {
+                Vector2 rad = new Vector2(0, Main.rand.NextFloat(((npc.width + npc.height) /2) / 5));
+                Vector2 shootPoint = rad.RotatedBy(Main.rand.NextFloat(0, MathHelper.TwoPi));
+                Dust dust = Dust.NewDustPerfect(npc.Center, DustID.SolarFlare, shootPoint, 1, default, 1.2f + Main.rand.NextFloat(-.3f, .3f));
+                dust.noGravity = true;
+                dust.color = new Color(255, 0, 0);
+            }
             if (cDark)
             {
                 if (Main.rand.Next(4) < 3)

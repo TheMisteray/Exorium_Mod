@@ -27,7 +27,7 @@ namespace ExoriumMod.Content.Buffs.Minions
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             // Only player attacks should benefit from this buff, hence the NPC and trap checks.
-            if (projectile.npcProj || projectile.trap || !projectile.IsMinionOrSentryRelated)
+            if (!projectile.active || projectile.npcProj || projectile.trap || !projectile.IsMinionOrSentryRelated)
                 return;
 
             // SummonTagDamageMultiplier scales down tag damage for some specific minion and sentry projectiles for balance purposes.

@@ -1,12 +1,12 @@
 ﻿using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.CodeAnalysis.Host.Mef;
 
 namespace ExoriumMod.Helpers
 {
     public static class DrawHelper
     {
-		//TODO: rewrite this to work with other laser sizes
 		/// <summary>
 		/// Draws lasers
 		/// </summary>
@@ -21,27 +21,27 @@ namespace ExoriumMod.Helpers
 		/// <param name="color">Color override</param>
 		/// <param name="transDist">distance from origin of start of laser</param>
 		/// <param name="distance">Total length of laser</param>
-		public static void DrawLaser(Texture2D texture, Vector2 start, Vector2 unit, float step, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color), int transDist = 50, float distance = 2000f)
+		///
+		public static void DrawLaser(Texture2D texture, Vector2 start, Vector2 unit, float step, Rectangle laserTail, Rectangle laserBody, Rectangle laserHead, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color), int transDist = 50, float distance = 2000f)
 		{
 			float r = unit.ToRotation() + rotation;
 
 			// Draws the laser 'body'
 			for (float i = transDist; i <= distance; i += step)
 			{
-				Color c = Color.White;
 				var origin = start + i * unit;
 				Main.EntitySpriteDraw(texture, origin - Main.screenPosition,
-					new Rectangle(0, 26, 28, 26), i < transDist ? Color.Transparent : c, r,
-					new Vector2(28 * .5f, 26 * .5f), scale, 0, 0);
+					laserBody, i < transDist ? Color.Transparent : color, r,
+					new Vector2(laserBody.Width/2, laserBody.Height/2), scale, 0, 0);
 			}
 
 			// Draws the laser 'tail'
 			Main.EntitySpriteDraw(texture, start + unit * (transDist - step) - Main.screenPosition,
-				new Rectangle(0, 0, 28, 26), Color.White, r, new Vector2(28 * .5f, 26 * .5f), scale, 0, 0);
+				laserTail, color, r, new Vector2(laserTail.Width/2, laserHead.Height/2), scale, 0, 0);
 
 			// Draws the laser 'head'
 			Main.EntitySpriteDraw(texture, start + (distance + step) * unit - Main.screenPosition,
-				new Rectangle(0, 52, 28, 26), Color.White, r, new Vector2(28 * .5f, 26 * .5f), scale, 0, 0);
+				laserHead, color, r, new Vector2(laserHead.Width/2, laserHead.Height/2), scale, 0, 0);
 		}
 	}
 }

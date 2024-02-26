@@ -160,7 +160,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                     SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
                     state = 2f;
                 }
-                Lighting.AddLight(Projectile.Center + Projectile.velocity, .2f * strength, .14f * strength, 0);
+                Lighting.AddLight(Projectile.Center + Projectile.velocity, .2f * (strength + 2), .14f * (strength + 2), 0);
             }
             else if (state == 2f)
             {

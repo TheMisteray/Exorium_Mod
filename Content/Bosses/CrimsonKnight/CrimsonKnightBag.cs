@@ -1,4 +1,5 @@
-﻿using ExoriumMod.Core;
+﻿using ExoriumMod.Content.Items.Accessories;
+using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -46,6 +47,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<Caravene>()));
             int[] items = new int[4] { ItemType<Items.Weapons.Magic.BurningSphere>(), ItemType<Items.Weapons.Melee.InfernalSledge>(), ItemType<Items.Weapons.Summoner.Whips.FlameTongue>(), ItemType<Items.Weapons.Ranger.MagmaMortar>() };
             itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, items));
+            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<CrimsonCrest>()));
         }
 
         public override Color? GetAlpha(Color lightColor)

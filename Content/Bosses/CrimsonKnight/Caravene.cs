@@ -66,6 +66,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.HitSound = SoundID.NPCHit4;
             NPC.timeLeft = NPC.activeTime * 30;
             NPC.buffImmune[BuffID.OnFire] = true;
+            NPC.buffImmune[BuffType<Inferno>()] = true;
             NPC.noGravity = false;
             NPC.noTileCollide = false;
             NPC.alpha = 255;

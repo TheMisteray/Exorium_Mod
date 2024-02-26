@@ -106,7 +106,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             if (AIState == 3)
             {
                 Texture2D tex = Request<Texture2D>(AssetDirectory.BlightedSlime + "BlightedThornIndicator").Value;
-                DrawHelper.DrawLaser(tex, Projectile.Center, new Vector2(0, 1).RotatedBy(Projectile.rotation), 10, MathHelper.PiOver2, 1);
+                DrawHelper.DrawLaser(tex, Projectile.Center, new Vector2(0, 1).RotatedBy(Projectile.rotation), 10, new Rectangle(0, 0, 28, 26), new Rectangle(0, 26, 28, 26), new Rectangle(0, 52, 28, 26), MathHelper.PiOver2, 1);
             }
             return true;
         }

@@ -120,17 +120,17 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 		{
 			SpriteBatch spriteBatch = Main.spriteBatch;
 			if (Charge == MAX_CHARGE)
-				DrawHelper.DrawLaser(TextureAssets.Projectile[Projectile.type].Value, Main.player[Projectile.owner].Center, Projectile.velocity, 10, -1.57f, 1f, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(TextureAssets.Projectile[Projectile.type].Value, Main.player[Projectile.owner].Center, Projectile.velocity, 10, new Rectangle(0, 0, 28, 26), new Rectangle(0, 26, 28, 26), new Rectangle(0, 52, 28, 26) , - 1.57f, 1f, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
 			else
             {
 				Texture2D tex = Request<Texture2D>(AssetDirectory.Projectile + Name + "Guide").Value;
 				float ratio = ((MAX_CHARGE - Charge) / MAX_CHARGE);
 				Vector2 offset = new Vector2(0, 30 * ratio);
 				Vector2 offset2 = offset.RotatedBy(Projectile.velocity.ToRotation());
-				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center + offset2, Projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
-				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center - offset2, Projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
-				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center + (offset2 * 2), Projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
-				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center - (offset2 * 2), Projectile.velocity, 10, MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center + offset2, Projectile.velocity, 10, new Rectangle(0, 0, 28, 26), new Rectangle(0, 26, 28, 26), new Rectangle(0, 52, 28, 26), MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center - offset2, Projectile.velocity, 10, new Rectangle(0, 0, 28, 26), new Rectangle(0, 26, 28, 26), new Rectangle(0, 52, 28, 26), MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center + (offset2 * 2), Projectile.velocity, 10, new Rectangle(0, 0, 28, 26), new Rectangle(0, 26, 28, 26), new Rectangle(0, 52, 28, 26), MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
+				DrawHelper.DrawLaser(tex, Main.player[Projectile.owner].Center - (offset2 * 2), Projectile.velocity, 10, new Rectangle(0, 0, 28, 26), new Rectangle(0, 26, 28, 26), new Rectangle(0, 52, 28, 26), MathHelper.PiOver2, 1 - ratio, 1000f, Color.Lime, (int)MOVE_DISTANCE, Distance);
 			}
 			return false;
 		}

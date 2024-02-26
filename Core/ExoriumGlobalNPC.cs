@@ -14,6 +14,7 @@ namespace ExoriumMod.Core
         public bool cAcid;
         public bool stuckByNeedles;
         public bool stuckByRapier;
+        public bool infernoFire;
 
         public override void ResetEffects(NPC npc)
         {
@@ -21,22 +22,12 @@ namespace ExoriumMod.Core
             cAcid = false;
             stuckByNeedles = false;
             stuckByRapier = false;
+            infernoFire = false;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
-            if (cDark)
-            {
-                if (npc.lifeRegen > 0)
-                {
-                    npc.lifeRegen = 0;
-                }
-                npc.lifeRegen -= 154;
-                if (damage < 7)
-                {
-                    damage = 7;
-                }
-            }
+            //Dot buffs
             if (cAcid)
             {
                 if (npc.lifeRegen > 0)
@@ -49,6 +40,32 @@ namespace ExoriumMod.Core
                     damage = 3;
                 }
             }
+            if (cDark)
+            {
+                if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                npc.lifeRegen -= 154;
+                if (damage < 7)
+                {
+                    damage = 7;
+                }
+            }
+            if (infernoFire)
+            {
+                if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                npc.lifeRegen -= 90;
+                if (damage < 2)
+                {
+                    damage = 10;
+                }
+            }
+
+            //Irregular dot buffs
             if (stuckByNeedles)
             {
                 if (npc.lifeRegen > 0)

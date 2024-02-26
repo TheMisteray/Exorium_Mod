@@ -795,6 +795,27 @@ Mods: {
 					Incredibly heavy, may break
 					'''
 			}
+
+			CrimsonCrest: {
+				DisplayName: Crimson Crest
+				Tooltip:
+					'''
+					Damage is increased for each nearby enemy that is on fire, up to 20%
+					If you are on fire, damage is increased further
+					While at the maximum damage bonus, attacks inflict an explosive burning effect
+					'''
+			}
+
+			FlameTongueGreatsword: {
+				DisplayName: Flame Tongue Greatsword
+				Tooltip:
+					'''
+					The blade of the Crimson Knight
+					Large to the point of being unwieldy
+					Lights enemies ablaze
+					Every 5th swing throws an arc of flames in the shape of swords
+					'''
+			}
 		}
 
 		Projectiles: {
@@ -884,6 +905,8 @@ Mods: {
 			SkullShot.DisplayName: Skull Shot
 			Wum.DisplayName: Wum
 			InfernoBeam.DisplayName: Inferno Beam
+			FlameToungeGreatswordBlade.DisplayName: Flame Tounge Greatsword
+			FlameToungeGreatswordBeam.DisplayName: Flame Tounge Beam
 		}
 
 		Buffs: {
@@ -992,6 +1015,11 @@ Mods: {
 			ThrowingRapierDamage: {
 				DisplayName: 20!!!
 				Description: Mods.ExoriumMod.Buffs.ThrowingRapierDamage.Description
+			}
+
+			Inferno: {
+				DisplayName: Inferno
+				Description: Mods.ExoriumMod.Buffs.Inferno.Description
 			}
 		}
 

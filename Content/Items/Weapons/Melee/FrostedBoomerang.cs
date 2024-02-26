@@ -82,8 +82,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i <= 9; i++)
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+            for (int i = 0; i < 15; i++)
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0 , default, .5f);
         }
     }
 }

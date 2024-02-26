@@ -37,6 +37,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.TeleportationImmune[Type] = true;
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
+            NPCID.Sets.NoTownNPCHappiness[Type] = true;
+            NPCID.Sets.HasNoPartyText[Type] = true;
         }
 
         public override void SetDefaults()
@@ -175,15 +177,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     invulnerableTime = 9999;//Use this as alternative way of communicating despawn over net
 
                     //closes dialouge, may need testing
-                    Main.player[Main.myPlayer].SetTalkNPC(-1);
                     Main.player[Main.myPlayer].sign = -1;
                     Main.npcChatCornerItem = 0;
                     Main.editSign = false;
                     Main.npcChatText = "";
                     SoundEngine.PlaySound(SoundID.MenuClose, NPC.Center);
                     Main.player[Main.myPlayer].releaseMount = false;
+                    Main.player[Main.myPlayer].SetTalkNPC(-1);
                 }
-                //TODO: add bag dropping, netsend truce data, and exit animation
+                //TODO:netsend truce data
             }
         }
 

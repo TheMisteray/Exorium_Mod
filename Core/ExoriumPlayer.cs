@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -20,7 +23,13 @@ namespace ExoriumMod.Core
         public bool acidArrows;
         public bool ritualArrow;
         public bool reverseHandOut;
+        public bool inflictInferno;
 
+        //nearby mobs check
+        public bool checkNearbyNPCs;
+        public List<NPC> nearbyNPCs = new List<NPC>();
+
+        //shadow cloak
         public int cloakHP = 40;
         public int cloakTimer = 0;
 
@@ -43,6 +52,14 @@ namespace ExoriumMod.Core
             acidArrows = false;
             ritualArrow = false;
             reverseHandOut = false;
+            inflictInferno = false;
+
+            checkNearbyNPCs = false;
+        }
+
+        public override void PreUpdate()
+        {
+            base.PreUpdate();
         }
 
         public override void PostUpdateEquips()
@@ -56,6 +73,17 @@ namespace ExoriumMod.Core
                 cloakTimer++;
             else
                 cloakTimer = 0;
+
+            if (checkNearbyNPCs) //Loop for checking nearby npcs
+            {
+                nearbyNPCs.Clear(); //reset here instead of ResetEffects so the array can stay populated with last tick's data durring the equips check
+                foreach (NPC npc in Main.npc)
+                {
+                    if (npc.active && (Math.Pow(Player.Center.X - npc.Center.X, 2) + Math.Pow(Player.Center.Y - npc.Center.Y, 2) < 600000)) //This is square distance so ~800
+                        nearbyNPCs.Add(npc);
+                }
+            }
+
             base.PostUpdateEquips();
         }
 
@@ -106,6 +134,11 @@ namespace ExoriumMod.Core
         {
             if (item.DamageType == DamageClass.Melee && frostStone)
                 target.AddBuff(BuffID.Frostburn, 120);
+            if (inflictInferno)
+            {
+                target.AddBuff(BuffType<Content.Buffs.Inferno>(), 60);
+                SoundEngine.PlaySound(SoundID.Item100, target.Center);
+            }
         }
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Projectile, consider using OnHitNPC instead */
@@ -114,6 +147,11 @@ namespace ExoriumMod.Core
                 target.AddBuff(BuffID.Frostburn, 120);
             if (proj.type == ProjectileID.WoodenArrowFriendly && acidArrows)
                 target.AddBuff(BuffType<Content.Buffs.CausticAcid>(), 300);
+            if (inflictInferno)
+            {
+                target.AddBuff(BuffType<Content.Buffs.Inferno>(), 60);
+                SoundEngine.PlaySound(SoundID.Item100, target.Center);
+            }
         }
 
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
@@ -169,6 +207,8 @@ namespace ExoriumMod.Core
             ScreenMoveTime = 0;
             ScreenMoveTarget = Vector2.Zero;
             ScreenMovePan = Vector2.Zero;
+
+            nearbyNPCs = new List<NPC>();
         }
     }
 }

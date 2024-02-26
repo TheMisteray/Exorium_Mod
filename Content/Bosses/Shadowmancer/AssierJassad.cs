@@ -316,7 +316,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         {
                             Vector2 delta = NPC.Center - new Vector2(NPC.Center.X + Main.rand.NextFloat(5) * NPC.direction, NPC.Center.Y + Main.rand.NextFloat(-4, 5));
                             if (Main.rand.NextBool(1))
-                                Dust.NewDust(NPC.position + NPC.velocity, NPC.width, NPC.height, DustType<Shadow>(), delta.X, delta.Y);
+                                Dust.NewDust(NPC.Center + NPC.velocity, NPC.width, NPC.height, DustType<Shadow>(), delta.X, delta.Y);
                         }
                         break;
                     case 3:
