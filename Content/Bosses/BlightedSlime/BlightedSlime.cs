@@ -575,9 +575,9 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         public override bool PreKill()
         {
             //Update
-            if (!ExoriumWorld.downedBlightslime)
+            if (!Core.Systems.DownedBossSystem.downedBlightslime)
             {
-                ExoriumWorld.downedBlightslime = true;
+                Core.Systems.DownedBossSystem.downedBlightslime = true;
                 if (Main.netMode == NetmodeID.Server)
                 {
                     NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.

@@ -66,16 +66,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 switch(direction)
                 {
                     case 1:
-                        destination = new Vector2(ExoriumWorld.FallenTowerRect.Center.X + destinationHelper, ExoriumWorld.FallenTowerRect.Center.Y - (ExoriumWorld.FallenTowerRect.Height/2 - 160));
+                        destination = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X + destinationHelper, Core.Systems.WorldDataSystem.FallenTowerRect.Center.Y - (Core.Systems.WorldDataSystem.FallenTowerRect.Height/2 - 160));
                         break;
                     case 2:
-                        destination = new Vector2(ExoriumWorld.FallenTowerRect.Center.X - (ExoriumWorld.FallenTowerRect.Width / 2 - 80), ExoriumWorld.FallenTowerRect.Center.Y + destinationHelper);
+                        destination = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X - (Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80), Core.Systems.WorldDataSystem.FallenTowerRect.Center.Y + destinationHelper);
                         break;
                     case 3:
-                        destination = new Vector2(ExoriumWorld.FallenTowerRect.Center.X + destinationHelper, ExoriumWorld.FallenTowerRect.Center.Y + (ExoriumWorld.FallenTowerRect.Height / 2 - 96));
+                        destination = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X + destinationHelper, Core.Systems.WorldDataSystem.FallenTowerRect.Center.Y + (Core.Systems.WorldDataSystem.FallenTowerRect.Height / 2 - 96));
                         break;
                     case 4:
-                        destination = new Vector2(ExoriumWorld.FallenTowerRect.Center.X + (ExoriumWorld.FallenTowerRect.Width / 2 - 64), ExoriumWorld.FallenTowerRect.Center.Y + destinationHelper);
+                        destination = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X + (Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 64), Core.Systems.WorldDataSystem.FallenTowerRect.Center.Y + destinationHelper);
                         break;
                 }
 

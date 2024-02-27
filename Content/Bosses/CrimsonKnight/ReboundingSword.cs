@@ -52,13 +52,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (!rebounded)
             {
-                if (bottom == 1 && Projectile.Center.Y >= ExoriumWorld.FallenTowerRect.Bottom - 80)
+                if (bottom == 1 && Projectile.Center.Y >= Core.Systems.WorldDataSystem.FallenTowerRect.Bottom - 80)
                 {
                     Projectile.velocity.Y *= -1;
                     rebounded = true;
                     SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
                 }
-                else if (bottom == 0 && Projectile.Center.Y <= ExoriumWorld.FallenTowerRect.Top + 160)
+                else if (bottom == 0 && Projectile.Center.Y <= Core.Systems.WorldDataSystem.FallenTowerRect.Top + 160)
                 {
                     Projectile.velocity.Y *= -1;
                     rebounded = true;

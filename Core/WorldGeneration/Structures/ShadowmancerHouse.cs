@@ -81,8 +81,8 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                             break;
                         case 3:
                             WorldGen.Place4x2(k, l, (ushort)TileType<ShadowAltarTile>(), -1, 0);
-                            ExoriumWorld.shadowAltarCoordsX = k + 1;
-                            ExoriumWorld.shadowAltarCoordsY = l;
+                            Core.Systems.WorldDataSystem.shadowAltarCoordsX = k + 1;
+                            Core.Systems.WorldDataSystem.shadowAltarCoordsY = l;
                             break;
                         case 4:
                             WorldGen.PlaceObject(k, l, (ushort)TileType<DarkbrickDoorClosed>());

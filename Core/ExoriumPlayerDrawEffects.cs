@@ -31,7 +31,7 @@ namespace ExoriumMod.Core
                 float shrinkRange = 600;
 
                 //Rotation to point to Shadow Altar, super inelegant way to do this but I couldn't find another way so far. (I'd have to get data from ExoriumWorld to do so from what I can tell)
-                Vector2 shadowAltar = new Vector2(ExoriumWorld.shadowAltarCoordsX, ExoriumWorld.shadowAltarCoordsY).ToWorldCoordinates();
+                Vector2 shadowAltar = new Vector2(Core.Systems.WorldDataSystem.shadowAltarCoordsX, Core.Systems.WorldDataSystem.shadowAltarCoordsY).ToWorldCoordinates();
                 Vector2 toAltar = shadowAltar - Player.Center;
                 float rotation = toAltar.ToRotation() - MathHelper.ToRadians(45);
                 if (toAltar.Length() > disappearRange)

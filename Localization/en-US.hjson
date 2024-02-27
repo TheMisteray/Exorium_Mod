@@ -8,7 +8,15 @@ Mods: {
 		}
 
 		NPCs: {
-			BlightedSlime.DisplayName: Blighted Slime
+			BlightedSlime: {
+				DisplayName: Blighted Slime
+
+				BossChecklistIntegration: {
+					SpawnInfo: Use a [i:ExoriumMod/TaintedSludge] in the Deadlands.
+					DespawnMessage: The Blighted Slime hops away
+				}
+			}
+
 			Caravene.DisplayName: Crimson Knight
 			CaraveneBattleIntermission.DisplayName: Crimson Knight
 			CaravenePhaseTransition.DisplayName: Crimson Knight
@@ -22,7 +30,16 @@ Mods: {
 			SapphireGemsparkling.DisplayName: Sapphire Gemsparkling
 			SuspiciousLookingGeode.DisplayName: Suspicious Looking Geode
 			TopazGemsparkling.DisplayName: Topaz Gemsparkling
-			AssierJassad.DisplayName: Shadowmancer
+
+			AssierJassad: {
+				DisplayName: Shadowmancer
+
+				BossChecklistIntegration: {
+					SpawnInfo: Follow a [i:ExoriumMod/RitualBone] and touch the Shadow Altar.
+					DespawnMessage: The Shadowmancer absconds
+				}
+			}
+
 			MirrorEntity.DisplayName: Shadowmancer
 			ShadowAdd.DisplayName: Shadow
 			Poltergeist.DisplayName: Specter

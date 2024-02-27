@@ -130,8 +130,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private int transitionCounter = 0;
 
         //Portal/Arena Locations
-        private static Vector2 topL = ExoriumWorld.FallenTowerRect.TopLeft();
-        private static Vector2 topR = ExoriumWorld.FallenTowerRect.TopRight();
+        private static Vector2 topL = Core.Systems.WorldDataSystem.FallenTowerRect.TopLeft();
+        private static Vector2 topR = Core.Systems.WorldDataSystem.FallenTowerRect.TopRight();
         private static Vector2 Arena_Top_Left = topL + new Vector2(250, 400);
         private static Vector2 Arena_Middle_Left = topL + new Vector2(250, 720); //20 tiles to next location so + 320
         private static Vector2 Arena_Bottom_Left = topL + new Vector2(250, 1040);
@@ -142,9 +142,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private static float Arena_Left = topL.X + 250;
         private static float Arena_Right = topR.X - 250;
         private static List<Vector2> Current_Portals = new List<Vector2>() { Vector2.Zero, Vector2.Zero};
-        private static float maxTeleportHeight = ExoriumWorld.FallenTowerRect.Top + 160 + 240;
-        private static float minTeleportX = ExoriumWorld.FallenTowerRect.Left + 80;
-        private static float maxTeleportX = ExoriumWorld.FallenTowerRect.Right - 80;
+        private static float maxTeleportHeight = Core.Systems.WorldDataSystem.FallenTowerRect.Top + 160 + 240;
+        private static float minTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Left + 80;
+        private static float maxTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Right - 80;
 
         //Actions
         //0 - jump
@@ -186,12 +186,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
 
             Player player = Main.player[NPC.target];
-            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || !player.getRect().Intersects(ExoriumWorld.FallenTowerRect)) //Also stop targeting if outside of arena
+            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || !player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect)) //Also stop targeting if outside of arena
             {
                 NPC.TargetClosest(true);
                 NPC.netUpdate = true;
                 player = Main.player[NPC.target];
-                if (!player.active || player.dead || (NPC.position - player.position).Length() > 6000 || !player.getRect().Intersects(ExoriumWorld.FallenTowerRect))
+                if (!player.active || player.dead || (NPC.position - player.position).Length() > 6000 || !player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect))
                 {
                     if (!player.active || player.dead)//Player died
                     {
@@ -533,11 +533,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                         if (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4)
                         {
-                            bladeSpawnOrigin = new Vector2(ExoriumWorld.FallenTowerRect.Center.X, ExoriumWorld.FallenTowerRect.Bottom);
+                            bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Bottom);
                         }
                         else
                         {
-                            bladeSpawnOrigin = new Vector2(ExoriumWorld.FallenTowerRect.Center.X, ExoriumWorld.FallenTowerRect.Top);
+                            bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top);
                         }
 
                         Vector2 offset = new Vector2(1, -1);
@@ -555,7 +555,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     else if (actionTimer > 30 && actionTimer % bladeSpawnCount == 0 && actionTimer < 360)
                     {
                         Vector2 spawnPoint = bladeSpawnOrigin;
-                        spawnPoint.X += Main.rand.NextFloat(-(ExoriumWorld.FallenTowerRect.Width / 2) + 80, ExoriumWorld.FallenTowerRect.Width / 2 - 80);
+                        spawnPoint.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
 
                         Vector2 direction = new Vector2(-1, 1);
                         direction *= 10;
@@ -720,7 +720,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     else if (actionTimer == 30)
                     {
                         //Flames shoot from arena walls, if they come in contact with each other they explode into flame\
-                        Rectangle arena = ExoriumWorld.FallenTowerRect;
+                        Rectangle arena = Core.Systems.WorldDataSystem.FallenTowerRect;
 
                         //place along top, right, bottom, left
                         if (Main.netMode != NetmodeID.MultiplayerClient)

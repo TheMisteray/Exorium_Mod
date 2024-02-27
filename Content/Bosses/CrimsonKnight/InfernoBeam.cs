@@ -98,7 +98,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 AnchorX = Projectile.position.X;
                 AnchorY = Projectile.position.Y;
-                Main.NewText("re");
+                Main.NewText("" + Core.Systems.DownedBossSystem.downedShadowmancer);
             }
 
             Projectile.position = new Vector2(AnchorX, AnchorY);
@@ -124,7 +124,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private void Update()
         {
-            if (TURN_SPEED < .01f)
+            if (TURN_SPEED < .005f)
                 TURN_SPEED *= 1.02f;
             if (TurnLeft)
                 Projectile.velocity = Projectile.velocity.RotatedBy(TURN_SPEED);

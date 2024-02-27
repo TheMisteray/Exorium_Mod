@@ -36,7 +36,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Item.noMelee = true;
             Item.knockBack = 2;
             Item.value = Item.sellPrice(silver: 77); ;
-            Item.rare = 3;
+            Item.rare = 4;
             Item.UseSound = SoundID.Item45;
             Item.shoot = ProjectileType<BurningSphereProjectile>();
             Item.shootSpeed = 20;

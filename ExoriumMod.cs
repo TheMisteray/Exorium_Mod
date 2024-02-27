@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework;
-using ExoriumMod.Core;
+using ExoriumMod.Core.Systems;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -25,11 +25,9 @@ using Terraria.ModLoader.IO;
 
 namespace ExoriumMod
 {
-	public partial class ExoriumMod : Mod
+	public class ExoriumMod : Mod
 	{
         internal static ExoriumMod instance;
-
-        public static Effect SunOrbShader;
 
         public ExoriumMod()
 		{
@@ -95,25 +93,60 @@ namespace ExoriumMod
 
         public override void Unload()
         {
-            SunOrbShader = null;
-
             instance = null;
-        }
-
-        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */
-        {
-            RecipeGroup woodGroup = RecipeGroup.recipeGroups[RecipeGroup.recipeGroupIDs["Wood"]];
-            woodGroup.ValidItems.Add(ModContent.ItemType<Content.Items.TileItems.Deadwood>());
         }
 
         public override void PostSetupContent()
         {
-            //Cross Content
-            //BossChecklistCC();
-            //CensusCC();
-            //FargoMutantCC();
+            BossChecklistCC();
+            FargoMutantCC();
+        }
 
-            base.PostSetupContent();
+        private void BossChecklistCC()
+        {
+            Mod bcl = ModLoader.GetMod("BossChecklist");
+            if (bcl == null) return;
+
+            bcl.Call(
+                "LogBoss",
+                this,
+                nameof(Content.Bosses.Shadowmancer.AssierJassad),
+                1.9f,
+                (Func<bool>)(() => DownedBossSystem.downedShadowmancer),
+                ModContent.NPCType<Content.Bosses.Shadowmancer.AssierJassad>(),
+                new Dictionary<string, object>()
+                {
+                    ["spawnItems"] = ModContent.ItemType<Content.Items.Accessories.RitualBone>(),
+                });
+
+            bcl.Call(
+                "LogBoss",
+                this, nameof(Content.Bosses.BlightedSlime.BlightedSlime),
+                3.1f,
+                (Func<bool>)(() => DownedBossSystem.downedBlightslime),
+                ModContent.NPCType<Content.Bosses.BlightedSlime.BlightedSlime>(),
+                new Dictionary<string, object>()
+                {
+                    ["spawnItems"] = ModContent.ItemType<Content.Bosses.BlightedSlime.TaintedSludge>(),
+                });
+        }
+
+        private void CensusCC()
+        {
+            Mod census = ModLoader.GetMod("Census");
+            if (census != null)
+            {
+                census.Call("TownNPCCondition", ModContent.NPCType<Content.NPCs.Town.Lunatic>(), "Will show up when he feels like it. (After there are at least 3 other NPCs in your town).");
+            }
+        }
+
+        private void FargoMutantCC()
+        {
+            Mod fargosMutant = ModLoader.GetMod("Fargowiltas");
+            if (fargosMutant != null)
+            {
+                fargosMutant.Call("AddSummon", 3.1f, "ExoriumMod", "TaintedSludge", (Func<bool>)(() => DownedBossSystem.downedBlightslime), 125000);
+            }
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)

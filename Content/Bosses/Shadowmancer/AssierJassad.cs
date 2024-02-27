@@ -531,9 +531,9 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             }
 
             //Update
-            if (!ExoriumWorld.downedShadowmancer)
+            if (!Core.Systems.DownedBossSystem.downedShadowmancer)
             {
-                ExoriumWorld.downedShadowmancer = true;
+                Core.Systems.DownedBossSystem.downedShadowmancer = true;
                 if (Main.netMode == NetmodeID.Server)
                 {
                     NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.

@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace ExoriumMod.Core.Systems.TileCounters
 {
-    internal class DeadlandsBiomeTileCount : ModSystem
+    public class DeadlandsBiomeTileCount : ModSystem
     {
         public int deadlandsBlockCount;
 
