@@ -59,6 +59,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             RotationOffset += .006f;
             if (Main.expertMode)
                 RotationOffset += .003f;
+
+            if (Main.rand.NextBool(7))
+            {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SolarFlare, Projectile.velocity.X * Main.rand.NextFloat(.25f), 0, 0, default, 1);
+                Main.dust[dust].noGravity = true;
+            }
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)

@@ -13,6 +13,7 @@ float4 darker_color : hint_color = float4(0.64, 0.2, 0.05, 1.0);
 
 float spread = 0.5;
 float uTime;
+float uOpacity;
 
 float4 MainPS(float2 uv : TEXCOORD0) : COLOR0
 {
@@ -33,6 +34,8 @@ float4 MainPS(float2 uv : TEXCOORD0) : COLOR0
 
 	color = float4(bd_color, step1) * color;
 	color.rgb = lerp(color.rgb, middle_color.rgb, step2 - step3);
+	if (color.a > 0)
+		color.a = max(color.a - (uOpacity / 255), 0);
 
 	return color;
 }

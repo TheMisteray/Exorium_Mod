@@ -99,7 +99,7 @@ namespace ExoriumMod
         public override void PostSetupContent()
         {
             BossChecklistCC();
-            CensusCC();
+            //CensusCC();
             FargoMutantCC();
         }
 

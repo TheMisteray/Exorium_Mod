@@ -49,7 +49,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
-            NPC.damage = 29;
+            NPC.damage = 55;
             NPC.defense = 7;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
@@ -65,7 +65,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.buffImmune[BuffType<Inferno>()] = true;
             NPC.noGravity = false;
             NPC.noTileCollide = false;
-            NPC.alpha = 255;
+            NPC.alpha = 0;
             if (!Main.dedServ)
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/ExoriumRed");
             //bossBag = ItemType<ShadowmancerBag>();
@@ -106,10 +106,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private float portalSize = 0;
         private float portalLoop = 0;
         private Vector2 bladeSpawnOrigin = Vector2.Zero;
-        private int bladeSpawnQuadrant = 0;
+        private Vector2 bladeSpawnOrigin2 = Vector2.Zero;
+        private int bladeSpawnSide = 0;
         private int bladeSpawnCount = 0;
         private float auraAlpha = 0;
         private bool[] teleportLocations = new bool[6]{ false, false, false, false, false, false };
+        Vector2 trueTeleportLocation = Vector2.Zero;
 
 
         //Phase trackers
@@ -144,19 +146,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private static float maxTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Right - 80;
 
         //Actions
-        //0 - jump
+        //0 - jump                              -Unchanged?
         //1 - dash                              -Done
         //2 - Teleport next to player           -Unfinished
         //3 - Rift                              -Done
         //4 - parry                             -Done
-        //5 - Galacta knight lol
+        //5 - Galacta knight lol                -From all angles this time
         //6 - swords shower                     -Done
-        //7 - sword beams
-        //8 - hop down
+        //7 - sword beams                       -Targeted Sword Slash
+        //8 - hop down                          -Unchanged?
         //9 - Laser Pinwheel                    -Unfinished - TODO: Make unable to be used too close to walls or ceiling
         //10 - portal dash                      -Done
         //11 - Burning Sphere
-        //12 - enrage
+        //12 - enrage                           -Unchanged?
         public float Action
         {
             get => NPC.ai[0];
@@ -414,7 +416,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 2:
-                    Vector2 trueLocation = Vector2.Zero;
                     if (actionTimer == 0)
                     {
                         teleIndicator = true;
@@ -436,7 +437,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             {
                                 choose = Main.rand.Next(6);
                             }
-                            while (teleportLocations[choose] != false);
+                            while (teleportLocations[choose] != false); //repeat if that spot was already chosen
                             teleportLocations[choose] = true;
                         }
 
@@ -444,80 +445,63 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         NPC.noTileCollide = true;
                         noContactDamage = true;
                     }
-                    else if (actionTimer == 90)
+                    else if (actionTimer == 150)
                     {
                         //Choose the teleport spot
-                        int teleportLocal;
+                        int teleportLocal = 0;
                         do
                         {
                             teleportLocal = Main.rand.Next(6);
                         }
-                        while (teleportLocations[teleportLocal]);
+                        while (teleportLocations[teleportLocal] == false); //repeat if that spot was not chosen
 
                         //Choose offest based on teleport location
                         Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
                         Vector2 location;
-                        if (teleportLocations[0]) //Draw at locations of Teleport locations (all relative to player)
+                        for (int i = 0; i < 6; i++)//loop through locations and spawn clone or move based on index
                         {
-                            location = new Vector2(player.Center.X - texTele.Width, Arena_Top_Left.Y + 20);
-                            CreateCloneProjectile(location, 0);
-                            if (teleportLocal == 0)
-                                trueLocation = location;
+                            if (teleportLocations[i])
+                            {
+                                location = new Vector2(player.Center.X + (i<3? -NPC.width : NPC.width), Arena_Top_Left.Y + (i%3 == 0? 20 : i%3 == 1? 344:652));//really wish I didn't have to use static numbers for this but can't think of a way to avoid it
+                                if (location.X < minTeleportX + NPC.width / 2)
+                                    location.X = minTeleportX + NPC.width / 2;
+                                if (location.X > maxTeleportX - NPC.width / 2)
+                                    location.X = maxTeleportX - NPC.width / 2;
+                                if (teleportLocal == i)
+                                    trueTeleportLocation = location;
+                                else
+                                    CreateCloneProjectile(location, i, damage);
+                            }
                         }
-                        if (teleportLocations[1]) //Draw at locations of Teleport locations (all relative to player)
-                        {
-                            location = new Vector2(player.Center.X - texTele.Width, Arena_Top_Left.Y + 544);
-                            CreateCloneProjectile(location, 1);
-                            if (teleportLocal == 1)
-                                trueLocation = location;
-                        }
-                        if (teleportLocations[2]) //Draw at locations of Teleport locations (all relative to player)
-                        {
-                            location = new Vector2(player.Center.X - texTele.Width, Arena_Top_Left.Y + 864);
-                            CreateCloneProjectile(location, 2);
-                            if (teleportLocal == 2)
-                                trueLocation = location;
-                        }
-                        if (teleportLocations[3]) //Draw at locations of Teleport locations (all relative to player)
-                        {
-                            location = new Vector2(player.Center.X + texTele.Width, Arena_Top_Left.Y + 20);
-                            CreateCloneProjectile(location, 3);
-                            if (teleportLocal == 3)
-                                trueLocation = location;
-                        }
-                        if (teleportLocations[4]) //Draw at locations of Teleport locations (all relative to player)
-                        {
-                            location = new Vector2(player.Center.X + texTele.Width, Arena_Top_Left.Y + 544);
-                            CreateCloneProjectile(location, 4);
-                            if (teleportLocal == 4)
-                                trueLocation = location;
-                        }
-                        if (teleportLocations[5]) //Draw at locations of Teleport locations (all relative to player)
-                        {
-                            location = new Vector2(player.Center.X + texTele.Width, Arena_Top_Left.Y + 864);
-                            CreateCloneProjectile(location, 5);
-                            if (teleportLocal == 5)
-                                trueLocation = location;
-                        }
-                    }
-                    else if (actionTimer == 180)
-                    {
+
                         NPC.velocity = Vector2.Zero;
                         noContactDamage = false;
 
-                        NPC.Center = trueLocation;
+                        NPC.Center = trueTeleportLocation;
+                        NPC.alpha = 0;
+                        if ((NPC.Center - player.Center).X > 0)
+                            left = false;
+                        else
+                            left = true;
                         teleIndicator = false;
                     }
-                    else if (actionTimer == 200)
+                    else if (actionTimer == 180)
                     {
                         NPC.noGravity = false;
                         NPC.noTileCollide = false;
                         frameX = 1;
                         NPC.frameCounter = 0;
                     }
-                    else if (actionTimer >= 230)
+                    else if (actionTimer >= 210)
                     {
                         ChooseMovement();
+                    }
+
+                    //control alpha
+                    if (actionTimer < 80 && NPC.alpha < 255)
+                    {
+                        NPC.alpha += 5;
+                        if (NPC.alpha > 255) NPC.alpha = 255;//attempt to stop red flash
                     }
                     break;
                 case 3:
@@ -598,14 +582,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 5:
                     if (actionTimer == 0)
                     {
-                        //Only accept negative y quadrants in phase 2
-                        do
-                        {
-                            bladeSpawnQuadrant = Main.rand.Next(1, 5);
-                        }
-                        while (phase != 2 && (bladeSpawnQuadrant == 2 || bladeSpawnQuadrant == 3));
+                        //Choose a side, 1 is top 2 is bottom
+                        bladeSpawnSide = Main.rand.Next(1, 3);
 
-                        if (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4)
+                        if (phase == 2)
+                        {
+                            bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Bottom);
+                            bladeSpawnOrigin2 = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top);
+                        }
+                        else if (bladeSpawnSide == 1)
                         {
                             bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Bottom);
                         }
@@ -614,31 +599,45 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top);
                         }
 
+                        /*
                         Vector2 offset = new Vector2(1, -1);
                         offset *= 1800;
                         offset = offset.RotatedBy(MathHelper.ToRadians(90 * (bladeSpawnQuadrant - 1)));
 
-                        bladeSpawnOrigin += offset;
+                        bladeSpawnOrigin += offset;*/
 
-                        bladeSpawnCount = Main.expertMode ? 20 : 15;
+                        bladeSpawnCount = Main.expertMode ? 25 : 20;
                         if (Main.masterMode)
-                            bladeSpawnCount -= 5;
+                            bladeSpawnCount += 5;
                         if (phase == 2)
-                            bladeSpawnCount -= 5;
+                            bladeSpawnCount -= 10; //reduce since double are being created
                     }
                     else if (actionTimer > 30 && actionTimer % bladeSpawnCount == 0 && actionTimer < 360)
                     {
-                        Vector2 spawnPoint = bladeSpawnOrigin;
+                        Vector2 offset = new Vector2(Main.rand.NextBool()? 1 : -1, bladeSpawnSide == 1 ? -1 : 1);
+                        Vector2 direction = offset * -10; //gets vector back with magnatude 10
+                        offset *= 1800;
+                        Vector2 spawnPoint = bladeSpawnOrigin + offset;
+
                         spawnPoint.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
 
-                        Vector2 direction = new Vector2(-1, 1);
-                        direction *= 10;
-                        direction = direction.RotatedBy(MathHelper.ToRadians(90 * (bladeSpawnQuadrant - 1)));
-
                         if (Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint, direction, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4)? 1f : 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint, direction, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, bladeSpawnSide == 2 ? 1f : 0f);
+
+                        if (phase == 2)
+                        {
+                            Vector2 offset2 = new Vector2(Main.rand.NextBool() ? 1 : -1, bladeSpawnSide == 1 ? 1 : -1); //inverse so they come from the other side
+                            Vector2 direction2 = offset2 * -10; //gets vector back with magnatude 10
+                            offset2 *= 1800;
+                            Vector2 spawnPoint2 = bladeSpawnOrigin2 + offset2;
+
+                            spawnPoint2.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint2, direction2, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, bladeSpawnSide == 2 ? 0f : 1f); //inverse side again
+                        }
                     }
-                    if (actionTimer >= 420)
+                    if (actionTimer >= 370)
                     {
                         ChooseFollowup();
                     }
@@ -647,7 +646,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient && actionTimer % 6 == 0)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, new Vector2(0, -30).RotatedByRandom(MathHelper.Pi/16), ProjectileType<indicatorRainSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4) ? 1f : 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, new Vector2(0, -30).RotatedByRandom(MathHelper.Pi/16), ProjectileType<indicatorRainSword>(), damage, 1, Main.myPlayer, 60/*, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4) ? 1f : 0f*/);
                             SoundEngine.PlaySound(SoundID.Item100, swordTip);
                         }
                     }
@@ -777,13 +776,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 8:
-                    if (NPC.Bottom.Y > Main.player[NPC.target].Bottom.Y + 20 && actionTimer > 60 && actionTimer < 100)
+                    if (NPC.Bottom.Y > Main.player[NPC.target].Bottom.Y + 32 && actionTimer > 50 && actionTimer < 110)
                     {
-                        actionTimer = 100;
+                        actionTimer = 110;
                     }
-                    if (NPC.Bottom.Y < Arena_Bottom_Left.Y)
+                    if (NPC.Bottom.Y > Arena_Bottom_Left.Y - 32)
                     {
-                        actionTimer = 120;
+                        actionTimer = 121;
                     }
                     if (actionTimer == 0)
                     {
@@ -977,9 +976,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         NPC.velocity = Vector2.Zero;
                         NPC.alpha = 255;
                     }
-                    else if (actionTimer < timeReachedPortal + 120) //Move out of next portal for 2 seconds
+                    else if (actionTimer < timeReachedPortal + 120) //Move out of next portal after 2 seconds
                     {
-                        if (NPC.alpha > 255)
+                        if (NPC.alpha > 0)
                             NPC.alpha -= 15;
                         else
                             showPortals = false;
@@ -1116,12 +1115,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Main.rand.NextBool(2))
             {
                 //Check elevation level in arena
-                if (NPC.Center.Y < topL.Y + 865)
+                if (NPC.Center.Y < topL.Y + 544)
                 {
                     Action = 8;
                     wait = 20;
                 }
-                else if (NPC.Center.Y < topL.Y + 544)
+                else if (NPC.Center.Y < topL.Y + 865)
                 {
                     if (Main.rand.NextBool(2))
                     {
@@ -1158,7 +1157,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (Main.rand.NextBool(4) && phase == 2)
             {
-                if (NPC.Center.Y > topL.Y + 864 && NPC.Center.Y < topL.Y + 544 && NPC.Center.X > topL.X + 544 && NPC.Center.X < topR.X - 544)
+                if (NPC.Center.Y > topL.Y + 864 && NPC.Center.Y < topL.Y + 544 && NPC.Center.X > topL.X + 180 && NPC.Center.X < topR.X - 180)
                 {
                     Action = 9;
                     wait = 30;
@@ -1222,9 +1221,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             actionTimer = -1;
         }
 
-        private void CreateCloneProjectile(Vector2 location, int index)
+        private void CreateCloneProjectile(Vector2 location, int index, int damage)
         {
             //Projectile
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), location, Vector2.Zero, ProjectileType<CaraveneClone>(), damage, 2, Main.myPlayer, index < 3 ? 0 : 1);
+            /*
             for (int i = 0; i < 50; i++)
             {
                 Vector2 rad = new Vector2(0, Main.rand.NextFloat(30));
@@ -1232,7 +1234,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Dust dust = Dust.NewDustPerfect(location, DustID.SolarFlare, shootPoint, 1, default, 1 + Main.rand.NextFloat(-.5f, .5f));
                 dust.noGravity = true;
                 dust.color = new Color(184, 58, 24);
-            }
+            }*/
         }
         #endregion
 
@@ -1256,9 +1258,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
                     }
-                    else if (NPC.frameCounter == 20)
+                    else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 150)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((NPC.width * (left? 1: -1)), 80), Vector2.Zero, ProjectileType<SwordHitbox>(), NPC.damage, 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width + 30 : -NPC.width - 30), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 4 : 2)) * 2, 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1319,11 +1321,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
             }
             Main.musicFade[Main.curMusic] = 1f; //Want volume to be at max for a bit..
-            //TEST
-            Action = 9;
+            //TODO: This is a TEST line
+            //Action = 0;
             introTicker--;
             if (introTicker <= 0)
+            {
                 introAnimation = false;
+                ChooseMovement();
+            }
 
             if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
             {
@@ -1370,6 +1375,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 NPC.noTileCollide = false;
                 NPC.noGravity = false;
                 noContactDamage = false;
+                NPC.alpha = 0;
 
                 RemoveProjectiles();
             }
@@ -1468,16 +1474,17 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             fire.Parameters["noiseTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "FlamingSphere").Value);
             fire.Parameters["gradientTexture"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "basicGradient").Value);
             fire.Parameters["uTime"].SetValue(Main.GameUpdateCount * 0.02f);
+            fire.Parameters["uOpacity"].SetValue(NPC.alpha);
 
             if (true)
             {
                 Texture2D auraTex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "Aura").Value;
-                Color alpha = new Color(255, 255, 255, auraAlpha);
+                Color alpha = new Color(255, 255, 255, NPC.alpha);
 
                 spriteBatch.End();
                 spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, fire, Main.GameViewMatrix.ZoomMatrix);
 
-                spriteBatch.Draw(auraTex, NPC.Center - screenPos + new Vector2(0, -150), null, Color.White, 0, auraTex.Size() / 2, 1.8f, 0, 0);
+                spriteBatch.Draw(auraTex, NPC.Center - screenPos + new Vector2(0, -150), null, alpha, 0, auraTex.Size() / 2, 1.8f, 0, 0);
 
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
@@ -1492,7 +1499,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Color alphaColor;
 
             if (NPC.alpha != 0)
-                alphaColor = new Color(drawColor.R, drawColor.G, drawColor.B, NPC.alpha);
+                alphaColor = Color.Lerp(new Color(0, 0, 0, 0), drawColor, (float)(-1 * (NPC.alpha - 255)) / 255f);
             else
                 alphaColor = drawColor;
 
@@ -1502,7 +1509,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (!left)
             {
                 //Afterimage for dash
-                if ((Action == 1 && actionTimer > 60 && actionTimer < 150) || (Action == 10 && actionTimer > 60 && (timeReachedPortal == 0 || actionTimer < timeReachedPortal + 120)) || (Action == 2 && actionTimer >= 90 && actionTimer <= 94))
+                if ((Action == 1 && actionTimer > 60 && actionTimer < 150) || (Action == 10 && actionTimer > 60 && (timeReachedPortal == 0 || actionTimer < timeReachedPortal + 120)))
                 {
                     for (int k = NPC.oldPos.Length - 1; k >= 0; k--)
                     {
@@ -1530,7 +1537,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
             else
             {
-                if ((Action == 1 && actionTimer > 60 && actionTimer < 150) || (Action == 10 && actionTimer > 60 && (timeReachedPortal == 0 || actionTimer < timeReachedPortal + 120)) || (Action == 2 && actionTimer >= 90 && actionTimer <= 100))
+                if ((Action == 1 && actionTimer > 60 && actionTimer < 150) || (Action == 10 && actionTimer > 60 && (timeReachedPortal == 0 || actionTimer < timeReachedPortal + 120)))
                 {
                     for (int k = NPC.oldPos.Length - 1; k >= 0; k--)
                     {
@@ -1592,36 +1599,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator").Value;
                 Player p = Main.player[NPC.target];
-
-                if (teleportLocations[0]) //Draw at locations of Teleport locations (all relative to player)
+                for (int i = 0; i < 6; i++)
                 {
-                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y - 40 - p.Center.Y);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
-                }
-                if (teleportLocations[1]) //Draw at locations of Teleport locations (all relative to player)
-                {
-                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 280 - p.Center.Y);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
-                }
-                if (teleportLocations[2]) //Draw at locations of Teleport locations (all relative to player)
-                {
-                    Vector2 offset = new Vector2(-texTele.Width, Arena_Top_Left.Y + 588 - p.Center.Y);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.FlipHorizontally, 0);
-                }
-                if (teleportLocations[3]) //Draw at locations of Teleport locations (all relative to player)
-                {
-                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y - 40 - p.Center.Y);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.None, 0);
-                }
-                if (teleportLocations[4]) //Draw at locations of Teleport locations (all relative to player)
-                {
-                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 280 - p.Center.Y);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.None, 0);
-                }
-                if (teleportLocations[5]) //Draw at locations of Teleport locations (all relative to player)
-                {
-                    Vector2 offset = new Vector2(texTele.Width, Arena_Top_Left.Y + 588 - p.Center.Y);
-                    spriteBatch.Draw(texTele, p.Center + offset - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), SpriteEffects.None, 0);
+                    if (teleportLocations[i])
+                    {
+                        //adjust to not be out of arena
+                        Vector2 offset = new Vector2(i<3? -texTele.Width : texTele.Width, Arena_Top_Left.Y + (i%3==0? -40 : i%3==1? 280 : 596) - p.Center.Y);
+                        Vector2 coordinatesOfDash = p.Center + offset;
+                        if (coordinatesOfDash.X < minTeleportX + NPC.width / 2)
+                            coordinatesOfDash.X = minTeleportX + NPC.width / 2;
+                        if (coordinatesOfDash.X > maxTeleportX - NPC.width / 2)
+                            coordinatesOfDash.X = maxTeleportX - NPC.width / 2;
+                        spriteBatch.Draw(texTele, coordinatesOfDash - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), i<3? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                    }
                 }
 
                 //spriteBatch.Draw(texTele, (Main.player[NPC.target].Bottom + new Vector2(!left ? texTele.Width : -texTele.Width, -texTele.Height / 2)) - screenPos, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(255, 255, 255, 255), (float)(-1 * (loopCounter - 30)) / 30f), 0, new Vector2(texTele.Width, texTele.Height) / 2, 1 + (0.02f * loopCounter), !left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
@@ -1630,7 +1620,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (dashIndicator)
             {
                 Texture2D texDash = Request<Texture2D>(AssetDirectory.CrimsonKnight + "DashIndicator").Value;
-                spriteBatch.Draw(texDash, NPC.Center + (new Vector2(left ? 30 : -30, 0) * actionTimer) - screenPos, null, new Color(255, 255, 255, 0), 0, new Vector2(texDash.Width, texDash.Height) / 2, 1, left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+                //allign with player X
+                float difference = Main.player[NPC.target].Center.X - NPC.Center.X;
+                spriteBatch.Draw(texDash, NPC.Center + (new Vector2(left ? Math.Max(200, difference) : Math.Min(-200, difference), 0)) - screenPos, null, new Color(255, 255, 255, 0), 0, new Vector2(texDash.Width, texDash.Height) / 2, 1 + (0.04f * loopCounter), left ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             }
                 
             if (frameX == 6 || (frameX == 7 && !shieldDown)) //if shield is up or going up

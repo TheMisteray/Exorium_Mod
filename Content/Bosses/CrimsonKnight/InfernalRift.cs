@@ -72,7 +72,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Projectile.timeLeft == 180)
             {
                 //Create Spirits
-                float dist = towerYMin - towerYMax;
+                float dist = (towerYMin - towerYMax) - 128;
                 int count = 16;
                 float interval = dist / count;
                 bool[] leftSpirits = new bool[count];
@@ -92,7 +92,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             else
                             {
                                 leftSpirits[i] = true;
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X - 40, towerYMax + interval * i + 160), new Vector2(-1, 0), ProjectileType<RiftSpirit>(), Projectile.damage / 2, 3, Main.myPlayer, -1);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X - 40, towerYMax + interval * i + 192), new Vector2(-1, 0), ProjectileType<RiftSpirit>(), Projectile.damage, 3, Main.myPlayer, -1);
                             }
                         }
                         else
@@ -108,7 +108,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             else
                             {
                                 rightSpirits[i] = true;
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X + 40, towerYMax + interval * i + 160), new Vector2(1, 0), ProjectileType<RiftSpirit>(), Projectile.damage / 2, 3, Main.myPlayer, 1);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X + 40, towerYMax + interval * i + 192), new Vector2(1, 0), ProjectileType<RiftSpirit>(), Projectile.damage, 3, Main.myPlayer, 1);
                             }
                         }
                         else
@@ -168,6 +168,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Projectile.frameCounter = 0;
                 if (++Projectile.frame >= Main.projFrames[Projectile.type])
                     Projectile.frame = 0;
+            }
+
+            if (Main.rand.NextBool(4))
+            {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SolarFlare, Projectile.velocity.X * Main.rand.NextFloat(.25f), 0, 0, default, 1);
+                Main.dust[dust].noGravity = true;
             }
 
             Projectile.spriteDirection = direction;

@@ -37,9 +37,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             Projectile.velocity.Y += .20f;
             Projectile.rotation += .2f;
-            if (Main.rand.NextBool(3))
+            if (Main.rand.NextBool(6))
             {
-                //Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustType<BlightDust>(), 0, 0);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SolarFlare, Projectile.velocity.X * Main.rand.NextFloat(.25f), 0, 0, default, 1);
+                Main.dust[dust].noGravity = true;
             }
         }
 

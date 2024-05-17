@@ -25,7 +25,7 @@ float4 MainPS(float4 pos : SV_POSITION, float2 coords : TEXCOORD0) : COLOR0
 	float targetX = (uTargetPosition.x - uScreenPosition.x) / uScreenResolution.x;
 	float xDist = (coords.x - targetX) * (uScreenResolution / uScreenResolution.y);
 
-	if (xDist < uColor.x * uProgress && xDist > uColor.x * -uProgress)
+	if (xDist < (uColor.x * uProgress) - uColor.y && xDist >(uColor.x * -uProgress) + uColor.y)
 	{
 		//Red inside
 		float4 color = float4(1, 1, 1, 1);
@@ -45,7 +45,7 @@ float4 MainPS(float4 pos : SV_POSITION, float2 coords : TEXCOORD0) : COLOR0
 
 		return color;
 	}
-	else if (xDist < (uColor.x * uProgress) + uColor.y && xDist > (uColor.x * -uProgress) - uColor.y)
+	else if (xDist < uColor.x * uProgress && xDist > uColor.x * -uProgress)
 	{
 		return float4(0, 0, 0, 0);
 	}

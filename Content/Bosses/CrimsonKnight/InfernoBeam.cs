@@ -124,8 +124,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private void Update()
         {
-            if (TURN_SPEED < .005f)
-                TURN_SPEED *= 1.02f;
+            if (TURN_SPEED < .003f)
+                TURN_SPEED *= 1.015f;
             if (TurnLeft)
                 Projectile.velocity = Projectile.velocity.RotatedBy(TURN_SPEED);
             else

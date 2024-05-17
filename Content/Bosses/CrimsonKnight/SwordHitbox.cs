@@ -13,12 +13,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     internal class SwordHitbox : ModProjectile
     {
-        public override string Texture => AssetDirectory.Invisible;
+        public override string Texture => AssetDirectory.CrimsonKnight + "Caravene_Hitbox";
 
         public override void SetDefaults()
         {
-            Projectile.width = 220;
-            Projectile.height = 400;
+            Projectile.width = 200;
+            Projectile.height = 300;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 15;
             Projectile.tileCollide = false;
@@ -28,20 +28,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, 900);
-        }
-
-        public override bool PreDraw(ref Color lightColor)
-        {
-            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + "Caravene_Hitbox").Value;
-            Main.spriteBatch.Draw(tex,
-            new Rectangle((int)(Projectile.position.X - Main.screenPosition.X), (int)(Projectile.position.Y - Main.screenPosition.Y), 0, 0),
-            new Rectangle(0, 0, Projectile.width, Projectile.height),
-            Color.Red,
-            0,
-            Vector2.Zero,
-            SpriteEffects.FlipHorizontally,
-            0);
-            return base.PreDraw(ref lightColor);
         }
     }
 }
