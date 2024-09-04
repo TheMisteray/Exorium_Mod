@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.width = 34;
             Projectile.height = 28;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 240;
+            Projectile.timeLeft = 260;
             Projectile.tileCollide = true;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -52,6 +52,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = (Projectile.frame + 1) % 3;
+            }
+
+            if (Projectile.timeLeft < 30) //Fade away and become non damaging
+            {
+                if (Projectile.alpha > 0)
+                    Projectile.alpha -= 9;
+                Projectile.hostile = false;
             }
         }
 

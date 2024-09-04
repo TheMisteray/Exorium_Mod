@@ -32,7 +32,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Item.mana = 12;
             Item.useTime = 60;
             Item.useAnimation = 60;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.HoldUp;
             Item.noMelee = true;
             Item.knockBack = 2;
             Item.value = Item.sellPrice(silver: 77); ;

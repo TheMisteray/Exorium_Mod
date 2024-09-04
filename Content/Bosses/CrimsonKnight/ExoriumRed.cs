@@ -105,8 +105,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private bool showPortals = false;
         private float portalSize = 0;
         private float portalLoop = 0;
-        private Vector2 bladeSpawnOrigin = Vector2.Zero;
-        private Vector2 bladeSpawnOrigin2 = Vector2.Zero;
+        private Vector2 bladeSpawnOriginQ1 = Vector2.Zero;
+        private Vector2 bladeSpawnOriginQ2 = Vector2.Zero;
+        private Vector2 bladeSpawnOriginQ3 = Vector2.Zero;
+        private Vector2 bladeSpawnOriginQ4 = Vector2.Zero;
         private int bladeSpawnSide = 0;
         private int bladeSpawnCount = 0;
         private float auraAlpha = 0;
@@ -148,16 +150,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         //Actions
         //0 - jump                              -Unchanged?
         //1 - dash                              -Done
-        //2 - Teleport next to player           -Unfinished
+        //2 - Teleport next to player           -Done
         //3 - Rift                              -Done
         //4 - parry                             -Done
-        //5 - Galacta knight lol                -From all angles this time
+        //5 - Galacta knight lol                -Done
         //6 - swords shower                     -Done
-        //7 - sword beams                       -Targeted Sword Slash
+        //7 - sword beams                       -Done
         //8 - hop down                          -Unchanged?
         //9 - Laser Pinwheel                    -Unfinished - TODO: Make unable to be used too close to walls or ceiling
         //10 - portal dash                      -Done
-        //11 - Burning Sphere
+        //11 - Burning Sphere                   -Done
         //12 - enrage                           -Unchanged?
         public float Action
         {
@@ -585,59 +587,47 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         //Choose a side, 1 is top 2 is bottom
                         bladeSpawnSide = Main.rand.Next(1, 3);
 
-                        if (phase == 2)
-                        {
-                            bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Bottom);
-                            bladeSpawnOrigin2 = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top);
-                        }
-                        else if (bladeSpawnSide == 1)
-                        {
-                            bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Bottom);
-                        }
-                        else
-                        {
-                            bladeSpawnOrigin = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top);
-                        }
+                        //Grab spawn origins for each quadrant (same as how original boss does it)
+                        bladeSpawnOriginQ1 = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Bottom) + (new Vector2(1, -1) * 1800);
+                        bladeSpawnOriginQ2 = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top) + (new Vector2(1, 1) * 1800);
+                        bladeSpawnOriginQ3 = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top) + (new Vector2(-1, 1) * 1800);
+                        bladeSpawnOriginQ4 = new Vector2(Core.Systems.WorldDataSystem.FallenTowerRect.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Bottom) + (new Vector2(-1, -1) * 1800);
 
-                        /*
-                        Vector2 offset = new Vector2(1, -1);
-                        offset *= 1800;
-                        offset = offset.RotatedBy(MathHelper.ToRadians(90 * (bladeSpawnQuadrant - 1)));
-
-                        bladeSpawnOrigin += offset;*/
-
-                        bladeSpawnCount = Main.expertMode ? 25 : 20;
+                        bladeSpawnCount = Main.expertMode ? 20 : 25;
                         if (Main.masterMode)
-                            bladeSpawnCount += 5;
+                            bladeSpawnCount -= 5;
                         if (phase == 2)
-                            bladeSpawnCount -= 10; //reduce since double are being created
+                            bladeSpawnCount += 10; //reduce since double are being created
                     }
                     else if (actionTimer > 30 && actionTimer % bladeSpawnCount == 0 && actionTimer < 360)
                     {
-                        Vector2 offset = new Vector2(Main.rand.NextBool()? 1 : -1, bladeSpawnSide == 1 ? -1 : 1);
-                        Vector2 direction = offset * -10; //gets vector back with magnatude 10
-                        offset *= 1800;
-                        Vector2 spawnPoint = bladeSpawnOrigin + offset;
-
-                        spawnPoint.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
-
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint, direction, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, bladeSpawnSide == 2 ? 1f : 0f);
-
-                        if (phase == 2)
+                        if (bladeSpawnSide == 1 || phase == 2) //Spawn blades in quadrants 1 & 4
                         {
-                            Vector2 offset2 = new Vector2(Main.rand.NextBool() ? 1 : -1, bladeSpawnSide == 1 ? 1 : -1); //inverse so they come from the other side
-                            Vector2 direction2 = offset2 * -10; //gets vector back with magnatude 10
-                            offset2 *= 1800;
-                            Vector2 spawnPoint2 = bladeSpawnOrigin2 + offset2;
-
-                            spawnPoint2.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
-
+                            Vector2 spawnPointQ1 = bladeSpawnOriginQ1;
+                            spawnPointQ1.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPoint2, direction2, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, bladeSpawnSide == 2 ? 0f : 1f); //inverse side again
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ1, new Vector2(-10, 10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 1f);
+
+                            Vector2 spawnPointQ4 = bladeSpawnOriginQ4;
+                            spawnPointQ4.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ4, new Vector2(10, 10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 1f);
+                        }
+
+                        if (bladeSpawnSide == 2 || phase == 2)
+                        {
+                            Vector2 spawnPointQ2 = bladeSpawnOriginQ2;
+                            spawnPointQ2.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ2, new Vector2(-10, -10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 0f);
+
+                            Vector2 spawnPointQ3 = bladeSpawnOriginQ3;
+                            spawnPointQ3.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ3, new Vector2(10, -10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 0f);
                         }
                     }
-                    if (actionTimer >= 370)
+                    if (actionTimer >= 361)
                     {
                         ChooseFollowup();
                     }
@@ -666,55 +656,45 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             dummy = new Vector2(1, 0);
                         if (altBeamType)
                         {
-                            if (actionTimer % 20 == 0 && phase == 2 && !Main.masterMode)
-                            {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                            }
-
                             if (actionTimer <= 140)
                             {
                                 if (actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
 
-                                if (Main.masterMode && phase == 2 && actionTimer % 10 == 0)
+                                if (Main.masterMode || phase == 2 && actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
-                                else if (Main.expertMode && actionTimer % 35 == 0) //Extra in gaps in master mode
+                                else if (phase == 1 && Main.expertMode && actionTimer % 35 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
                         }
                         else
                         {
-                            if (actionTimer % 20 == 0 && phase == 2 && !Main.masterMode)
-                            {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                            }
-
                             if (actionTimer <= 140) //Rotations are negative to reverse sides
                             {
                                 if (actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
 
-                                if (Main.masterMode && phase == 2 && actionTimer % 10 == 0)
+                                if (Main.masterMode || phase == 2 && actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
-                                else if (Main.expertMode && actionTimer % 35 == 0)
+                                else if (phase == 1 && Main.expertMode && actionTimer % 35 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
                         }
@@ -769,6 +749,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                                 }
                             }
                         }
+                    }
+                    if (actionTimer == 20 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((NPC.width * (left? 1:-1)), 0), Vector2.Zero, ProjectileType<CrimsonSlash>(), damage, 4, Main.myPlayer, player.whoAmI, Main.rand.NextFloat(MathHelper.Pi * 2));
                     }
                     if (actionTimer >= 40)
                     {
@@ -1059,7 +1043,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     NPC.noGravity = false;
                     if (actionTimer == 60 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75), Vector2.Zero, ProjectileType<FlamingSphere>(), damage * 2, 1, Main.myPlayer, NPC.target);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75), Vector2.Zero, ProjectileType<LargeFlamingSphere>(), damage * 2, 1, Main.myPlayer, NPC.target);
                     }
                     if (actionTimer == 60)
                     {
@@ -1157,7 +1141,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (Main.rand.NextBool(4) && phase == 2)
             {
-                if (NPC.Center.Y > topL.Y + 864 && NPC.Center.Y < topL.Y + 544 && NPC.Center.X > topL.X + 180 && NPC.Center.X < topR.X - 180)
+                if (true/*NPC.Center.Y > topL.Y + 864 && NPC.Center.Y < topL.Y + 544 && NPC.Center.X > topL.X + 180 && NPC.Center.X < topR.X - 180*/)
                 {
                     Action = 9;
                     wait = 30;
@@ -1168,7 +1152,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     wait = 20;
                 }
             }
-            else  if (Main.rand.NextBool(3))
+            else if (Main.rand.NextBool(3))
             {
                 Action = 5;
                 wait = 30;
@@ -1260,7 +1244,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 150)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width + 30 : -NPC.width - 30), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 4 : 2)) * 2, 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 4 : 2)) * 2, 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1695,14 +1679,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool? CanBeHitByProjectile(Projectile projectile)
         {
-            if (introAnimation || phaseTransition)
+            if (introAnimation || phaseTransition || noContactDamage)
                 return false;
             return base.CanBeHitByProjectile(projectile);
         }
 
         public override bool? CanBeHitByItem(Player player, Item item)
         {
-            if (introAnimation || phaseTransition)
+            if (introAnimation || phaseTransition || noContactDamage)
                 return false;
             return base.CanBeHitByItem(player, item);
         }

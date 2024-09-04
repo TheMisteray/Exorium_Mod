@@ -548,7 +548,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                         bladeSpawnOrigin += offset;
 
-                        bladeSpawnCount = Main.expertMode ? 20 : 15;
+                        bladeSpawnCount = Main.expertMode ? 20 : 25;
                         if (Main.masterMode)
                             bladeSpawnCount -= 5;
                         if (phase == 2)
@@ -1124,7 +1124,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 90)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width + 30 : -NPC.width - 30), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 4 : 2)) * 2, 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 4 : 2)) * 2, 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1563,21 +1563,21 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool? CanBeHitByProjectile(Projectile projectile)
         {
-            if (introAnimation || phaseTransition)
+            if (introAnimation || phaseTransition || noContactDamage)
                 return false;
             return base.CanBeHitByProjectile(projectile);
         }
 
         public override bool CanBeHitByNPC(NPC attacker)
         {
-            if (introAnimation || phaseTransition)
+            if (introAnimation || phaseTransition || noContactDamage)
                 return false;
             return base.CanBeHitByNPC(attacker);
         }
 
         public override bool? CanBeHitByItem(Player player, Item item)
         {
-            if (introAnimation || phaseTransition)
+            if (introAnimation || phaseTransition || noContactDamage)
                 return false;
             return base.CanBeHitByItem(player, item);
         }

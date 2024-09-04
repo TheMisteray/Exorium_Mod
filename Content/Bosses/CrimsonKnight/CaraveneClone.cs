@@ -77,7 +77,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (Projectile.frameCounter == 20)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Projectile.Center + new Vector2((left ? Projectile.width + 30 : -Projectile.width - 30), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), Projectile.damage, 7, Main.myPlayer);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2((!left ? Projectile.width : -Projectile.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), Projectile.damage, 7, Main.myPlayer);
                     }
                     Projectile.frameCounter += 5;
                     break;

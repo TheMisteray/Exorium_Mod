@@ -924,6 +924,9 @@ Mods: {
 			InfernoBeam.DisplayName: Inferno Beam
 			FlameToungeGreatswordBlade.DisplayName: Flame Tounge Greatsword
 			FlameToungeGreatswordBeam.DisplayName: Flame Tounge Beam
+			CrimsonSlashProjectile.DisplayName: Crimson Slash Projectile
+			CrimsonSlash.DisplayName: Crimson Slash
+			LargeFlamingSphere.DisplayName: Large Flaming Sphere
 		}
 
 		Buffs: {

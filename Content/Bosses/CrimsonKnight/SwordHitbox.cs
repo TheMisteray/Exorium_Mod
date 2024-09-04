@@ -13,7 +13,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
     internal class SwordHitbox : ModProjectile
     {
-        public override string Texture => AssetDirectory.CrimsonKnight + "Caravene_Hitbox";
+        public override string Texture => AssetDirectory.Invisible;
 
         public override void SetDefaults()
         {

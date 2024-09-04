@@ -100,13 +100,13 @@ namespace ExoriumMod
         {
             BossChecklistCC();
             //CensusCC();
-            FargoMutantCC();
+            //FargoMutantCC();
         }
 
         private void BossChecklistCC()
         {
-            Mod bcl = ModLoader.GetMod("BossChecklist");
-            if (bcl == null) return;
+            if (!ModLoader.TryGetMod("BossChecklist", out Mod bcl)) { return; }
+            if (bcl.Version < new Version(1, 6)) { return; }
 
             bcl.Call(
                 "LogBoss",
@@ -134,20 +134,14 @@ namespace ExoriumMod
 
         private void CensusCC()
         {
-            Mod census = ModLoader.GetMod("Census");
-            if (census != null)
-            {
-                census.Call("TownNPCCondition", ModContent.NPCType<Content.NPCs.Town.Lunatic>(), "Will show up when he feels like it. (After there are at least 3 other NPCs in your town).");
-            }
+            if (!ModLoader.TryGetMod("Census", out Mod census)) { return; }
+            census.Call("TownNPCCondition", ModContent.NPCType<Content.NPCs.Town.Lunatic>(), "Will show up when he feels like it. (After there are at least 3 other NPCs in your town).");
         }
 
         private void FargoMutantCC()
         {
-            Mod fargosMutant = ModLoader.GetMod("Fargowiltas");
-            if (fargosMutant != null)
-            {
-                fargosMutant.Call("AddSummon", 3.1f, "ExoriumMod", "TaintedSludge", (Func<bool>)(() => DownedBossSystem.downedBlightslime), 125000);
-            }
+            if (!ModLoader.TryGetMod("Fargowiltas", out Mod fargosMutant)) { return; }
+            fargosMutant.Call("AddSummon", 3.1f, "ExoriumMod", "TaintedSludge", (Func<bool>)(() => DownedBossSystem.downedBlightslime), 125000);
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)

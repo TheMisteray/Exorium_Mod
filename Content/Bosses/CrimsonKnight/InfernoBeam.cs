@@ -61,6 +61,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public bool IsAtMaxCharge => Charge == MAX_CHARGE;
 
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.CanDistortWater[Type] = false;
+            ProjectileID.Sets.CanHitPastShimmer[Type] = true;
+            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 4800;
+            base.SetStaticDefaults();
+        }
+
         public override void SetDefaults()
         {
             Projectile.width = 8;
@@ -98,7 +106,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 AnchorX = Projectile.position.X;
                 AnchorY = Projectile.position.Y;
-                Main.NewText("" + Core.Systems.DownedBossSystem.downedShadowmancer);
             }
 
             Projectile.position = new Vector2(AnchorX, AnchorY);
@@ -124,8 +131,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private void Update()
         {
-            if (TURN_SPEED < .003f)
-                TURN_SPEED *= 1.015f;
+            if (TURN_SPEED < .0003f)
+                TURN_SPEED *= 1.005f;
             if (TurnLeft)
                 Projectile.velocity = Projectile.velocity.RotatedBy(TURN_SPEED);
             else

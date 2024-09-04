@@ -48,7 +48,7 @@ namespace ExoriumMod.Content.Items.Accessories
 
             player.GetDamage(DamageClass.Generic) += Math.Min(0.015f * total, max);
 
-            if (0.015f * total > max)
+            if (0.015f * total >= max)
                 player.GetModPlayer<ExoriumPlayer>().inflictInferno = true;
         }
     }

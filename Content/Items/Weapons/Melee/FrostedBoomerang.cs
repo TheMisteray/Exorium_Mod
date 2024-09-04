@@ -22,7 +22,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         {
             Item.CloneDefaults(ItemID.WoodenBoomerang);
             Item.shoot = ProjectileType<RimeBoomerang>();
-            Item.damage = 15;
+            Item.damage = 21;
             Item.useTime = 34;
             Item.useAnimation = 34;
             Item.autoReuse = true;

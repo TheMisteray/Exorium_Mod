@@ -50,7 +50,15 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 		// Are we at max charge? With c#6 you can simply use => which indicates this is a get only property
 		public bool IsAtMaxCharge => Charge == MAX_CHARGE;
 
-		public override void SetDefaults()
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.CanDistortWater[Type] = false;
+            ProjectileID.Sets.CanHitPastShimmer[Type] = true;
+            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 4800;
+            base.SetStaticDefaults();
+        }
+
+        public override void SetDefaults()
 		{
 			Projectile.width = 8;
 			Projectile.height = 8;
