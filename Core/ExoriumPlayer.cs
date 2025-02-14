@@ -7,6 +7,19 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
+using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
+using System;
+using System.Drawing;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using ExoriumMod.Core.Systems;
+
 namespace ExoriumMod.Core
 {
     partial class ExoriumPlayer : ModPlayer
@@ -59,6 +72,10 @@ namespace ExoriumMod.Core
 
         public override void PreUpdate()
         {
+            if (!Main.hardMode && Player.getRect().Intersects(Systems.WorldDataSystem.FallenTowerRect)) //prevent messing up the charred tower before hardmode
+            {
+                Player.AddBuff(BuffID.NoBuilding, 2);
+            }
             base.PreUpdate();
         }
 

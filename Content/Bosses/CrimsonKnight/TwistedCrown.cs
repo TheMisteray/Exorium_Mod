@@ -1,21 +1,23 @@
 ﻿using ExoriumMod.Core;
+using Microsoft.Xna.Framework;
 using System;
+using System.Drawing;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace ExoriumMod.Content.Bosses.BlightedSlime
+namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
-    class TaintedSludge : ModItem
+    internal class TwistedCrown : ModItem
     {
-        public override string Texture => AssetDirectory.BlightedSlime + Name;
+        public override string Texture => AssetDirectory.CrimsonKnight + Name;
 
         public override void SetStaticDefaults()
         {
-            // Tooltip.SetDefault("Summons the Blighted Slime");
             ItemID.Sets.SortingPriorityBossSpawns[Item.type] = 12;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
         }
@@ -33,7 +35,6 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             Item.UseSound = SoundID.Item44;
             Item.consumable = true;
         }
-
         public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
         {
             itemGroup = ContentSamples.CreativeHelper.ItemGroup.BossSpawners;
@@ -41,24 +42,21 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
         public override bool CanUseItem(Player player)
         {
-            return player.InModBiome(GetInstance<Content.Biomes.DeadlandBiome>()) && !NPC.AnyNPCs(NPCType<BlightedSlime>());
+            return Framing.GetTileSafely(player.Center.ToTileCoordinates()).WallType == WallType<Walls.StructureWalls.FallenTowerWalls.CharredObsidianWall>() && player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect) && !NPC.AnyNPCs(NPCType<Caravene>()) && !NPC.AnyNPCs(NPCType<CaraveneBattleIntermission>()) && !NPC.AnyNPCs(NPCType<ExoriumRed>());
         }
 
         public override Nullable<bool> UseItem(Player player)
         {
-            if (player.whoAmI == Main.myPlayer)
+            SoundEngine.PlaySound(SoundID.Roar, player.position);
+            int type = NPCType<Caravene>();
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                SoundEngine.PlaySound(SoundID.Roar, player.position);
-                int type = NPCType<BlightedSlime>();
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    // If the player is not in multiplayer, spawn directly
-                    NPC.SpawnOnPlayer(player.whoAmI, type);
-                }
-                else
-                {
-                    NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
-                }
+                // If the player is not in multiplayer, spawn directly
+                NPC.SpawnOnPlayer(player.whoAmI, type);
+            }
+            else
+            {
+                NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
             }
             return true;
         }
@@ -66,8 +64,8 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.Gel, 30);
-            recipe.AddIngredient(ItemType<Items.Materials.WightBone>(), 5);
+            recipe.AddIngredient(ItemType<Items.Materials.Metals.DarksteelBar>(), 4);
+            recipe.AddIngredient(ItemID.Ruby);
             recipe.AddTile(TileID.DemonAltar);
             recipe.Register();
         }

@@ -18,6 +18,7 @@ using Terraria.GameContent.Bestiary;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
+    [AutoloadBossHead]
     class Caravene : ModNPC
     {
         public override string Texture => AssetDirectory.CrimsonKnight + Name + "_Hitbox";
@@ -48,6 +49,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
+
+            // Add this in for bosses that have a summon item, requires corresponding code in the item (See MinionBossSummonItem.cs)
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
+            // Automatically group with other bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
         }
 
@@ -1175,6 +1181,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 introTicker = 480;
                 introTickerMax = introTicker;
+                NPC.Center = new Vector2(Arena_Top_Left.X + Arena_Width / 2, Arena_Top_Left.Y + 344); //Move here immediately because 1.4 boss spawning multiplayer stuff likes to spawn a million miles away
 
                 foreach (Player player in Main.player)
                 {

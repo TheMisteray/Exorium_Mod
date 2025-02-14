@@ -22,6 +22,11 @@ namespace ExoriumMod.Core.Systems
 
         public static Rectangle FallenTowerRect = new Rectangle();
 
+        public Rectangle FallenTowerDetectionZone
+        {
+            get { return new Rectangle(FallenTowerRect.X, FallenTowerRect.Y, FallenTowerRect.Width, FallenTowerRect.Height); }
+        }
+
         public override void SaveWorldData(TagCompound tag)
         {
             tag["shadowAltarCoordsX"] = shadowAltarCoordsX;

@@ -64,7 +64,7 @@ namespace ExoriumMod.Content.Tiles
             Player player = Main.LocalPlayer;
             if (!NPC.AnyNPCs(NPCType<Bosses.Shadowmancer.AssierJassad>()))
             {
-                HandleNPC(NPCType<Content.Bosses.Shadowmancer.AssierJassad>(), netID, false);
+                HandleNPC(NPCType<Content.Bosses.Shadowmancer.AssierJassad>(), netID, false, Main.LocalPlayer.whoAmI);
                 return true;
             }
             return false;

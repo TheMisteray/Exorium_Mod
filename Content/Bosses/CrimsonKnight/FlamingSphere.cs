@@ -180,8 +180,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
     {
         public override void AI()
         {
-            explosionRadius = 820;
-            maxScalar = 2.2f;
+            if (Main.masterMode)
+            {
+                explosionRadius = 820;
+                maxScalar = 2.2f;
+            }
+            else
+            {
+                explosionRadius = 760;
+                maxScalar = 2.0f;
+            }
             base.AI();
         }
     }

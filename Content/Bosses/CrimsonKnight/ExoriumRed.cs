@@ -18,6 +18,7 @@ using Terraria.GameContent.UI.Elements;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
+    [AutoloadBossHead]
     class ExoriumRed : ModNPC
     {
         public override string Texture => AssetDirectory.CrimsonKnight + "Caravene" + "_Hitbox";
@@ -810,40 +811,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             }
                         }
                     }
-                    else if (actionTimer == 150 && Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
+                    else if (actionTimer >= 150 && actionTimer % 50 == 0 && Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
                     {
                         Vector2 trajectory = player.Center - swordTip;
                         trajectory.Normalize();
-                        for (int i = 0; i < 8; i++)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / 8) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
-                    }
-                    else if (actionTimer == 210 && Main.netMode != NetmodeID.MultiplayerClient && Main.masterMode)
-                    {
-                        Vector2 trajectory = Vector2.UnitX;
-                        trajectory.RotatedByRandom(MathHelper.PiOver2);
-                        for (int i = 0; i < 8; i++)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / 8) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
-                    }
-                    else if (actionTimer == 270 && Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
-                    {
-                        Vector2 trajectory = player.Center - swordTip;
-                        trajectory.Normalize();
-                        for (int i = 0; i < 8; i++)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / 8) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
-                    }
-                    else if (actionTimer == 330 && Main.netMode != NetmodeID.MultiplayerClient && Main.masterMode)
-                    {
-                        Vector2 trajectory = Vector2.UnitX;
-                        trajectory.RotatedByRandom(MathHelper.PiOver2);
-                        for (int i = 0; i < 8; i++)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / 8) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
-                    }
-                    else if (actionTimer == 390 && Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
-                    {
-                        Vector2 trajectory = player.Center - swordTip;
-                        trajectory.Normalize();
-                        for (int i = 0; i < 8; i++)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / 8) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
+                        if (Main.expertMode && (actionTimer%100 == 0 || Main.masterMode))
+                        {
+                            for (int i = 0; i < 8; i++)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / 8) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
+                        }
+
+                        bool counterClockwise = actionTimer % 100 == 0;
+                        for (int i = 0; i < 4; i++)
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.UnitX.RotatedBy((MathHelper.TwoPi / 4) * i), ProjectileType<RotatingFireball>(), damage, 2, Main.myPlayer, counterClockwise? 1 : 0, phase == 2 ? 1 : 0);
                     }
                     else if (actionTimer > 510)
                     {

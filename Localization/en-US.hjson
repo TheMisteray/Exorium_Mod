@@ -55,19 +55,19 @@ Mods: {
 				DisplayName: Lunatic
 
 				TownNPCMood: {
-					Princess_LovesNPC: I like {NPCName}.
-					LikeNPC_Princess: I like {NPCName}.
-					HateCrowded: I hate how crowded I am.
-					DislikeCrowded: I dislike how crowded I am.
+					Princess_LovesNPC: I think {NPCName} is a pretty good storyteller. Even if most of them don't make much sense.
+					LikeNPC_Princess: At least {NPCName} doesn't talk to me like I'm crazy.
+					HateCrowded: Feels like I can't go anywhere without brushing past someone.
+					DislikeCrowded: These people sure are noisy.
 					LoveSpace: I love having so much space.
-					FarFromHome: I am too far from home.
-					NoHome: I hate not having a home.
-					Content: I am content.
-					LikeBiome: I like {BiomeName}.
-					HateBiome: I hate {BiomeName}.
-					LoveNPC: I love {NPCName}.
-					LikeNPC: I like {NPCName}.
-					DislikeNPC: I dislike {NPCName}.
+					FarFromHome: Where was I going again?
+					NoHome: I used to have a house... Not too sure what happened to it.
+					Content: I thank you for your... Hospitality.
+					LikeBiome: The {BiomeName} was a nice scenic choice for this place if I do say so myself... What do you mean you built this place?
+					HateBiome: If I was the person in charge of the {BiomeName} I'd blow it all up and try again.
+					LoveNPC: Have you met {NPCName}? I'm not sure when or how they got here, but make sure they stay around.
+					LikeNPC: At least {NPCName} is nice enough to give me some space.
+					DislikeNPC: Have you noticed that {NPCName} keeps giving me weird looks?
 				}
 			}
 		}
@@ -272,7 +272,7 @@ Mods: {
 				Tooltip:
 					'''
 					"A masterful invention"
-					Don\'t use near any structures you care about
+					Don't use near any structures you care about
 					'''
 			}
 
@@ -438,7 +438,7 @@ Mods: {
 			}
 
 			DeadwoodWorkbench: {
-				DisplayName: Deadwood Workbench
+				DisplayName: Deadwood Work Bench
 				Tooltip: ""
 			}
 
@@ -453,7 +453,7 @@ Mods: {
 			}
 
 			Crate: {
-				DisplayName: Crate
+				DisplayName: Wooden Crate
 				Tooltip: ""
 			}
 
@@ -473,12 +473,12 @@ Mods: {
 			}
 
 			BlightedHamaxe: {
-				DisplayName: Frayed Hamaxe
+				DisplayName: Blightsteel Hamaxe
 				Tooltip: ""
 			}
 
 			BlightedPickaxe: {
-				DisplayName: Diseased Pickaxe
+				DisplayName: Blightsteel Pickaxe
 				Tooltip: ""
 			}
 
@@ -564,7 +564,7 @@ Mods: {
 
 			Pestilence: {
 				DisplayName: Tome of Pestilence
-				Tooltip: Shoots a trail of blight specks
+				Tooltip: Shoots a short trail of blighted specks
 			}
 
 			PulseRinger: {
@@ -597,15 +597,15 @@ Mods: {
 
 			BlightedPike: {
 				DisplayName: Mildew
-				Tooltip: Launches specks of blight
+				Tooltip: Launches blighted specks
 			}
 
 			BlightSword: {
 				DisplayName: Blighted Greatsword
 				Tooltip:
 					'''
-					A massive two-handed weapon
-					Hold to charge a stronger swing
+					A ridiculously large sword
+					Hold to charge up a powerful strike
 					'''
 			}
 
@@ -668,7 +668,7 @@ Mods: {
 				Tooltip:
 					'''
 					Inflicts Frostburn 
-					Striking targets has a chance to build up energy up to 5 times 
+					Striking foes builds up energy up to 5 times 
 					Right click to release the built up energy
 					'''
 			}
@@ -772,7 +772,7 @@ Mods: {
 			}
 
 			IceCream: {
-				DisplayName: Ice Cream
+				DisplayName: Cake Flavored Ice Cream
 				Tooltip: Please eat it INSIDE your room.
 			}
 
@@ -809,7 +809,7 @@ Mods: {
 					'''
 					8 summon tag damage
 					Your summons will focus struck enemies
-					Incredibly heavy, may break
+					Incredibly heavy, pieces may break off
 					'''
 			}
 
@@ -833,29 +833,39 @@ Mods: {
 					Every 5th swing throws an arc of flames in the shape of swords
 					'''
 			}
+
+			TwistedCrown: {
+				Tooltip: ""
+				DisplayName: Twisted Crown
+			}
+
+			SandAegisStaff: {
+				DisplayName: Sand Aegis Staff
+				Tooltip: ""
+			}
 		}
 
 		Projectiles: {
 			BlightedSpike.DisplayName: Blighted Spike
 			BlightedThorn.DisplayName: Blighted Thorn
-			BlightSlimeShot.DisplayName: Blight Slime Shot
+			BlightSlimeShot.DisplayName: Sludge Shot
 			SpikePlacer.DisplayName: Spike Placer
-			backupFireball.DisplayName: backup Fireball
-			CaraveneBladeProj.DisplayName: Flametounge SwordBeam
-			CaraveneBladeProjHorizontal.DisplayName: Flametounge SwordBeam
+			backupFireball.DisplayName: Fireball
+			CaraveneBladeProj.DisplayName: Flametounge Sword Beam
+			CaraveneBladeProjHorizontal.DisplayName: Flametounge Sword Beam
 			CaraveneClone.DisplayName: Image of Red
 			CaraveneFireball.DisplayName: Fireball
 			FireballRing.DisplayName: Fireball
 			FlamePillar.DisplayName: Flame Pillar
-			FlametoungeBeam.DisplayName: Flametounge Swordbeam
+			FlametoungeBeam.DisplayName: Flametounge Sword Beam
 			FlameTrail.DisplayName: Flame Trail
 			FlamingSphere.DisplayName: Flaming Sphere
 			gridCollision.DisplayName: Explosion
 			GridFire.DisplayName: Fireball
 			gridShot.DisplayName: Fireblast
-			indicatorRainSword.DisplayName: Flametounge Swordbeam
+			indicatorRainSword.DisplayName: Flametounge Sword Beam
 			InfernalRift.DisplayName: Infernal Rift
-			ReboundingSword.DisplayName: Flametounge Swordbeam
+			ReboundingSword.DisplayName: Flametounge Sword Beam
 			RiftSpirit.DisplayName: Rift Spirit
 			SwordHitbox.DisplayName: Flametounge
 			AmberPulse.DisplayName: Amber Pulse
@@ -895,19 +905,19 @@ Mods: {
 			DarksteelSkullMelee.DisplayName: Darksteel Skull Melee
 			HeldInfernalSledge.DisplayName: Infernal Sledge
 			InfernalTrails.DisplayName: Infernal Sledge
-			RimeBladeProj.DisplayName: Rime Blade Proj
+			RimeBladeProj.DisplayName: Rime Blade
 			RimeBoomerang.DisplayName: Frosted Chackram
 			SwungBlightedSword.DisplayName: Blighted Sword
-			AcidOrbProj.DisplayName: Acid Orb Proj
+			AcidOrbProj.DisplayName: Acid Orb
 			DarksteelArrow.DisplayName: Darksteel Arrow
 			IonBeam.DisplayName: Ion Beam
 			LingeringFlame.DisplayName: Lingering Flame
 			LustrousBeam.DisplayName: Lustrous Beam
 			MagmaBlob.DisplayName: Magma Blob
-			ThrowingRapierProj.DisplayName: Throwing Rapier Proj
+			ThrowingRapierProj.DisplayName: Throwing Rapier
 			FlameTongueProjectile.DisplayName: Flame Tounge
 			SparklingWhipHead.DisplayName: Sparkling Whip Head
-			SparklingWhipProjectile.DisplayName: SparklingWhip
+			SparklingWhipProjectile.DisplayName: Sparkling Whip
 			DarksteelSkull.DisplayName: Darksteel Skull
 			Fireball.DisplayName: Fireball
 			BlightedNeedleSummon.DisplayName: Blighsteel Needle
@@ -927,6 +937,7 @@ Mods: {
 			CrimsonSlashProjectile.DisplayName: Crimson Slash Projectile
 			CrimsonSlash.DisplayName: Crimson Slash
 			LargeFlamingSphere.DisplayName: Large Flaming Sphere
+			RotatingFireball.DisplayName: Rotating Fireball
 		}
 
 		Buffs: {
@@ -992,8 +1003,8 @@ Mods: {
 				DisplayName: Sand Aegis
 				Description:
 					'''
-					The sand aegis will protect you 
-					Sand aegis grant 1 defense each
+					The shield of sand will protect you 
+					Each shield grants 1 defense
 					'''
 			}
 
@@ -1072,9 +1083,9 @@ Mods: {
 			DeadwoodDoorOpen.MapEntry: Deadwood Door
 			DeadwoodSaplingTile.MapEntry: Sapling
 			DeadwoodTableTile.MapEntry: Deadwood Table
-			DeadwoodWorkbenchTile.MapEntry: Mods.ExoriumMod.MapObject.DeadwoodWorkbenchTile
-			DuneStoneTile.MapEntry: DuneStone
-			RimeStoneTile.MapEntry: RimeStone
+			DeadwoodWorkbenchTile.MapEntry: Work Bench
+			DuneStoneTile.MapEntry: Dune Stone
+			RimeStoneTile.MapEntry: Rime Stone
 			ShadowAltarTile.MapEntry: Shadow Altar
 			DarkbrickDoorOpen.MapEntry: Darkbrick Door Open
 			DarkbrickDoorClosed.MapEntry: Darkbrick Door Closed

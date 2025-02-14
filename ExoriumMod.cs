@@ -147,11 +147,13 @@ namespace ExoriumMod
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             ExoriumPacketType msgType = (ExoriumPacketType)reader.ReadByte();
+            int npcType;
+            int netID;
             switch (msgType)
             {
                 case ExoriumPacketType.ShadowmancerSpawn:
-                    int npcType = reader.ReadInt32();
-                    int netID = reader.ReadInt32();
+                    npcType = reader.ReadInt32();
+                    netID = reader.ReadInt32();
                     Content.Tiles.ShadowAltarTile.HandleNPC(npcType, netID, true, whoAmI);
                     break;
             }

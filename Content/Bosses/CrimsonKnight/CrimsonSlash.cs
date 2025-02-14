@@ -17,7 +17,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetDefaults()
         {
-            Projectile.width = 240;
+            Projectile.width = 32;
             Projectile.height = 32;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 350;
@@ -114,13 +114,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailingMode[Type] = 1;
+            ProjectileID.Sets.TrailingMode[Type] = 0;
             ProjectileID.Sets.TrailCacheLength[Type] = 4;
         }
 
         public override void SetDefaults()
         {
-            Projectile.width = 80;
+            Projectile.width = 32;
             Projectile.height = 32;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 300;
@@ -149,9 +149,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Vector2 pos = Projectile.oldPos[k];
 
-                Main.EntitySpriteDraw(tex, pos - Main.screenPosition + new Vector2(Projectile.width/2, Projectile.height/2), new Rectangle(0,0,Projectile.width,Projectile.height), Color.Red, Projectile.rotation, new Vector2(-tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, pos - Main.screenPosition + new Vector2(tex.Width/2, tex.Height/2), new Rectangle(0,0,tex.Width,tex.Height), new Color(255, 255, 255, 255/(k+1)), Projectile.rotation, new Vector2(-tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
             }
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, Projectile.width, Projectile.height), Color.White, Projectile.rotation, new Vector2(-tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, tex.Width, tex.Height), Color.White, Projectile.rotation, new Vector2(-tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
     }
