@@ -3,7 +3,7 @@ Mods: {
 		Biomes: {
 			DeadlandBiome: {
 				DisplayName: The Deadlands
-				TownNPCDialogueName: the Deadland Biome
+				TownNPCDialogueName: Deadlands
 			}
 		}
 
@@ -17,7 +17,15 @@ Mods: {
 				}
 			}
 
-			Caravene.DisplayName: Crimson Knight
+			Caravene: {
+				DisplayName: Crimson Knight
+
+				BossChecklistIntegration: {
+					SpawnInfo: Use a [i:ExoriumMod/TwistedCrown] in the Charred Tower in the Underworld
+					DespawnMessage: The Crimson Knight ends the duel
+				}
+			}
+
 			CaraveneBattleIntermission.DisplayName: Crimson Knight
 			CaravenePhaseTransition.DisplayName: Crimson Knight
 			ExoriumRed.DisplayName: Crimson Knight
@@ -69,6 +77,8 @@ Mods: {
 					LikeNPC: At least {NPCName} is nice enough to give me some space.
 					DislikeNPC: Have you noticed that {NPCName} keeps giving me weird looks?
 				}
+
+				Census.Spawncondition: Will show up when he feels like it. (After there are at least 3 other NPCs in your town).
 			}
 		}
 

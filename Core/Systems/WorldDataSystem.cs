@@ -12,6 +12,7 @@ using ExoriumMod.Content.Tiles;
 using ExoriumMod.Content.Walls;
 using Terraria.WorldBuilding;
 using Terraria.IO;
+using ExoriumMod.Core.WorldGeneration.Structures;
 
 namespace ExoriumMod.Core.Systems
 {
@@ -43,6 +44,10 @@ namespace ExoriumMod.Core.Systems
             FallenTowerRect.Y = (int)tag.Get<Vector2>("FallenTowerPos").Y;
             FallenTowerRect.Width = (int)tag.Get<Vector2>("FallenTowerSize").X;
             FallenTowerRect.Height = (int)tag.Get<Vector2>("FallenTowerSize").Y;
+
+            if (!ModLoader.TryGetMod("Fargowiltas", out Mod fargosMutant)) { return; }
+            fargosMutant.Call("AddIndestructibleRectangle", new Rectangle((WorldDataSystem.shadowAltarCoordsX - ExoriumStructures._shadowhouseWidth / 2) * 16, (WorldDataSystem.shadowAltarCoordsY - ExoriumStructures._shadowhouseHeight / 2 - 1) * 16, ExoriumStructures._shadowhouseWidth * 16, ExoriumStructures._shadowhouseHeight * 16));
+            fargosMutant.Call("AddIndestructibleRectangle", WorldDataSystem.FallenTowerRect);
         }
 
         public override void NetSend(BinaryWriter writer)

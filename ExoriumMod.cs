@@ -14,14 +14,9 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Reflection;
 using System.Collections.Generic;
-using Terraria.GameContent.Dyes;
-using Terraria.GameContent.UI;
-using Terraria.UI;
-using Terraria.Localization;
-using Terraria.ModLoader.Core;
-using Terraria.Utilities;
-using Terraria.UI.Chat;
-using Terraria.ModLoader.IO;
+using ExoriumMod.Core;
+using static Terraria.ModLoader.ModContent;
+using ExoriumMod.Core.WorldGeneration.Structures;
 
 namespace ExoriumMod
 {
@@ -99,8 +94,8 @@ namespace ExoriumMod
         public override void PostSetupContent()
         {
             BossChecklistCC();
-            //CensusCC();
-            //FargoMutantCC();
+            CensusCC();
+            FargoMutantCC();
         }
 
         private void BossChecklistCC()
@@ -130,18 +125,41 @@ namespace ExoriumMod
                 {
                     ["spawnItems"] = ModContent.ItemType<Content.Bosses.BlightedSlime.TaintedSludge>(),
                 });
+
+            bcl.Call(
+                "LogBoss",
+                this, nameof(Content.Bosses.CrimsonKnight.Caravene),
+                6.99f,
+                (() => DownedBossSystem.downedCrimsonKnight),
+                ModContent.NPCType<Content.Bosses.CrimsonKnight.Caravene>(),
+                new Dictionary<string, object>()
+                {
+                    ["spawnItems"] = ModContent.ItemType<Content.Bosses.CrimsonKnight.TwistedCrown>(),
+                    ["customPortrait"] = (SpriteBatch spriteBatch, Rectangle rect, Color color) => {
+                        Texture2D texture = ModContent.Request<Texture2D>(AssetDirectory.BestiaryEnemyImage + "Caravene_Bestiary").Value;
+                        Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 5 * 2));
+                        spriteBatch.Draw(texture, centered, null, color, 0, Vector2.Zero, .8f, SpriteEffects.None, 0);
+                    }
+                });
+
         }
 
         private void CensusCC()
         {
             if (!ModLoader.TryGetMod("Census", out Mod census)) { return; }
-            census.Call("TownNPCCondition", ModContent.NPCType<Content.NPCs.Town.Lunatic>(), "Will show up when he feels like it. (After there are at least 3 other NPCs in your town).");
+            census.Call("TownNPCCondition", ModContent.NPCType<Content.NPCs.Town.Lunatic>(),
+                ModContent.GetInstance<Content.NPCs.Town.Lunatic>().GetLocalization("Census.Spawncondition").WithFormatArgs());
         }
 
         private void FargoMutantCC()
         {
             if (!ModLoader.TryGetMod("Fargowiltas", out Mod fargosMutant)) { return; }
-            fargosMutant.Call("AddSummon", 3.1f, "ExoriumMod", "TaintedSludge", (Func<bool>)(() => DownedBossSystem.downedBlightslime), 125000);
+            fargosMutant.Call("AddSummon", 1.9f, ItemType<Content.Items.Accessories.RitualBone>(), (Func<bool>)(() => DownedBossSystem.downedShadowmancer), 10000);
+            fargosMutant.Call("AddSummon", 3.1f, ItemType<Content.Bosses.BlightedSlime.TaintedSludge>(), (Func<bool>)(() => DownedBossSystem.downedBlightslime), 125000);
+            fargosMutant.Call("AddSummon", 6.99f, ItemType<Content.Bosses.CrimsonKnight.TwistedCrown>(), (Func<bool>)(() => DownedBossSystem.downedCrimsonKnight), 170000);
+
+            //fargosMutant.Call("AddIndestructibleRectangle", new Rectangle((WorldDataSystem.shadowAltarCoordsX - ExoriumStructures._shadowhouseWidth/2) * 16, (WorldDataSystem.shadowAltarCoordsY - ExoriumStructures._shadowhouseHeight/2) * 16, ExoriumStructures._shadowhouseWidth * 16, ExoriumStructures._shadowhouseHeight * 16));
+            //fargosMutant.Call("AddIndestructibleRectangle", WorldDataSystem.FallenTowerRect);
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
