@@ -568,9 +568,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Weapons.Ranger.AcidOrb>(), 1, 31, 52));
 
-            notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), 2, 1, 3)).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), 1, 1, 3));
+            IItemDropRule scroll = notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), 2, 1, 3));
+            scroll.OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), 1, 1, 3));
 
-            notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Magic.ShadowBolt>(), 3)).OnFailedRoll(notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.NineLivesStealer>(), 2)).OnFailedRoll(notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Summoner.ShadowOrb>(), 1, 12, 20))));
+            IItemDropRule item1 = notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Magic.ShadowBolt>(), 3));
+            IItemDropRule item2 = item1.OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.NineLivesStealer>(), 2));
+            item2.OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Summoner.ShadowOrb>(), 1, 12, 20));
 
             npcLoot.Add(notExpertRule);
         }

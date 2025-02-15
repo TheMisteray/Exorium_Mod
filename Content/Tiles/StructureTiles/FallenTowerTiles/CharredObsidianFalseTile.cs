@@ -18,7 +18,7 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
             Main.tileSolid[Type] = true;
             Main.tileMerge[TileID.Ash][this.Type] = true;
             Main.tileBlockLight[Type] = false;
-            AddMapEntry(new Color(51, 12, 5));
+            AddMapEntry(new Color(25, 6, 2)); //Match wall color
             DustType = DustID.Obsidian;
             HitSound = SoundID.Tink;
             MineResist = 5f;

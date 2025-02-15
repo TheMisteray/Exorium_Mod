@@ -32,9 +32,9 @@ namespace ExoriumMod.Content.Tiles
             DustType = DustType<Dusts.DeadwoodTreeDust>();
         }
 
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ItemType<Items.TileItems.DeadwoodWorkbench>());
-        }
+        //public override void KillMultiTile(int i, int j, int frameX, int frameY)
+        //{
+        //    Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ItemType<Items.TileItems.DeadwoodWorkbench>());
+        //}
     }
 }

@@ -43,10 +43,10 @@ namespace ExoriumMod.Content.Tiles
 			num = 1;
 		}
 
-		public override void KillMultiTile(int i, int j, int frameX, int frameY)
-		{
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ModContent.ItemType<Items.TileItems.DeadwoodBed>());
-		}
+		//public override void KillMultiTile(int i, int j, int frameX, int frameY)
+		//{
+		//	Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ModContent.ItemType<Items.TileItems.DeadwoodBed>());
+		//}
 
 		public override bool RightClick(int i, int j)
 		{

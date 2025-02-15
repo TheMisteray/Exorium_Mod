@@ -27,6 +27,7 @@ namespace ExoriumMod.Content.Items.TileItems
             Item.useAnimation = 15;
             Item.useTime = 15;
             Item.autoReuse = true;
+            Item.consumable = true;
             Item.createTile = TileType<Tiles.DeadwoodTile>();
         }
 

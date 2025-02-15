@@ -87,9 +87,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.noGravity = false;
             NPC.noTileCollide = false;
             NPC.alpha = 255;
+            NPC.value = Item.buyPrice(0, 7, 0, 0);
             if (!Main.dedServ)
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/knight");
-            //bossBag = ItemType<ShadowmancerBag>();
         }
 
         //May want to make teleport next to player not damage when teleporting

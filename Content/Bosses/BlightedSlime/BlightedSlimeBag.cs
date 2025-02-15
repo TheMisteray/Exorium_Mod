@@ -45,6 +45,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         {
 			itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<BlightedSlime>()));
 			itemLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.TaintedGel>(), 1, 50, 66));
+			itemLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.Metals.BlightedOre>(), 1, 80, 120));
 			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Accessories.CoreOfBlight>(), 1));
         }
 

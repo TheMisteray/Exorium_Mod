@@ -32,7 +32,7 @@ namespace ExoriumMod.Content.Items.Accessories
             player.GetModPlayer<ExoriumPlayer>().checkNearbyNPCs = true;
 
             float total = 0;
-            float max = 0.15f;
+            float max = 0.2f;
             List<NPC> nearby = player.GetModPlayer<ExoriumPlayer>().nearbyNPCs;
             for (int i = 0; i < nearby.Count; i++) //Check nearby npc for burning
             {
@@ -42,13 +42,12 @@ namespace ExoriumMod.Content.Items.Accessories
 
             if (player.HasBuff(BuffID.OnFire) || player.HasBuff(BuffID.OnFire3) || player.HasBuff(BuffID.CursedInferno) || player.HasBuff(BuffID.ShadowFlame) || player.HasBuff(ModContent.BuffType<Buffs.Inferno>()))
             {
-                total += 5;
-                max = 0.2f;
+                player.GetDamage(DamageClass.Generic) += 0.05f;
             }
 
-            player.GetDamage(DamageClass.Generic) += Math.Min(0.015f * total, max);
+            player.GetDamage(DamageClass.Generic) += Math.Min(0.02f * total, max);
 
-            if (0.015f * total >= max)
+            if (0.02f * total >= max)
                 player.GetModPlayer<ExoriumPlayer>().inflictInferno = true;
         }
     }

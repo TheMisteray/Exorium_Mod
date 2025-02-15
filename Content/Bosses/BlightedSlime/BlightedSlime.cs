@@ -611,7 +611,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
 
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
 
-            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Materials.TaintedGel>(), 1, 50, 65));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Materials.TaintedGel>(), 1, 50, 66));
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<Items.Materials.Metals.BlightedOre>(), 1, 80, 120));
 
             npcLoot.Add(notExpertRule);

@@ -41,8 +41,15 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(NPCType<AssierJassad>()));
-            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), 2, 1, 3)).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), 1, 1, 3));
-			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Magic.ShadowBolt>(), 3)).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.NineLivesStealer>(), 2).OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Summoner.ShadowOrb>(), 1, 12, 20)));
+            IItemDropRule scroll = ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.ScrollOfMagicMissiles>(), 2, 1, 3);
+            scroll.OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Consumables.Scrolls.SpellScrollShield>(), 1, 1, 3));
+
+            IItemDropRule item1 = ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Magic.ShadowBolt>(), 3);
+            IItemDropRule item2 = item1.OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.NineLivesStealer>(), 2));
+            item2.OnFailedRoll(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Summoner.ShadowOrb>(), 1, 12, 20));
+
+            itemLoot.Add(scroll);
+			itemLoot.Add(item1);
 			itemLoot.Add(ItemDropRule.Common(ItemType<Items.Weapons.Ranger.AcidOrb>(), 1, 31, 52));
 			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Accessories.ShadowmancerCloak>(), 1));
         }
