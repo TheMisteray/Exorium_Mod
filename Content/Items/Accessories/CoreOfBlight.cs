@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace ExoriumMod.Content.Items.Accessories
 {
@@ -24,19 +25,13 @@ namespace ExoriumMod.Content.Items.Accessories
             Item.value = 20000;
             Item.rare = -12;
             Item.expert = true;
+            Item.lifeRegen = -2;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.lifeRegen -= 2;
-            if (player.lifeRegen <=0)
-            {
-                player.GetDamage(DamageClass.Generic) += -0.03f * player.lifeRegen;
-            }
-            if (player.lifeRegen > 0)
-            {
-                player.GetDamage(DamageClass.Generic) += -0.01f * player.lifeRegen;
-            }
+            //player.lifeRegen -= 2;
+            player.GetModPlayer<ExoriumPlayer>().blightCore = true;
         }
     }
 }

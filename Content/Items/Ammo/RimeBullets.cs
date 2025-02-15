@@ -35,8 +35,9 @@ namespace ExoriumMod.Content.Items.Ammo
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
+            Recipe recipe = CreateRecipe(70);
             recipe.AddIngredient(ItemType<Materials.Metals.RimestoneBar>());
+            recipe.AddIngredient(ItemID.MusketBall, 70);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

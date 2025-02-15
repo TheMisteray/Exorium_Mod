@@ -36,6 +36,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.TeleportationImmune[Type] = true;
+
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
         }
 
         public override void SetDefaults()

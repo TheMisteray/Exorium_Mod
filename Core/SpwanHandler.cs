@@ -9,13 +9,13 @@ namespace ExoriumMod.Core
     {
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.InModBiome(GetInstance<Content.Biomes.DeadlandBiome>()))
-            {
-                pool.Clear();
-                pool.Add(NPCType<Content.NPCs.Enemies.Deadlands.WightArcher>(), .07f);
-                pool.Add(NPCType<Content.NPCs.Enemies.Deadlands.WightWarrior>(), .1f);
-                pool.Add(NPCType<Content.NPCs.Enemies.Deadlands.Poltergeist>(), .03f);
-            }
+            //if (spawnInfo.Player.InModBiome(GetInstance<Content.Biomes.DeadlandBiome>())) Not needed anymore
+            //{
+            //    pool.Clear();
+            //    pool.Add(NPCType<Content.NPCs.Enemies.Deadlands.WightArcher>(), .07f);
+            //    pool.Add(NPCType<Content.NPCs.Enemies.Deadlands.WightWarrior>(), .1f);
+            //    pool.Add(NPCType<Content.NPCs.Enemies.Deadlands.Poltergeist>(), .03f);
+            //}
         }
     }
 }

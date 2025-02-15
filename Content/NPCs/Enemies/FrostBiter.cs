@@ -98,10 +98,15 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frozen] = true;
+
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
             };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
+            NPCID.Sets.RespawnEnemyID[NPC.type] = ModContent.NPCType<FrostBiterHead>();
         }
         public override void SetDefaults()
         {
@@ -152,6 +157,20 @@ namespace ExoriumMod.Content.NPCs.Enemies
     internal class FrostBiterTail : FrostBiter
     {
         public override string Texture => AssetDirectory.EnemyNPC + Name;
+
+        public override void SetStaticDefaults()
+        {
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frozen] = true;
+
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
+            NPCID.Sets.RespawnEnemyID[NPC.type] = ModContent.NPCType<FrostBiterHead>();
+        }
+
         public override void SetDefaults()
         {
             NPC.width = 30;

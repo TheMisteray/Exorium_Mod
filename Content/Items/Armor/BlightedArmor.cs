@@ -23,6 +23,7 @@ namespace ExoriumMod.Content.Items.Armor
             Item.value = 15000;
             Item.rare = 2;
             Item.defense = 7;
+            Item.lifeRegen = -1;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -42,7 +43,7 @@ namespace ExoriumMod.Content.Items.Armor
         {
             player.moveSpeed -= 0.02f;
             player.GetDamage(DamageClass.Generic) += .02f;
-            player.lifeRegen -= 1;
+            //player.lifeRegen -= 1;
         }
 
         public override void AddRecipes()
@@ -72,13 +73,14 @@ namespace ExoriumMod.Content.Items.Armor
             Item.value = 9500;
             Item.rare = 2;
             Item.defense = 8;
+            Item.lifeRegen = -1;
         }
 
         public override void UpdateEquip(Player player)
         {
             player.moveSpeed -= 0.06f;
             player.GetDamage(DamageClass.Generic) += .03f;
-            player.lifeRegen -= 1;
+            //player.lifeRegen -= 1;
         }
 
         public override void AddRecipes()
@@ -107,13 +109,14 @@ namespace ExoriumMod.Content.Items.Armor
             Item.value = 7500;
             Item.rare = 2;
             Item.defense = 7;
+            Item.lifeRegen = -1;
         }
 
         public override void UpdateEquip(Player player)
         {
             player.moveSpeed -= 0.03f;
             player.GetDamage(DamageClass.Generic) += 0.02f;
-            player.lifeRegen -= 1;
+            //player.lifeRegen -= 1;
         }
 
         public override void AddRecipes()

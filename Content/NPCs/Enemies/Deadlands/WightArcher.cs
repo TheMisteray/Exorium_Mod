@@ -45,6 +45,12 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
             SpawnModBiomes = new int[1] { ModContent.GetInstance<DeadlandBiome>().Type };
         }
 
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.SpawnTileType == ModContent.TileType<Content.Tiles.AshenDustTile>()) return 0.7f;
+            return 0;
+        }
+
         public override void AI()
         {
             int damage = NPC.damage / (Main.expertMode == true ? 4 : 2);

@@ -5,17 +5,24 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.GameContent;
 using Terraria;
+using Microsoft.Xna.Framework;
 
 namespace ExoriumMod.Content.Tiles.Trees
 {
-    /*
     class DeadwoodTree : ModTree
     {
         private Mod mod => ModLoader.GetMod("ExoriumMod");
 
+        private Asset<Texture2D> texture;
+        private Asset<Texture2D> branchesTexture;
+        private Asset<Texture2D> topsTexture;
+
         public override void SetStaticDefaults()
         {
             GrowsOnTileId = new int[1] { TileType<AshenDustTile>() };
+            texture = ModContent.Request<Texture2D>(AssetDirectory.Tree + "DeadwoodTree");
+            branchesTexture = ModContent.Request<Texture2D>(AssetDirectory.Tree + "DeadwoodTree_Branches");
+            topsTexture = ModContent.Request<Texture2D>(AssetDirectory.Tree + "DeadwoodTree_Tops");
         }
 
         public override TreePaintingSettings TreeShaderSettings => new TreePaintingSettings
@@ -27,14 +34,24 @@ namespace ExoriumMod.Content.Tiles.Trees
             SpecialGroupMaximumSaturationValue = 1f
         };
 
-        public override void SetTreeFoliageSettings(Tile tile, int xoffset, ref int treeFrame, ref int floorY, ref int topTextureFrameWidth, ref int topTextureFrameHeight)
+        // This is the primary texture for the trunk. Branches and foliage use different settings.
+        public override Asset<Texture2D> GetTexture() => texture;
+
+        // Branch Textures
+        public override Asset<Texture2D> GetBranchTextures() => branchesTexture;
+
+        // Top Textures
+        public override Asset<Texture2D> GetTopTextures() => topsTexture;
+
+        public override void SetTreeFoliageSettings(Tile tile, ref int xoffset, ref int treeFrame, ref int floorY, ref int topTextureFrameWidth, ref int topTextureFrameHeight)
         {
-            //TODO
+            //Needed for the abstract
         }
 
-        public override int GrowthFXGore()
+        public override bool Shake(int x, int y, ref bool createLeaves)
         {
-            return mod.Find<ModGore>(AssetDirectory.TreeGores + "DeadwoodTreeFX").Type;
+            Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ItemType<Items.TileItems.Deadwood>());
+            return false;
         }
 
         public override int DropWood()
@@ -42,22 +59,6 @@ namespace ExoriumMod.Content.Tiles.Trees
             return ItemType<Items.TileItems.Deadwood>();
         }
 
-        public override Asset<Texture2D> GetTexture()
-        {
-            return Request<Texture2D>("Assets/Tiles/Trees/DeadwoodTree" /*AssetDirectory.Tree + "DeadwoodTree"*//*;
-        }
-
-        public override Asset<Texture2D> GetTopTextures()
-        {
-            return Request<Texture2D>("Assets/Tiles/Trees/DeadwoodTree" + "_Tops");
-        }
-
-        public override Asset<Texture2D> GetBranchTextures()
-        {
-            return Request<Texture2D>("Assets/Tiles/Trees/DeadwoodTree" + "_Branches");
-        }
-
         public override int CreateDust() => DustType<Dusts.DeadwoodTreeDust>();
     }
-*/
 }

@@ -44,6 +44,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             NPC.timeLeft = NPC.activeTime * 30;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
+            NPC.boss = true;
         }
 
         int[] gemsparklings = new int[7];
@@ -415,7 +416,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-            new FlavorTextBestiaryInfoElement("This hollowed out rock is home to a species of living gemstones. To harvest the gemstones on its surface you will have to deal with its inhabitants."),
+            new FlavorTextBestiaryInfoElement("This hollowed out rock is home to a colony of living gemstones. To harvest the gemstones on its surface you will have to deal with its inhabitants."),
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
             });
         }

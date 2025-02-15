@@ -271,8 +271,8 @@ Mods: {
 				DisplayName: Molotov Vest
 				Tooltip:
 					'''
-					"A masterful invention"
 					Don't use near any structures you care about
+					'A masterful invention'
 					'''
 			}
 
@@ -559,7 +559,7 @@ Mods: {
 
 			GlitteringGun: {
 				DisplayName: Glittering Gun
-				Tooltip: '''"Or was it the glimmering gun..."'''
+				Tooltip: "'Or was it the glimmering gun..?'"
 			}
 
 			Pestilence: {
@@ -577,7 +577,7 @@ Mods: {
 				Tooltip:
 					'''
 					Launches bouncing sand balls 
-					"This is a horrible idea"
+					'This is a horrible idea'
 					'''
 			}
 
@@ -735,9 +735,9 @@ Mods: {
 				DisplayName: Throwing Rapier
 				Tooltip:
 					'''
-					"Anything works if you roll a 20"
-					If the tip of the rapier hits the enemy it will stick
+					If the tip of the rapier hits an enemy it will stick
 					Otherwise it will bounce
+					'Anything works if you roll a 20'
 					'''
 			}
 
@@ -796,10 +796,10 @@ Mods: {
 					'''
 					7 summon tag damage
 					Your summons will focus struck enemies
-					It flails of it's own accord
 					Lights targets ablaze and slightly lowers their defense
 					Your summons amplify this burn effect
 					Hold to control the tongue
+					'It flails of it's own accord'
 					'''
 			}
 
@@ -835,7 +835,11 @@ Mods: {
 			}
 
 			TwistedCrown: {
-				Tooltip: ""
+				Tooltip:
+					'''
+					A replica crown of a dark deity
+					Attracts the Crimson Knight if taken to a battlefield deep underground
+					'''
 				DisplayName: Twisted Crown
 			}
 
@@ -990,13 +994,13 @@ Mods: {
 			}
 
 			FlameTongueBurn: {
-				DisplayName: Mods.ExoriumMod.BuffName.FlameTongueBurn
-				Description: Mods.ExoriumMod.BuffDescription.FlameTongueBurn
+				DisplayName: Flame Tongue Burn
+				Description: Deals additional damage and defense reduction
 			}
 
 			FlameTongueTag: {
-				DisplayName: Mods.ExoriumMod.BuffName.FlameTongueTag
-				Description: Mods.ExoriumMod.BuffDescription.FlameTongueTag
+				DisplayName: FlameTongueTag
+				Description: FlameTongueTag
 			}
 
 			SandAegis: {
@@ -1019,8 +1023,8 @@ Mods: {
 			}
 
 			SparklingWhipTag: {
-				DisplayName: Mods.ExoriumMod.BuffName.SparklingWhipTag
-				Description: Mods.ExoriumMod.BuffDescription.SparklingWhipTag
+				DisplayName: SparklingWhipTag
+				Description: SparklingWhipTag
 			}
 
 			StuckBlightedNeedleDebuff: {
@@ -1045,12 +1049,17 @@ Mods: {
 
 			ThrowingRapierDamage: {
 				DisplayName: 20!!!
-				Description: Mods.ExoriumMod.Buffs.ThrowingRapierDamage.Description
+				Description: Critical Hit!
 			}
 
 			Inferno: {
 				DisplayName: Inferno
-				Description: Mods.ExoriumMod.Buffs.Inferno.Description
+				Description: Inferno
+			}
+
+			NoGraves: {
+				DisplayName: Grave Buster
+				Description: A strange force is erasing your gravestones
 			}
 		}
 

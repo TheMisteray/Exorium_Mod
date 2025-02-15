@@ -21,12 +21,12 @@ namespace ExoriumMod.Content.Items.Accessories
             Item.value = 10000;
             Item.accessory = true;
             Item.rare = 2;
+            Item.lifeRegen = -1;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<ExoriumPlayer>().wightQuiver = true;
-            player.lifeRegen -= 1;
         }
     }
 }

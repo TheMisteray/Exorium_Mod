@@ -50,7 +50,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float throwSpeed = Main.rand.NextFloat(.8f, 1.2f);
-            Projectile.NewProjectile(source, position.X, position.Y, velocity.X * throwSpeed, velocity.Y * throwSpeed, ProjectileType<ThrowingRapierProj>(), damage, knockback, player.whoAmI, Main.rand.NextFloat(.1f, .8f));
+            Projectile.NewProjectile(source, position.X, position.Y, velocity.X * throwSpeed, velocity.Y * throwSpeed, ProjectileType<ThrowingRapierProj>(), damage, knockback, player.whoAmI, Main.rand.NextFloat(.1f, .6f) * (Main.rand.NextBool()? 1:-1));
             return false;
         }
 

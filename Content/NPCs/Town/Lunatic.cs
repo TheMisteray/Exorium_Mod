@@ -55,6 +55,7 @@ namespace ExoriumMod.Content.NPCs.Town
             };
 
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            NPCID.Sets.TownNPCBestiaryPriority.Add(Type);
 
             // Set Example Person's biome and neighbor preferences with the NPCHappiness hook. You can add happiness text and remarks with localization (See an example in ExampleMod/Localization/en-US.lang).
             // NOTE: The following code uses chaining - a style that works due to the fact that the SetXAffection methods return the same NPCHappiness instance they're called on.
@@ -66,7 +67,8 @@ namespace ExoriumMod.Content.NPCs.Town
                 .SetNPCAffection(NPCID.Clothier, AffectionLevel.Love)
                 .SetNPCAffection(NPCID.Guide, AffectionLevel.Dislike)
                 .SetNPCAffection(NPCID.Dryad, AffectionLevel.Dislike)
-                .SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Love)
+                .SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Like)
+                .SetNPCAffection(NPCID.Princess, AffectionLevel.Love)
             ;
         }
 
@@ -126,7 +128,7 @@ namespace ExoriumMod.Content.NPCs.Town
             }
             if (Guide >= 0 && Main.rand.NextBool(7))
             {
-                return Main.npc[Guide].GivenName + " always refuses to talk to me. Look, I just keep forgetting all the recipies.";
+                return Main.npc[Guide].GivenName + " always refuses to talk to me. Look, I just keep forgetting how to make a bucket.";
             }
             if (Main.rand.Next(3) >= 1)
             {
@@ -137,7 +139,7 @@ namespace ExoriumMod.Content.NPCs.Town
                     case 1:
                         return "Why do I wear a mask you ask? Well... I don't know.";
                     case 2:
-                        return "I feel like I'm forgetting something...";
+                        return "I feel like I'm forgetting something.";
                     case 3:
                         return "I'm not crazy. Who told you that?";
                     default:

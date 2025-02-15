@@ -23,12 +23,8 @@ namespace ExoriumMod.Content.Items.Accessories
             Item.accessory = true;
             Item.value = 1000;
             Item.rare = 1;
-            Item.defense = 4;
-        }
-
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            player.lifeRegen -= 1;          
+            Item.defense = 3;
+            Item.lifeRegen = -1;
         }
 
         public override void AddRecipes()

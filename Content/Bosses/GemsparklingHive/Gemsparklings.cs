@@ -234,8 +234,9 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
-        });
+                new FlavorTextBestiaryInfoElement("Faint traces of magic suggest that transmutation magic may be at play here rather than natural phenomena. They only seem concerned with protecting their hive."),
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns
+            });
         }
     }
 

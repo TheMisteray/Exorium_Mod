@@ -10,6 +10,8 @@ using Terraria.ModLoader.Utilities;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
+using static Terraria.ID.IL_NPCID.Sets;
+using ExoriumMod.Content.Bosses.GemsparklingHive;
 
 namespace ExoriumMod.Content.NPCs.Enemies
 {
@@ -22,12 +24,11 @@ namespace ExoriumMod.Content.NPCs.Enemies
             // DisplayName.SetDefault("Dune Creeper");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.WallCreeper];
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                Velocity = 1f, // Draws the NPC in the bestiary as if its walking -1 tiles in the x direction
-                Direction = -1
+                Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
             };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
         }
 
         public override void SetDefaults()
@@ -3454,15 +3455,6 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             return SpawnCondition.DesertCave.Chance * .04f;
         }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
-            {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundDesert,
-                new FlavorTextBestiaryInfoElement("")
-            });
-        }
     }
 
     class DuneCreeperWall : ModNPC
@@ -3473,10 +3465,12 @@ namespace ExoriumMod.Content.NPCs.Enemies
         {
             // DisplayName.SetDefault("Dune Creeper");
             Main.npcFrameCount[NPC.type] = Main.npcFrameCount[NPCID.WallCreeperWall];
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                Hide = true
+                Velocity = -2f, // Draws the NPC in the bestiary as if its walking -1 tiles in the x direction
+                Direction = -1
             };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetDefaults()
@@ -3720,6 +3714,17 @@ namespace ExoriumMod.Content.NPCs.Enemies
         public override void OnKill()
         {
             Item.NewItem(NPC.GetSource_Loot(), NPC.getRect(), ItemType<Items.Materials.Metals.DuneStone>(), Main.rand.Next(7, 14));
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            int associatedNPCType = NPCType<DuneCreeper>();
+            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: false);
+
+            bestiaryEntry.Info.AddRange([
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundDesert,
+                new FlavorTextBestiaryInfoElement("")
+            ]);
         }
     }
 }

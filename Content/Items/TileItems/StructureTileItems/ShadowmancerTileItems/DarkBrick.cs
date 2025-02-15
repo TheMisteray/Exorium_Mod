@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria;
 using Terraria.GameContent.Creative;
+using Terraria.ID;
 
 namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.ShadowmancerTileItems
 {
@@ -33,6 +34,7 @@ namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.ShadowmancerTile
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Items.WallItems.StructureWallItems.ShadowmancerWalls.DarkBrickWall>(), 4);
+            recipe.AddTile(TileID.WorkBenches);
             recipe.Register();
         }
     }

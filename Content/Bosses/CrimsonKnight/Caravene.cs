@@ -41,11 +41,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
             { // Influences how the NPC looks in the Bestiary
-//CustomTexturePath = AssetDirectory.CrimsonKnight + Name, // If the NPC is multiple parts like a worm, a custom texture for the Bestiary is encouraged.
-                Position = new Vector2(40f, 24f),
-                PortraitPositionXOverride = 50f,
-                PortraitPositionYOverride = 50f,
-                Scale = .15f
+                CustomTexturePath = AssetDirectory.CrimsonKnight + Name + "_Portrait",
+                PortraitPositionXOverride = 4f,
+                PortraitPositionYOverride = 20f,
+                Scale = .5f
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
@@ -55,6 +54,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             // Automatically group with other bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            {
+                new FlavorTextBestiaryInfoElement("One of the 'Exorium Knights'. He sought to take that crown from you, and continued to fight even after seeing that you held a fake."),
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
+            });
         }
 
         public override void SetDefaults()
@@ -1637,15 +1645,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 NPC.life += damageDone;
             }
             base.OnHitByProjectile(projectile, hit, damageDone);
-        }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
-            {
-                new FlavorTextBestiaryInfoElement("This one appears to have been experimenting with a strange ritual altar. To... Limited success. It is still a mystery what exactly they hoped to accomplish. Not that it matters now with them gone."),
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-            });
         }
     }
 }   

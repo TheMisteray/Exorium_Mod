@@ -68,7 +68,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemType<Materials.Metals.BlightsteelBar>(), 12);
             recipe.AddIngredient(ItemType<Materials.TaintedGel>(), 6);
-            recipe.AddTile(TileID.Bookcases);
+            recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }
     }

@@ -6,19 +6,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-
-using ExoriumMod.Core;
-using Microsoft.Xna.Framework;
-using System;
-using System.Drawing;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Core.Systems;
+using ExoriumMod.Content.Buffs;
 
 namespace ExoriumMod.Core
 {
@@ -37,6 +25,7 @@ namespace ExoriumMod.Core
         public bool ritualArrow;
         public bool reverseHandOut;
         public bool inflictInferno;
+        public bool blightCore;
 
         //nearby mobs check
         public bool checkNearbyNPCs;
@@ -66,6 +55,7 @@ namespace ExoriumMod.Core
             ritualArrow = false;
             reverseHandOut = false;
             inflictInferno = false;
+            blightCore = false;
 
             checkNearbyNPCs = false;
         }
@@ -75,8 +65,17 @@ namespace ExoriumMod.Core
             if (!Main.hardMode && Player.getRect().Intersects(Systems.WorldDataSystem.FallenTowerRect)) //prevent messing up the charred tower before hardmode
             {
                 Player.AddBuff(BuffID.NoBuilding, 2);
+                Player.AddBuff(BuffType<NoGraves>(), 2);
             }
             base.PreUpdate();
+        }
+
+        public override void PostUpdateBuffs()
+        {
+            if (Player.HasBuff(BuffID.NoBuilding) && !Main.hardMode && Player.getRect().Intersects(Systems.WorldDataSystem.FallenTowerRect))
+            {
+                Player.noBuilding = true;
+            }
         }
 
         public override void PostUpdateEquips()
@@ -98,6 +97,18 @@ namespace ExoriumMod.Core
                 {
                     if (npc.active && (Math.Pow(Player.Center.X - npc.Center.X, 2) + Math.Pow(Player.Center.Y - npc.Center.Y, 2) < 600000)) //This is square distance so ~800
                         nearbyNPCs.Add(npc);
+                }
+            }
+
+            if (blightCore)
+            {
+                if (Player.lifeRegen <= 0)
+                {
+                    Player.GetDamage(DamageClass.Generic) += -0.03f * Player.lifeRegen;
+                }
+                if (Player.lifeRegen > 0)
+                {
+                    Player.GetDamage(DamageClass.Generic) += -0.01f * Player.lifeRegen;
                 }
             }
 

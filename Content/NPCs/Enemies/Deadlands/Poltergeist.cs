@@ -43,6 +43,12 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
             SpawnModBiomes = new int[1] { ModContent.GetInstance<DeadlandBiome>().Type };
         }
 
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.SpawnTileType == ModContent.TileType<Content.Tiles.AshenDustTile>()) return 0.3f;
+            return 0;
+        }
+
         public override void CustomBehavior(ref float ai)
         {
             Vector2 dist = Main.player[NPC.target].position - NPC.position;

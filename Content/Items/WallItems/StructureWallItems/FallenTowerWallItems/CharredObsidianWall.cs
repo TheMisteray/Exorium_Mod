@@ -1,4 +1,6 @@
-﻿using ExoriumMod.Core;
+﻿using ExoriumMod.Content.Items.TileItems.StructureTileItems.FallenTowerTileItems;
+using ExoriumMod.Core;
+using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -27,6 +29,14 @@ namespace ExoriumMod.Content.Items.WallItems.StructureWallItems.FallenTowerWallI
             Item.useStyle = 1;
             Item.consumable = true;
             Item.createWall = WallType<Walls.StructureWalls.FallenTowerWalls.CharredObsidianWall>();
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe2 = CreateRecipe(4);
+            recipe2.AddIngredient(ItemType<CharredObsidian>());
+            recipe2.AddTile(TileID.WorkBenches);
+            recipe2.Register();
         }
     }
 }

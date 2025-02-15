@@ -26,7 +26,7 @@ namespace ExoriumMod.Core
             }
 
             int DirtRockWallRunnerIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
-            if (DirtRockWallRunnerIndex != -1)
+            if (DirtRockWallRunnerIndex != -1) //Right before living trees
             {
                 tasks.Insert(DirtRockWallRunnerIndex + 1, new PassLegacy("Deadlands", delegate (GenerationProgress progress, GameConfiguration config)
                   {

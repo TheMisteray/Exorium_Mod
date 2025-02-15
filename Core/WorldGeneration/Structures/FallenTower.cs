@@ -116,7 +116,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
             }
 
             //Protect from other generation
-            GenVars.structures.AddStructure(new Rectangle(i, j, _fallenTowerShape.GetLength(1), _fallenTowerShape.GetLength(0)), 50);
+            GenVars.structures.AddProtectedStructure(new Rectangle(i, j, _fallenTowerShape.GetLength(1), _fallenTowerShape.GetLength(0)), 50);
         }
 
         private static readonly int[,] _fallenTowerShape = {

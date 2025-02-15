@@ -1,5 +1,7 @@
 ﻿using ExoriumMod.Core;
+using Terraria;
 using Terraria.GameContent.Creative;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -26,6 +28,12 @@ namespace ExoriumMod.Content.Items.TileItems.StructureTileItems.FallenTowerTileI
             Item.useStyle = 1;
             Item.consumable = true;
             Item.createTile = TileType<Tiles.StructureTiles.FallenTowerTiles.CharredObsidianPlatformTile>();
+        }
+        public override void AddRecipes()
+        {
+            Recipe recipe2 = CreateRecipe(2);
+            recipe2.AddIngredient(ItemType<CharredObsidian>());
+            recipe2.Register();
         }
     }
 }
