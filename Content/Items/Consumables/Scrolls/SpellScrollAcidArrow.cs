@@ -1,6 +1,7 @@
 ﻿using ExoriumMod.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -44,11 +45,11 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<Buffs.AcidArrows>(), 1800);
+            player.AddBuff(BuffType<Buffs.AcidArrows>(), 3600);
             player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 7200);
         }
 
-        public override bool CanShoot(Player player)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             return false;
         }

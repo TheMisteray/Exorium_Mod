@@ -3723,7 +3723,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
 
             bestiaryEntry.Info.AddRange([
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundDesert,
-                new FlavorTextBestiaryInfoElement("")
+                new FlavorTextBestiaryInfoElement("Dune Creepers find themselves far from their home in the caverns. After accidentally stepping into the holes of porous Dune Stone many times, they slowly accumulate a thin coating of the substance on their bodies.")
             ]);
         }
     }

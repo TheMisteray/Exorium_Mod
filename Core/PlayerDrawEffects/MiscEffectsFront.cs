@@ -23,7 +23,7 @@ namespace ExoriumMod.Core.PlayerDrawEffects
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            if (drawInfo.drawPlayer.GetModPlayer<ExoriumPlayer>().shield)
+            if (drawInfo.drawPlayer.GetModPlayer<ExoriumPlayer>().shield && !drawInfo.drawPlayer.dead)
             {
                 var position = drawInfo.Center - Main.screenPosition;
                 position = new Vector2((int)position.X, (int)position.Y); // You'll sometimes want to do this, to avoid quivering.
@@ -43,6 +43,7 @@ namespace ExoriumMod.Core.PlayerDrawEffects
                     SpriteEffects.None, // SpriteEffects.
                     0 // 'Layer'. This is always 0 in Terraria.
                 ));
+                Lighting.AddLight(drawInfo.drawPlayer.Center, new Vector3(.34f, .52f, .46f));
             }
 
         }

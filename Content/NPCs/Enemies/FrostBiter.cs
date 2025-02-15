@@ -246,7 +246,7 @@ namespace ExoriumMod.Content.NPCs.Enemies
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundSnow,
-                new FlavorTextBestiaryInfoElement("")
+                new FlavorTextBestiaryInfoElement("Frost Biters were once Diggers, but after consuming large amounts of Ice and Rime Stone their skin has become hard and cold.")
             });
         }
     }

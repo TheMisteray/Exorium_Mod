@@ -114,7 +114,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             for (int i = 0; i < 8; i++)
             {
                 double rad = (Math.PI / 180) * Main.rand.NextFloat(361);
-                int dust = Dust.NewDust(new Vector2(Projectile.Center.X + (float)(Math.Cos(rad + 1.5) * (areaSize + 45)), Projectile.Center.Y + (float)(Math.Sin(rad + 1.5) * (areaSize + 45))), 1, 1, 20, 0, 0, 0);
+                int dust = Dust.NewDust(new Vector2(Projectile.Center.X + (float)(Math.Cos(rad + 1.5) * (areaSize + 90)), Projectile.Center.Y + (float)(Math.Sin(rad + 1.5) * (areaSize + 90))), 1, 1, 20, 0, 0, 0);
                 //Main.dust[dust].scale *= 0.98f;
             }
         }

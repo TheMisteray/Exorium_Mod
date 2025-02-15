@@ -41,10 +41,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
             { // Influences how the NPC looks in the Bestiary
-                CustomTexturePath = AssetDirectory.CrimsonKnight + Name + "_Portrait",
-                PortraitPositionXOverride = 4f,
-                PortraitPositionYOverride = 20f,
-                Scale = .5f
+                CustomTexturePath = AssetDirectory.BestiaryEnemyImage + Name + "_Bestiary",
+                PortraitPositionXOverride = 2f,
+                PortraitPositionYOverride = 60f,
+                PortraitScale = 0.9f,
+                Position = new Vector2(0, 90),
+                
+                Scale = .7f
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 

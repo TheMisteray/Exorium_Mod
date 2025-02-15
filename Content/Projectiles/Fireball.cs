@@ -20,7 +20,7 @@ namespace ExoriumMod.Content.Projectiles
         public override void AI()
         {
             Projectile.rotation -= .2f;
-            Dust.NewDust(Projectile.Center, 0, 0, 6, 0f, 0f, 0, default(Color), 1f);
+            for (int i = 0; i < 2; i ++) Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 0, default(Color), 1f);
         }
 
         public override void OnKill(int timeLeft)

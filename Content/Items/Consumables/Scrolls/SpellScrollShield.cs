@@ -26,7 +26,6 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
             Item.width = 32;
             Item.height = 32;
             Item.useAnimation = 20;
-            Item.useTurn = true;
             Item.useTime = 20;
             Item.useStyle = 4;
             Item.UseSound = SoundID.Item4;
@@ -46,7 +45,7 @@ namespace ExoriumMod.Content.Items.Consumables.Scrolls
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(BuffType<Buffs.Shield>(), 1600);
+            player.AddBuff(BuffType<Buffs.Shield>(), 1800);
             player.AddBuff(BuffType<Buffs.ScrollCooldown>(), 5400);
         }
 
