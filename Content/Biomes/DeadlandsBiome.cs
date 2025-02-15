@@ -15,7 +15,7 @@ namespace ExoriumMod.Content.Biomes
 		// Select all the scenery
 		public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("ExoriumMod/DeadlandsWater"); // Sets a water style for when inside this biome
 		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>("ExoriumMod/DeadlandsSurfaceBGStyle");
-		//public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;
+		public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
 
 		// Select Music
 		public override int Music => MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/TheGrime");
@@ -52,7 +52,7 @@ namespace ExoriumMod.Content.Biomes
 		{
 			bool b1 = ModContent.GetInstance<DeadlandsBiomeTileCount>().deadlandsBlockCount >= 250;
 
-			bool b2 = player.ZoneSkyHeight || player.ZoneOverworldHeight;
+			bool b2 = /*player.ZoneSkyHeight || player.ZoneOverworldHeight;*/ true; //Not needed until an underground variant is added
 			return b1 && b2;
 		}
 	}

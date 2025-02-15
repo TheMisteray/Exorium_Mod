@@ -171,7 +171,7 @@ namespace ExoriumMod.Content.NPCs.Town
 				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
 
 				// Sets your NPC's flavor text in the bestiary.
-				new FlavorTextBestiaryInfoElement("A strange figure that approached you one night. It's not clear what his deal is, or if he knows either. Fravrick seems to be suffering from some form of memory loss, and becuase of this can't seem to remember where the magical knick-knacks he sells come from."),
+				new FlavorTextBestiaryInfoElement("A strange man that approached you one night looking for lodging, supposedly lost. It's not clear what his deal is, or if he knows either. Fravrick seems to be suffering from some form of memory loss, and becuase of this doesn't remember where the magical knick-knacks he sells came from."),
             });
         }
 

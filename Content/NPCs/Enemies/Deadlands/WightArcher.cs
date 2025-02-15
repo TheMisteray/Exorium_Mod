@@ -47,7 +47,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.SpawnTileType == ModContent.TileType<Content.Tiles.AshenDustTile>()) return 0.7f;
+            if (spawnInfo.Player.InModBiome<DeadlandBiome>() && spawnInfo.SpawnTileType == ModContent.TileType<Content.Tiles.AshenDustTile>()) return 0.14f;
             return 0;
         }
 
@@ -3346,7 +3346,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ItemType<Items.Accessories.WightQuiver>(), 40));
-            npcLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.WightBone>(), 3));
+            npcLoot.Add(ItemDropRule.Common(ItemType<Items.Materials.WightBone>(), 2));
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

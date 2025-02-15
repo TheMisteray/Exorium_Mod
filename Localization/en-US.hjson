@@ -59,11 +59,11 @@ Mods: {
 					LikeNPC_Princess: At least {NPCName} doesn't talk to me like I'm crazy.
 					HateCrowded: Feels like I can't go anywhere without brushing past someone.
 					DislikeCrowded: These people sure are noisy.
-					LoveSpace: I love having so much space.
+					LoveSpace: I'm liking this peace and quiet.
 					FarFromHome: Where was I going again?
 					NoHome: I used to have a house... Not too sure what happened to it.
 					Content: I thank you for your... Hospitality.
-					LikeBiome: The {BiomeName} was a nice scenic choice for this place if I do say so myself... What do you mean you built this place?
+					LikeBiome: The {BiomeName} has some nice scenery. Perhaps that's where I used to live.
 					HateBiome: If I was the person in charge of the {BiomeName} I'd blow it all up and try again.
 					LoveNPC: Have you met {NPCName}? I'm not sure when or how they got here, but make sure they stay around.
 					LikeNPC: At least {NPCName} is nice enough to give me some space.

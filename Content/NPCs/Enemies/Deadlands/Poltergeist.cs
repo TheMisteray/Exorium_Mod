@@ -45,7 +45,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.SpawnTileType == ModContent.TileType<Content.Tiles.AshenDustTile>()) return 0.3f;
+            if (spawnInfo.Player.InModBiome<DeadlandBiome>() && spawnInfo.SpawnTileType == ModContent.TileType<Content.Tiles.AshenDustTile>()) return 0.06f;
             return 0;
         }
 
