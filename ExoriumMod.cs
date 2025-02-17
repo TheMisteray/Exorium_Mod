@@ -116,6 +116,18 @@ namespace ExoriumMod
                 });
 
             bcl.Call(
+                "LogMiniBoss",
+                this,
+                nameof(Content.Bosses.GemsparklingHive.GemsparklingHive),
+                2.01f,
+                (() => DownedBossSystem.downedGemsparklingHive),
+                NPCType<Content.Bosses.GemsparklingHive.GemsparklingHive>(),
+                new Dictionary<string, object>()
+                {
+
+                });
+
+            bcl.Call(
                 "LogBoss",
                 this, nameof(Content.Bosses.BlightedSlime.BlightedSlime),
                 3.1f,

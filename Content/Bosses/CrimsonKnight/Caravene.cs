@@ -92,8 +92,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/knight");
         }
 
-        //May want to make teleport next to player not damage when teleporting
-
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
             NPC.lifeMax = (int)(NPC.lifeMax * 0.75 * balance);

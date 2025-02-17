@@ -78,6 +78,13 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             set => NPC.ai[3] = value ? 1f : 0f;
         }
 
+        //lifeMax Really doesnt't matter for this boss
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
+        {
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.3 * balance);
+            NPC.damage = (int)(NPC.damage * 0.6);
+        }
+
         public float timer = 0;
 
         //Doesn't need netUpdate
@@ -392,14 +399,14 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ItemID.Amethyst, 1, 8, 15));
-            npcLoot.Add(ItemDropRule.Common(ItemID.Topaz, 1, 8, 15));
-            npcLoot.Add(ItemDropRule.Common(ItemID.Emerald, 1, 4, 9));
-            npcLoot.Add(ItemDropRule.Common(ItemID.Sapphire, 1, 4, 9));
-            npcLoot.Add(ItemDropRule.Common(ItemID.Ruby, 1, 3, 7));
-            npcLoot.Add(ItemDropRule.Common(ItemID.Diamond, 1, 2, 4));
-            npcLoot.Add(ItemDropRule.Common(ItemID.Amber, 1, 1, 2));
-            npcLoot.Add(ItemDropRule.Common(ItemID.StoneBlock, 1, 10, 30));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Amethyst, 1, 14, 20));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Topaz, 1, 14, 20));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Emerald, 1, 8, 15));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Sapphire, 1, 8, 15));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Ruby, 1, 5, 9));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Diamond, 1, 5, 9));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Amber, 1, 4, 7));
+            npcLoot.Add(ItemDropRule.Common(ItemID.StoneBlock, 1, 15, 40));
 
             base.ModifyNPCLoot(npcLoot);
         }

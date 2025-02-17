@@ -21,7 +21,7 @@ Mods: {
 				DisplayName: Crimson Knight
 
 				BossChecklistIntegration: {
-					SpawnInfo: Use a [i:ExoriumMod/TwistedCrown] in the Charred Tower in the Underworld
+					SpawnInfo: Use a [i:ExoriumMod/TwistedCrown] in the Charred Tower in the Underworld.
 					DespawnMessage: The Crimson Knight ends the duel
 				}
 			}
@@ -33,7 +33,11 @@ Mods: {
 			AmethystGemsparkling.DisplayName: Amethyst Gemsparkling
 			DiamondGemsparkling.DisplayName: Diamond Gemsparkling
 			EmeraldGemsparkling.DisplayName: Emerald Gemsparkling
-			GemsparklingHive.DisplayName: Gemsparkling Hive
+
+			GemsparklingHive: { 
+				DisplayName: Gemsparkling Hive
+				BossChecklistIntegration.SpawnInfo: Break open a Suspicious Looking Geode in the Caverns.
+			}
 			RubyGemsparkling.DisplayName: Ruby Gemsparkling
 			SapphireGemsparkling.DisplayName: Sapphire Gemsparkling
 			SuspiciousLookingGeode.DisplayName: Suspicious Looking Geode
