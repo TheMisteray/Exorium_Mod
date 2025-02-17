@@ -32,7 +32,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Item.mana = 12;
             Item.useTime = 60;
             Item.useAnimation = 60;
-            Item.useStyle = 4;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.noUseGraphic = true; //Use graphics were acting weird
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.noMelee = true;
             Item.knockBack = 2;

@@ -34,10 +34,11 @@ Mods: {
 			DiamondGemsparkling.DisplayName: Diamond Gemsparkling
 			EmeraldGemsparkling.DisplayName: Emerald Gemsparkling
 
-			GemsparklingHive: { 
+			GemsparklingHive: {
 				DisplayName: Gemsparkling Hive
 				BossChecklistIntegration.SpawnInfo: Break open a Suspicious Looking Geode in the Caverns.
 			}
+
 			RubyGemsparkling.DisplayName: Ruby Gemsparkling
 			SapphireGemsparkling.DisplayName: Sapphire Gemsparkling
 			SuspiciousLookingGeode.DisplayName: Suspicious Looking Geode
@@ -632,10 +633,9 @@ Mods: {
 				DisplayName: Burning Hands
 				Tooltip:
 					'''
+					Primary attack deals additional damage to burning targets
+					Right click to unleash a weak spread of fire that burns targets
 					Unleash flames from your fingertips
-					Uses Mana and can\'t be used with mana sickness
-					Right click to shoot a flaming fist
-					(Right click does not use mana)
 					'''
 			}
 
@@ -956,6 +956,7 @@ Mods: {
 			CrimsonSlash.DisplayName: Crimson Slash
 			LargeFlamingSphere.DisplayName: Large Flaming Sphere
 			RotatingFireball.DisplayName: Rotating Fireball
+			FireCone.DisplayName: Fire Cone
 		}
 
 		Buffs: {

@@ -167,7 +167,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 spriteBatch.End();
                 ShapeBatch.Begin(spriteBatch.GraphicsDevice);
-                ShapeBatch.Circle(Projectile.Center - Main.screenPosition, explosionRadius, 200, MathHelper.ToRadians(1.0f * Projectile.timeLeft), Color.Lerp(Color.Red, new Color(0, 0, 0, 0), (float)(-1 * (Projectile.timeLeft - 60)) / 60f), Color.Lerp(Color.OrangeRed, new Color(0, 0, 0, 0), (float)(-1 * (Projectile.timeLeft - 60)) / 60f));
+                ShapeBatch.Circle(Projectile.Center - Main.screenPosition, explosionRadius, 200, MathHelper.ToRadians(1.0f * Projectile.timeLeft), new Color(0, 0, 0, 0), Color.Lerp(Color.OrangeRed, new Color(0, 0, 0, 0), (float)(-1 * (Projectile.timeLeft - 60)) / 60f));
                 ShapeBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
             }

@@ -17,7 +17,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
         {
             /* Tooltip.SetDefault("Produces a shadow on impact that will do your bidding" +
                 "\nShadows have a small chance to inflict consuming dark"); */
-            ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
+            //ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 50;
         }
@@ -35,18 +35,21 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
             Item.rare = 1;
             Item.UseSound = SoundID.Item1;
             Item.maxStack = 999;
+            Item.noUseGraphic = true;
             Item.noMelee = true;
             Item.consumable = true;
             Item.shootSpeed = 10f;
             Item.DamageType = DamageClass.Summon;
 
             // No buffTime because otherwise the item tooltip would say something like "1 minute duration"
-            Item.shoot = ProjectileType<Projectiles.Minions.ShadowOrbSummon>();
+            Item.shoot = ProjectileType<Projectiles.Minions.ShadowSummon>(); //List the actual summon so that summon sacrifice happens properly
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Item.damage);
+            player.AddBuff(BuffType<Buffs.Minions.ShadowSummon>(), 2);
+
+            Projectile.NewProjectile(source, position, velocity, ProjectileType<Projectiles.Minions.ShadowOrbSummon>(), damage, knockback, player.whoAmI, Item.damage);
             return false;
         }
     }

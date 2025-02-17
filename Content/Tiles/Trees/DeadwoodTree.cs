@@ -48,6 +48,11 @@ namespace ExoriumMod.Content.Tiles.Trees
             //Needed for the abstract
         }
 
+        public override bool CanDropAcorn()
+        {
+            return false;
+        }
+
         public override bool Shake(int x, int y, ref bool createLeaves)
         {
             Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ItemType<Items.TileItems.Deadwood>());

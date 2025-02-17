@@ -5,9 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Core.Utilities
 {
-	//Adapted from code provided by my University professor.
-	//I have permission to use and adapt this code
-
     static class ShapeBatch
     {
 		// Internal initialization and drawing fields

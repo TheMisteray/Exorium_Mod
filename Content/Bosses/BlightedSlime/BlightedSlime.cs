@@ -44,7 +44,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
         public override void SetDefaults()
         {
             NPC.aiStyle = -1;
-            NPC.lifeMax = 4000;
+            NPC.lifeMax = 4400;
             NPC.damage = 49;
             NPC.defense = 16;
             NPC.knockBackResist = 0f;

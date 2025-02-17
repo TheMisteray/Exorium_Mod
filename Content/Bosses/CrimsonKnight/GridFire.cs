@@ -248,11 +248,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void AI()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 24; i++)
             {
-                Vector2 rad = new Vector2(0, Main.rand.NextFloat(Projectile.width/20));
+                Vector2 rad = new Vector2(0, Main.rand.NextFloat(Projectile.width / 30, Projectile.width/20));
                 Vector2 shootPoint = rad.RotatedBy(Main.rand.NextFloat(0, MathHelper.TwoPi));
-                Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.SolarFlare, shootPoint, 1, default, 1 + Main.rand.NextFloat(-.5f, .5f));
+                Dust dust = Dust.NewDustPerfect(Projectile.Center - (shootPoint/2), DustID.SolarFlare, shootPoint, 1, default, 1 + Main.rand.NextFloat(-.3f, .8f));
                 dust.noGravity = true;
                 dust.color = new Color(184, 58, 24);
             }
@@ -272,6 +272,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             spriteBatch.End();
             ShapeBatch.Begin(spriteBatch.GraphicsDevice);
             ShapeBatch.CircleOutline(Projectile.Center - Main.screenPosition, Projectile.Hitbox.Width / 2, 100, Projectile.timeLeft, new Color(255, 69, 0, lightColor.A));
+            //ShapeBatch.Circle(Projectile.Center - Main.screenPosition, Projectile.Hitbox.Width / 2, 100, Projectile.timeLeft, new Color(0, 0, 0, 0), new Color(120, 30, 0, 10));
             ShapeBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
 

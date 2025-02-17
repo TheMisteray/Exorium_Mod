@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.GameContent.Creative;
+using ExoriumMod.Core.Utilities;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
@@ -25,12 +26,12 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Item.damage = 27;
+            Item.damage = 36;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 46;
             Item.height = 36;
-            Item.useTime = 60;
-            Item.useAnimation = 60;
+            Item.useTime = 90;
+            Item.useAnimation = 90;
             Item.useStyle = 5;
             Item.noMelee = true;
             Item.knockBack = 7;
@@ -72,6 +73,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
     class MagmaBlob : ModProjectile
     {
+        //Commented out stuff is from scrapped version of weapon 
         public override string Texture => AssetDirectory.CrimsonKnight + "FlamingSphere";
 
         public override void SetDefaults()
@@ -94,7 +96,12 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                for (int i = -112; i <= 112; i+=32)
+                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<Bosses.CrimsonKnight.gridCollision>(), Projectile.damage/2, 0, Projectile.owner);
+                Main.projectile[proj].hostile = false;
+                Main.projectile[proj].friendly = true;
+                Main.projectile[proj].timeLeft = 120;
+
+                /*for (int i = -112; i <= 112; i+=32)
                 {
                     //Checks for tiles
                     Vector2 positionUp = Projectile.Center + new Vector2(i, 0);
@@ -143,12 +150,13 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
                     if (found)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), truePosition, Vector2.Zero, ProjectileType<LingeringFlame>(), Projectile.damage, 0, Projectile.owner, flip? 1:0);
-                }
+                }*/
             }
 
             //Dust
-            for (int i = 0; i < 40; i++)
+            /*for (int i = 0; i < 40; i++)
             {
+                
                 int dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.SolarFlare, -i * .3f, 0f, 0, default, 1);
                 Dust d1 = Main.dust[dust];
                 d1.noGravity = true;
@@ -157,7 +165,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
                 d1 = Main.dust[dust];
                 d1.noGravity = true;
                 d1.color = new Color(184, 58, 24);
-            }
+            }*/
 
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
@@ -196,7 +204,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         }
     }
 
-    class LingeringFlame : ModProjectile
+/*    class LingeringFlame : ModProjectile
     {
         public override string Texture => AssetDirectory.CrimsonKnight + "FlameTrail";
 
@@ -243,5 +251,5 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         {
             target.AddBuff(BuffID.OnFire, 420);
         }
-    }
+    }*/
 }

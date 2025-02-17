@@ -119,8 +119,15 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                             DustHelper.DustCircle(Projectile.Center + Projectile.velocity * 64, DustID.Torch, 3, 30, 1, .2f, 0, 0, Color.White, true);
                             SoundEngine.PlaySound(SoundID.MaxMana, Projectile.Center);
                         }
+                        else
+                        {
+                            DustHelper.DustCircle(Projectile.Center + Projectile.velocity * 64, DustID.Torch, 1, 10, .7f, .1f, 0, 0, Color.White, true);
+                        }
                     }
-                    Lighting.AddLight(Projectile.Center + Projectile.velocity, .15f * strength, .105f * strength, 0);
+                    //This also affects the visual position of the hammer
+                    Projectile.velocity = (player.direction == 1) ? Vector2.UnitX.RotatedBy(MathHelper.PiOver4 * -3) : Vector2.UnitX.RotatedBy(MathHelper.PiOver4 * 3) * -1;
+                    //Lighting to scale with strength charge
+                    Lighting.AddLight(Projectile.Center + Projectile.velocity, .15f * (strength + 1), .105f * (strength + 1), 0);
                 }
                 // Move to swing
                 else if (state == 0f)
@@ -174,7 +181,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.Center = playerHandPos;
             Projectile.rotation = Projectile.velocity.RotatedBy(MathHelper.Pi/4).ToRotation();
 
-            player.ChangeDir(player.direction);
+            if (state == 0f) //once swing has begun stop player from changing directions
+                player.ChangeDir((Main.MouseWorld.X > player.Center.X) ? 1 : -1);
             Projectile.direction = player.direction;
 
             player.heldProj = Projectile.whoAmI;
