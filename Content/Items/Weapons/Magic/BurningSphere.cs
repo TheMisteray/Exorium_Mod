@@ -32,9 +32,8 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Item.mana = 12;
             Item.useTime = 60;
             Item.useAnimation = 60;
+            //Item.noUseGraphic = true; //Use graphics were acting weird
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.noUseGraphic = true; //Use graphics were acting weird
-            Item.useStyle = ItemUseStyleID.HoldUp;
             Item.noMelee = true;
             Item.knockBack = 2;
             Item.value = Item.sellPrice(silver: 77); ;
@@ -95,10 +94,6 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Vector2 rrp = player.RotatedRelativePoint(player.MountedCenter, true);
             Vector2 trajectory = Main.MouseWorld - Projectile.Center;
 
-            //Visuals
-            if (!EndChannel)
-                UpdatePlayerVisuals(player, rrp);
-
             // Client Side
             if (Main.myPlayer == Projectile.owner)
             {
@@ -136,16 +131,6 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Lighting.AddLight(Projectile.Center, 1.5f * scalar, 1.05f * scalar, 0);
         }
 
-        private void UpdatePlayerVisuals(Player player, Vector2 playerHandPos)
-        {
-            player.ChangeDir((Math.Abs((Projectile.Center - player.Center).ToRotation()) > MathHelper.PiOver2)? 0: 1);
-
-            player.itemTime = 15;
-
-            //Hand direction
-            player.itemRotation = (Projectile.Center - player.Center).ToRotation();
-        }
-
         public override bool PreDraw(ref Color lightColor)
         {
             SpriteBatch spriteBatch = Main.spriteBatch;
@@ -176,6 +161,11 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 600);
+        }
+
+        public override bool? CanCutTiles() //looked wack because proj is actually way bigger than collision or visual
+        {
+            return false;
         }
     }
 }
