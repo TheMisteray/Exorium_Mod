@@ -41,6 +41,8 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
             Item.shootSpeed = 10f;
             Item.DamageType = DamageClass.Summon;
 
+            //No bufftype because then perma buff based on stack effects like Fargos give you the minion buff
+
             // No buffTime because otherwise the item tooltip would say something like "1 minute duration"
             Item.shoot = ProjectileType<Projectiles.Minions.ShadowSummon>(); //List the actual summon so that summon sacrifice happens properly
         }
