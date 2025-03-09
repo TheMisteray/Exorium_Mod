@@ -152,7 +152,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Projectile.soundDelay <= 0)
             {
                 Projectile.soundDelay = SOUND_INTERVAL;
-                //SoundEngine.PlaySound(SoundID.NPCDeath7, Projectile.position);
+                SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
             }
         }
 

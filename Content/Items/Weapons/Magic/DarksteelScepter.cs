@@ -58,7 +58,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 10);
+            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 14);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

@@ -47,7 +47,7 @@ namespace ExoriumMod.Content.Items.Tools
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 12);
+            recipe.AddIngredient(ItemType<Materials.Metals.DarksteelBar>(), 11);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

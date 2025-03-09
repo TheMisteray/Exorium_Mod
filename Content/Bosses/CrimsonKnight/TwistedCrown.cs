@@ -64,9 +64,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemType<Items.Materials.Metals.DarksteelBar>(), 4);
+            recipe.AddIngredient(ItemType<Items.Materials.Metals.DarksteelBar>(), 2);
             recipe.AddIngredient(ItemID.Ruby);
-            recipe.AddTile(TileID.DemonAltar);
+            recipe.AddTile(TileType<Tiles.ShadowAltarTile>());
             recipe.Register();
         }
     }
