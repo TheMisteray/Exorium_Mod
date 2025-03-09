@@ -84,6 +84,12 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Projectile.alpha = 255;
         }
 
+        bool TargetReached
+        {
+            get => Projectile.ai[0] == 1;
+            set => Projectile.ai[0] = value ? 1 : 0;
+        }
+
         public override void AI()
         {
             if (Projectile.alpha != 0)
@@ -109,10 +115,12 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                         move = newMove;
                         distance = distanceTo;
                         target = true;
+                        if (distanceTo < 20)
+                            TargetReached = true;
                     }
                 }
             }
-            if (target)
+            if (target && !TargetReached)
             {
                 AdjustMagnitude(ref move);
                 Projectile.velocity = (10 * Projectile.velocity + move) / 11f;

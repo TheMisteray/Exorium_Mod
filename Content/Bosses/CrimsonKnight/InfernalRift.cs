@@ -77,6 +77,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 float interval = dist / count;
                 bool[] leftSpirits = new bool[count];
                 bool[] rightSpirits = new bool[count];
+                SoundEngine.PlaySound(SoundID.Item60);
 
                 //Set where spirits will be
                 if (Main.netMode != NetmodeID.MultiplayerClient)

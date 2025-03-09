@@ -35,7 +35,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 3;
             Item.value = Item.sellPrice(gold: 10, silver: 50);
-            Item.rare = 4;
+            Item.rare = 5;
             Item.UseSound = SoundID.Item60;
             Item.autoReuse = true;
             Item.shoot = ProjectileType<FlameToungeGreatswordBlade>();
@@ -136,7 +136,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         }
 
                         if (swordAngle < MaxAngle)
-                            swordAngle += SwingSpeed;
+                            swordAngle += SwingSpeed * player.GetAttackSpeed(DamageClass.Melee);
                         else
                         {
                             state = 1;
@@ -152,10 +152,10 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         }
 
                         //dust
-                        for (int i = 0; i < 3; i++)
+                        for (int i = 0; i < 4; i++)
                         {
-                            int dust = Dust.NewDust(Projectile.Center + (SwingLength * Main.rand.NextFloat()), 0, 0, DustID.Torch, normal.Y, -normal.X, 1, default, Main.rand.NextFloat(1) + 1);
-                            Main.dust[dust].noGravity = true;
+                            int dust2 = Dust.NewDust(Projectile.Center + (SwingLength * Main.rand.NextFloat()), 0, 0, DustID.SolarFlare, -normal.Y, normal.X, 1, default, Main.rand.NextFloat(1) + .8f);
+                            Main.dust[dust2].noGravity = true;
                         }
                         break;
                     case 1: //hold
@@ -179,7 +179,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         }
 
                         if (swordAngle > MinAngle)
-                            swordAngle -= SwingSpeed;
+                            swordAngle -= SwingSpeed * player.GetAttackSpeed(DamageClass.Melee);
                         else
                         {
                             state = 3;
@@ -195,9 +195,9 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         }
 
                         //dust
-                        for (int i = 0; i < 3; i++)
+                        for (int i = 0; i < 4; i++)
                         {
-                            int dust2 = Dust.NewDust(Projectile.Center + (SwingLength * Main.rand.NextFloat()), 0, 0, DustID.SolarFlare, -normal.Y, normal.X, 1, default, Main.rand.NextFloat(1) + 1);
+                            int dust2 = Dust.NewDust(Projectile.Center + (SwingLength * Main.rand.NextFloat()), 0, 0, DustID.SolarFlare, -normal.Y, normal.X, 1, default, Main.rand.NextFloat(1) + .8f);
                             Main.dust[dust2].noGravity = true;
                         }
                         break;

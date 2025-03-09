@@ -30,7 +30,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Projectile.hostile = true;
         }
 
-        private const float WIDTH = 1000;
         private const float HEIGHT = 60;
         Vector2 spawnAxis = Vector2.Zero;
 
@@ -44,6 +43,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             get => Projectile.ai[1] == 1f;
             set => Projectile.ai[1] = value ? 1f : 0f;
+        }
+
+        public float WIDTH
+        {
+            get => Projectile.ai[2];
+            set => Projectile.ai[2] = value;
         }
 
         public override void AI()

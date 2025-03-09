@@ -26,7 +26,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Item.damage = 36;
+            Item.damage = 27;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 46;
             Item.height = 36;

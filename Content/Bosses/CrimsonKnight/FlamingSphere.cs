@@ -43,7 +43,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private bool lightener = false;
         private float killTimer = 0;
         private bool exploded = false;
-        protected float explosionRadius = 360;
+        protected float explosionRadius = 400;
         protected float maxScalar = 1.4f;
 
         public override void AI()
@@ -182,12 +182,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (Main.masterMode)
             {
-                explosionRadius = 820;
+                explosionRadius = 960;
                 maxScalar = 2.2f;
             }
             else
             {
-                explosionRadius = 760;
+                explosionRadius = 840;
                 maxScalar = 2.0f;
             }
             base.AI();

@@ -11,6 +11,7 @@ using ExoriumMod.Content.Buffs.Minions;
 using System;
 using static Terraria.ModLoader.ModContent;
 using Terraria.GameContent.Creative;
+using ExoriumMod.Content.Items.Weapons.Magic;
 
 namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
 {
@@ -41,6 +42,8 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner.Whips
             Item.channel = true;
             Item.UseSound = null;
         }
+
+        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ProjectileType<FlameTongueProjectile>()] <= 0;
 
         public override bool MeleePrefix()
         {

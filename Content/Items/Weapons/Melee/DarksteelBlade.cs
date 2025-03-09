@@ -22,7 +22,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            Item.damage = 38;
+            Item.damage = 34;
             Item.DamageType = DamageClass.Melee;
             Item.width = 48;
             Item.height = 48;
@@ -54,7 +54,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             // Stagger difference
             float scale = 1f - (Main.rand.NextFloat() * .3f);
             perturbedSpeed = perturbedSpeed * scale;
-            int projectile = Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
+            int projectile = Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, (int)(damage * 0.8f), knockback, player.whoAmI);
             Main.projectile[projectile].DamageType = DamageClass.Melee;
             return false; // return false because projectiles were already fired
         }
@@ -79,6 +79,12 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.penetrate = 1;
             Projectile.timeLeft = 800;
             Projectile.alpha = 255;
+        }
+
+        bool TargetReached
+        {
+            get => Projectile.ai[0] == 1;
+            set => Projectile.ai[0] = value ? 1 : 0;
         }
 
         public override void AI()
@@ -106,10 +112,12 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         move = newMove;
                         distance = distanceTo;
                         target = true;
+                        if (distanceTo < 20)
+                            TargetReached = true;
                     }
                 }
             }
-            if (target)
+            if (target && !TargetReached)
             {
                 AdjustMagnitude(ref move);
                 Projectile.velocity = (10 * Projectile.velocity + move) / 11f;

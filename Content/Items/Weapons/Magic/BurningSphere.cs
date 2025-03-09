@@ -25,7 +25,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            Item.damage = 25;
+            Item.damage = 29;
             Item.width = 32;
             Item.height = 42;
             Item.DamageType = DamageClass.Magic;

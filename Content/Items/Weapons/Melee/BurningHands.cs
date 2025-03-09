@@ -78,18 +78,19 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 {
                     Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.ToRadians(-(Main.rand.NextFloat(5) + 8) * 2 + (Main.rand.NextFloat(5) + 8) * i));
 
-                    Vector2 muzzleOffset = Vector2.Normalize(perturbedSpeed) * 75f; //Weapon looked weird when these spawned on player, so muzzle offset was added
+                    Vector2 muzzleOffset = Vector2.Normalize(perturbedSpeed) * 25f; //Weapon looked weird when these spawned on player, so muzzle offset was added
+                    Vector2 basePos = position;
                     if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
                     {
-                        position += muzzleOffset;
+                        basePos += muzzleOffset;
                     }
 
-                    Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<FireCone>(), (int)(damage/4f), knockback, player.whoAmI, 0, 1);
+                    Projectile.NewProjectile(source, basePos.X, basePos.Y, perturbedSpeed.X, perturbedSpeed.Y, ProjectileType<FireCone>(), (int)(damage/4f), knockback, player.whoAmI, 0, 1);
                 }
             }
             else
             {
-                Vector2 perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(15)); //degree spread. // Stagger difference
+                Vector2 perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(10)); //degree spread. // Stagger difference
                 float scale = 1f - (Main.rand.NextFloat() * .3f);
                 perturbedSpeed = perturbedSpeed * scale;
                 Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);

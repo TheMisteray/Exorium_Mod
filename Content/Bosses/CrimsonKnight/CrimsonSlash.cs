@@ -151,7 +151,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                 Main.EntitySpriteDraw(tex, pos - Main.screenPosition + new Vector2(tex.Width/2, tex.Height/2), new Rectangle(0,0,tex.Width,tex.Height), new Color(255, 255, 255, 255/(k+1)), Projectile.rotation, new Vector2(-tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
             }
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, tex.Width, tex.Height), Color.White, Projectile.rotation, new Vector2(-tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + new Vector2(tex.Width / 2, tex.Height / 2), new Rectangle(0, 0, tex.Width, tex.Height), Color.White, Projectile.rotation, new Vector2(-tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
     }

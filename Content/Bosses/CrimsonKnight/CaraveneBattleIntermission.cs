@@ -177,19 +177,21 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 foreach (Player p in Main.player)
                 {
-                    if (p.active && !p.dead && Main.netMode != NetmodeID.MultiplayerClient && !Despawn)
+                    if (p.active && Main.netMode != NetmodeID.Server && !Despawn)
+                    {
                         p.QuickSpawnItem(NPC.GetSource_DropAsItem(), ItemType<CrimsonKnightBag>());
+                        //closes dialouge, may need testing
+                        p.sign = -1;
+                        Main.npcChatCornerItem = 0;
+                        Main.editSign = false;
+                        Main.npcChatText = "";
+                        Main.player[Main.myPlayer].releaseMount = false;
+                        Main.player[Main.myPlayer].SetTalkNPC(-1);
+                    }
+
                     Despawn = true;
                     invulnerableTime = 9999;//Use this as alternative way of communicating despawn over net
-
-                    //closes dialouge, may need testing
-                    Main.player[Main.myPlayer].sign = -1;
-                    Main.npcChatCornerItem = 0;
-                    Main.editSign = false;
-                    Main.npcChatText = "";
                     SoundEngine.PlaySound(SoundID.MenuClose, NPC.Center);
-                    Main.player[Main.myPlayer].releaseMount = false;
-                    Main.player[Main.myPlayer].SetTalkNPC(-1);
                 }
                 //TODO:netsend truce data
             }

@@ -15,6 +15,9 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
+using ExoriumMod.Core.Utilities;
+using ExoriumMod.Content.Bosses.Shadowmancer;
+using Terraria.GameContent.ItemDropRules;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -50,8 +53,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
-            NPC.damage = 55;
-            NPC.defense = 7;
+            NPC.damage = 61;
+            NPC.defense = 36;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
@@ -131,6 +134,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private bool phaseTransition = false;
         private int transitionCounter = 0;
 
+        private bool deathAnimation = false;
+        private float deathTimer = 0;
+
+        private float[] deathLightLengths = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private float[] deathLightAngles = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
         //Portal/Arena Locations
         private static Vector2 topL = Core.Systems.WorldDataSystem.FallenTowerRect.TopLeft();
         private static Vector2 topR = Core.Systems.WorldDataSystem.FallenTowerRect.TopRight();
@@ -172,10 +181,22 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private float actionTimer;
 
+        public float DeathTimer
+        {
+            get => NPC.ai[3];
+            set => NPC.ai[3] = value;
+        }
+
         public override void AI()
         {
+            if (DeathTimer > 0) //override AI with death animation in this case
+            {
+                DeathAnimation();
+                return;
+            }
+
             //Damage calculations
-            int damage = NPC.damage / (Main.expertMode == true ? 4 : 2);
+            int damage = NPC.damage / (Main.expertMode == true ? 2 : 1);
 
             //Reset vars
             parry = false;
@@ -362,9 +383,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
 
-                                if ((phase == 2 || Main.masterMode) && actionTimer % 30 == 0)
+                                if (actionTimer % 20 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                    SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, swordPoint);
+                                    if (phase == 2 || Main.masterMode)
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<LargeFlamePillar>(), damage, 0);
+                                    else
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
                                 }
                             }
                             if (Main.rand.NextBool(2))
@@ -549,10 +574,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         }
                     }
                     if (actionTimer > 60 && actionTimer < Parry_Durration)
+                    {
+                        NPC.HitSound = SoundID.Item150;
                         parry = true;
+                    }
                     else if (actionTimer == Parry_Durration)
                     {
                         parry = false;
+                        NPC.HitSound = SoundID.NPCHit4;
                         shieldDown = true;
                         NPC.frameCounter = 0;
                         bool sound = false;
@@ -887,7 +916,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                                 if (actionTimer % 20 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                    SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, swordPoint);
+                                    if (phase == 2 || Main.masterMode)
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<LargeFlamePillar>(), damage, 0);
+                                    else
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
                                 }
                             }
                             if (Main.rand.NextBool(2))
@@ -1035,36 +1068,28 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     break;
                 case 12:
-                    bool playSound = false;
-                    if (actionTimer == 30 && Main.netMode != NetmodeID.MultiplayerClient)
+                    if (actionTimer == 5)
                     {
-                        Vector2 toPlayer = player.Center - swordTip;
-                        playSound = true;
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer, ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            for (int i = 0; i < 28; i++)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 14) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0, 2000);
+                            }
+                        }
+
+                        // dust telegraph
+                        for (int i = 0; i < 100; i++)
+                        {
+                            Vector2 pos = player.Center;
+                            pos.Y -= 900;
+                            pos.X -= 500;
+                            Dust.NewDust(pos, 1000, 1, DustID.SolarFlare, 0, Main.rand.NextFloat(20));
+                        }
                     }
-                    else if (actionTimer == 40 && Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        Vector2 toPlayer = player.Center - swordTip;
-                        playSound = true;
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
-                    }
-                    else if (actionTimer == 50 && Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        Vector2 toPlayer = player.Center - swordTip;
-                        playSound = true;
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, toPlayer.RotatedBy(MathHelper.ToRadians(-20)), ProjectileType<backupFireball>(), damage, 3, Main.myPlayer);
-                    }
-                    else if (actionTimer == 80)
-                    {
-                        frameX = 1;
-                    }
-                    else if (actionTimer > 90)
+                    else if (actionTimer == 60)
                     {
                         ChooseMovement();
-                    }
-                    if (playSound)
-                    {
-                        SoundEngine.PlaySound(SoundID.Item100, swordTip);
                     }
                     break;
             }
@@ -1105,7 +1130,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
             else
             {
-                if (phase == 2 && Main.rand.NextBool(3))
+                if (phase == 2 && Main.rand.NextBool())
                 {
                     Action = 10;
                 }
@@ -1119,18 +1144,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         private void ChooseAttack()
         {
-            if (Main.rand.NextBool(4) && phase == 2)
+            if (phase == 2 && Main.rand.NextBool(4))
             {
-                if (true/*NPC.Center.Y > topL.Y + 864 && NPC.Center.Y < topL.Y + 544 && NPC.Center.X > topL.X + 180 && NPC.Center.X < topR.X - 180*/)
-                {
-                    Action = 9;
-                    wait = 30;
-                }
-                else
-                {
-                    Action = 7;
-                    wait = 20;
-                }
+                Action = 9;
+                wait = 30;
             }
             else if (Main.rand.NextBool(3))
             {
@@ -1156,20 +1173,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Main.rand.NextBool(4) && phase == 2)
             {
                 Action = 11;
-
-                //Use flaming sphere if there is no flaming sphere
-                foreach (Projectile p in Main.projectile)
-                {
-                    if (p.type == ProjectileType<FlamingSphere>())
-                        Action = 12;
-                }
-
                 wait = 90;
             }
-            else if (Main.rand.NextBool(3) && !(phase == 1 && (Main.rand.NextBool()))) //Less common in phase 1
+            else if (Main.rand.NextBool(3)) //Less common in phase 1
             {
-                Action = 4;
-                wait = 5;
+                if (phase == 1)
+                {
+                    Action = 12;
+                    wait = 10;
+                }
+                else
+                {
+                    Action = 4;
+                    wait = 5;
+                }
             }
             else if (Main.rand.NextBool(2))
             {
@@ -1204,6 +1221,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void FindFrame(int frameHeight)
         {
+            if (deathAnimation) return;
             //Increment speed changed by column
             switch (frameX)
             {
@@ -1359,6 +1377,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 frameX = 5;
             }
+            else if (transitionCounter == 120)
+            {
+                SoundEngine.PlaySound(SoundID.Roar, NPC.position);
+            }
             else if (transitionCounter > 120 && transitionCounter < 210)
             {
                 for (int i = 0; i < 20; i++)
@@ -1394,6 +1416,84 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
         }
 
+        private void DeathAnimation()
+        {
+            if (DeathTimer == 1) //First frame sets
+            {
+                NPC.boss = false; //This might be bad??? Using it to stop music
+                Music = -1;
+                for (int i = 0; i < deathLightAngles.Length; i++) //Set light angles randomly
+                {
+                    bool done = false;
+                    float angle = 0;
+
+                    while (!done) //loop unil an angle that is different enough from the others is chosen
+                    {
+                        done = true;
+                        angle = Main.rand.NextFloat(MathHelper.TwoPi);
+
+                        foreach(float rad in deathLightAngles)
+                        {
+                            if (rad != 0 && Math.Abs(rad - angle) < .15f) { done = false; }
+                        }
+                    }
+                    deathLightAngles[i] = angle;
+                }
+
+                foreach (Player player in Main.player)
+                {
+                    //Set each player's screen target if not set
+                    if ((player.Center - NPC.Center).Length() < 3000 && player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget == Vector2.Zero)
+                    {
+                        player.GetModPlayer<ExoriumPlayer>().ScreenMoveTarget = NPC.Center;
+                        player.GetModPlayer<ExoriumPlayer>().ScreenMoveTime = 500; //Extra second over death animation time
+                    }
+                }
+            }
+            if (DeathTimer % 8 == 0) //Set ticker based on past fights
+            {
+                Vector2 blastPos = new Vector2(NPC.position.X + Main.rand.NextFloat(NPC.width), NPC.position.Y + Main.rand.NextFloat(NPC.height));
+                int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), blastPos.X, blastPos.Y, 0, 0, 612, 0, 0, Main.myPlayer, 1, 1);
+                SoundEngine.PlaySound(SoundID.Item14, Main.projectile[proj].position);
+                Main.projectile[proj].hostile = false;
+            }
+            if (DeathTimer >= 60)
+            {
+                deathLightLengths[0] += 5;
+                deathLightLengths[1] += 5;
+                deathLightLengths[2] += 5;
+                deathLightAngles[0] += .003f;
+                deathLightAngles[1] += .003f;
+                deathLightAngles[2] += .003f;
+                if (DeathTimer >= 150)
+                {
+                    deathLightLengths[3] += 5;
+                    deathLightLengths[4] += 5;
+                    deathLightLengths[5] += 5;
+                    deathLightAngles[3] += .003f;
+                    deathLightAngles[4] += .003f;
+                    deathLightAngles[5] += .003f;
+                    if (DeathTimer >= 240) 
+                    {
+                        deathLightLengths[6] += 5;
+                        deathLightLengths[7] += 5;
+                        deathLightLengths[8] += 5;
+                        deathLightAngles[6] += .003f;
+                        deathLightAngles[7] += .003f;
+                        deathLightAngles[8] += .003f;
+                    }
+                }
+            }
+
+            DeathTimer++;
+            if (DeathTimer == 380)
+            {
+                NPC.life = 0;
+                NPC.HitEffect(0, 0);
+                NPC.checkDead(); // This will trigger ModNPC.CheckDead the second time, causing the real death.
+            }
+        }
+
         //Kill all boss projectiles so no cheap hits when camera is moved
         private void RemoveProjectiles()
         {
@@ -1411,19 +1511,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     p.type == ProjectileType<ReboundingSword>() ||
                     p.type == ProjectileType<backupFireball>() ||
                     p.type == ProjectileType<ReboundingSword>() ||
-                    p.type == ProjectileType<FlametoungeBeam>())
+                    p.type == ProjectileType<CrimsonSlash>() ||
+                    p.type == ProjectileType<CrimsonSlashProjectile>() ||
+                    p.type == ProjectileType<LargeFlamingSphere>() ||
+                    p.type == ProjectileType<FlamePillar>() ||
+                    p.type == ProjectileType<LargeFlamePillar>() ||
+                    p.type == ProjectileType<InfernoBeam>() ||
+                    p.type == ProjectileType<InfernalRift>() ||
+                    p.type == ProjectileType<RiftSpirit>() ||
+                    p.type == ProjectileType<RotatingFireball>())
                 {
                     p.timeLeft = 1;
                     p.Kill();
                 }
             }
-        }
-
-        public override void OnKill()
-        {
-            RemoveProjectiles();
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-                NPC.NewNPCDirect(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaraveneBattleIntermission>(), default, default, 300);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1533,6 +1634,25 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (DeathTimer > 0) //Catch into this block so that other draws stop for death animation
+            {
+                Color lightWhite = new Color(120, 0, 0, 200);
+                spriteBatch.End();
+                ShapeBatch.Begin(spriteBatch.GraphicsDevice);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[0]).RotatedBy(deathLightAngles[0] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[0]).RotatedBy(deathLightAngles[0] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[1]).RotatedBy(deathLightAngles[1] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[1]).RotatedBy(deathLightAngles[1] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[2]).RotatedBy(deathLightAngles[2] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[2]).RotatedBy(deathLightAngles[2] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[3]).RotatedBy(deathLightAngles[3] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[3]).RotatedBy(deathLightAngles[3] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[4]).RotatedBy(deathLightAngles[4] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[4]).RotatedBy(deathLightAngles[4] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[5]).RotatedBy(deathLightAngles[5] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[5]).RotatedBy(deathLightAngles[5] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[6]).RotatedBy(deathLightAngles[6] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[6]).RotatedBy(deathLightAngles[6] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[7]).RotatedBy(deathLightAngles[7] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[7]).RotatedBy(deathLightAngles[7] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[8]).RotatedBy(deathLightAngles[8] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[8]).RotatedBy(deathLightAngles[8] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
+                ShapeBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+                return;
+            }
+
             //Portal for despawn
             if (exitTicker > 60)
             {
@@ -1691,34 +1811,80 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return true;
         }
 
-        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
         {
             if (parry)
             {
-                parryDamaged += damageDone;
+                parryDamaged += item.damage;
                 if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
-                NPC.life += damageDone;
+                modifiers.SetMaxDamage(1);
             }
-            base.OnHitByItem(player, item, hit, damageDone);
+            base.ModifyHitByItem(player, item, ref modifiers);
         }
 
-        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if (parry)
             {
-                parryDamaged += damageDone;
+                parryDamaged += projectile.damage;
                 if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
-                NPC.life += damageDone;
+                modifiers.SetMaxDamage(1);
             }
-            base.OnHitByProjectile(projectile, hit, damageDone);
+            base.ModifyHitByProjectile(projectile, ref modifiers);
+        }
+
+        public override bool CheckDead()
+        {
+            if (DeathTimer == 0)
+            {
+                DeathTimer = 1;
+                NPC.damage = 0;
+                NPC.life = NPC.lifeMax;
+                NPC.dontTakeDamage = true;
+                NPC.netUpdate = true;
+                RemoveProjectiles();
+                return false;
+            }
+            return true;
+        }
+
+        public override void OnKill()
+        {
+            SoundEngine.PlaySound(SoundID.NPCDeath10, NPC.Center);
+            int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, 0, 0, 612, 0, 0, Main.myPlayer, 1, 10);
+            SoundEngine.PlaySound(SoundID.Item14, Main.projectile[proj].position);
+            Main.projectile[proj].hostile = false;
+
+            //gores
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore1").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore2").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore3").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore4").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore5").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore6").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore7").Type, NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (-Vector2.UnitY * (Main.rand.NextFloat(3) + .5f)).RotatedByRandom(MathHelper.PiOver2), Mod.Find<ModGore>(Name + "_gore8").Type, NPC.scale);
+            base.OnKill();
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Magic.BurningSphere>()));
+            npcLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Ranger.MagmaMortar>()));
+            npcLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Summoner.Whips.FlameTongue>()));
+            npcLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.InfernalSledge>()));
+            npcLoot.Add(ItemDropRule.NotScalingWithLuck(ItemType<Items.Weapons.Melee.FlameTongueGreatsword>()));
+            LeadingConditionRule expertRule = new LeadingConditionRule(new Conditions.IsExpert());
+            expertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Accessories.CrimsonCrest>()));
+            npcLoot.Add(expertRule);
         }
     }
 }   

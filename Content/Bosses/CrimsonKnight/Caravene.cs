@@ -15,6 +15,7 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
+using ExoriumMod.Core.Utilities;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -72,8 +73,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
-            NPC.damage = 43;
-            NPC.defense = 11;
+            NPC.damage = 67;
+            NPC.defense = 28;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
@@ -470,9 +471,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            for (int i = 0; i < 12; i++)
+                            for (int i = 0; i < 16; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 6) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 8) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0, 1400);
                             }
                         }
 
@@ -503,11 +504,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     else if (actionTimer > 60 && actionTimer < Parry_Durration)
                     {
                         parry = true;
+                        NPC.HitSound = SoundID.Item150;
                         NPC.defense = 999;
                     }
                     else if (actionTimer == Parry_Durration)
                     {
                         parry = false;
+                        NPC.HitSound = SoundID.NPCHit4;
                         NPC.defense = NPC.defDefense;
                         shieldDown = true;
                         NPC.frameCounter = 0;
@@ -524,7 +527,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             toPlayer.Normalize();
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, toPlayer * 18, ProjectileType<backupFireball>(), damage * 2, 3, Main.myPlayer, player.whoAmI);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, toPlayer * 18, ProjectileType<backupFireball>(), (int)(damage * 1.5f), 3, Main.myPlayer, player.whoAmI);
                             }
                             SoundEngine.PlaySound(SoundID.Item20);
                         }
@@ -1139,7 +1142,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 90)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 4 : 2)) * 2, 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 2 : 1)) * 2, 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1272,6 +1275,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 frameX = 5;
             }
+            else if (transitionCounter == 120)
+            {
+                SoundEngine.PlaySound(SoundID.Roar, NPC.position);
+            }
             else if (transitionCounter > 120 && transitionCounter < 210)
             {
                 for (int i = 0; i < 20; i++)
@@ -1329,13 +1336,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     p.Kill();
                 }
             }
-        }
-
-        public override void OnKill()
-        {
-            RemoveProjectiles();
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-                NPC.NewNPCDirect(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaraveneBattleIntermission>(), default, default, 300);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1618,34 +1618,41 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return true;
         }
 
-        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
         {
             if (parry)
             {
-                parryDamaged += damageDone;
+                parryDamaged += item.damage;
                 if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
-                NPC.life += damageDone;
+                modifiers.SetMaxDamage(1);
             }
-            base.OnHitByItem(player, item, hit, damageDone);
+            base.ModifyHitByItem(player, item, ref modifiers);
         }
 
-        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if (parry)
             {
-                parryDamaged += damageDone;
+                parryDamaged += projectile.damage;
                 if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;
                 }
-                NPC.life += damageDone;
+                modifiers.SetMaxDamage(1);
             }
-            base.OnHitByProjectile(projectile, hit, damageDone);
+            base.ModifyHitByProjectile(projectile, ref modifiers);
+        }
+
+        public override void OnKill()
+        {
+            RemoveProjectiles();
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                NPC.NewNPCDirect(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaraveneBattleIntermission>(), default, default, 300);
         }
     }
 }   
