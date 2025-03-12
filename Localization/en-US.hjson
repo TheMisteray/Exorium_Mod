@@ -958,6 +958,8 @@ Mods: {
 			RotatingFireball.DisplayName: Rotating Fireball
 			FireCone.DisplayName: Fire Cone
 			MegaFlamePillar.DisplayName: Mega Flame Pillar
+			LargeFlamePillar.DisplayName: Large Flame Pillar
+			RiftIndicator.DisplayName: Rift Indicator
 		}
 
 		Buffs: {

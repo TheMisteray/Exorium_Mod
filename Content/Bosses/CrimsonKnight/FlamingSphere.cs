@@ -96,7 +96,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
             if (Projectile.timeLeft == 60)
             {
-                float explosionArea = explosionRadius;
+                exploded = true;
+
+                float explosionArea = explosionRadius * 2;
                 Vector2 oldSize = Projectile.Size;
                 // Resize the projectile hitbox to be bigger.
                 Projectile.position = Projectile.Center;
@@ -115,8 +117,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Projectile.Center = Projectile.position;
 
                 SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
-
-                exploded = true;
             }
 
             if (scalar < 1)
@@ -141,7 +141,22 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool CanHitPlayer(Player target)
         {
-            return ((target.Center - Projectile.Center).Length() < (target.width/2) + (Projectile.width/2) * scalar);
+            if (exploded)
+                return ((target.Center - Projectile.Center).Length() < explosionRadius);
+            else
+                return ((target.Center - Projectile.Center).Length() < (target.width / 2) + (Projectile.width / 2) * scalar);
+        }
+
+        public override void ModifyDamageHitbox(ref Rectangle hitbox) //This should cover the cases where the sphere is very large and exceeds the hitbox in size
+        {
+            if (!exploded)
+            {
+                hitbox.Width = 400;
+                hitbox.Height = 400;
+                hitbox.X -= 100;
+                hitbox.Y -= 100;
+            }
+            base.ModifyDamageHitbox(ref hitbox);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -228,7 +243,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void AI()
         {
-            if (!(timer > 0) && Projectile.timeLeft > 120)
+            if (!(timer > 0) && Projectile.timeLeft > 150)
             {
                 //Minor homing in expert mode (basic seek behavior)
                 if (Main.expertMode)

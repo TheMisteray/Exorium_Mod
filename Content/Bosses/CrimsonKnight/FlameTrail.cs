@@ -7,6 +7,9 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
+using Terraria.Audio;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -124,7 +127,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Projectile.position += new Vector2(-Projectile.width/2, -Projectile.height/2);
             }
             else if (Timer == 120)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
                 Projectile.hostile = true;
+            }
             else if (Timer > 120)
             {
                 for (int i = 0; i < 3; i++)
@@ -156,6 +162,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
+            if (Timer >= 120) return false;
             fallThrough = false;
             Vector2 tileBottom = new Vector2(Projectile.position.X + Projectile.width / 2, Projectile.position.Y + Projectile.height);
             if (!Main.tile[tileBottom.ToTileCoordinates().X, tileBottom.ToTileCoordinates().Y].IsActuated)
@@ -177,11 +184,21 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
     {
         public override string Texture => AssetDirectory.CrimsonKnight + "FlamePillar";
 
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.CanDistortWater[Type] = false;
+            ProjectileID.Sets.CanHitPastShimmer[Type] = true;
+            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 6400;
+            base.SetStaticDefaults();
+        }
+
         public override void AI()
         {
+            base.AI();
             if (Timer == 120)
             {
                 Projectile.height = 1500;
+                Projectile.position = new Vector2(Projectile.position.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top);
             }
             else if (Timer > 120)
             {
@@ -191,7 +208,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     Main.dust[dust].noGravity = true;
                 }
             }
-            base.AI();
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -200,9 +216,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Texture2D tex = Request<Texture2D>(Texture).Value;
                 Vector2 height = new Vector2(0, Projectile.height);
-                Main.EntitySpriteDraw(tex, Projectile.position - height - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), ((Timer + 40) % 60) / 60 * 3, SpriteEffects.None, 0);
-                Main.EntitySpriteDraw(tex, Projectile.position - height - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), ((Timer + 20) % 60) / 60 * 3, SpriteEffects.None, 0);
-                Main.EntitySpriteDraw(tex, Projectile.position - height - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), (Timer % 60) / 60 * 3, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), ((Timer + 40) % 60) / 60 * 3, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), ((Timer + 20) % 60) / 60 * 3, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), (Timer % 60) / 60 * 3, SpriteEffects.None, 0);
             }
             return base.PreDraw(ref lightColor);
         }

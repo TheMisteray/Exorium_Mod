@@ -16,7 +16,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Fireball");
+            ProjectileID.Sets.TrailingMode[Type] = 2;
+            ProjectileID.Sets.TrailCacheLength[Type] = 5;
         }
 
         public override void SetDefaults()
@@ -64,17 +65,25 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             RotationOffset += .006f;
             if (Main.expertMode)
                 RotationOffset += .003f;
-
-            if (Main.rand.NextBool(7))
-            {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SolarFlare, Projectile.velocity.X * Main.rand.NextFloat(.25f), 0, 0, default, 1);
-                Main.dust[dust].noGravity = true;
-            }
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.OnFire, Enrage ? 600 : 300);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = Request<Texture2D>(Texture).Value;
+            //Afterimages
+            for (int k = Projectile.oldPos.Length - 1; k >= 0; k--)
+            {
+                Vector2 pos = Projectile.oldPos[k];
+
+                Main.EntitySpriteDraw(tex, pos - Main.screenPosition + new Vector2(Projectile.width / 2, Projectile.height / 2), new Rectangle(0, 0, Projectile.width, Projectile.height), new Color(255 / (k + 1), 255 / (k + 1), 255 / (k + 1), 255 / (k + 1)), Projectile.oldRot[k], new Vector2(tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
+            }
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, Projectile.width, Projectile.height), Color.White, Projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
+            return false;
         }
     }
 }

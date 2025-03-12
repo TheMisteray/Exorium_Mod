@@ -138,7 +138,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private float deathTimer = 0;
 
         private float[] deathLightLengths = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        private float[] deathLightAngles = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private float[] deathLightAngles = { 0, 
+            0 + MathHelper.TwoPi / 3, 
+            0 + MathHelper.TwoPi / 3 * 2, 
+            MathHelper.TwoPi / 9, 
+            MathHelper.TwoPi / 9 + MathHelper.TwoPi / 3, 
+            MathHelper.TwoPi / 9 + MathHelper.TwoPi / 3 * 2, 
+            MathHelper.TwoPi / 9 * 2, 
+            MathHelper.TwoPi / 9 * 2 + MathHelper.TwoPi / 3, 
+            MathHelper.TwoPi / 9 * 2 + MathHelper.TwoPi / 3 * 2 };
 
         //Portal/Arena Locations
         private static Vector2 topL = Core.Systems.WorldDataSystem.FallenTowerRect.TopLeft();
@@ -385,7 +393,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                                 if (actionTimer % 20 == 0)
                                 {
-                                    SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, swordPoint);
+                                    SoundEngine.PlaySound(SoundID.Item45, swordPoint);
                                     if (phase == 2 || Main.masterMode)
                                         Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<LargeFlamePillar>(), damage, 0);
                                     else
@@ -627,34 +635,56 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if (Main.masterMode)
                             bladeSpawnCount -= 5;
                         if (phase == 2)
-                            bladeSpawnCount += 10; //reduce since double are being created
+                            bladeSpawnCount += 10; //reduce since more are being created
                     }
                     else if (actionTimer > 30 && actionTimer % bladeSpawnCount == 0 && actionTimer < 360)
                     {
-                        if (bladeSpawnSide == 1 || phase == 2) //Spawn blades in quadrants 1 & 4
+                        if (bladeSpawnSide == 1) //Spawn blades in quadrants 1 & 4
                         {
                             Vector2 spawnPointQ1 = bladeSpawnOriginQ1;
                             spawnPointQ1.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                for (int i = -2; i < 3; i++)
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ1 + new Vector2(50 * i, 0), new Vector2(-10, 10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 1f);
+                            }
+                            else
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ1, new Vector2(-10, 10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 1f);
 
                             Vector2 spawnPointQ4 = bladeSpawnOriginQ4;
                             spawnPointQ4.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            if (Main.netMode != NetmodeID.MultiplayerClient && phase == 2 && Main.rand.NextBool())
+                            {
+                                for (int i = -2; i < 3; i++)
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ4 + new Vector2(50 * i, 0), new Vector2(10, 10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 1f);
+                            }
+                            else
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ4, new Vector2(10, 10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 1f);
                         }
 
-                        if (bladeSpawnSide == 2 || phase == 2)
+                        if (bladeSpawnSide == 2)
                         {
                             Vector2 spawnPointQ2 = bladeSpawnOriginQ2;
                             spawnPointQ2.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            if (Main.netMode != NetmodeID.MultiplayerClient && phase == 2 && Main.rand.NextBool())
+                            {
+                                for (int i = -2; i < 3; i++)
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ2 + new Vector2(50 * i, 0), new Vector2(-10, -10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 0f);
+                            }
+                            else
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ2, new Vector2(-10, -10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 0f);
 
                             Vector2 spawnPointQ3 = bladeSpawnOriginQ3;
                             spawnPointQ3.X += Main.rand.NextFloat(-(Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2) + 80, Core.Systems.WorldDataSystem.FallenTowerRect.Width / 2 - 80);
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            if (Main.netMode != NetmodeID.MultiplayerClient && phase == 2 && Main.rand.NextBool())
+                            {
+                                for (int i = -2; i < 3; i++)
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ3 + new Vector2(50 * i, 0), new Vector2(10, -10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 0f);
+                            }
+                            else
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPointQ3, new Vector2(10, -10)/*This is what is would calculate as for this quadrant for the first boss*/, ProjectileType<ReboundingSword>(), damage, 1, Main.myPlayer, 60, 0f);
+                            }
                         }
                     }
                     if (actionTimer >= 361)
@@ -832,8 +862,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         {
                             for (int i = 0; i < 4; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, unit.RotatedBy(MathHelper.PiOver2 * i), ProjectileType<InfernoBeam>(), damage * 2, 5, -1, 0, turnLeft ? 1 : 0);
-                                if ((phase == 2 && Main.expertMode) || Main.masterMode)//Double beams
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, unit.RotatedBy(MathHelper.PiOver2 * i), ProjectileType<InfernoBeam>(), (int)(damage * 1.5f), 5, -1, 0, turnLeft ? 1 : 0);
+                                if (/*Main.expertMode*/ true)//Double beams
                                 {
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, unit.RotatedBy(MathHelper.PiOver2 * i + MathHelper.PiOver4), ProjectileType<InfernoBeam>(), damage * 2, 5, -1, 0, turnLeft ? 1 : 0);
                                 }
@@ -844,15 +874,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         Vector2 trajectory = player.Center - swordTip;
                         trajectory.Normalize();
+                        int swordAmount = Main.expertMode ? 8 : 12;
                         if (Main.expertMode && (actionTimer%100 == 0 || Main.masterMode))
                         {
-                            for (int i = 0; i < 8; i++)
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / 8) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
+                            for (int i = 0; i < swordAmount; i++)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, trajectory.RotatedBy((MathHelper.TwoPi / swordAmount) * i) * .01f, ProjectileType<FlametoungeBeam>(), damage, 1, Main.myPlayer, 90);
                         }
 
                         bool counterClockwise = actionTimer % 100 == 0;
                         for (int i = 0; i < 4; i++)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.UnitX.RotatedBy((MathHelper.TwoPi / 4) * i), ProjectileType<RotatingFireball>(), damage, 2, Main.myPlayer, counterClockwise? 1 : 0, phase == 2 ? 1 : 0);
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.UnitX.RotatedBy((MathHelper.TwoPi / 4) * i), ProjectileType<RotatingFireball>(), damage, 2, Main.myPlayer, counterClockwise ? 1 : 0, phase == 2 ? 1 : 0);
+                            if (Main.expertMode) //4 more in opposite loop for Expert mode
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, Vector2.UnitX.RotatedBy((MathHelper.TwoPi / 4) * i), ProjectileType<RotatingFireball>(), damage, 2, Main.myPlayer, !counterClockwise ? 1 : 0, phase == 2 ? 1 : 0);
+                        }
                     }
                     else if (actionTimer > 510)
                     {
@@ -995,7 +1030,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                                 if (actionTimer % 20 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                    SoundEngine.PlaySound(SoundID.Item45, swordPoint);
+                                    if (phase == 2 || Main.masterMode)
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<LargeFlamePillar>(), damage, 0);
+                                    else
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
                                 }
                             }
                             if (Main.rand.NextBool(2))
@@ -1070,21 +1109,22 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 12:
                     if (actionTimer == 5)
                     {
+                        int fireballRingWidth = 2000;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            for (int i = 0; i < 28; i++)
+                            for (int i = 0; i < 24; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 14) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0, 2000);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 12) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0, fireballRingWidth);
                             }
                         }
 
                         // dust telegraph
-                        for (int i = 0; i < 100; i++)
+                        for (int i = 0; i < 200; i++)
                         {
                             Vector2 pos = player.Center;
                             pos.Y -= 900;
-                            pos.X -= 500;
-                            Dust.NewDust(pos, 1000, 1, DustID.SolarFlare, 0, Main.rand.NextFloat(20));
+                            pos.X -= fireballRingWidth/2;
+                            Dust.NewDust(pos, fireballRingWidth, 1, DustID.SolarFlare, 0, Main.rand.NextFloat(20));
                         }
                     }
                     else if (actionTimer == 60)
@@ -1242,7 +1282,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 150)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 4 : 2)) * 2, 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (int)(NPC.damage / (Main.expertMode == true ? 4 : 2) * 1.5f), 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1302,9 +1342,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     Filters.Scene.Activate("ExoriumMod:CaraveneTitle", NPC.Center).GetShader().UseImage(text).UseImage(heatMap, 1).UseTargetPosition(NPC.Center).UseIntensity(introTicker).UseProgress(Main.GameUpdateCount * 0.0015f);
                 }
             }
-            Main.musicFade[Main.curMusic] = 1f; //Want volume to be at max for a bit..
-            //TODO: This is a TEST line
-            //Action = 0;
+            Main.musicFade[Main.curMusic] = 1f; //Want volume to be at max for a immediately
             introTicker--;
             if (introTicker <= 0)
             {
@@ -1422,23 +1460,23 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 NPC.boss = false; //This might be bad??? Using it to stop music
                 Music = -1;
-                for (int i = 0; i < deathLightAngles.Length; i++) //Set light angles randomly
-                {
-                    bool done = false;
-                    float angle = 0;
+                //for (int i = 0; i < deathLightAngles.Length; i++) //Set light angles randomly --------Doesn't look as good as set angles
+                //{
+                //    bool done = false;
+                //    float angle = 0;
 
-                    while (!done) //loop unil an angle that is different enough from the others is chosen
-                    {
-                        done = true;
-                        angle = Main.rand.NextFloat(MathHelper.TwoPi);
+                //    while (!done) //loop unil an angle that is different enough from the others is chosen
+                //    {
+                //        done = true;
+                //        angle = Main.rand.NextFloat(MathHelper.TwoPi);
 
-                        foreach(float rad in deathLightAngles)
-                        {
-                            if (rad != 0 && Math.Abs(rad - angle) < .15f) { done = false; }
-                        }
-                    }
-                    deathLightAngles[i] = angle;
-                }
+                //        foreach(float rad in deathLightAngles)
+                //        {
+                //            if (rad != 0 && Math.Abs(rad - angle) < .15f) { done = false; }
+                //        }
+                //    }
+                //    deathLightAngles[i] = angle;
+                //}
 
                 foreach (Player player in Main.player)
                 {
@@ -1459,28 +1497,28 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
             if (DeathTimer >= 60)
             {
-                deathLightLengths[0] += 5;
-                deathLightLengths[1] += 5;
-                deathLightLengths[2] += 5;
-                deathLightAngles[0] += .003f;
-                deathLightAngles[1] += .003f;
-                deathLightAngles[2] += .003f;
+                deathLightLengths[0] += 6;
+                deathLightLengths[1] += 6;
+                deathLightLengths[2] += 6;
+                deathLightAngles[0] += .002f; //Rotate all here so that they don't desync
+                deathLightAngles[1] += .002f;
+                deathLightAngles[2] += .002f;
+                deathLightAngles[3] += .002f;
+                deathLightAngles[4] += .002f;
+                deathLightAngles[5] += .002f;
+                deathLightAngles[6] += .002f;
+                deathLightAngles[7] += .002f;
+                deathLightAngles[8] += .002f;
                 if (DeathTimer >= 150)
                 {
                     deathLightLengths[3] += 5;
                     deathLightLengths[4] += 5;
                     deathLightLengths[5] += 5;
-                    deathLightAngles[3] += .003f;
-                    deathLightAngles[4] += .003f;
-                    deathLightAngles[5] += .003f;
                     if (DeathTimer >= 240) 
                     {
                         deathLightLengths[6] += 5;
                         deathLightLengths[7] += 5;
                         deathLightLengths[8] += 5;
-                        deathLightAngles[6] += .003f;
-                        deathLightAngles[7] += .003f;
-                        deathLightAngles[8] += .003f;
                     }
                 }
             }
@@ -1503,14 +1541,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     p.type == ProjectileType<CaraveneBladeProj>() ||
                     p.type == ProjectileType<CaraveneBladeProjHorizontal>() ||
                     p.type == ProjectileType<CaraveneFireball>() ||
-                    p.type == ProjectileType<GridFire>() ||
                     p.type == ProjectileType<gridCollision>() ||
                     p.type == ProjectileType<gridShot>() ||
                     p.type == ProjectileType<FlamingSphere>() ||
                     p.type == ProjectileType<FireballRing>() || 
                     p.type == ProjectileType<ReboundingSword>() ||
                     p.type == ProjectileType<backupFireball>() ||
-                    p.type == ProjectileType<ReboundingSword>() ||
                     p.type == ProjectileType<CrimsonSlash>() ||
                     p.type == ProjectileType<CrimsonSlashProjectile>() ||
                     p.type == ProjectileType<LargeFlamingSphere>() ||
@@ -1519,10 +1555,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     p.type == ProjectileType<InfernoBeam>() ||
                     p.type == ProjectileType<InfernalRift>() ||
                     p.type == ProjectileType<RiftSpirit>() ||
-                    p.type == ProjectileType<RotatingFireball>())
+                    p.type == ProjectileType<RotatingFireball>() ||
+                    p.type == ProjectileType<FlametoungeBeam>() ||
+                    p.type == ProjectileType<CaraveneClone>())
                 {
                     p.timeLeft = 1;
                     p.Kill();
+                }
+                else if (p.type == ProjectileType<GridFire>())
+                {
+                    p.active = false;
                 }
             }
         }
@@ -1609,7 +1651,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         Vector2 pos = NPC.oldPos[k];
 
                         spriteBatch.Draw(tex,
-                            new Rectangle((int)(pos.X - 51) - (int)(screenPos.X), (int)(pos.Y - 205) - (int)(screenPos.Y), 412, 442),
+                            new Rectangle((int)(pos.X - 51) - (int)(screenPos.X), (int)(pos.Y - 200) - (int)(screenPos.Y), 412, 442),
                             new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                             Color.Red * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length),
                             NPC.rotation,
@@ -1620,7 +1662,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
 
                 spriteBatch.Draw(tex,
-                    new Rectangle((int)(NPC.position.X - 51) - (int)(screenPos.X), (int)(NPC.position.Y - 205) - (int)(screenPos.Y), 412, 442),
+                    new Rectangle((int)(NPC.position.X - 51) - (int)(screenPos.X), (int)(NPC.position.Y - 200) - (int)(screenPos.Y), 412, 442),
                     new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                     alphaColor,
                     NPC.rotation,
@@ -1847,6 +1889,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 DeathTimer = 1;
                 NPC.damage = 0;
+                NPC.velocity = Vector2.Zero;
                 NPC.life = NPC.lifeMax;
                 NPC.dontTakeDamage = true;
                 NPC.netUpdate = true;
@@ -1854,6 +1897,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 return false;
             }
             return true;
+        }
+
+        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
+        {
+            return deathTimer == 0; //Only draw before death animtion
         }
 
         public override void OnKill()
@@ -1885,6 +1933,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             LeadingConditionRule expertRule = new LeadingConditionRule(new Conditions.IsExpert());
             expertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ItemType<Items.Accessories.CrimsonCrest>()));
             npcLoot.Add(expertRule);
+        }
+
+        public override bool PreKill()
+        {
+            //Update
+            if (!Core.Systems.DownedBossSystem.killedCrimsonKnight)
+            {
+                Core.Systems.DownedBossSystem.killedCrimsonKnight = true;
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.
+                }
+            }
+            return base.PreKill();
         }
     }
 }   

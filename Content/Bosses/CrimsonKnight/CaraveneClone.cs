@@ -167,7 +167,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             else
             {
                 spritebatch.Draw(tex,
-                    new Rectangle((int)(Projectile.position.X - 51) - (int)(screenPos.X), (int)(Projectile.position.Y - 205) - (int)(screenPos.Y), 412, 442),
+                    new Rectangle((int)(Projectile.position.X - 51) - (int)(screenPos.X), (int)(Projectile.position.Y - 200) - (int)(screenPos.Y), 412, 442),
                     new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                     alphaColor,
                     Projectile.rotation,

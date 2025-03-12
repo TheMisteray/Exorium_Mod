@@ -20,7 +20,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void SetDefaults()
         {
             Projectile.width = 1;
-            Projectile.height = 1;
+            Projectile.height = 2000;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 300;
             Projectile.tileCollide = false;
@@ -52,12 +52,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                     Filters.Scene.Activate("ExoriumMod:InfernalRift", Projectile.Center).GetShader().UseColor(.05f, .005f, 0).UseTargetPosition(Projectile.Center).UseImage(heatMap).UseProgress(0);
                 }
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top + 200), Vector2.UnitY * 110, ProjectileType<RiftIndicator>(), 0, 0);
+            }
+
+            if (Projectile.timeLeft == 220)
+            {
+                Projectile.hostile = true;
+                SoundEngine.PlaySound(SoundID.Item60);
             }
 
             if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:InfernalRift"].IsActive() && Projectile.timeLeft < 220)
             {
                 //Alter progress
-                Filters.Scene["ExoriumMod:InfernalRift"].GetShader().UseIntensity(Main.GameUpdateCount * 0.0015f).UseProgress(progressValue); //Make use game time for stoppin while paused
+                Filters.Scene["ExoriumMod:InfernalRift"].GetShader().UseIntensity(Main.GameUpdateCount * 0.005f).UseProgress(progressValue); //Make use game time for stoppin while paused
 
                 if (Projectile.timeLeft > 110 && progressValue < 1)
                 {
@@ -73,11 +80,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 //Create Spirits
                 float dist = (towerYMin - towerYMax) - 128;
-                int count = 16;
+                int count = Main.expertMode? 16: 20;
+                if (Main.masterMode) count += 4;
                 float interval = dist / count;
                 bool[] leftSpirits = new bool[count];
                 bool[] rightSpirits = new bool[count];
-                SoundEngine.PlaySound(SoundID.Item60);
 
                 //Set where spirits will be
                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -128,6 +135,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Filters.Scene["ExoriumMod:InfernalRift"].Deactivate();
             }
             return base.PreKill(timeLeft);
+        }
+
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+        {
+            modifiers.SourceDamage *= 2.2f;
+            base.ModifyHitPlayer(target, ref modifiers);
         }
     }
 
@@ -187,6 +200,33 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SolarFlare, Projectile.velocity.X * Main.rand.NextFloat(.25f), 0, 0, default, 1);
                 Main.dust[dust].noGravity = true;
             }
+        }
+    }
+
+    class RiftIndicator : ModProjectile
+    {
+        public override string Texture => AssetDirectory.Invisible;
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 1;
+            Projectile.height = 1;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 300;
+            Projectile.tileCollide = false;
+            Projectile.friendly = false;
+            Projectile.hostile = false;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            spriteBatch.End();
+            ShapeBatch.Begin(spriteBatch.GraphicsDevice);
+            ShapeBatch.Triangle(Projectile.Center - Main.screenPosition, Projectile.Center - Main.screenPosition + new Vector2(-40, -700), Projectile.Center - Main.screenPosition + new Vector2(40, -700), new Color(200, 0, 0, 255), Color.Transparent, Color.Transparent);
+            ShapeBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+            return false;
         }
     }
 }

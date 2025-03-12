@@ -33,7 +33,7 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.Caravene>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.ExoriumRed>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.CaraveneBattleIntermission>()))
+            if (NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.Caravene>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.ExoriumRed>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.CaraveneBattleIntermission>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.CaravenePhaseTransition>()))
                 Main.tileSolid[Type] = true;
             else
                 Main.tileSolid[Type] = false;
@@ -41,7 +41,7 @@ namespace ExoriumMod.Content.Tiles.StructureTiles.FallenTowerTiles
 
         public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
-            if (NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.Caravene>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.ExoriumRed>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.CaraveneBattleIntermission>()))
+            if (NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.Caravene>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.ExoriumRed>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.CaraveneBattleIntermission>()) || NPC.AnyNPCs(NPCType<Bosses.CrimsonKnight.CaravenePhaseTransition>()))
             {
                 int dust = Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, DustID.Torch, 0f, 0f, 100, default(Color), 1.5f);
                 Main.dust[dust].noGravity = true;

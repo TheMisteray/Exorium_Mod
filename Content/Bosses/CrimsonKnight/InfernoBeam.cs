@@ -152,7 +152,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Projectile.soundDelay <= 0)
             {
                 Projectile.soundDelay = SOUND_INTERVAL;
-                SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
+                SoundEngine.PlaySound(SoundID.Item34, Projectile.position);
             }
         }
 
@@ -248,7 +248,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Vector2 pos = Projectile.oldPos[k];
 
-                Main.EntitySpriteDraw(tex, pos - Main.screenPosition + new Vector2(Projectile.width / 2, Projectile.height / 2), new Rectangle(0, 0, Projectile.width, Projectile.height), new Color(255, 255, 255, 255 / (k + 1)), Projectile.oldRot[k], new Vector2(tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, pos - Main.screenPosition + new Vector2(Projectile.width / 2, Projectile.height / 2), new Rectangle(0, 0, Projectile.width, Projectile.height), new Color(255 / (k + 1), 255 / (k + 1), 255 / (k + 1), 255 / (k + 1)), Projectile.oldRot[k], new Vector2(tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
             }
             Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, Projectile.width, Projectile.height), Color.White, Projectile.rotation, new Vector2(tex.Width / 2, tex.Height / 2), Projectile.scale, SpriteEffects.None, 0);
             return false;

@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExoriumMod.Content.Buffs;
+using ExoriumMod.Core.Systems;
 
 namespace ExoriumMod.Core
 {
@@ -62,7 +63,7 @@ namespace ExoriumMod.Core
 
         public override void PreUpdate()
         {
-            if (!Main.hardMode && Player.getRect().Intersects(Systems.WorldDataSystem.FallenTowerRect)) //prevent messing up the charred tower before hardmode
+            if ((!Main.hardMode && !DownedBossSystem.killedCrimsonKnight) && Player.getRect().Intersects(Systems.WorldDataSystem.FallenTowerRect)) //prevent messing up the charred tower before hardmode
             {
                 Player.AddBuff(BuffID.NoBuilding, 2);
                 Player.AddBuff(BuffType<NoGraves>(), 2);
@@ -72,7 +73,7 @@ namespace ExoriumMod.Core
 
         public override void PostUpdateBuffs()
         {
-            if (Player.HasBuff(BuffID.NoBuilding) && !Main.hardMode && Player.getRect().Intersects(Systems.WorldDataSystem.FallenTowerRect))
+            if (Player.HasBuff(BuffID.NoBuilding) && (!Main.hardMode && !DownedBossSystem.killedCrimsonKnight) && Player.getRect().Intersects(Systems.WorldDataSystem.FallenTowerRect))
             {
                 Player.noBuilding = true;
             }

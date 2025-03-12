@@ -146,7 +146,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 counter++;
             }
-            else if (time >= 240 && time < 420)
+            else if (time == 240)
+            {
+                SoundEngine.PlaySound(SoundID.Roar, NPC.position);
+            }
+            else if (time > 240 && time < 420)
             {
                 counter++;
                 for (int i = 0; i < 20; i++)
@@ -193,7 +197,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 else
                 {
                     spriteBatch.Draw(tex,
-                        new Rectangle((int)(NPC.TopLeft.X - 51) - (int)(screenPos.X), (int)(NPC.TopLeft.Y - 205) - (int)(screenPos.Y), 412, 442),
+                        new Rectangle((int)(NPC.TopLeft.X - 51) - (int)(screenPos.X), (int)(NPC.TopLeft.Y - 200) - (int)(screenPos.Y), 412, 442),
                         new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                         drawColor,
                         NPC.rotation,

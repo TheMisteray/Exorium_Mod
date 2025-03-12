@@ -372,7 +372,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if ((phase == 2 || Main.masterMode) && !endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
+                                if (actionTimer % 30 == 0 && phase == 2 && Main.expertMode)
+                                {
+                                    SoundEngine.PlaySound(SoundID.Item45, swordPoint);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                }
+                            }
                             if (Main.rand.NextBool(2))
                             {
                                 if (left)
@@ -469,21 +476,22 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 3:
                     if (actionTimer == 5)
                     {
+                        int fireballRingWidth = 1400;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             for (int i = 0; i < 16; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 8) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0, 1400);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -900), Vector2.Zero, ProjectileType<FireballRing>(), damage, 1, Main.myPlayer, (MathHelper.Pi / 8) * i, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0, fireballRingWidth);
                             }
                         }
 
                         // dust telegraph
-                        for (int i = 0; i < 100; i++)
+                        for (int i = 0; i < 140; i++)
                         {
                             Vector2 pos = player.Center;
                             pos.Y -= 900;
-                            pos.X -= 500;
-                            Dust.NewDust(pos, 1000, 1, DustID.SolarFlare, 0, Main.rand.NextFloat(20));
+                            pos.X -= fireballRingWidth/2;
+                            Dust.NewDust(pos, fireballRingWidth, 1, DustID.SolarFlare, 0, Main.rand.NextFloat(20));
                         }
                     }
                     else if (actionTimer == 60)
@@ -838,7 +846,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if (phase == 2 && !endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
+                                if (actionTimer % 30 == 0 && phase == 2 && Main.expertMode)
+                                {
+                                    SoundEngine.PlaySound(SoundID.Item45, swordPoint);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                }
+                            }
                             if (Main.rand.NextBool(2))
                             {
                                 if (left)
@@ -906,7 +921,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         if (phase == 2 && !endFlameSpawn)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlameTrail>(), damage, 0);
+                                if (actionTimer % 30 == 0 && phase == 2 && Main.expertMode)
+                                {
+                                    SoundEngine.PlaySound(SoundID.Item45, swordPoint);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), swordPoint, Vector2.Zero, ProjectileType<FlamePillar>(), damage, 0);
+                                }
+                            }
                             if (Main.rand.NextBool(2))
                             {
                                 if (left)
@@ -1142,7 +1164,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 90)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (NPC.damage / (Main.expertMode == true ? 2 : 1)) * 2, 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (int)(NPC.damage / (Main.expertMode == true ? 4 : 2) * 1.5f), 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1211,6 +1233,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 introAnimation = false;
                 ChooseMovement();
+
+                //Update
+                if (!Core.Systems.DownedBossSystem.foughtCrimsonKnight)
+                {
+                    Core.Systems.DownedBossSystem.foughtCrimsonKnight = true;
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.
+                    }
+                }
             }
 
             //TODO: This changes based on past fights
@@ -1335,6 +1367,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     p.timeLeft = 1;
                     p.Kill();
                 }
+                else if (p.type == ProjectileType<GridFire>())
+                {
+                    p.active = false;
+                }
             }
         }
 
@@ -1399,7 +1435,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         Vector2 pos = NPC.oldPos[k];
 
                         spriteBatch.Draw(tex,
-                            new Rectangle((int)(pos.X - 51) - (int)(screenPos.X), (int)(pos.Y - 205) - (int)(screenPos.Y), 412, 442),
+                            new Rectangle((int)(pos.X - 51) - (int)(screenPos.X), (int)(pos.Y - 200) - (int)(screenPos.Y), 412, 442),
                             new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                             Color.Red * ((float)(NPC.oldPos.Length - k) / (float)NPC.oldPos.Length),
                             NPC.rotation,
@@ -1410,7 +1446,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
 
                 spriteBatch.Draw(tex,
-                    new Rectangle((int)(NPC.position.X - 51) - (int)(screenPos.X), (int)(NPC.position.Y - 205) - (int)(screenPos.Y), 412, 442),
+                    new Rectangle((int)(NPC.position.X - 51) - (int)(screenPos.X), (int)(NPC.position.Y - 200) - (int)(screenPos.Y), 412, 442),
                     new Rectangle(xSourceHeight, ySourceHeight, 412, 442),
                     alphaColor,
                     NPC.rotation,
