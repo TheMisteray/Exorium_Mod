@@ -23,6 +23,15 @@ namespace ExoriumMod.Core.Systems
 
         public static Rectangle FallenTowerRect = new Rectangle();
 
+        /// <summary>
+        /// Not saved, do not use
+        /// </summary>
+        public static Vector2 deadlandsNode1;
+        /// <summary>
+        /// Not saved, do not use
+        /// </summary>
+        public static Vector2 deadlandsNode2;
+
         public Rectangle FallenTowerDetectionZone
         {
             get { return new Rectangle(FallenTowerRect.X, FallenTowerRect.Y, FallenTowerRect.Width, FallenTowerRect.Height); }

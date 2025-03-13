@@ -4,6 +4,7 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using ExoriumMod.Content.Tiles;
 using ExoriumMod.Content.Walls;
+using Microsoft.Xna.Framework;
 
 namespace ExoriumMod.Core.WorldGeneration.Biomes
 {
@@ -48,7 +49,7 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                                 if (Framing.GetTileSafely(m, n).HasTile)
                                 {
                                     int type = Framing.GetTileSafely(m, n).TileType;
-                                    if (type == TileID.BlueDungeonBrick || type == TileID.GreenDungeonBrick || type == TileID.PinkDungeonBrick || type == TileID.Cloud || type == TileID.RainCloud || type == TileID.WoodBlock || type == TileID.LivingWood || type == TileID.Ebonstone || type == TileID.Crimstone || type == TileID.SandstoneBrick)
+                                    if (type == TileID.BlueDungeonBrick || type == TileID.GreenDungeonBrick || type == TileID.PinkDungeonBrick || type == TileID.Cloud || type == TileID.RainCloud || type == TileID.WoodBlock || type == TileID.LivingWood || type == TileID.LivingMahoganyLeaves || type == TileID.Ebonstone || type == TileID.Crimstone || type == TileID.SandstoneBrick)
                                     {
                                         placementOK = false;
                                         break;
@@ -56,7 +57,7 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                                 }
                             }
                         }
-                        if (placementOK || attempts > 100000000) //if far too many attempts, spawn anyway (this may disrupt other structures but hopefully won't happen too often)
+                        if (placementOK || attempts > 100000) //if far too many attempts, spawn anyway (this may disrupt other structures but hopefully won't happen too often)
                         {
                             success = SetDeadlands(i, j, k, l);
                         }
@@ -116,7 +117,43 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                     }
                 }
             }
+            Systems.WorldDataSystem.deadlandsNode1 = new Vector2(i, j);
+            Systems.WorldDataSystem.deadlandsNode2 = new Vector2(k, l);
             return true;
+        }
+
+        public static void FinalizeDeadlands()
+        {
+            float sizeScale = Main.maxTilesX / 14f;
+            int i = (int)Systems.WorldDataSystem.deadlandsNode1.X;
+            int j = (int)Systems.WorldDataSystem.deadlandsNode1.Y;
+            int k = (int)Systems.WorldDataSystem.deadlandsNode2.X;
+            int l = (int)Systems.WorldDataSystem.deadlandsNode2.Y;
+
+            //Repeat the normal generation, and remove grass/dirt from the main body. This is caused by a later world gen pass that does not allow generating before living trees, introduced in 1.4
+            for (int m = i - Main.maxTilesX / 20; m <= k + Main.maxTilesX / 20; m++)
+            {
+                for (int n = Math.Min(j, l) - Main.maxTilesX / 20; n <= Math.Max(j, l) + Main.maxTilesX / 20; n++)
+                {
+                    double sumDist = (Math.Sqrt(Math.Pow(i - m, 2) + Math.Pow(j - n, 2))) + (Math.Sqrt(Math.Pow(k - m, 2) + Math.Pow(l - n, 2)));
+                    int smoothSpread = Main.maxTilesX / 60;
+                    if (sizeScale >= sumDist) //Lower and lower chance to still place a tile up to smoothspread distance
+                    {
+                        if (WorldGen.InWorld(m, n, 30)) //Don't think this is actually necessary
+                        {
+                            switch (Framing.GetTileSafely(m, n).TileType)
+                            {
+                                case TileID.Grass:
+                                case TileID.Dirt:
+                                    Framing.GetTileSafely(m, n).TileType = (ushort)TileType<AshenDustTile>();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

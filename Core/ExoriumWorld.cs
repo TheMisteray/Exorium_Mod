@@ -28,17 +28,27 @@ namespace ExoriumMod.Core
             int DirtRockWallRunnerIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
             if (DirtRockWallRunnerIndex != -1) //Right before living trees
             {
-                tasks.Insert(DirtRockWallRunnerIndex + 1, new PassLegacy("Deadlands", delegate (GenerationProgress progress, GameConfiguration config)
+                tasks.Insert(DirtRockWallRunnerIndex, new PassLegacy("Deadlands", delegate (GenerationProgress progress, GameConfiguration config)
                   {
                       progress.Message = "Generating Deadlands";
                       WorldGeneration.Biomes.ExoriumBiomes.DeadlandsGeneration();
                   }));
             }
 
+            int PlaceFallenLogIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Place Fallen Log"));
+            if (PlaceFallenLogIndex != -1) //Right before fallen logs
+            {
+                tasks.Insert(PlaceFallenLogIndex + 1, new PassLegacy("Smoothing Deadlands", delegate (GenerationProgress progress, GameConfiguration config)
+                {
+                    progress.Message = "Smoothing Deadlands";
+                    WorldGeneration.Biomes.ExoriumBiomes.FinalizeDeadlands();
+                }));
+            }
+
             int FinalCleanupIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Final Cleanup"));
             if (FinalCleanupIndex != -1)
-            {
-                tasks.Insert(FinalCleanupIndex + 1, new PassLegacy("Exorium Structures", delegate (GenerationProgress progress, GameConfiguration config)
+            {                            //not +! so cleanup doesn't smooth them
+                tasks.Insert(FinalCleanupIndex, new PassLegacy("Exorium Structures", delegate (GenerationProgress progress, GameConfiguration config)
                {
                    progress.Message = "Generating Exorium Structures";
                    WorldGeneration.Structures.ExoriumStructures.ShadowHouse();
