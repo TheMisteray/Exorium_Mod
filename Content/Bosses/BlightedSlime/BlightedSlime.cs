@@ -61,7 +61,7 @@ namespace ExoriumMod.Content.Bosses.BlightedSlime
             NPC.timeLeft = NPC.activeTime * 30;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<DeadlandBiome>().Type };
             if (!Main.dedServ)
-                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/SlimyGrime");
+                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/UnprecedentedGrime");
         }
          
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
