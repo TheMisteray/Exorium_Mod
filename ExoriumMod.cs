@@ -40,15 +40,25 @@ namespace ExoriumMod
                 Filters.Scene["ExoriumMod:DeadlandsSky"] = new Filter((new ScreenShaderData("FilterMiniTower")).UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryLow);
 
                 //Shader refs
-                Ref<Effect> HeatDistortEffectRef = new Ref<Effect>(Assets.Request<Effect>("Effects/HeatDistortion", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> screenRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShockwaveEffect", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> flamingSphereRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FlamingSphere", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> shadowmancerShadeRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShadowmancerShade", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> violetPortalRef = new Ref<Effect>(Assets.Request<Effect>("Effects/VioletPortal", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> fireAuraRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FireAura", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> caraveneTitleRef = new Ref<Effect>(Assets.Request<Effect>("Effects/CaraveneTitle", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> infernalRiftRef = new Ref<Effect>(Assets.Request<Effect>("Effects/InfernalRift", AssetRequestMode.ImmediateLoad).Value);
-                Ref<Effect> laserEffectRef = new Ref<Effect>(Assets.Request<Effect>("Effects/Deathray", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> HeatDistortEffectRef = new Ref<Effect>(Assets.Request<Effect>("Effects/HeatDistortion", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> screenRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShockwaveEffect", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> flamingSphereRef = new Ref<Effect>(Assets.Request<Effect>("Effects/Flaming
+                //Ref<Effect> shadowmancerShadeRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ShadowmancerShade", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> violetPortalRef = new Ref<Effect>(Assets.Request<Effect>("Effects/VioletPortal", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> fireAuraRef = new Ref<Effect>(Assets.Request<Effect>("Effects/FireAura", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> caraveneTitleRef = new Ref<Effect>(Assets.Request<Effect>("Effects/CaraveneTitle", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> infernalRiftRef = new Ref<Effect>(Assets.Request<Effect>("Effects/InfernalRift", AssetRequestMode.ImmediateLoad).Value);
+                //Ref<Effect> laserEffectRef = new Ref<Effect>(Assets.Request<Effect>("Effects/Deathray", AssetRequestMode.ImmediateLoad).Value);
+                Asset<Effect> HeatDistortEffectRef = this.Assets.Request<Effect>("Effects/HeatDistortion");
+                Asset<Effect> screenRef = this.Assets.Request<Effect>("Effects/ShockwaveEffect");
+                Asset<Effect> flamingSphereRef = this.Assets.Request<Effect>("Effects/FlamingSphere");
+                Asset<Effect> shadowmancerShadeRef = this.Assets.Request<Effect>("Effects/ShadowmancerShade");
+                Asset<Effect> violetPortalRef = this.Assets.Request<Effect>("Effects/VioletPortal");
+                Asset<Effect> fireAuraRef = this.Assets.Request<Effect>("Effects/FireAura");
+                Asset<Effect> caraveneTitleRef = this.Assets.Request<Effect>("Effects/CaraveneTitle");
+                Asset<Effect> infernalRiftRef = this.Assets.Request<Effect>("Effects/InfernalRift");
+                Asset<Effect> laserEffectRef = this.Assets.Request<Effect>("Effects/Deathray");
+
 
 
 

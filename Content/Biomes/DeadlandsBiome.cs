@@ -50,7 +50,7 @@ namespace ExoriumMod.Content.Biomes
 		// Calculate when the biome is active.
 		public override bool IsBiomeActive(Player player)
 		{
-			bool b1 = ModContent.GetInstance<DeadlandsBiomeTileCount>().deadlandsBlockCount >= 250;
+			bool b1 = ModContent.GetInstance<DeadlandsBiomeTileCount>().deadlandsBlockCount >= 300;
 
 			bool b2 = /*player.ZoneSkyHeight || player.ZoneOverworldHeight;*/ true; //Not needed until an underground variant is added
 			return b1 && b2;

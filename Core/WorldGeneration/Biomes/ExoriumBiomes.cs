@@ -109,9 +109,7 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                             }
                             if (Framing.GetTileSafely(m, n).WallType != 0 && Framing.GetTileSafely(m, n).WallType != 7 && Framing.GetTileSafely(m, n).WallType != 8 && Framing.GetTileSafely(m, n).WallType != 9 &&
                                 Framing.GetTileSafely(m, n).WallType != 244 && Framing.GetTileSafely(m, n).WallType != 94 && Framing.GetTileSafely(m, n).WallType != 95 && Framing.GetTileSafely(m, n).WallType != 96 &&
-                                Framing.GetTileSafely(m, n).WallType != 97 && Framing.GetTileSafely(m, n).WallType != 98 && Framing.GetTileSafely(m, n).WallType != 99 && Framing.GetTileSafely(m, n).WallType != 100 &&
-                                Framing.GetTileSafely(m, n).WallType != 101 && Framing.GetTileSafely(m, n).WallType != 102 && Framing.GetTileSafely(m, n).WallType != 103 && Framing.GetTileSafely(m, n).WallType != 104 &&
-                                Framing.GetTileSafely(m, n).WallType != 105)
+                                Framing.GetTileSafely(m, n).WallType != 97 && Framing.GetTileSafely(m, n).WallType != 98 && Framing.GetTileSafely(m, n).WallType != 99)
                                 Framing.GetTileSafely(m, n).WallType = (ushort)WallType<AshenDustWall>();
                         }
                     }
@@ -147,9 +145,26 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                                 case TileID.Dirt:
                                     Framing.GetTileSafely(m, n).TileType = (ushort)TileType<AshenDustTile>();
                                     break;
+                                case TileID.Copper:
+                                case TileID.Tin:
+                                case TileID.Lead:
+                                case TileID.Iron:
+                                case TileID.Silver:
+                                case TileID.Tungsten:
+                                case TileID.Gold:
+                                case TileID.Platinum:
+                                case TileID.Crimtane:
+                                case TileID.Demonite:
+                                    Framing.GetTileSafely(m, n).TileType = (ushort)TileType<BlightedOreTile>();
+                                    break;
                                 default:
                                     break;
+
                             }
+                            if (Framing.GetTileSafely(m, n).WallType != 0 && Framing.GetTileSafely(m, n).WallType != 7 && Framing.GetTileSafely(m, n).WallType != 8 && Framing.GetTileSafely(m, n).WallType != 9 &&
+                                Framing.GetTileSafely(m, n).WallType != 244 && Framing.GetTileSafely(m, n).WallType != 94 && Framing.GetTileSafely(m, n).WallType != 95 && Framing.GetTileSafely(m, n).WallType != 96 &&
+                                Framing.GetTileSafely(m, n).WallType != 97 && Framing.GetTileSafely(m, n).WallType != 98 && Framing.GetTileSafely(m, n).WallType != 99)
+                                Framing.GetTileSafely(m, n).WallType = (ushort)WallType<AshenDustWall>();
                         }
                     }
                 }
