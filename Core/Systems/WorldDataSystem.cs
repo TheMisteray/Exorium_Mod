@@ -32,11 +32,6 @@ namespace ExoriumMod.Core.Systems
         /// </summary>
         public static Vector2 deadlandsNode2;
 
-        public Rectangle FallenTowerDetectionZone
-        {
-            get { return new Rectangle(FallenTowerRect.X, FallenTowerRect.Y, FallenTowerRect.Width, FallenTowerRect.Height); }
-        }
-
         public override void SaveWorldData(TagCompound tag)
         {
             tag["shadowAltarCoordsX"] = shadowAltarCoordsX;
@@ -72,7 +67,7 @@ namespace ExoriumMod.Core.Systems
             shadowAltarCoordsX = reader.ReadInt32();
             shadowAltarCoordsY = reader.ReadInt32();
 
-            ReadRectangle(reader);
+            FallenTowerRect = ReadRectangle(reader);
         }
 
         //Not sure if this is necessary
@@ -84,7 +79,7 @@ namespace ExoriumMod.Core.Systems
             FallenTowerRect = new Rectangle();
         }
 
-        private void WriteRectangle(BinaryWriter writer, Rectangle rect)
+        private static void WriteRectangle(BinaryWriter writer, Rectangle rect)
         {
             writer.Write(rect.X);
             writer.Write(rect.Y);
@@ -92,6 +87,6 @@ namespace ExoriumMod.Core.Systems
             writer.Write(rect.Height);
         }
 
-        private Rectangle ReadRectangle(BinaryReader reader) => new Rectangle(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+        private static Rectangle ReadRectangle(BinaryReader reader) => new Rectangle(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
     }
 }

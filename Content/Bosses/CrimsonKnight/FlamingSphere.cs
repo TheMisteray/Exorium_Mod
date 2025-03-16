@@ -127,7 +127,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool PreKill(int timeLeft)
         {
-            if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:HeatDistortion"].IsActive())
+            if (Filters.Scene["ExoriumMod:HeatDistortion"].IsActive())
             {
                 Filters.Scene["ExoriumMod:HeatDistortion"].Deactivate();
             }

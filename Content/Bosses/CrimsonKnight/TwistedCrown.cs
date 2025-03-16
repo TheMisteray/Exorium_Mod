@@ -47,16 +47,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override Nullable<bool> UseItem(Player player)
         {
-            SoundEngine.PlaySound(SoundID.Roar, player.position);
-            int type = NPCType<Caravene>();
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+            if (player.whoAmI == Main.myPlayer)
             {
-                // If the player is not in multiplayer, spawn directly
-                NPC.SpawnOnPlayer(player.whoAmI, type);
-            }
-            else
-            {
-                NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
+                SoundEngine.PlaySound(SoundID.Roar, player.position);
+                int type = NPCType<Caravene>();
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    // If the player is not in multiplayer, spawn directly
+                    NPC.SpawnOnPlayer(player.whoAmI, type);
+                }
+                else
+                {
+                    NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
+                }
             }
             return true;
         }

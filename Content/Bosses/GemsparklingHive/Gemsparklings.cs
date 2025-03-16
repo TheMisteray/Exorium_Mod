@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.Bestiary;
+using System.IO;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -63,6 +64,18 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             set => NPC.ai[3] = value;
         }
 
+        private Vector2 direction = Vector2.Zero;
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.WriteVector2(direction);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            direction = reader.ReadVector2();
+        }
+
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
             NPC.lifeMax = (int)(NPC.lifeMax * 0.5 * balance);
@@ -71,18 +84,12 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void AI()
         {
+            NPC.netUpdate = true;
             #region Targeting
-            if (Main.netMode != 1)
-            {
-                NPC.TargetClosest(true);
-                NPC.netUpdate = true;
-            }
-
             Player player = Main.player[NPC.target];
             if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 3000)
             {
                 NPC.TargetClosest(true);
-                NPC.netUpdate = true;
                 player = Main.player[NPC.target];
                 if (!player.active || player.dead || (NPC.position - player.position).Length() > 3000)
                 {
@@ -94,10 +101,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             if (!Main.npc[(int)hiveWhoAmI].active || Main.npc[(int)hiveWhoAmI].type != NPCType<GemsparklingHive>())
             {
                 NPC.velocity = new Vector2(0f, 10f);
-                if (NPC.timeLeft > 10)
-                {
-                    NPC.timeLeft = 10;
-                }
+                NPC.EncourageDespawn(1);
                 return;
             }
 
@@ -122,12 +126,19 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             else if (NPC.ai[1] == 5)
             {
                 Hide();
+                return;
             }
 
-            if (ticker % 160 == 120)
+            if (ticker % 160 == 120 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
                 NPC.ai[1] = 1;
-            if (ticker % 540 == 300)
+                NPC.netUpdate = true;
+            }
+            if (ticker % 540 == 300 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
                 NPC.ai[1] = 2;
+                NPC.netUpdate = true;
+            }
         }
 
         public override void FindFrame(int frameHeight)
@@ -161,22 +172,24 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 //Movement
                 if (player.active)
                 {
-                    Vector2 direction = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi);
+                    direction = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi);
                     direction *= speed;
-                    NPC.velocity = (NPC.velocity * (inertia - 1) + direction) / inertia;
+                    direction = (NPC.velocity * (inertia - 1) + direction) / inertia;
                 }
                 else
                     NPC.velocity = new Vector2(0f, 10f);
 
                 if (Vector2.Distance(NPC.Center, Main.npc[(int)hiveWhoAmI].Center) > 600)
                 {
-                    Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - NPC.Center;
+                    direction = Main.npc[(int)hiveWhoAmI].Center - NPC.Center;
                     direction.Normalize();
-                    NPC.velocity = direction * 2;
+                    direction = direction * 2;
                 }
 
                 NPC.netUpdate = true;
             }
+
+            NPC.velocity = direction;
         }
 
         public void Hide()
@@ -187,25 +200,31 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             NPC.dontTakeDamage = true;
 
             //Movement
-            if (NPC.alpha >= 255)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - NPC.Center;
-                NPC.velocity = direction;
+                if (NPC.alpha >= 240)
+                {
+                    direction = Main.npc[(int)hiveWhoAmI].Center - NPC.Center;
+                }
+                else
+                {
+                    direction = Main.npc[(int)hiveWhoAmI].Center - NPC.Center;
+                    direction.Normalize();
+                    direction *= 10;
+                }
+                NPC.netUpdate = true;
             }
-            else
-            {
-                Vector2 direction = Main.npc[(int)hiveWhoAmI].Center - NPC.Center;
-                direction.Normalize();
-                direction *= 10;
-                NPC.velocity = direction;
-            }
+            NPC.velocity = direction;
         }
 
         public override void OnKill()
         {
             NPC hive = Main.npc[(int)hiveWhoAmI];
-            if (hive.type == NPCType<GemsparklingHive>())
+            if (hive.type == NPCType<GemsparklingHive>() && Main.netMode != NetmodeID.MultiplayerClient)
+            {
                 hive.ai[3] = 1;
+                hive.netUpdate = true;
+            }
             base.OnKill();
         }
 
@@ -221,11 +240,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (NPC.alpha < 200)
+            if (NPC.alpha < 230)
             {
                 Vector2 drawCenter = NPC.Center;
                 drawCenter.Y += 4;
-                spriteBatch.Draw(Request<Texture2D>(AssetDirectory.GemsparklingHive + Name).Value, drawCenter - screenPos, new Rectangle(0, NPC.frame.Y, NPC.width, NPC.height), Color.White, NPC.rotation, new Vector2(NPC.width, NPC.height) / 2, 1, SpriteEffects.None, 0);
+                spriteBatch.Draw(Request<Texture2D>(AssetDirectory.GemsparklingHive + Name).Value, drawCenter - screenPos, new Rectangle(0, NPC.frame.Y, NPC.width, NPC.height), new Color(255,255,255, NPC.alpha), NPC.rotation, new Vector2(NPC.width, NPC.height) / 2, 1, SpriteEffects.None, 0);
             }
             base.PostDraw(spriteBatch, screenPos, drawColor);
         }

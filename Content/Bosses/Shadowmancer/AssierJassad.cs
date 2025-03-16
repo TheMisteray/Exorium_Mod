@@ -95,20 +95,27 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
         private int attackProgress = 0;
         private bool showHP = true;
         private int target = 0;
+        private int location = 0; //teleport location index
         private Vector2 moveTo = Vector2.Zero;
 
         #region Networking
         //TODO: Check if all of this is even necessary, it might work just fine without sending past actions etc.
         public override void SendExtraAI(System.IO.BinaryWriter writer)
         {
-            writer.Write(showHP);
-            writer.Write(target);
+            writer.Write(phase);
+            writer.Write(attackLength);
+            writer.Write(attackProgress);
+            writer.Write(location);
+            writer.WriteVector2(moveTo);
         }
 
         public override void ReceiveExtraAI(System.IO.BinaryReader reader)
         {
-            showHP = reader.ReadBoolean();
-            target = reader.ReadInt32();
+            phase = reader.ReadInt32();
+            attackLength = reader.ReadInt32();
+            attackProgress = reader.ReadInt32();
+            location = reader.ReadInt32();
+            moveTo = reader.ReadVector2();
         }
         #endregion Networking
 
@@ -135,12 +142,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             int damage = NPC.damage / (Main.expertMode == true ? 4 : 2);
             NPC.aiAction = 0;
 
-            if (Main.netMode != 1)
-            {
-                NPC.TargetClosest(true);
-                NPC.netUpdate = true;
-            }
-
             Player player = Main.player[NPC.target];
             if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 3000)
             {
@@ -150,10 +151,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 if (!player.active || player.dead || (NPC.position - player.position).Length() > 3000)
                 {
                     NPC.velocity = new Vector2(0f, 10f);
-                    if (NPC.timeLeft > 10)
-                    {
-                        NPC.timeLeft = 10;
-                    }
+                    NPC.EncourageDespawn(10);
                     return;
                 }
             }
@@ -178,21 +176,24 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 NPC.netUpdate = true;
             }
             
-            if (Main.netMode != 1 && moveTime > 0)
+            if (moveTime > 0)
             {
-                if (target == 0)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    moveTo = player.Center;
-                    NPC.aiAction = 0;
-                    NPC.TargetClosest(false);
-                    moveTo.Y -= Main.rand.NextFloat(0, 201) + 160;
-                    moveTo.X += Main.rand.NextFloat(-655, 656);
-                    target++;
+                    if (target == 0)
+                    {
+                        moveTo = player.Center;
+                        NPC.TargetClosest(false);
+                        moveTo.Y -= Main.rand.NextFloat(0, 201) + 160;
+                        moveTo.X += Main.rand.NextFloat(-655, 656);
+                        target++;
+                        NPC.netUpdate = true;
+                    }
                 }
+                NPC.aiAction = 0;
                 NPC.velocity = (moveTo - NPC.Center) / 90;
                 NPC.velocity.Y *= 5.5f;
                 moveTime--;
-                NPC.netUpdate = true;
             }
 
             #region Action selection
@@ -235,6 +236,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             attackLength = 180;
                         break;
                     case 5: //Mirror Image
+                            if (Main.netMode != NetmodeID.MultiplayerClient) //choose a location index and sync
+                            {
+                                location = (int)Main.rand.Next((!(phase == 3) ? 2 : 3));
+                                NPC.netUpdate = true;
+                            }
                             moveTime = 90;
                             actionCool = 90;
                             attackLength = 120;
@@ -259,6 +265,11 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 NPC.velocity.X = 0;
                 NPC.velocity.Y = 0;
                 NPC.netUpdate = true;
+            }
+            else if ((actionCool <= 0f) && (moveTime <= 0f))
+            {
+                NPC.velocity.X = 0;
+                NPC.velocity.Y = 0;
             }
             #endregion
 
@@ -293,18 +304,23 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                     case 1:
                         NPC.velocity = Vector2.Zero;
                         NPC.aiAction = 2;
-                        if (Main.netMode != 1 && (attackProgress == 0 || attackProgress == 30 || phase >=2 && attackProgress == 60 || (phase == 3 && attackProgress == 90)))
+                        if ((attackProgress == 0 || attackProgress == 30 || phase >=2 && attackProgress == 60 || (phase == 3 && attackProgress == 90)))
                         {
                             SoundEngine.PlaySound(SoundID.Item1, NPC.position);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + NPC.direction * -5, NPC.Center.Y, (attackProgress/2) * -NPC.direction, -8, ProjectileType<ShadowOrb>(), damage, 1, Main.myPlayer);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + NPC.direction * -5, NPC.Center.Y, (attackProgress/2) * -NPC.direction, -8, ProjectileType<ShadowOrb>(), damage, 1, Main.myPlayer);
                         }
                         break;
                     case 2:
                         if (attackProgress < 180)
                         {
                             NPC.TargetClosest(false);
-                            moveTo = player.Center;
-                            moveTo.X += 500 * NPC.direction;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                moveTo = player.Center;
+                                moveTo.X += 500 * NPC.direction;
+                                NPC.netUpdate = true;
+                            }
                             NPC.velocity = (moveTo - NPC.Center) / 60;
                         }
                         else if (attackProgress == 180)
@@ -364,9 +380,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         if (attackProgress <= 120)
                         {
                             NPC.TargetClosest(false);
-                            player = Main.player[NPC.target];
-                            Vector2 moveTo = player.Center;
-                            moveTo.X += 500 * NPC.direction;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                moveTo = player.Center;
+                                moveTo.X += 500 * NPC.direction;
+                                NPC.netUpdate = true;
+                            }
                             NPC.velocity = (moveTo - NPC.Center) / 60;
                         }
                         else if (attackProgress > 120 && attackProgress < 150)
@@ -401,30 +420,30 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                         }
                         break;
                     case 5:
-                        if (Main.netMode != 1 && attackProgress == 120)
+                        if (attackProgress == 120)
                         {
-                            int location = (int)Main.rand.Next((!(phase == 3) ? 2 : 3));
                             for (int i = 0; i <= (!(phase == 3) ? 2 : 4); i++)
                             {
                                 int xmod = (i == 0) ? -160 : (i == 1) ? 0 : (i == 2) ? 160 : (i == 3) ? -300 : 300;
                                 int ymod = (i == 0) ? -80 : (i == 1) ? -130 : (i == 2) ? -80 : (i == 3) ? -20 : -20;
-                                if (!(location == i)) NPC.NewNPC(NPC.GetSource_FromAI(), (int)player.Center.X + xmod, (int)player.Center.Y + ymod, NPCType<MirrorEntity>(), 0, 0, 0, 0, 0, NPC.target);
-                                else
+                                if (!(location == i) && Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    NPC.position.X = player.Center.X + xmod - NPC.width/2;
+                                    NPC.NewNPC(NPC.GetSource_FromAI(), (int)player.Center.X + xmod, (int)player.Center.Y + ymod, NPCType<MirrorEntity>(), 0, 0, 0, 0, 0, NPC.target);
+                                }
+                                else if (location == i)
+                                {
+                                    NPC.position.X = player.Center.X + xmod - NPC.width / 2;
                                     NPC.position.Y = player.Center.Y + ymod - NPC.height;
-                                    showHP = false;
                                 }
                             }
                             NPC.velocity = Vector2.Zero;
                             NPC.alpha = 0;
+                            showHP = false;
                         }
                         else if (attackProgress > 120 && attackProgress < 300)
                         {
                             if (Main.rand.NextBool(1))
                             {
-                                int offset = Main.rand.Next(-12, 13);
-                                new Vector2(NPC.position.X + offset, NPC.position.Y + offset);
                                 Dust.NewDust(NPC.position + NPC.velocity, NPC.width, NPC.height, DustType<Shadow>(), NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f);
                             }
                         }
@@ -434,11 +453,15 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                     case 6:
                         if (attackProgress < 60)
                         {
-                            Vector2 moveTo = player.Center;
                             NPC.aiAction = 0;
                             NPC.TargetClosest(false);
-                            moveTo.Y -= 160;
-                            moveTo.X += 600 * NPC.direction;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                moveTo = player.Center; 
+                                moveTo.Y -= 160;
+                                moveTo.X += 600 * NPC.direction;
+                                NPC.netUpdate = true;
+                            }
                             target++;
                             NPC.velocity = (moveTo - NPC.Center) / 60;
                         }
@@ -481,7 +504,6 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                     NPC.aiAction = 0;
                     actionCool--;
                 }
-                NPC.netUpdate = true;
             }
             #endregion
 

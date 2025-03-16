@@ -51,10 +51,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Projectile.NewProjectile(source, player.Center, (player.direction == 1) ? Vector2.UnitX.RotatedBy(MathHelper.PiOver4 * -3) : Vector2.UnitX.RotatedBy(MathHelper.PiOver4 * 3) * -1, ProjectileType<HeldInfernalSledge>(), damage, knockback, player.whoAmI, 0, 0);
-            }
+            Projectile.NewProjectile(source, player.Center, (player.direction == 1) ? Vector2.UnitX.RotatedBy(MathHelper.PiOver4 * -3) : Vector2.UnitX.RotatedBy(MathHelper.PiOver4 * 3) * -1, ProjectileType<HeldInfernalSledge>(), damage, knockback, player.whoAmI, 0, 0);
             return false;
         }
     }

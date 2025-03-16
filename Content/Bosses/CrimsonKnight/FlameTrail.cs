@@ -188,7 +188,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             ProjectileID.Sets.CanDistortWater[Type] = false;
             ProjectileID.Sets.CanHitPastShimmer[Type] = true;
-            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 6400;
+            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 6000;
             base.SetStaticDefaults();
         }
 
@@ -197,16 +197,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             base.AI();
             if (Timer == 120)
             {
-                Projectile.height = 1500;
-                Projectile.position = new Vector2(Projectile.position.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top);
-            }
-            else if (Timer > 120)
-            {
-                for (int i = 0; i < 12; i++)
-                {
-                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0, -10, 0, default, 2.5f);
-                    Main.dust[dust].noGravity = true;
-                }
+                Projectile.height = 1000;
+                Projectile.position = new Vector2(Projectile.position.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top + 170);
             }
         }
 
@@ -219,6 +211,20 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), ((Timer + 40) % 60) / 60 * 3, SpriteEffects.None, 0);
                 Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), ((Timer + 20) % 60) / 60 * 3, SpriteEffects.None, 0);
                 Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + (new Vector2(tex.Width / 2, tex.Height) * 3), new Rectangle(0, 0, tex.Width, tex.Height), Color.Red, MathHelper.Pi, new Vector2(tex.Width / 2, tex.Height), (Timer % 60) / 60 * 3, SpriteEffects.None, 0);
+            }
+            else if (Timer > 120)
+            {
+                Vector2 halfHeight = new Vector2(0, Projectile.height / 2);
+                for (int i = 0; i < 6; i++)
+                {
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height / 2, DustID.Torch, 0, -10, 0, default, 2.5f);
+                    Main.dust[dust].noGravity = true;
+                }
+                for (int i = 0; i < 6; i++) //I learn today that dust spwans have a logic distance, so I need a second set to cove the bottom half or else it becomes invisible at the bottom of the arena
+                {
+                    int dust = Dust.NewDust(Projectile.position + halfHeight, Projectile.width, Projectile.height / 2, DustID.Torch, 0, -10, 0, default, 2.5f);
+                    Main.dust[dust].noGravity = true;
+                }
             }
             return base.PreDraw(ref lightColor);
         }

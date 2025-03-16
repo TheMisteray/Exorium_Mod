@@ -16,6 +16,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using ExoriumMod.Core.Utilities;
+using System.IO;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -99,12 +100,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.damage = (int)(NPC.damage * 0.7);
         }
 
-        private bool left = false;
-
-        private int frameX = 0;
-
-        private int loopCounter = 0;
-
         //Action trackers
         private bool teleIndicator = false;
         private bool parry = false;
@@ -159,7 +154,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private static List<Vector2> Arena_Portals = new List<Vector2>() { Arena_Top_Left, Arena_Middle_Left, Arena_Bottom_Left, Arena_Top_Right, Arena_Middle_Right, Arena_Bottom_Right };
         private static float Arena_Left = topL.X + 250;
         private static float Arena_Right = topR.X - 250;
-        private static List<Vector2> Current_Portals = new List<Vector2>() { Vector2.Zero, Vector2.Zero};
         private static float maxTeleportHeight = Core.Systems.WorldDataSystem.FallenTowerRect.Top + 160 + 240;
         private static float minTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Left + 80;
         private static float maxTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Right - 80;
@@ -184,9 +178,44 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => NPC.ai[0] = value;
         }
 
-        private float wait = 60;
+        public float wait
+        {
+            get => NPC.ai[1];
+            set => NPC.ai[1] = value;
+        }
 
-        private float actionTimer;
+        public float actionTimer
+        {
+            get => NPC.ai[2];
+            set => NPC.ai[2] = value;
+        }
+
+        public bool left
+        {
+            get => NPC.ai[3] == 1;
+            set => NPC.ai[3] = value ? 1 : 0;
+        }
+
+        private int frameX = 0;
+        private int loopCounter = 0;
+        private static List<Vector2> Current_Portals = new List<Vector2>() { Vector2.Zero, Vector2.Zero };
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(frameX);
+            writer.Write(loopCounter);
+            writer.Write(Current_Portals.Count);
+            for (int i = 0; i < Current_Portals.Count; i++)
+                writer.WriteVector2(Current_Portals[i]);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            frameX = reader.ReadInt32();
+            loopCounter = reader.ReadInt32();
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+                Current_Portals.Add(reader.ReadVector2());
+        }
 
         public override void AI()
         {
@@ -198,29 +227,24 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             Vector2 swordTip = new Vector2(NPC.Center.X + (left ? 65 : -65), NPC.Center.Y - NPC.height - 75);
 
             #region Targeting  
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+            Player player = Main.player[NPC.target];
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active || !player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect)) //Also stop targeting if outside of arena
             {
                 NPC.TargetClosest(true);
             }
 
-            Player player = Main.player[NPC.target];
-            if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || !player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect)) //Also stop targeting if outside of arena
+            player = Main.player[NPC.target];
+            if (player.dead || (NPC.position - player.position).Length() > 12000 || !player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect))
             {
-                NPC.TargetClosest(true);
-                NPC.netUpdate = true;
-                player = Main.player[NPC.target];
-                if (!player.active || player.dead || (NPC.position - player.position).Length() > 6000 || !player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect))
+                if (player.dead)//Player died
                 {
-                    if (!player.active || player.dead)//Player died
-                    {
-                        //A valiant effort
-                    }
-                    else//Player ran away
-                    {
-                        //Coward...
-                    }
-                    exitAnimation = true;
+                    //A valiant effort
                 }
+                else//Player ran away
+                {
+                    //Coward...
+                }
+                exitAnimation = true;
             }
             #endregion
 
@@ -241,7 +265,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 PhaseTransition();
                 return;
             }
-            else if (exitAnimation)
+            else if (exitAnimation && actionTimer <= 0)
             {
                 ExitAI();
                 return;
@@ -476,7 +500,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 case 3:
                     if (actionTimer == 5)
                     {
-                        int fireballRingWidth = 1400;
+                        int fireballRingWidth = 1200;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             for (int i = 0; i < 16; i++)
@@ -503,7 +527,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     if (actionTimer == 0)
                     {
                         parryDamaged = 0;
-                        parryDamaged = 0;
                     }
                     else if (actionTimer < 60)
                     {
@@ -513,16 +536,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         parry = true;
                         NPC.HitSound = SoundID.Item150;
-                        NPC.defense = 999;
                     }
                     else if (actionTimer == Parry_Durration)
                     {
                         parry = false;
                         NPC.HitSound = SoundID.NPCHit4;
-                        NPC.defense = NPC.defDefense;
                         shieldDown = true;
                         NPC.frameCounter = 0;
-                        bool sound = false;
 
                         //Use same formula as draw to create projectiles
 
@@ -533,10 +553,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             offset = offset.RotatedBy(Main.GameUpdateCount * .02);
                             Vector2 toPlayer = player.Center - (NPC.Center + offset);
                             toPlayer.Normalize();
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, toPlayer * 18, ProjectileType<backupFireball>(), (int)(damage * 1.5f), 3, Main.myPlayer, player.whoAmI);
-                            }
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, toPlayer * 18, ProjectileType<backupFireball>(), (int)(damage * 1.5f), 3, Main.myPlayer, player.whoAmI);
                             SoundEngine.PlaySound(SoundID.Item20);
                         }
 
@@ -604,6 +621,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), swordTip, new Vector2(0, -30).RotatedByRandom(MathHelper.Pi/16), ProjectileType<indicatorRainSword>(), damage, 1, Main.myPlayer, 60, (bladeSpawnQuadrant == 1 || bladeSpawnQuadrant == 4) ? 1f : 0f);
                             SoundEngine.PlaySound(SoundID.Item100, swordTip);
                         }
+                        else if (actionTimer % 6 == 0)
+                            SoundEngine.PlaySound(SoundID.Item100, swordTip);
                     }
                     break;
                 case 6:
@@ -736,6 +755,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     if (NPC.velocity == Vector2.Zero)
                     {
                         frameX = 0;
+                        NPC.noTileCollide = false;
                         ChooseAttack();
                     }
                     break;
@@ -800,34 +820,38 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         //Set up portal locations
                         Current_Portals.Clear();
 
-                        int portal = -1;
-                        //Check elevation level in arena
-                        if (NPC.Center.Y < topL.Y + 544)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            portal = 0;
-                        }
-                        else if (NPC.Center.Y < topL.Y + 864)
-                        {
-                            portal = 1;
-                        }
-                        else
-                        {
-                            portal = 2;
-                        }
-                        if (left)
-                            portal += 3;
-
-                        Current_Portals.Add(Arena_Portals[portal]);
-
-                        for (int i = 0; i < (Main.masterMode? 3: 1); i++) //Add extra portals in master mode
-                        {
-                            Vector2 randPortal = Vector2.Zero;
-                            do
+                            int portal = -1;
+                            //Check elevation level in arena
+                            if (NPC.Center.Y < topL.Y + 544)
                             {
-                                randPortal = Arena_Portals[Main.rand.Next(Arena_Portals.Count)];
+                                portal = 0;
                             }
-                            while (Current_Portals.Contains(randPortal));
-                            Current_Portals.Add(randPortal);
+                            else if (NPC.Center.Y < topL.Y + 864)
+                            {
+                                portal = 1;
+                            }
+                            else
+                            {
+                                portal = 2;
+                            }
+                            if (left)
+                                portal += 3;
+
+                            Current_Portals.Add(Arena_Portals[portal]);
+
+                            for (int i = 0; i < (Main.masterMode ? 3 : 1); i++) //Add extra portals in master mode
+                            {
+                                Vector2 randPortal = Vector2.Zero;
+                                do
+                                {
+                                    randPortal = Arena_Portals[Main.rand.Next(Arena_Portals.Count)];
+                                }
+                                while (Current_Portals.Contains(randPortal));
+                                Current_Portals.Add(randPortal);
+                            }
+                            NPC.netUpdate = true;
                         }
 
                         showPortals = true;
@@ -1040,20 +1064,28 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         #region Action Helper Methods
         private void ChooseMovement()
         {
-            if (Main.rand.NextBool(2))
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                //Check elevation level in arena
-                if (NPC.Center.Y < topL.Y + 544)
+                if (Main.rand.NextBool(2))
                 {
-                    Action = 8;
-                    wait = 20;
-                }
-                else if (NPC.Center.Y < topL.Y + 865)
-                {
-                    if (Main.rand.NextBool(2))
+                    //Check elevation level in arena
+                    if (NPC.Center.Y < topL.Y + 544)
                     {
                         Action = 8;
                         wait = 20;
+                    }
+                    else if (NPC.Center.Y < topL.Y + 865)
+                    {
+                        if (Main.rand.NextBool(2))
+                        {
+                            Action = 8;
+                            wait = 20;
+                        }
+                        else
+                        {
+                            Action = 0;
+                            wait = 10;
+                        }
                     }
                     else
                     {
@@ -1063,82 +1095,86 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
                 else
                 {
-                    Action = 0;
-                    wait = 10;
+                    if (phase == 2 && Main.rand.NextBool())
+                    {
+                        Action = 10;
+                    }
+                    else
+                        Action = 1;
+                    wait = 90;
                 }
-            }
-            else
-            {
-                if (phase == 2 && Main.rand.NextBool(3))
-                {
-                    Action = 10;
-                }
-                else
-                    Action = 1;
-                wait = 90;
-            }
 
-            actionTimer = -1;
+                actionTimer = -1;
+                NPC.netUpdate = true;
+            }
         }
 
         private void ChooseAttack()
         {
-            if (Main.rand.NextBool(4) && phase == 2 && Main.expertMode)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Action = 9;
-                wait = 30;
-            }
-            else  if (Main.rand.NextBool(3))
-            {
-                Action = 5;
-                wait = 30;
-            }
-            else if (Main.rand.NextBool(2))
-            {
-                Action = 7;
-                wait = 20;
-            }
-            else
-            {
-                Action = 6;
-                wait = 90;
-            }
+                if (Main.rand.NextBool(4) && phase == 2 && Main.expertMode)
+                {
+                    Action = 9;
+                    wait = 30;
+                }
+                else if (Main.rand.NextBool(3))
+                {
+                    Action = 5;
+                    wait = 30;
+                }
+                else if (Main.rand.NextBool(2))
+                {
+                    Action = 7;
+                    wait = 20;
+                }
+                else
+                {
+                    Action = 6;
+                    wait = 90;
+                }
 
-            actionTimer = -1;
+                actionTimer = -1;
+                NPC.netUpdate = true;
+            }
         }
         
         private void ChooseFollowup()
         {
-            if (Main.rand.NextBool(4) && phase == 2)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Action = 11;
-
-                //Use flaming sphere if there is no flaming sphere
-                foreach (Projectile p in Main.projectile)
+                if (Main.rand.NextBool(4) && phase == 2)
                 {
-                    if (p.type == ProjectileType<FlamingSphere>())
-                        Action = 12;
+                    Action = 11;
+
+                    //Use flaming sphere if there is no flaming sphere
+                    foreach (Projectile p in Main.projectile)
+                    {
+                        if (p.type == ProjectileType<FlamingSphere>())
+                            Action = 12;
+                    }
+
+                    wait = 90;
+                }
+                else if (Main.rand.NextBool(3) && !(phase == 1 && (Main.rand.NextBool()))) //Less common in phase 1
+                {
+                    Action = 4;
+                    wait = 5;
+                }
+                else if (Main.rand.NextBool(2))
+                {
+                    Action = 3;
+                    wait = 20;
+                }
+                else
+                {
+                    Action = 2;
+                    wait = 5;
                 }
 
-                wait = 90;
+                actionTimer = -1;
+                NPC.netUpdate = true;
             }
-            else if (Main.rand.NextBool(3) && !(phase == 1 && (Main.rand.NextBool()))) //Less common in phase 1
-            {
-                Action = 4;
-                wait = 5;
-            }
-            else if (Main.rand.NextBool(2))
-            {
-                Action = 3;
-                wait = 20;
-            }
-            else
-            {
-                Action = 2;
-                wait = 5;
-            }
-
-            actionTimer = -1;
         }
         #endregion
 
@@ -1162,7 +1198,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     {
                         SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
                     }
-                    else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 90)
+                    else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 90 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (int)(NPC.damage / (Main.expertMode == true ? 4 : 2) * 1.5f), 7, Main.myPlayer);
                     }
@@ -1342,7 +1378,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (exitTicker > 210)
             {
-                NPC.active = false;
+                NPC.position = new Vector2(0, 0);
+                NPC.EncourageDespawn(1);
             }
         }
 
@@ -1362,7 +1399,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     p.type == ProjectileType<ReboundingSword>() ||
                     p.type == ProjectileType<backupFireball>() ||
                     p.type == ProjectileType<ReboundingSword>() ||
-                    p.type == ProjectileType<FlametoungeBeam>())
+                    p.type == ProjectileType<FlametoungeBeam>() ||
+                    p.type == ProjectileType<FlamePillar>())
                 {
                     p.timeLeft = 1;
                     p.Kill();
@@ -1659,7 +1697,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (parry)
             {
                 parryDamaged += item.damage;
-                if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
+                if (parryDamaged > 20)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;
@@ -1674,7 +1712,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (parry)
             {
                 parryDamaged += projectile.damage;
-                if (parryDamaged > 20 && Main.netMode != NetmodeID.MultiplayerClient)
+                if (parryDamaged > 20)
                 {
                     parryDamaged = 0;
                     parryRetaliate++;

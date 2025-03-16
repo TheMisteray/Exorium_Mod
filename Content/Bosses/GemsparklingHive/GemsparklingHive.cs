@@ -10,6 +10,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.DataStructures;
 using ExoriumMod.Content.Biomes;
 using Terraria.WorldBuilding;
+using System;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -32,7 +33,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         public override void SetDefaults()
         {
             NPC.aiStyle = -1;
-            NPC.lifeMax = 1000;
+            NPC.lifeMax = 150;
             NPC.damage = 16;
             NPC.defense = 7;
             NPC.knockBackResist = .3f;
@@ -44,14 +45,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             NPC.timeLeft = NPC.activeTime * 30;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.boss = true;
         }
 
         int[] gemsparklings = new int[7];
 
-        private static int HEALTH_UNTIL_BREAK = Main.expertMode ? 150 : 100;
-
-        public float aiState
+        public float AIState
         {
             get => NPC.ai[0];
             set => NPC.ai[0] = value;
@@ -59,12 +57,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         // 0 - closed
         // 1 - open
         // 2 - dash
-
-        public float effectiveDamageTaken
-        {
-            get => NPC.ai[1];
-            set => NPC.ai[1] = value;
-        }
+        // 3 - die
 
         public bool setGemsparklings
         {
@@ -81,7 +74,6 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         //lifeMax Really doesnt't matter for this boss
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.3 * balance);
             NPC.damage = (int)(NPC.damage * 0.6);
         }
 
@@ -101,73 +93,36 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                 gemsparklings[4] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<RubyGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
                 gemsparklings[5] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<DiamondGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
                 gemsparklings[6] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<AmberGemsparkling>(), 0, 0, 5, 0, NPC.whoAmI, NPC.target);
+                foreach (int i in gemsparklings)
+                {
+                    NPC sparkNpc = Main.npc[i];
+                    if (CheckSparkling(sparkNpc))
+                    {
+                        sparkNpc.ai[1] = 5;
+                        sparkNpc.netUpdate = true;
+                    }
+                }
                 setGemsparklings = true;
-            }
-
-            #region Targeting
-            if (Main.netMode != 1)
-            {
-                NPC.TargetClosest(true);
                 NPC.netUpdate = true;
             }
 
+            #region Targeting
             Player player = Main.player[NPC.target];
             if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 3000)
             {
                 NPC.TargetClosest(true);
-                NPC.netUpdate = true;
                 player = Main.player[NPC.target];
                 if (!player.active || player.dead || (NPC.position - player.position).Length() > 3000)
                 {
                     NPC.velocity = new Vector2(0f, 10f);
-                    if (NPC.timeLeft > 10)
-                    {
-                        NPC.timeLeft = 10;
-                    }
+                    NPC.EncourageDespawn(30);
                     return;
                 }
             }
             #endregion
 
-            if (Main.netMode != NetmodeID.MultiplayerClient && effectiveDamageTaken >= HEALTH_UNTIL_BREAK)
-            {
-                effectiveDamageTaken = 0;
-                aiState = 1;
-                timer = 0;
-
-                int sparkingsAlive = 0;
-                foreach(int i in gemsparklings)
-                {
-                    NPC sparkNpc = Main.npc[i];
-                    if (CheckSparkling(sparkNpc))
-                        sparkingsAlive++;
-                }
-
-                int chosenSparklings = 0;
-                int alreadyChosen = -1;
-                int tries = 0;
-                while (chosenSparklings < 2) //2 or all if less alive
-                {
-                    tries++;
-                    int chosen = gemsparklings[Main.rand.Next(gemsparklings.Length)];
-                    if (chosen == alreadyChosen)
-                        continue;
-                    if (CheckSparkling(Main.npc[chosen]))
-                    {
-                        chosenSparklings++;
-                        alreadyChosen = chosen;
-                        Main.npc[chosen].ai[1] = 0;
-                        Main.npc[chosen].velocity = new Vector2(0, 4).RotatedByRandom(MathHelper.TwoPi);
-                    }
-                    if (chosenSparklings == 1 && sparkingsAlive == 1)
-                        break;
-                    if (sparkingsAlive == 0)
-                        break;
-                }
-            }
-
             timer++;
-            switch (aiState)
+            switch (AIState)
             {
                 case 0:
                     ClosedAI(player);
@@ -177,6 +132,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
                     break;
                 case 2:
                     DashAI(player);
+                    break;
+                case 3: //die
+                    NPC.life = 0;
+                    NPC.HitEffect(0, 0);
+                    NPC.checkDead();
                     break;
             }
 
@@ -188,39 +148,56 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
         {
             NPC.aiAction = 1;
             NPC.velocity *= .9f;
-            if (timer > 900)
+            if (timer > 900 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 foreach (int i in gemsparklings)
                 {
                     NPC sparkNpc = Main.npc[i];
                     if (CheckSparkling(sparkNpc))
+                    {
                         sparkNpc.ai[1] = 5;
+                        sparkNpc.netUpdate = true;
+                    }
                 }
                 timer = 0;
-                aiState = 0;
+                AIState = 0;
                 timer = 0;
+                NPC.netUpdate = true;
             }
             if (player.active == false)
             {
-                foreach (int i in gemsparklings)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    NPC sparkNpc = Main.npc[i];
-                    if (CheckSparkling(sparkNpc))
-                        sparkNpc.ai[1] = 5;
+                    foreach (int i in gemsparklings)
+                    {
+                        NPC sparkNpc = Main.npc[i];
+                        if (CheckSparkling(sparkNpc))
+                        {
+                            sparkNpc.ai[1] = 5;
+                            sparkNpc.netUpdate = true;
+                        }
+                    }
+                    AIState = 0;
+                    NPC.velocity = new Vector2(0, 10);
+                    timer = 0;
+                    NPC.netUpdate = true;
                 }
-                aiState = 0;
-                NPC.velocity = new Vector2(0, 10);
-                timer = 0;
             }
         }
 
         private void ClosedAI(Player player)
         {
-            foreach (int i in gemsparklings)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                NPC sparkNpc = Main.npc[i];
-                if (CheckSparkling(sparkNpc))
-                    sparkNpc.ai[1] = 5;
+                foreach (int i in gemsparklings)
+                {
+                    NPC sparkNpc = Main.npc[i];
+                    if (CheckSparkling(sparkNpc))
+                    {
+                        sparkNpc.ai[1] = 5;
+                        sparkNpc.netUpdate = true;
+                    }
+                }
             }
             NPC.aiAction = 0;
             if ((player.Center - NPC.Center).X >= 0 && rotatorSpeed < .06f)
@@ -255,7 +232,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
             if (timer >= 300)
             {
-                aiState = 2;
+                AIState = 2;
                 timer = 0;
             }
         }
@@ -265,7 +242,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             NPC.aiAction = 0;
             if (timer >= 150)
             {
-                aiState = 0;
+                AIState = 0;
                 timer = 0;
                 rotatorSpeed = 0;
             }
@@ -287,6 +264,8 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             else
             {
+                if (Math.Abs(rotatorSpeed) < .003f) //rev up if spin is slow
+                    rotatorSpeed *= 1.2f;
                 rotatorSpeed *= 1.01f;
                 NPC.rotation += rotatorSpeed;
                 NPC.velocity *= 0.92f;
@@ -329,29 +308,82 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
         {
-            if (aiState != 0)
+            if (AIState != 0)
                 modifiers.Knockback.Flat = 0;
-            NPC.life = NPC.lifeMax;
             base.ModifyIncomingHit(ref modifiers);
         }
 
-        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        public override bool? CanBeHitByItem(Player player, Item item)
         {
-            if (aiState != 1)
-                effectiveDamageTaken += damageDone;
-            base.OnHitByItem(player, item, hit, damageDone);
+            if (AIState == 1)
+                return false;
+            return base.CanBeHitByItem(player, item);
         }
 
-        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        public override bool? CanBeHitByProjectile(Projectile projectile)
         {
-            if (aiState != 1)
-                effectiveDamageTaken += damageDone;
-            base.OnHitByProjectile(projectile, hit, damageDone);
+            if (AIState == 1)
+                return false;
+            return base.CanBeHitByProjectile(projectile);
+        }
+
+        public override bool CanBeHitByNPC(NPC attacker)
+        {
+            if (AIState == 1)
+                return false;
+            return base.CanBeHitByNPC(attacker);
+        }
+
+        public override bool CheckDead()
+        {
+            if (AIState != 3)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    AIState = 1;
+                    timer = 0;
+
+                    int sparkingsAlive = 0;
+                    foreach (int i in gemsparklings)
+                    {
+                        NPC sparkNpc = Main.npc[i];
+                        if (CheckSparkling(sparkNpc))
+                            sparkingsAlive++;
+                    }
+
+                    int chosenSparklings = 0;
+                    int alreadyChosen = -1;
+                    int tries = 0;
+                    while (chosenSparklings < 2) //2 or all if less alive
+                    {
+                        tries++;
+                        int chosen = gemsparklings[Main.rand.Next(gemsparklings.Length)];
+                        if (chosen == alreadyChosen)
+                            continue;
+                        if (CheckSparkling(Main.npc[chosen]))
+                        {
+                            chosenSparklings++;
+                            alreadyChosen = chosen;
+                            Main.npc[chosen].ai[1] = 0;
+                            Main.npc[chosen].velocity = new Vector2(0, 4).RotatedByRandom(MathHelper.TwoPi);
+                        }
+                        if (chosenSparklings == 1 && sparkingsAlive == 1)
+                            break;
+                        if (sparkingsAlive == 0)
+                            break;
+                    }
+
+                    NPC.life = NPC.lifeMax;
+                    NPC.netUpdate = true;
+                }
+                return false;
+            }
+            return base.CheckDead();
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
-            if (aiState == 1)
+            if (AIState == 1)
                 return false;
             float dist = Vector2.Distance(target.Center, NPC.Center);
             if (dist < target.width + NPC.width)
@@ -376,14 +408,11 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
             }
             if (!stillSpark)
             {
-                aiState = 0;
+                AIState = 0;
                 if (numSparks == 0)
                 {
-                    NPC.HitInfo hit = new NPC.HitInfo();
-                    hit.Damage = 9999;
-                    NPC.StrikeNPC(hit, true);
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                        NetMessage.SendStrikeNPC(NPC, hit);
+                    AIState = 3;
+                    NPC.netUpdate = true;
                 }
             }
         }

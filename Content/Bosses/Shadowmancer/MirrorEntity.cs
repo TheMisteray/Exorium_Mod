@@ -106,13 +106,12 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
 
         public override void SendExtraAI(System.IO.BinaryWriter writer)
         {
-            writer.Write((double)moveTo.X);
-            writer.Write((double)moveTo.Y);
+            writer.WriteVector2(moveTo);
         }
 
         public override void ReceiveExtraAI(System.IO.BinaryReader reader)
         {
-            moveTo = new Vector2((float)reader.ReadDouble(), (float)reader.ReadDouble());
+            moveTo = reader.ReadVector2();
         }
 
 
@@ -121,25 +120,15 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
             int damage = NPC.damage / (Main.expertMode == true ? 4 : 2);
             NPC.aiAction = 0;
 
-            if (Main.netMode != 1)
-            {
-                NPC.TargetClosest(true);
-                NPC.netUpdate = true;
-            }
-
             Player player = Main.player[NPC.target];
             if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 2000)
             {
                 NPC.TargetClosest(true);
-                NPC.netUpdate = true;
                 player = Main.player[NPC.target];
                 if (!player.active || player.dead || (NPC.position - player.position).Length() > 2000)
                 {
                     NPC.velocity = new Vector2(0f, 10f);
-                    if (NPC.timeLeft > 10)
-                    {
-                        NPC.timeLeft = 10;
-                    }
+                    NPC.EncourageDespawn(10);
                     return;
                 }
             }
@@ -153,17 +142,21 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 NPC.direction = 1;
             }
 
-            if (Main.netMode != 1 && moveTime > 0)
+            if (moveTime > 0)
             {
-                if (target == 0)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    moveTo = player.Center;
-                    NPC.aiAction = 0;
-                    NPC.TargetClosest(false);
-                    moveTo.Y -= Main.rand.NextFloat(0, 201) + 160;
-                    moveTo.X += Main.rand.NextFloat(-655, 656);
-                    target++;
+                    if (target == 0)
+                    {
+                        moveTo = player.Center;
+                        NPC.TargetClosest(false);
+                        moveTo.Y -= Main.rand.NextFloat(0, 201) + 160;
+                        moveTo.X += Main.rand.NextFloat(-655, 656);
+                        target++;
+                        NPC.netUpdate = true;
+                    }
                 }
+                NPC.aiAction = 0;
                 NPC.velocity = (moveTo - NPC.Center) / 90;
                 NPC.velocity.Y *= 5.5f;
                 moveTime--;
@@ -190,7 +183,7 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                 NPC.velocity.Y = 0;
             }
 
-            if (Main.netMode != 1 && actionCool > 0f && moveTime <= 0)
+            if (actionCool > 0f && moveTime <= 0)
             {
                 switch (actionCycle)
                 {
@@ -209,16 +202,20 @@ namespace ExoriumMod.Content.Bosses.Shadowmancer
                             {
                                 delta = new Vector2(0f, 5f);
                             }
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + NPC.direction * -25, NPC.Center.Y, delta.X, delta.Y, ProjectileType<ShadowBolt>(), damage, 2, Main.myPlayer);
-                            NPC.netUpdate = true;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + NPC.direction * -25, NPC.Center.Y, delta.X, delta.Y, ProjectileType<ShadowBolt>(), damage, 2, Main.myPlayer);
                         }
                         break;
                     case 1:
                         if (attackProgress < 300)
                         {
                             NPC.TargetClosest(false);
-                            moveTo = player.Center;
-                            moveTo.X += 500 * NPC.direction;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                moveTo = player.Center;
+                                moveTo.X += 500 * NPC.direction;
+                                NPC.netUpdate = true;
+                            }
                             NPC.velocity = (moveTo - NPC.Center) / 60;
                         }
                         else if (attackProgress == 300)

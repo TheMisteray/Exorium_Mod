@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using ExoriumMod.Content.Projectiles;
+using System.IO;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -103,6 +104,16 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             set => Projectile.localAI[0] = value;
         }
 
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(swings);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            swings = reader.ReadInt32();
+        }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -146,8 +157,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
                         if (swings >= 5)
                         {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                                SwordFan(rrp);
+                            SwordFan(rrp);
                             swings = 0;
                         }
 
@@ -189,8 +199,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
                         if (swings >= 5)
                         {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                                SwordFan(rrp);
+                            SwordFan(rrp);
                             swings = 0;
                         }
 
@@ -328,6 +337,11 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void AI()
         {
+
+            if (Projectile.timeLeft == 300)
+            {
+                Projectile.netUpdate = true;
+            }
             if (FadeState)
             {
                 Projectile.timeLeft = 10;

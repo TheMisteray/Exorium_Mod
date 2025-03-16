@@ -7,6 +7,7 @@ using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
+using Terraria.ModLoader.Utilities;
 
 namespace ExoriumMod.Content.Bosses.GemsparklingHive
 {
@@ -53,11 +54,7 @@ namespace ExoriumMod.Content.Bosses.GemsparklingHive
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneRockLayerHeight)
-            {
-                return .005f;
-            }
-            return 0;
+            return SpawnCondition.Cavern.Chance * .008f;
         }
     }
 }

@@ -52,7 +52,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                     Filters.Scene.Activate("ExoriumMod:InfernalRift", Projectile.Center).GetShader().UseColor(.05f, .005f, 0).UseTargetPosition(Projectile.Center).UseImage(heatMap).UseProgress(0);
                 }
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top + 200), Vector2.UnitY * 110, ProjectileType<RiftIndicator>(), 0, 0);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top + 200), Vector2.UnitY * 110, ProjectileType<RiftIndicator>(), 0, 0);
             }
 
             if (Projectile.timeLeft == 220)
@@ -81,7 +82,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 //Create Spirits
                 float dist = (towerYMin - towerYMax) - 128;
                 int count = Main.expertMode? 16: 20;
-                if (Main.masterMode) count += 4;
+                if (Main.masterMode) count += 2;
                 float interval = dist / count;
                 bool[] leftSpirits = new bool[count];
                 bool[] rightSpirits = new bool[count];
