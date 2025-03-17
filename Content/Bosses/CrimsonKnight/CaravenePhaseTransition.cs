@@ -125,32 +125,62 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
 
             time++;
-            if (time == 0)
+            if (time == 1)
             {
-                //Upset
+                AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                popupRequest.Color = Color.Red;
+                if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
+                    popupRequest.Text = "...";
+                else if (Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                    popupRequest.Text = "Ugh";
+                else
+                    popupRequest.Text = "Seriously?";
+                popupRequest.DurationInFrames = 90;
+                PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
             }
-            else if (time == 60)
+            else if (time == 90)
             {
-                //Fluff
-            }
-            else if (time == 120)
-            {
-                //You asked for it
+                if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
+                    time = 269;
+                else
+                {
+                    AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                    popupRequest.Color = Color.Red;
+                    if (Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                        popupRequest.Text = "I shouldn't have expected anything...";
+                    else
+                        popupRequest.Text = "So that's how it is then";
+                    popupRequest.DurationInFrames = 90;
+                    PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                }
             }
             else if (time == 180)
+            {
+                if (Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                    time = 269;
+                else
+                {
+                    AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                    popupRequest.Color = Color.Red;
+                    popupRequest.Text = "Well... You asked for it";
+                    popupRequest.DurationInFrames = 90;
+                    PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                }
+            }
+            else if (time == 270)
             {
                 frameX = 5;
                 counter = 0;
             }
-            else if (time > 180 && time < 240)
+            else if (time > 270 && time < 330)
             {
                 counter++;
             }
-            else if (time == 240)
+            else if (time == 330)
             {
                 SoundEngine.PlaySound(SoundID.Roar, NPC.position);
             }
-            else if (time > 240 && time < 420)
+            else if (time > 330 && time < 510)
             {
                 counter++;
                 for (int i = 0; i < 20; i++)
@@ -162,10 +192,18 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     dust.color = new Color(184, 58, 24);
                 }
             }
-            else if (time == 420)
+            else if (time == 510)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                     NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<ExoriumRed>(), 0, 6);
+                if (!Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                {
+                    Core.Systems.DownedBossSystem.dueledCrimsonKnight = true;
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.
+                    }
+                }
                 NPC.active = false;
             }
         }

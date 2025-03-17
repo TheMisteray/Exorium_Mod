@@ -128,31 +128,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         private int transitionCounter = 0;
 
         private float[] deathLightLengths = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        private float[] deathLightAngles = { 0, 
-            0 + MathHelper.TwoPi / 3, 
-            0 + MathHelper.TwoPi / 3 * 2, 
-            MathHelper.TwoPi / 9, 
-            MathHelper.TwoPi / 9 + MathHelper.TwoPi / 3, 
-            MathHelper.TwoPi / 9 + MathHelper.TwoPi / 3 * 2, 
-            MathHelper.TwoPi / 9 * 2, 
-            MathHelper.TwoPi / 9 * 2 + MathHelper.TwoPi / 3, 
+        private float[] deathLightAngles = { 0,
+            0 + MathHelper.TwoPi / 3,
+            0 + MathHelper.TwoPi / 3 * 2,
+            MathHelper.TwoPi / 9,
+            MathHelper.TwoPi / 9 + MathHelper.TwoPi / 3,
+            MathHelper.TwoPi / 9 + MathHelper.TwoPi / 3 * 2,
+            MathHelper.TwoPi / 9 * 2,
+            MathHelper.TwoPi / 9 * 2 + MathHelper.TwoPi / 3,
             MathHelper.TwoPi / 9 * 2 + MathHelper.TwoPi / 3 * 2 };
-
-        //Portal/Arena Locations
-        private static Vector2 topL = Core.Systems.WorldDataSystem.FallenTowerRect.TopLeft();
-        private static Vector2 topR = Core.Systems.WorldDataSystem.FallenTowerRect.TopRight();
-        private static Vector2 Arena_Top_Left = topL + new Vector2(250, 400);
-        private static Vector2 Arena_Middle_Left = topL + new Vector2(250, 720); //20 tiles to next location so + 320
-        private static Vector2 Arena_Bottom_Left = topL + new Vector2(250, 1040);
-        private static Vector2 Arena_Top_Right = topR + new Vector2(-250, 400);
-        private static Vector2 Arena_Middle_Right = topR + new Vector2(-250, 720);
-        private static Vector2 Arena_Bottom_Right = topR + new Vector2(-250, 1040);
-        private static List<Vector2> Arena_Portals = new List<Vector2>() { Arena_Top_Left, Arena_Middle_Left, Arena_Bottom_Left, Arena_Top_Right, Arena_Middle_Right, Arena_Bottom_Right };
-        private static float Arena_Left = topL.X + 250;
-        private static float Arena_Right = topR.X - 250;
-        private static float maxTeleportHeight = Core.Systems.WorldDataSystem.FallenTowerRect.Top + 160 + 240;
-        private static float minTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Left + 80;
-        private static float maxTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Right - 80;
 
         //Actions
         //0 - jump                              -Unchanged?
@@ -227,6 +211,23 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void AI()
         {
+
+            //Portal/Arena Locations          ---NOTICE: previously these were kepts as statics outside of AI, this caused an issue where they would not respond to worlds being loaded, so they were moved here, it is a bit messy
+            Vector2 topL = Core.Systems.WorldDataSystem.FallenTowerRect.TopLeft();
+            Vector2 topR = Core.Systems.WorldDataSystem.FallenTowerRect.TopRight();
+            Vector2 Arena_Top_Left = topL + new Vector2(250, 400);
+            Vector2 Arena_Middle_Left = topL + new Vector2(250, 720); //20 tiles to next location so + 320
+            Vector2 Arena_Bottom_Left = topL + new Vector2(250, 1040);
+            Vector2 Arena_Top_Right = topR + new Vector2(-250, 400);
+            Vector2 Arena_Middle_Right = topR + new Vector2(-250, 720);
+            Vector2 Arena_Bottom_Right = topR + new Vector2(-250, 1040);
+            List<Vector2> Arena_Portals = new List<Vector2>() { Arena_Top_Left, Arena_Middle_Left, Arena_Bottom_Left, Arena_Top_Right, Arena_Middle_Right, Arena_Bottom_Right };
+            float Arena_Left = topL.X + 250;
+            float Arena_Right = topR.X - 250;
+            float maxTeleportHeight = Core.Systems.WorldDataSystem.FallenTowerRect.Top + 160 + 240;
+            float minTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Left + 80;
+            float maxTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Right - 80;
+
             if (DeathTimer > 0) //override AI with death animation in this case
             {
                 DeathAnimation();
@@ -250,13 +251,53 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             player = Main.player[NPC.target];
             if (player.dead || (NPC.position - player.position).Length() > 12000 || !player.getRect().Intersects(Core.Systems.WorldDataSystem.FallenTowerRect))
             {
-                if (player.dead)//Player died
+                if (player.dead && exitAnimation == false)//Player died
                 {
                     //A valiant effort
+                    if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
+                    {
+                        AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                        popupRequest.Color = Color.Red;
+                        popupRequest.Text = "...";
+                        popupRequest.DurationInFrames = 90;
+                        PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                    }
+                    else if (Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                    {
+                        AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                        popupRequest.Color = Color.Red;
+                        popupRequest.Text = "Serves you right!";
+                        popupRequest.DurationInFrames = 90;
+                        PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                    }
+                    else
+                    {
+                        AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                        popupRequest.Color = Color.Red;
+                        popupRequest.Text = "A valiant effort";
+                        popupRequest.DurationInFrames = 90;
+                        PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                    }
                 }
-                else//Player ran away
+                else if (exitAnimation == false)//Player ran away
                 {
                     //Coward...
+                    if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
+                    {
+                        AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                        popupRequest.Color = Color.Red;
+                        popupRequest.Text = "...";
+                        popupRequest.DurationInFrames = 90;
+                        PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                    }
+                    else
+                    {
+                        AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                        popupRequest.Color = Color.Red;
+                        popupRequest.Text = "Coward";
+                        popupRequest.DurationInFrames = 90;
+                        PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                    }
                 }
                 exitAnimation = true;
             }
@@ -271,12 +312,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             //Override normal action
             if (introAnimation)
             {
-                IntroAI();
+                IntroAI(topL);
                 return;
             }
             else if (phaseTransition)
             {
-                PhaseTransition();
+                PhaseTransition(topL);
                 return;
             }
             else if (exitAnimation && actionTimer <= 0)
@@ -558,7 +599,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer >= 210)
                     {
-                        ChooseMovement();
+                        ChooseMovement(topL);
                     }
 
                     //control alpha
@@ -582,7 +623,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer > 240)
                     {
-                        ChooseMovement();
+                        ChooseMovement(topL);
                     }
                     break;
                 case 4:
@@ -639,7 +680,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer > Parry_Durration + 40)
                     {
-                        ChooseMovement();
+                        ChooseMovement(topL);
                     }
                     break;
                 case 5:
@@ -1130,7 +1171,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer > 180)
                     {
-                        ChooseMovement();
+                        ChooseMovement(topL);
                     }
                     break;
                 case 12:
@@ -1156,7 +1197,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (actionTimer == 60)
                     {
-                        ChooseMovement();
+                        ChooseMovement(topL);
                     }
                     break;
             }
@@ -1166,7 +1207,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         }
 
         #region Action Helper Methods
-        private void ChooseMovement()
+        private void ChooseMovement(Vector2 topL)
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -1285,7 +1326,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             //Projectile
             if (Main.netMode != NetmodeID.MultiplayerClient)
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), location, Vector2.Zero, ProjectileType<CaraveneClone>(), damage, 2, Main.myPlayer, index < 3 ? 0 : 1);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), location, Vector2.Zero, ProjectileType<CaraveneClone>(), (int)(damage * 1.5f), 2, Main.myPlayer, index < 3 ? 0 : 1);
             /*
             for (int i = 0; i < 50; i++)
             {
@@ -1366,7 +1407,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         }
 
         //Play intro animation
-        private void IntroAI()
+        private void IntroAI(Vector2 topL)
         {
             if (introTicker == 9999) //Boss Card
             {
@@ -1386,7 +1427,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (introTicker <= 0)
             {
                 introAnimation = false;
-                ChooseMovement();
+                ChooseMovement(topL);
             }
 
             if (Main.netMode != NetmodeID.Server && Filters.Scene["ExoriumMod:CaraveneTitle"].IsActive())
@@ -1403,7 +1444,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         }
 
         //Play phase transition
-        private void PhaseTransition()
+        private void PhaseTransition(Vector2 topL)
         {
             if (transitionCounter >= 260)
             {
@@ -1477,7 +1518,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 phaseTransition = false;
 
-                ChooseMovement();
+                ChooseMovement(topL);
             }
             transitionCounter++;
         }
@@ -1769,6 +1810,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 Texture2D texTele = Request<Texture2D>(AssetDirectory.CrimsonKnight + "TeleportIndicator").Value;
                 Player p = Main.player[NPC.target];
+                float minTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Left + 80;
+                float maxTeleportX = Core.Systems.WorldDataSystem.FallenTowerRect.Right - 80;
+                Vector2 topL = Core.Systems.WorldDataSystem.FallenTowerRect.TopLeft();
+                Vector2 Arena_Top_Left = topL + new Vector2(250, 400);
                 for (int i = 0; i < 6; i++)
                 {
                     if (teleportLocations[i])

@@ -16,6 +16,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Localization;
 using Terraria.Audio;
 using Steamworks;
+using Mono.Cecil;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -91,8 +92,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             set => NPC.ai[2] = value ? 1f : 0f;
         }
 
+        public bool Despawn
+        {
+            get => NPC.ai[2] == 1f;
+            set => NPC.ai[2] = value ? 1f : 0f;
+        }
+
         private float counter = 0;
-        private bool Despawn = false;
         private float despawnTime;
         private bool invisible = false;
         private float portalSize;
@@ -112,10 +118,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 NPC.TargetClosest(true);
                 NPC.netUpdate = true;
                 player = Main.player[NPC.target];
-                if (!player.active || player.dead || (NPC.position - player.position).Length() > 3000)
+                if (player.dead || (NPC.position - player.position).Length() > 8000)
                 {
                     //TODO: this still will use the same exit if the player is far
-                    return;
+                    NPC.EncourageDespawn(120);
                 }
             }
             #endregion
@@ -146,19 +152,44 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Despawn)
             {
                 despawnTime++;
+                if (despawnTime == 10)
+                    NPC.DropItemInstanced(NPC.position, new Vector2(NPC.width, NPC.height), ItemType<CrimsonKnightBag>(), 1);
                 if (despawnTime == 30)
                 {
                     //Say stuff
+                    AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                    popupRequest.Color = Color.Red;
+                    if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
+                        popupRequest.Text = "...";
+                    else if (Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                        popupRequest.Text = "Good to see you've come to your senses";
+                    else
+                        popupRequest.Text = "It was a good fight!";
+                    popupRequest.DurationInFrames = 90;
+                    PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
                 }
-                else if (despawnTime == 80)
+                else if (despawnTime == 120)
                 {
                     //Say stuff
+                    if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
+                        despawnTime = 149;
+                    else
+                    {
+                        AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
+                        popupRequest.Color = Color.Red;
+                        if (Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                            popupRequest.Text = "I'm outta here";
+                        else
+                            popupRequest.Text = "Maybe we'll cross paths again sometime";
+                        popupRequest.DurationInFrames = 90;
+                        PopupText.NewText(popupRequest, NPC.Center + new Vector2(0, -NPC.width));
+                    }
                 }
-                else if (despawnTime == 180)
+                else if (despawnTime == 210)
                 {
                     invisible = true;
                 }
-                else if (despawnTime == 240)
+                else if (despawnTime == 270)
                 {
                     NPC.active = false;
                 }
@@ -172,7 +203,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override string GetChat()
         {
             if (!Despawn)
-                return "Okay! Okay!!! You can keep it... Say, you're pretty good. How about we call this a truce for now?";
+            {
+                if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
+                    return "...";
+                else if (Core.Systems.DownedBossSystem.dueledCrimsonKnight)
+                    return "Against my better judgement, I'm giving you one more chance to call it a draw here.";
+                else if (Core.Systems.DownedBossSystem.trucedCrimsonKnight)
+                    return "Haha! Another great fight! Truce?";
+                else
+                    return "Okay! Okay!!! You can keep the crown... Say, you're pretty good. How about we call this a draw for now?";
+            }
             return "";
         }
 
@@ -184,26 +224,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)
         {
-            if (firstButton)
+            if (firstButton && !Despawn)
             {
-                foreach (Player p in Main.player)
-                {
-                    if (Main.netMode != NetmodeID.Server && p.active && !Despawn)
-                    {
-                        p.QuickSpawnItem(NPC.GetSource_DropAsItem(), ItemType<CrimsonKnightBag>());
-                        //closes dialouge, may need testing
-                        p.sign = -1;
-                        Main.npcChatCornerItem = 0;
-                        Main.editSign = false;
-                        Main.npcChatText = "";
-                        Main.player[Main.myPlayer].releaseMount = false;
-                        Main.player[Main.myPlayer].SetTalkNPC(-1);
-                    }
+                Despawn = true;
+                invulnerableTime = 9999;//Use this as alternative way of communicating despawn over net
+                SoundEngine.PlaySound(SoundID.MenuClose, NPC.Center);
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
+                NPC.netUpdate = true;
 
-                    Despawn = true;
-                    invulnerableTime = 9999;//Use this as alternative way of communicating despawn over net
-                    SoundEngine.PlaySound(SoundID.MenuClose, NPC.Center);
-                }
                 //Update
                 if (!Core.Systems.DownedBossSystem.trucedCrimsonKnight)
                 {
@@ -213,6 +241,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                         NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.
                     }
                 }
+            }
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                Main.npcChatCornerItem = 0;
+                Main.editSign = false;
+                Main.npcChatText = "";
+                Main.LocalPlayer.releaseMount = false;
             }
         }
 
@@ -270,7 +306,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
 
             //Portal
-            if (Despawn && despawnTime >= 120)
+            if (Despawn && despawnTime >= 150)
             {
                 var portal = Filters.Scene["ExoriumMod:VioletPortal"].GetShader().Shader;
                 portal.Parameters["sampleTexture2"].SetValue(Request<Texture2D>(AssetDirectory.ShaderMap + "PortalMap").Value);
@@ -281,7 +317,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spriteBatch.End();
                 spriteBatch.Begin(default, BlendState.NonPremultiplied, default, default, default, portal, Main.GameViewMatrix.ZoomMatrix);
 
-                if (despawnTime < 180)
+                if (despawnTime < 210)
                     portalSize += .02f;
                 else
                     portalSize -= .02f;
@@ -315,20 +351,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
                 NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaravenePhaseTransition>());
-        }
-
-        public override bool PreKill()
-        {
-            //Update
-            if (!Core.Systems.DownedBossSystem.dueledCrimsonKnight)
-            {
-                Core.Systems.DownedBossSystem.dueledCrimsonKnight = true;
-                if (Main.netMode == NetmodeID.Server)
-                {
-                    NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.
-                }
-            }
-            return base.PreKill();
         }
     }
 }
