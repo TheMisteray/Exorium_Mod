@@ -17,6 +17,11 @@ using Terraria.Localization;
 using Terraria.Audio;
 using Steamworks;
 using Mono.Cecil;
+using ExoriumMod.Content.Items.Accessories;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.UI;
+using ExoriumMod.Content.Bosses.Shadowmancer;
+using System.IO;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -94,8 +99,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public bool Despawn
         {
-            get => NPC.ai[2] == 1f;
-            set => NPC.ai[2] = value ? 1f : 0f;
+            get => NPC.ai[3] == 1f;
+            set => NPC.ai[3] = value ? 1f : 0f;
         }
 
         private float counter = 0;
@@ -116,7 +121,6 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (!player.active || player.dead && Main.netMode != NetmodeID.MultiplayerClient || (NPC.position - player.position).Length() > 3000)
             {
                 NPC.TargetClosest(true);
-                NPC.netUpdate = true;
                 player = Main.player[NPC.target];
                 if (player.dead || (NPC.position - player.position).Length() > 8000)
                 {
@@ -152,9 +156,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             if (Despawn)
             {
                 despawnTime++;
-                if (despawnTime == 10)
-                    NPC.DropItemInstanced(NPC.position, new Vector2(NPC.width, NPC.height), ItemType<CrimsonKnightBag>(), 1);
-                if (despawnTime == 30)
+
+                if (despawnTime == 40)
                 {
                     //Say stuff
                     AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
@@ -189,9 +192,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 {
                     invisible = true;
                 }
-                else if (despawnTime == 270)
+                else if (despawnTime >= 270)
                 {
-                    NPC.active = false;
+                    NPC.life = 0;
+                    NPC.HitEffect(0, 0);
+                    NPC.checkDead();
                 }
             }
             else
@@ -226,11 +231,18 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (firstButton && !Despawn)
             {
-                Despawn = true;
                 invulnerableTime = 9999;//Use this as alternative way of communicating despawn over net
                 SoundEngine.PlaySound(SoundID.MenuClose, NPC.Center);
-                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
-                NPC.netUpdate = true;
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                {
+                    var netMessage = ExoriumMod.instance.GetPacket();
+                    netMessage.Write((byte)ExoriumPacketType.CaraveneBagDrop);
+                    netMessage.Send();
+                }
+                else
+                {
+                    Despawn = true;
+                }
 
                 //Update
                 if (!Core.Systems.DownedBossSystem.trucedCrimsonKnight)
@@ -238,7 +250,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     Core.Systems.DownedBossSystem.trucedCrimsonKnight = true;
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        NetMessage.SendData(MessageID.WorldData); // Immediately inform clients of new world state.
+                        NetMessage.SendData(MessageID.WorldData);
                     }
                 }
             }
@@ -347,10 +359,32 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return false;
         }
 
-        public override void OnKill()
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-                NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaravenePhaseTransition>());
+            npcLoot.Add(ItemDropRule.BossBag(ItemType<CrimsonKnightBag>()));
+
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+
+            int[] items = new int[4] { ItemType<Items.Weapons.Magic.BurningSphere>(), ItemType<Items.Weapons.Melee.InfernalSledge>(), ItemType<Items.Weapons.Summoner.Whips.FlameTongue>(), ItemType<Items.Weapons.Ranger.MagmaMortar>() };
+            notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, items));
+            notExpertRule.OnSuccess(ItemDropRule.CoinsBasedOnNPCValue(NPCType<Caravene>()));
+            npcLoot.Add(notExpertRule);
+            base.ModifyNPCLoot(npcLoot);
+        }
+
+        public override bool CheckDead()
+        {
+            if (Despawn)
+            {
+                return true;
+            }
+            else
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Bottom.Y, NPCType<CaravenePhaseTransition>());
+                NPC.active = false;
+                return false;
+            }
         }
     }
 }

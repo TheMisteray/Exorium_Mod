@@ -22,10 +22,9 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
             int j = 0;
             while (!success)
             {
-                if (attempts > 10000)
+                if (attempts > 100000)
                 {
                     success = true;
-                    return;
                 }
                 i = Main.maxTilesX / 2 + (WorldGen.genRand.Next(Main.maxTilesX / 6, Main.maxTilesX / 3) * (WorldGen.genRand.NextBool() ? -1 : 1));
                 j = Main.maxTilesY - 200;

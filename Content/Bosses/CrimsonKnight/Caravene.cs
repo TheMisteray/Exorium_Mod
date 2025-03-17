@@ -75,8 +75,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
-            NPC.damage = 67;
-            NPC.defense = 28;
+            NPC.damage = 64;
+            NPC.defense = 31;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
@@ -632,7 +632,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                         bladeSpawnOrigin += offset;
 
-                        bladeSpawnCount = Main.expertMode ? 20 : 25;
+                        bladeSpawnCount = Main.expertMode ? 18 : 22;
                         if (Main.masterMode)
                             bladeSpawnCount -= 5;
                         if (phase == 2)

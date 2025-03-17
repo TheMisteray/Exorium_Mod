@@ -85,6 +85,8 @@ Mods: {
 
 				Census.Spawncondition: Will show up when he feels like it. (After there are at least 3 other NPCs in your town).
 			}
+
+			LootDropDummy.DisplayName: Loot Drop Dummy
 		}
 
 		Items: {
@@ -954,11 +956,11 @@ Mods: {
 			FlameToungeGreatswordBeam.DisplayName: Flame Tounge Beam
 			CrimsonSlashProjectile.DisplayName: Crimson Slash Projectile
 			CrimsonSlash.DisplayName: Crimson Slash
-			LargeFlamingSphere.DisplayName: Large Flaming Sphere
+			LargeFlamingSphere.DisplayName: Flaming Sphere
 			RotatingFireball.DisplayName: Rotating Fireball
 			FireCone.DisplayName: Fire Cone
 			MegaFlamePillar.DisplayName: Mega Flame Pillar
-			LargeFlamePillar.DisplayName: Large Flame Pillar
+			LargeFlamePillar.DisplayName: Flame Pillar
 			RiftIndicator.DisplayName: Rift Indicator
 		}
 

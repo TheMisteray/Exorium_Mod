@@ -196,12 +196,26 @@ namespace ExoriumMod
                     netID = reader.ReadInt32();
                     Content.Tiles.ShadowAltarTile.HandleNPC(npcType, netID, true, whoAmI);
                     break;
+                case ExoriumPacketType.CaraveneBagDrop:
+                    foreach(NPC npc in Main.npc)
+                    {
+                        if (npc.type == NPCType<Content.Bosses.CrimsonKnight.CaraveneBattleIntermission>())
+                            npc.ai[3] = 1;
+                    }
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        var netMessage = instance.GetPacket();
+                        netMessage.Write((byte)ExoriumPacketType.CaraveneBagDrop);
+                        netMessage.Send();
+                    }
+                    break;
             }
         }
     }
 
     internal enum ExoriumPacketType : byte
     {
-        ShadowmancerSpawn
+        ShadowmancerSpawn,
+        CaraveneBagDrop
     }
 }

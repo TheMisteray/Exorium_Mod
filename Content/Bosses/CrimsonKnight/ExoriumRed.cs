@@ -54,8 +54,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
-            NPC.damage = 61;
-            NPC.defense = 36;
+            NPC.damage = 71;
+            NPC.defense = 39;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
@@ -235,7 +235,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             }
 
             //Damage calculations
-            int damage = NPC.damage / (Main.expertMode == true ? 2 : 1);
+            int damage = NPC.damage / (Main.expertMode == true ? 4 : 2);
 
             //Reset vars
             parry = false;
@@ -2044,6 +2044,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 }
             }
             return base.PreKill();
+        }
+
+        public override void BossLoot(ref string name, ref int potionType)
+        {
+            name = "Exorium Red";
+            potionType = ItemID.HealingPotion;
         }
     }
 }   
