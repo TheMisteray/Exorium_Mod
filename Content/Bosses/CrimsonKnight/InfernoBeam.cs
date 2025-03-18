@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using ExoriumMod.Primitives;
 using System.IO;
 using Terraria.Graphics.Shaders;
 using ExoriumMod.Content.Bosses.GemsparklingHive;

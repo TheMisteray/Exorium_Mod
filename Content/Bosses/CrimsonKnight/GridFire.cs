@@ -5,10 +5,10 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
+using Luminance.Core.Graphics;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -226,7 +226,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         }
     }
 
-    internal class gridCollision : ModProjectile
+    internal class gridCollision : ModProjectile, IPixelatedPrimitiveRenderer
     {
         public override string Texture => AssetDirectory.Invisible;
 
@@ -265,18 +265,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             return dist.Length() < ((projHitbox.Width/2) + (targetHitbox.Width/2));
         }
 
-        public override bool PreDraw(ref Color lightColor)
+        public void RenderPixelatedPrimitives(SpriteBatch spriteBatch)
         {
-            SpriteBatch spriteBatch = Main.spriteBatch;
-
-            spriteBatch.End();
-            ShapeBatch.Begin(spriteBatch.GraphicsDevice);
-            ShapeBatch.CircleOutline(Projectile.Center - Main.screenPosition, Projectile.Hitbox.Width / 2, 100, Projectile.timeLeft, new Color(255, 69, 0, lightColor.A));
-            //ShapeBatch.Circle(Projectile.Center - Main.screenPosition, Projectile.Hitbox.Width / 2, 100, Projectile.timeLeft, new Color(0, 0, 0, 0), new Color(120, 30, 0, 10));
-            ShapeBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-
-            return true;
+            PrimitiveRenderer.RenderCircleEdge(Projectile.Center, new(_ => 2, _ => new Color(255, 69, 0), _ => Projectile.Hitbox.Width/2, true), 100);
         }
     }
 }

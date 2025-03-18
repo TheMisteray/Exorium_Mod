@@ -5,14 +5,14 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
+using Luminance.Core.Graphics;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
-    class FlamingSphere : ModProjectile 
+    class FlamingSphere : ModProjectile, IPixelatedPrimitiveRenderer
     {
         public override string Texture => AssetDirectory.CrimsonKnight + "FlamingSphere"; //don't reference Name so child class still works
 
@@ -178,16 +178,16 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
 
             }
-            else
-            {
-                spriteBatch.End();
-                ShapeBatch.Begin(spriteBatch.GraphicsDevice);
-                ShapeBatch.Circle(Projectile.Center - Main.screenPosition, explosionRadius, 200, MathHelper.ToRadians(1.0f * Projectile.timeLeft), new Color(0, 0, 0, 0), Color.Lerp(Color.OrangeRed, new Color(0, 0, 0, 0), (float)(-1 * (Projectile.timeLeft - 60)) / 60f));
-                ShapeBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-            }
 
             return false;
+        }
+
+        public void RenderPixelatedPrimitives(SpriteBatch spriteBatch)
+        {
+            if (Projectile.timeLeft > 60)
+                return;
+
+            PrimitiveRenderer.RenderCircle(Projectile.Center, new(_ => explosionRadius, _ => Color.Lerp(Color.OrangeRed, new Color(0, 0, 0, 0), (float)(-1 * (Projectile.timeLeft - 60)) / 60f), true));
         }
     }
 

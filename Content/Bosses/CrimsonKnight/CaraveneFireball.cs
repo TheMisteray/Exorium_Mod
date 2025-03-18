@@ -7,7 +7,6 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
-using ExoriumMod.Core.Utilities;
 using Terraria.Graphics.Shaders;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight

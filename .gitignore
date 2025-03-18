@@ -14,3 +14,7 @@
 
 commit-message.txt
 *.sfk
+
+Luminance.dll
+Luminance.pdb
+Luminance.xml

@@ -15,7 +15,6 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
-using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Bosses.Shadowmancer;
 using Terraria.GameContent.ItemDropRules;
 using System.IO;
@@ -1583,9 +1582,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
             if (DeathTimer >= 60)
             {
-                deathLightLengths[0] += 6;
-                deathLightLengths[1] += 6;
-                deathLightLengths[2] += 6;
+                deathLightLengths[0] += .03f;
+                deathLightLengths[1] += .03f;
+                deathLightLengths[2] += .03f;
                 deathLightAngles[0] += .002f; //Rotate all here so that they don't desync
                 deathLightAngles[1] += .002f;
                 deathLightAngles[2] += .002f;
@@ -1597,14 +1596,14 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 deathLightAngles[8] += .002f;
                 if (DeathTimer >= 150)
                 {
-                    deathLightLengths[3] += 5;
-                    deathLightLengths[4] += 5;
-                    deathLightLengths[5] += 5;
+                    deathLightLengths[3] += .03f;
+                    deathLightLengths[4] += .03f;
+                    deathLightLengths[5] += .03f;
                     if (DeathTimer >= 240) 
                     {
-                        deathLightLengths[6] += 5;
-                        deathLightLengths[7] += 5;
-                        deathLightLengths[8] += 5;
+                        deathLightLengths[6] += .03f;
+                        deathLightLengths[7] += .03f;
+                        deathLightLengths[8] += .03f;
                     }
                 }
             }
@@ -1763,20 +1762,10 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             if (DeathTimer > 0) //Catch into this block so that other draws stop for death animation
             {
-                Color lightWhite = new Color(120, 0, 0, 200);
-                spriteBatch.End();
-                ShapeBatch.Begin(spriteBatch.GraphicsDevice);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[0]).RotatedBy(deathLightAngles[0] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[0]).RotatedBy(deathLightAngles[0] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[1]).RotatedBy(deathLightAngles[1] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[1]).RotatedBy(deathLightAngles[1] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[2]).RotatedBy(deathLightAngles[2] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[2]).RotatedBy(deathLightAngles[2] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[3]).RotatedBy(deathLightAngles[3] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[3]).RotatedBy(deathLightAngles[3] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[4]).RotatedBy(deathLightAngles[4] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[4]).RotatedBy(deathLightAngles[4] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[5]).RotatedBy(deathLightAngles[5] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[5]).RotatedBy(deathLightAngles[5] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[6]).RotatedBy(deathLightAngles[6] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[6]).RotatedBy(deathLightAngles[6] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[7]).RotatedBy(deathLightAngles[7] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[7]).RotatedBy(deathLightAngles[7] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.Triangle(NPC.Center - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[8]).RotatedBy(deathLightAngles[8] + MathHelper.PiOver4 / 5) - screenPos, NPC.Center + (Vector2.UnitY * deathLightLengths[8]).RotatedBy(deathLightAngles[8] - MathHelper.PiOver4 / 5) - screenPos, lightWhite, Color.Transparent, Color.Transparent);
-                ShapeBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+                Texture2D texRay = Request<Texture2D>(AssetDirectory.CrimsonKnight + "RayEffect").Value;
+                Color lightRed = new Color(200, 0, 0, 0);
+                for (int i = 0; i < deathLightAngles.Length; i++)
+                    Main.EntitySpriteDraw(texRay, NPC.Center - Main.screenPosition, null, lightRed, deathLightAngles[i], new Vector2(texRay.Width / 2, texRay.Height), deathLightLengths[i], SpriteEffects.None, 0);
                 return;
             }
 

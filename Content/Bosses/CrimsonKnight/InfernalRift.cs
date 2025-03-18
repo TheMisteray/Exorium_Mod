@@ -5,11 +5,11 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
 using System;
+using Luminance.Core.Graphics;
 
 namespace ExoriumMod.Content.Bosses.CrimsonKnight
 {
@@ -53,7 +53,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     Filters.Scene.Activate("ExoriumMod:InfernalRift", Projectile.Center).GetShader().UseColor(.05f, .005f, 0).UseTargetPosition(Projectile.Center).UseImage(heatMap).UseProgress(0);
                 }
                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top + 200), Vector2.UnitY * 110, ProjectileType<RiftIndicator>(), 0, 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, Core.Systems.WorldDataSystem.FallenTowerRect.Top + 200), Vector2.UnitY * 60, ProjectileType<RiftIndicator>(), 0, 0);
             }
 
             if (Projectile.timeLeft == 220)
@@ -208,6 +208,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
     {
         public override string Texture => AssetDirectory.Invisible;
 
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+        }
+
         public override void SetDefaults()
         {
             Projectile.width = 1;
@@ -221,12 +226,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override bool PreDraw(ref Color lightColor)
         {
-            SpriteBatch spriteBatch = Main.spriteBatch;
-            spriteBatch.End();
-            ShapeBatch.Begin(spriteBatch.GraphicsDevice);
-            ShapeBatch.Triangle(Projectile.Center - Main.screenPosition, Projectile.Center - Main.screenPosition + new Vector2(-40, -700), Projectile.Center - Main.screenPosition + new Vector2(40, -700), new Color(200, 0, 0, 255), Color.Transparent, Color.Transparent);
-            ShapeBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+            Texture2D texIndicator = Request<Texture2D>(AssetDirectory.CrimsonKnight + "RayEffect").Value;
+            Main.EntitySpriteDraw(texIndicator, Projectile.Center - Main.screenPosition, null, new Color(200, 0, 0, 0), Projectile.rotation, new Vector2(texIndicator.Width, texIndicator.Height) / 2, .7f, SpriteEffects.None, 0);
             return false;
         }
     }

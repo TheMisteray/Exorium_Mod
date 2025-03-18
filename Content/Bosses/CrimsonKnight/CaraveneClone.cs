@@ -5,7 +5,6 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExoriumMod.Core.Utilities;
 using ExoriumMod.Content.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;

@@ -15,7 +15,6 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
-using ExoriumMod.Core.Utilities;
 using System.IO;
 using Humanizer;
 

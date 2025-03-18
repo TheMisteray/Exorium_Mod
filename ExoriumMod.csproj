@@ -9,10 +9,14 @@
     <AdditionalFiles Remove="Localization\en-US.hjson" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Assets\Gores\" />
     <Folder Include="Assets\Items\Weapons\Summoner\Whips\" />
     <Folder Include="Backgrounds\" />
+    <Folder Include="Core\Utilities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Luminance">
+      <HintPath>Luminance.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

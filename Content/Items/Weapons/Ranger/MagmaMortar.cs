@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.GameContent.Creative;
-using ExoriumMod.Core.Utilities;
 
 namespace ExoriumMod.Content.Items.Weapons.Ranger
 {
