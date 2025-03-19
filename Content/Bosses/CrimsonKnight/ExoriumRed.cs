@@ -58,7 +58,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
-            NPC.value = Item.buyPrice(0, 25, 0, 0);
+            NPC.value = Item.buyPrice(0, 20, 0, 0);
             NPC.npcSlots = 30f;
             NPC.boss = true;
             NPC.lavaImmune = true;

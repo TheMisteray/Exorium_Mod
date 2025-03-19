@@ -89,7 +89,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.noGravity = false;
             NPC.noTileCollide = false;
             NPC.alpha = 255;
-            NPC.value = Item.buyPrice(0, 7, 0, 0);
+            NPC.value = Item.buyPrice(0, 3, 5, 0);
             if (!Main.dedServ)
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/knight");
         }
