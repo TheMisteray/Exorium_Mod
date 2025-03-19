@@ -53,8 +53,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
-            NPC.damage = 71;
-            NPC.defense = 57;
+            NPC.damage = 63;
+            NPC.defense = 47;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
@@ -523,9 +523,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             int spots = 2;
                             if (phase == 2 || Main.expertMode)
                                 spots++;
-                            if (phase == 2 && Main.expertMode)
-                                spots++;
-                            if (phase == 2 && Main.masterMode)
+                            if ((phase == 2 && Main.expertMode) || Main.masterMode)
                                 spots++;
 
                             for (int i = 0; i < 6; i++)
@@ -696,7 +694,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                         bladeSpawnCount = Main.expertMode ? 20 : 25;
                         if (Main.masterMode)
-                            bladeSpawnCount -= 5;
+                            bladeSpawnCount -= 3;
                         if (phase == 2)
                             bladeSpawnCount += 10; //reduce since more are being created
                     }
@@ -783,19 +781,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             {
                                 if (actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy((MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
 
                                 if (Main.masterMode || phase == 2 && actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                                 else if (phase == 1 && Main.expertMode && actionTimer % 35 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy(((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
                         }
@@ -805,19 +803,19 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             {
                                 if (actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-(MathHelper.PiOver2 / 14f) * (actionTimer / 10f)) * 700, dummy.RotatedBy(-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
 
                                 if (Main.masterMode || phase == 2 && actionTimer % 10 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                                 else if (phase == 1 && Main.expertMode && actionTimer % 35 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.5f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * -.01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder - dummy.RotatedBy(-((MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * 700, dummy.RotatedBy((-(MathHelper.PiOver2 / 14) * (actionTimer / 10f)) + MathHelper.PiOver2) * .01f, ProjectileType<FlametoungeBeam>(), (int)(damage * 1.2f), 1, Main.myPlayer, 60, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
                         }
@@ -1325,7 +1323,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             //Projectile
             if (Main.netMode != NetmodeID.MultiplayerClient)
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), location, Vector2.Zero, ProjectileType<CaraveneClone>(), (int)(damage * 1.5f), 2, Main.myPlayer, index < 3 ? 0 : 1);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), location, Vector2.Zero, ProjectileType<CaraveneClone>(), (int)(damage * 1.4f), 2, Main.myPlayer, index < 3 ? 0 : 1);
             /*
             for (int i = 0; i < 50; i++)
             {
@@ -1361,7 +1359,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 150 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (int)(NPC.damage / (Main.expertMode == true ? 4 : 2) * 1.5f), 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (int)(NPC.damage / (Main.expertMode == true ? 4 : 2) * 1.4f), 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1933,6 +1931,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
         {
+            modifiers.FinalDamage *= 0.7f; //30% damage reduction
+
             if (parry)
             {
                 parryDamaged += item.damage;
@@ -1948,6 +1948,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
+            modifiers.FinalDamage *= 0.7f; //20% damage reduction
+
             if (parry)
             {
                 parryDamaged += projectile.damage;

@@ -157,7 +157,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             {
                 despawnTime++;
 
-                if (despawnTime == 40)
+                if (despawnTime == 30)
                 {
                     //Say stuff
                     AdvancedPopupRequest popupRequest = new AdvancedPopupRequest();
@@ -216,7 +216,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 else if (Core.Systems.DownedBossSystem.trucedCrimsonKnight)
                     return "Haha! Another great fight! Truce?";
                 else
-                    return "Okay! Okay!!! You can keep the crown... Say, you're pretty good. How about we call this a draw for now?";
+                    return "Okay! Okay!!! You can keep the crown! Looks fake anyway... Say, you're pretty good. How about we call this a draw for now?";
             }
             return "";
         }

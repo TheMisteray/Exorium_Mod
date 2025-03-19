@@ -74,8 +74,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
-            NPC.damage = 64;
-            NPC.defense = 44;
+            NPC.damage = 55;
+            NPC.defense = 34;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;
@@ -633,9 +633,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
                         bladeSpawnCount = Main.expertMode ? 18 : 22;
                         if (Main.masterMode)
-                            bladeSpawnCount -= 5;
+                            bladeSpawnCount -= 3;
                         if (phase == 2)
-                            bladeSpawnCount -= 5;
+                            bladeSpawnCount -= 3;
                     }
                     else if (actionTimer > 30 && actionTimer % bladeSpawnCount == 0 && actionTimer < 360)
                     {
@@ -681,15 +681,15 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                             {
                                 if (actionTimer % 20 == 0)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(Main.rand.NextFloat(-800, 800), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
 
                                 if (actionTimer < 70)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, 50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.2f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(700, -50 * (actionTimer / 10)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.52f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
                             else
@@ -697,24 +697,24 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                                 if (actionTimer % 20 == 0)
                                 {
                                     if (Main.rand.NextBool(2))
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                     else
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.5f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(700, Main.rand.NextFloat(-600, 600)), Vector2.Zero, ProjectileType<CaraveneBladeProjHorizontal>(), (int)(damage * 1.2f), 1, Main.myPlayer, 1, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
 
                                 //create more projectiles in phase two, done this way rather than changing the first if statement so that the increased projectiles are fired in pairs so the rhthym of the attack is kept consistant
                                 if (actionTimer < 130)
                                 {
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2(-50 * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                                 }
                             }
 
                         }
                         else
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? 300 : 400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? -300 : -400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.5f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? 300 : 400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), playerPlaceholder + new Vector2((Main.expertMode ? -300 : -400) * (actionTimer / 10), -400), Vector2.Zero, ProjectileType<CaraveneBladeProj>(), (int)(damage * 1.2f), 1, Main.myPlayer, 0, (NPC.life < (NPC.lifeMax / 2)) ? 1 : 0);
                         }
                     }
                     if (actionTimer >= 150)
@@ -1240,7 +1240,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                     }
                     else if (NPC.frameCounter == 20 && Action == 2 && actionTimer > 90 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (int)(NPC.damage / (Main.expertMode == true ? 4 : 2) * 1.5f), 7, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2((left ? NPC.width : -NPC.width), 0), Vector2.Zero, ProjectileType<SwordHitbox>(), (int)(NPC.damage / (Main.expertMode == true ? 4 : 2) * 1.4f), 7, Main.myPlayer);
                     }
                     NPC.frameCounter += 5;
                     break;
@@ -1816,6 +1816,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
         {
+            modifiers.FinalDamage *= 0.8f; //20% damage reduction
+
             if (parry)
             {
                 parryDamaged += item.damage;
@@ -1831,6 +1833,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
+            modifiers.FinalDamage *= 0.8f; //20% damage reduction
+
             if (parry)
             {
                 parryDamaged += projectile.damage;

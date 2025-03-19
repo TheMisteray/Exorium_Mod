@@ -87,6 +87,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         {
             target.AddBuff(BuffID.OnFire, 300);
         }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = Request<Texture2D>(AssetDirectory.CrimsonKnight + Name).Value;
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, tex.Height/8 * Projectile.frame, tex.Width, tex.Height / 8), Color.White, 0, new Vector2(tex.Width, tex.Height / 8) / 2, Projectile.scale, SpriteEffects.None);
+            return false;
+        }
     }
 
     class FlamePillar : ModProjectile
