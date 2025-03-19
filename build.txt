@@ -1,8 +1,8 @@
 displayName = Exorium Mod
 author = Mr. A
 version = 0.2
-hideCode = true
-hideResources = true
+hideCode = false
+hideResources = false
 includeSource = false
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, Luminance.dll, Luminance.pdb, Luminance.xml
 includePDB = false;

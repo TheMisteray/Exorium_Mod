@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            Item.width = 30;
+            Item.width = 32;
             Item.height = 40;
             Item.rare = 3;
             Item.value = Item.sellPrice(gold: 3, silver: 50);
@@ -36,7 +36,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Item.noMelee = true;
             Item.shootSpeed = 14f;
             Item.autoReuse = true;
-            Item.damage = 38;
+            Item.damage = 39;
             Item.shoot = ProjectileType<DarksteelSkullMagic>();
             Item.UseSound = SoundID.Item20;
         }

@@ -853,7 +853,7 @@ Mods: {
 			TwistedCrown: {
 				Tooltip:
 					'''
-					A replica crown of a dark deity
+					A replica of a dark deity's crown
 					Attracts the Crimson Knight if taken to a battlefield deep underground
 					'''
 				DisplayName: Twisted Crown

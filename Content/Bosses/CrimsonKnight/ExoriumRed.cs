@@ -54,7 +54,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.aiStyle = -1;
             NPC.lifeMax = 6666;
             NPC.damage = 71;
-            NPC.defense = 39;
+            NPC.defense = 57;
             NPC.knockBackResist = 0f;
             NPC.width = 140;
             NPC.height = 240;

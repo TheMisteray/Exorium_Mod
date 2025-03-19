@@ -22,7 +22,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            Item.damage = 34;
+            Item.damage = 37;
             Item.DamageType = DamageClass.Melee;
             Item.width = 48;
             Item.height = 48;
