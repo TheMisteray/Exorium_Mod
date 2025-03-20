@@ -101,6 +101,7 @@ namespace ExoriumMod.Core.WorldGeneration.Biomes
                                 case TileID.BlueDungeonBrick:
                                 case TileID.GreenDungeonBrick:
                                 case TileID.PinkDungeonBrick:
+                                case TileID.SandstoneBrick:
                                 case TileID.LivingWood:
                                     break;
                                 default:

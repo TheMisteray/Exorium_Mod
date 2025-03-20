@@ -56,7 +56,11 @@ namespace ExoriumMod.Content.Projectiles.Minions
             return false;
         }
 
-        private float shotTimer = 0;
+        private float shotTimer
+        {
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
+        }
 
         public override void AI()
         {
@@ -136,9 +140,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
             if (foundTarget)
             {
                 shotTimer--;
-                if (shotTimer <= 0)
+                if (shotTimer <= 0 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    shotTimer = 90;
+                    shotTimer = Main.rand.Next(70, 111);
+                    Projectile.netUpdate = true;
                     float magnitude = (float)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
                     if (magnitude > 0)
                         delta *= 20f / magnitude;

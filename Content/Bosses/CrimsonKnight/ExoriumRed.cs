@@ -1273,7 +1273,9 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 else
                 {
                     Action = 6;
-                    wait = 90;
+                    wait = 100;
+                    if (phase == 2)
+                        wait += 20;
                 }
 
                 actionTimer = -1;

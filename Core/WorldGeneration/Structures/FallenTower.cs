@@ -66,7 +66,7 @@ namespace ExoriumMod.Core.WorldGeneration.Structures
                         case 2:
                             tile.HasTile = false;
                             WorldGen.KillTile(k, l);
-                            WorldGen.PlaceTile(k, l, TileType<CharredObsidianPlatformTile>());
+                            WorldGen.PlaceObject(k, l, TileType<CharredObsidianPlatformTile>());
                             tile.WallType = (ushort)WallType<CharredObsidianWall>();
                             break;
                         case 3:

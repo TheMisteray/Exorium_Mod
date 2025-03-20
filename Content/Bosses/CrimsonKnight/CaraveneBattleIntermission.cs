@@ -45,6 +45,8 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
             NPCID.Sets.HasNoPartyText[Type] = true;
+            NPCID.Sets.CannotSitOnFurniture[Type] = true;
+            NPCID.Sets.ProjectileNPC[Type] = true;
 
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
@@ -71,6 +73,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
             NPC.noGravity = false;
             NPC.noTileCollide = false;
             NPC.dontTakeDamage = true;
+            NPC.chaseable = false;
         }
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */

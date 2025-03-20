@@ -53,7 +53,7 @@ namespace ExoriumMod.Content.NPCs.Enemies.Deadlands
         {
             Vector2 dist = Main.player[NPC.target].position - NPC.position;
             float magnitude = (float)Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);
-            if (magnitude >= 270 && NPC.alpha <= 255)
+            if (magnitude >= 400 && NPC.alpha <= 255)
                 NPC.alpha += 5;
             else if (NPC.alpha >= 40)
                 NPC.alpha -= 5; 

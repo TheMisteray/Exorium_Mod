@@ -45,9 +45,9 @@ namespace ExoriumMod.Core
                 }));
             }
 
-            int FinalCleanupIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Final Cleanup"));
+            int FinalCleanupIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Tile Cleanup"));
             if (FinalCleanupIndex != -1)
-            {                            //not +! so cleanup doesn't smooth them
+            {
                 tasks.Insert(FinalCleanupIndex + 1, new PassLegacy("Exorium Structures", delegate (GenerationProgress progress, GameConfiguration config)
                {
                    progress.Message = "Generating Exorium Structures";

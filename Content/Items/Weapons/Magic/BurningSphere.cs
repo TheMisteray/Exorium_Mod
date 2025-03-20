@@ -121,6 +121,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
                     EndChannel = true;
                     Projectile.netUpdate = true;
                     scalar -= .02f;
+                    player.itemTime = 20;
                     if (scalar < 0)
                     {
                         Projectile.timeLeft = 0;
