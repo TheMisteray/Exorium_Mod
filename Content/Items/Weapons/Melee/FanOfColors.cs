@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.InteropServices;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Luminance.Core.Graphics;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -60,15 +61,15 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                 {
                     Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.Lerp(-(rotation/2), 1.5f*rotation, i / (numberProjectiles - 1))) * .2f;
                     int projectile = Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
-                    Main.projectile[projectile].localAI[1] = i;
-                    Main.projectile[projectile].localAI[0] = 5 * i;
+                    Main.projectile[projectile].ai[1] = i;
+                    Main.projectile[projectile].ai[0] = 5 * i;
                 }
                 else
                 {
                     Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.Lerp((rotation/2), -rotation*1.5f, i / (numberProjectiles - 1))) * .2f;
                     int projectile = Projectile.NewProjectile(source, position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockback, player.whoAmI);
-                    Main.projectile[projectile].localAI[1] = i;
-                    Main.projectile[projectile].localAI[0] = 5 * i;
+                    Main.projectile[projectile].ai[1] = i;
+                    Main.projectile[projectile].ai[0] = 5 * i;
                 }
             }
             mode = !mode;
@@ -91,13 +92,15 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         }
     }
 
-    class ColorKnife : ModProjectile
+    class ColorKnife : ModProjectile, IPixelatedPrimitiveRenderer
     {
         public override string Texture => AssetDirectory.Projectile + Name;
 
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 7;
+            ProjectileID.Sets.TrailCacheLength[Type] = 6;
+            ProjectileID.Sets.TrailingMode[Type] = 0;
         }
 
         public override void SetDefaults()
@@ -107,6 +110,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.timeLeft = 360;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
@@ -116,11 +120,12 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.alpha = 0;
             if (Projectile.timeLeft == 360)
                 Projectile.netUpdate = true;
-            if (Projectile.localAI[0] > 0)
+            if (Projectile.ai[0] > 0)
             {
                 Projectile.alpha = 255;
-                Projectile.localAI[0]--;
-                switch (Projectile.localAI[1])
+                Projectile.ai[0]--;
+                Projectile.position = Main.player[Projectile.owner].Center + Projectile.Size * -0.5f + Vector2.Normalize(Projectile.velocity) * 45f; //stick to owner
+                switch (Projectile.ai[1])
                 {
                     case 0:
                         Lighting.AddLight(Projectile.position, 255 * 0.002f, 0 * 0.002f, 0 * 0.002f);
@@ -145,22 +150,71 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         break;
                 }
             }
-            Projectile.frame = (int)Projectile.localAI[1];
+            else
+            {
+                Projectile.tileCollide = true;
+            }
+            Projectile.frame = (int)Projectile.ai[1];
         }
 
         public override bool ShouldUpdatePosition()
         {
-            return Projectile.localAI[0] <= 0;
+            return Projectile.ai[0] <= 0;
         }
 
         public override Nullable<bool> CanDamage()/* tModPorter Suggestion: Return null instead of true *//* Suggestion: Return null instead of false */
         {
-            return Projectile.localAI[0] <= 0;
+            return Projectile.ai[0] <= 0;
         }
 
         public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            if (Projectile.ai[0] <= 0)
+                Main.EntitySpriteDraw(Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(0, (int)(Projectile.height * Projectile.ai[1]), Projectile.width, Projectile.height), Color.White, Projectile.rotation, new Vector2(Projectile.width, Projectile.height) / 2, 1, SpriteEffects.None);
+            return false;
+        }
+
+        public void RenderPixelatedPrimitives(SpriteBatch spriteBatch)
+        {
+            if (Projectile.ai[0] > 0)
+                return;
+
+            Color trailColor = Color.White;
+            switch (Projectile.ai[1])
+            {
+                case 0:
+                    trailColor = new Color(255, 0, 0, 0);
+                    break;
+                case 1:
+                    trailColor = new Color(255, 110, 0, 0);
+                    break;
+                case 2:
+                    trailColor = new Color(255, 247, 0, 0);
+                    break;
+                case 3:
+                    trailColor = new Color(0, 255, 0, 0);
+                    break;
+                case 4:
+                    trailColor = new Color(0, 255, 204, 0);
+                    break;
+                case 5:
+                    trailColor = new Color(35, 0, 255, 0);
+                    break;
+                case 6:
+                    trailColor = new Color(149, 0, 255, 0);
+                    break;
+            }
+
+            ManagedShader shader = ShaderManager.GetShader("ExoriumMod.ExamplePrimShader");
+            shader.TrySetParameter("trailColor", trailColor);
+
+            Vector2 positionToCenter = Projectile.Size/ 2;
+            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(_ => Projectile.width/4, _ => trailColor, _ => positionToCenter, true, true, shader), 4);
         }
     }
 }

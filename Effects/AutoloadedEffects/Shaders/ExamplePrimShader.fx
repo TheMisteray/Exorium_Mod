@@ -1,7 +1,7 @@
-// Documentation for this file exists as the following location: https://github.com/DominicKarma/Luminance/tree/main/Core/Graphics/Primitives
-// If you copypaste this .fx file for use as a base for a custom shader, don't forget to delete the residual comments in here.
+sampler worldTexture : register(s0);
 sampler overlayTexture : register(s1);
 float globalTime;
+float4 trailColor;
 matrix uWorldViewProjection;
 
 struct VertexShaderInput
@@ -39,9 +39,10 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     float4 color = input.Color;
     float2 uv = input.TextureCoordinates;
     
-    // As a simple example, interpolate from red to blue the futher along the primitives this fragment is.
-    // At the start it will return red, at the end it will return blue.
-    return lerp(float4(1, 0, 0, 1), float4(0, 0, 1, 1), uv.x);
+    if (abs(uv.y - 0.5) < abs(.5 - uv.x / 2))
+        return trailColor;
+    else
+        return tex2D(worldTexture, uv);
 }
 
 technique Technique1

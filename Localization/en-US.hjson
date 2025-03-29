@@ -591,11 +591,7 @@ Mods: {
 
 			SettlingSands: {
 				DisplayName: Settling Sands
-				Tooltip:
-					'''
-					Launches bouncing sand balls 
-					'This is a horrible idea'
-					'''
+				Tooltip: "Launches bouncing sand balls "
 			}
 
 			ShadowBolt: {
@@ -860,8 +856,12 @@ Mods: {
 			}
 
 			SandAegisStaff: {
-				DisplayName: Sand Aegis Staff
-				Tooltip: ""
+				DisplayName: Sand Shield Staff
+				Tooltip: 
+					'''
+					Summons sand shields to defend you
+					Each shield grants 1 defense
+					'''
 			}
 		}
 
@@ -945,7 +945,7 @@ Mods: {
 			DancingSwordSummon.DisplayName: DancingSword
 			DarksteelSkullSummon.DisplayName: Darksteel Skull
 			Gum.DisplayName: Gum
-			SandAegis.DisplayName: Sand Aegis
+			SandAegis.DisplayName: Sand Shield
 			SandWisp.DisplayName: Sand Wisp
 			ShadowOrbSummon.DisplayName: Shadow Orb Summon
 			ShadowSummon.DisplayName: Shadow
@@ -962,6 +962,8 @@ Mods: {
 			MegaFlamePillar.DisplayName: Mega Flame Pillar
 			LargeFlamePillar.DisplayName: Flame Pillar
 			RiftIndicator.DisplayName: Rift Indicator
+			SandRing.DisplayName: Sand Ring
+			SandSpray.DisplayName: Sand Spray
 		}
 
 		Buffs: {
@@ -1024,7 +1026,7 @@ Mods: {
 			}
 
 			SandAegis: {
-				DisplayName: Sand Aegis
+				DisplayName: Sand Shield
 				Description:
 					'''
 					The shield of sand will protect you 

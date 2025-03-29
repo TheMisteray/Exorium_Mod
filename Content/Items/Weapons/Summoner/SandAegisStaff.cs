@@ -19,7 +19,7 @@ namespace ExoriumMod.Content.Items.Weapons.Summoner
         }
         public override void SetDefaults()
         {
-            Item.damage = 11;
+            Item.damage = 12;
             Item.knockBack = 0f;
             Item.mana = 10;
             Item.width = 32;

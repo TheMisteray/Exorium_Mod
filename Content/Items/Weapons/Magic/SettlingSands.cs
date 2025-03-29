@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Items.Weapons.Magic
 {
@@ -22,13 +23,13 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            Item.damage = 18;
+            Item.damage = 17;
             Item.width = 15;
             Item.height = 15;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 8;
-            Item.useTime = 24;
-            Item.useAnimation = 24;
+            Item.useTime = 29;
+            Item.useAnimation = 29;
             Item.useStyle = 5;
             Item.noMelee = true;
             Item.knockBack = 1;
@@ -36,7 +37,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
             Item.rare = 1;
             Item.UseSound = SoundID.Item42;
             Item.shoot = ProjectileType<SandShot>();
-            Item.shootSpeed = 7;
+            Item.shootSpeed = 16;
             Item.autoReuse = true;
             Item.scale = 0.9f;
         }
@@ -53,49 +54,94 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
     {
         public override string Texture => AssetDirectory.Projectile + Name;
 
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("Bouncing Sand");
-        }
-
         public override void SetDefaults()
         {
-            Projectile.CloneDefaults(ProjectileID.SandBallGun);
-            AIType = ProjectileID.SandBallGun;
-            Projectile.aiStyle = 1;
-            Projectile.ai[1] = 0;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.penetrate = 3;
+            Projectile.friendly = true;
         }
 
-        public float projectileBounce
+        public override void AI()
         {
-            get => Projectile.ai[1];
-            set => Projectile.ai[1] = value;
+            if (Projectile.velocity.X > 0)
+                Projectile.velocity.X -= 0.06f;
+            else
+                Projectile.velocity.X += 0.06f;
+
+            Projectile.velocity.Y += 0.3f;
+            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Sand);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Player player = Main.player[Projectile.owner];
-            projectileBounce++;
-            if (projectileBounce >= 3)
+            Projectile.penetrate--;
+            if (Projectile.velocity.X != oldVelocity.X)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ProjectileID.SandBallFalling, 5, 5, player.whoAmI);
-                Projectile.Kill();
+                Projectile.velocity.X = -oldVelocity.X;
             }
-            else
+            if (Projectile.velocity.Y != oldVelocity.Y)
             {
-                Projectile.ai[0] += 0.1f;
-                if (Projectile.velocity.X != oldVelocity.X)
-                {
-                    Projectile.velocity.X = -oldVelocity.X / 1.5f;
-                }
-                if (Projectile.velocity.Y != oldVelocity.Y)
-                {
-                    Projectile.velocity.Y = -oldVelocity.Y / 1.5f;
-                }
-                Projectile.velocity *= 0.75f;
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ProjectileID.SandBallFalling, 5, 5, player.whoAmI);
-                SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+                Projectile.velocity.Y = -oldVelocity.Y;
             }
+            Projectile.velocity.Y *= 0.75f;
+            Projectile.velocity.X *= 0.75f;
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ProjectileType<SandRing>(), Projectile.damage/2, 0, Projectile.owner, 0.8f);
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            return false;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            Projectile.velocity.X = -Projectile.velocity.X;
+            Projectile.velocity.Y = -Projectile.velocity.Y;
+            Projectile.velocity.Y *= 0.75f;
+            Projectile.velocity.X *= 0.75f;
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0, 0, ProjectileType<SandRing>(), Projectile.damage / 2, 0, Projectile.owner, 0.8f);
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            base.OnHitNPC(target, hit, damageDone);
+        }
+    }
+
+    class SandRing : ModProjectile
+    {
+        public override string Texture => AssetDirectory.Glow + Name;
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 64;
+            Projectile.height = 64;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
+            Projectile.timeLeft = 400;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 20;
+        }
+
+        private float counter = 0;
+
+        public override void AI()
+        {
+            Projectile.rotation += 0.02f;
+            Projectile.ai[0] += 0.003f;
+            Projectile.scale = Projectile.ai[0];
+            counter++;
+            if (counter > 10)
+            {
+                Projectile.alpha += 4;
+                if (Projectile.alpha >= 250)
+                    Projectile.timeLeft = 0;
+            }
+            base.AI();
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = Request<Texture2D>(Texture).Value;
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.Lerp(new Color(0, 0, 0, 0), new Color(244, 164, 96, 0), (float)(-1 * (Projectile.alpha - 255)) / 255f).MultiplyRGBA(lightColor), Projectile.rotation, tex.Size() / 2, Projectile.scale, SpriteEffects.None);
             return false;
         }
     }

@@ -5,10 +5,13 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
+using Luminance.Core.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExoriumMod.Content.Projectiles.Minions
 {
-    class SandAegis : ModProjectile
+    class SandAegis : ModProjectile, IPixelatedPrimitiveRenderer
     {
         public override string Texture => AssetDirectory.Minion + Name;
 
@@ -29,11 +32,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
 
         public sealed override void SetDefaults()
         {
-            Projectile.width = 64;
-            Projectile.height = 64;
+            Projectile.width = 36;
+            Projectile.height = 36;
             // Makes the minion go through tiles freely
             Projectile.tileCollide = false;
-            Projectile.scale = .7f;
             // These below are needed for a minion weapon
             // Only controls if it deals damage to enemies on contact (more on that later)
             Projectile.friendly = true;
@@ -57,12 +59,41 @@ namespace ExoriumMod.Content.Projectiles.Minions
             return true;
         }
 
+        float tickerSync
+        {
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
+        }
+
+        float rotationSpeed
+        {
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
+        }
+
+        bool IsMaster
+        {
+            get => Projectile.ai[2] == 1;
+            set => Projectile.ai[2] = value ? 1 : 0;
+        }
+
+        private static float RotationRadius = 80f;
+        private bool setSelf = false;
+        Vector2 anchorPoint;
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            IsMaster = false;
+
+            if (!setSelf)
+            {
+                anchorPoint = player.Center;
+                setSelf = true;
+            }
 
             #region Active check
-            // This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
+                // This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
             if (player.dead || !player.active)
             {
                 player.ClearBuff(BuffType<Buffs.Minions.SandAegis>());
@@ -70,46 +101,6 @@ namespace ExoriumMod.Content.Projectiles.Minions
             if (player.HasBuff(BuffType<Buffs.Minions.SandAegis>()))
             {
                 Projectile.timeLeft = 2;
-            }
-            #endregion
-
-            #region General behavior
-            Vector2 idlePosition = player.Center;
-            int num = player.ownedProjectileCounts[ProjectileType<SandAegis>()];
-            if (num == 0) num = 1; 
-            double deg = 360 / num; //Speed
-            double rad = ((deg * Projectile.minionPos) + Projectile.ai[1]) * (Math.PI / 180); //Convert degrees to radians
-            double dist = 86; //Distance away from the player
-            idlePosition.X = player.Center.X - (int)(Math.Cos(rad + 1.5) * dist) - Projectile.width / 2;
-            idlePosition.Y = player.Center.Y - (int)(Math.Sin(rad + 1.5) * dist) - Projectile.height / 2;
-            Projectile.ai[1] += 1f;
-
-            // Teleport to player if distance is too big
-            Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
-            float distanceToIdlePosition = vectorToIdlePosition.Length();
-            if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > 2000f)
-            {
-                // Whenever you deal with non-regular events that change the behavior or position drastically, make sure to only run the code on the owner of the projectile,
-                // and then set netUpdate to true
-                Projectile.position = idlePosition;
-                Projectile.velocity *= 0.1f;
-                Projectile.netUpdate = true;
-            }
-
-            // If your minion is flying, you want to do this independently of any conditions
-            float overlapVelocity = 0.04f;
-            for (int i = 0; i < Main.maxProjectiles; i++)
-            {
-                // Fix overlap with other minions
-                Projectile other = Main.projectile[i];
-                if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
-                {
-                    if (Projectile.position.X < other.position.X) Projectile.velocity.X -= overlapVelocity;
-                    else Projectile.velocity.X += overlapVelocity;
-
-                    if (Projectile.position.Y < other.position.Y) Projectile.velocity.Y -= overlapVelocity;
-                    else Projectile.velocity.Y += overlapVelocity;
-                }
             }
             #endregion
 
@@ -123,9 +114,9 @@ namespace ExoriumMod.Content.Projectiles.Minions
             if (player.HasMinionAttackTargetNPC)
             {
                 NPC npc = Main.npc[player.MinionAttackTargetNPC];
-                float between = Vector2.Distance(npc.Center, Projectile.Center);
+                float between = Vector2.Distance(npc.Center, player.Center);
                 // Reasonable distance away so it doesn't target across multiple screens
-                if (between < 450f)
+                if (between < 300f)
                 {
                     distanceFromTarget = between;
                     targetCenter = npc.Center;
@@ -140,14 +131,10 @@ namespace ExoriumMod.Content.Projectiles.Minions
                     NPC npc = Main.npc[i];
                     if (npc.CanBeChasedBy())
                     {
-                        float between = Vector2.Distance(npc.Center, Projectile.Center);
-                        bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;
+                        float between = Vector2.Distance(npc.Center, player.Center);
+                        bool closest = Vector2.Distance(player.Center, targetCenter) > between;
                         bool inRange = between < distanceFromTarget;
-                        bool lineOfSight = Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height);
-                        // Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
-                        // The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
-                        bool closeThroughWall = between < 100f;
-                        if (((closest && inRange) || !foundTarget) && (lineOfSight || closeThroughWall))
+                        if (between < 450f && ((closest && inRange) || !foundTarget))
                         {
                             distanceFromTarget = between;
                             targetCenter = npc.Center;
@@ -164,42 +151,78 @@ namespace ExoriumMod.Content.Projectiles.Minions
             Projectile.friendly = foundTarget;
             #endregion
 
-            #region Movement
+            #region General behavior
+            Vector2 anchorPointTarget = player.Center;
+            float numShield = 0;
 
-            // Default movement parameters (here for attacking)
-            float speed = 8f;
-            float inertia = 20f;
+            //Find and index self based on other existing summons
+            for (int i = 0; i <= Main.maxProjectiles; i++)
+            {
+                if (i == Projectile.whoAmI) //Exit once self is found
+                {
+                    if (numShield == 0 && Main.netMode != NetmodeID.MultiplayerClient) //use this one as master if it is first and set all other's ticker to it
+                    {
+                        foreach (Projectile p in Main.ActiveProjectiles)
+                        {
+                            if (p.type == ProjectileType<SandAegis>() && p.whoAmI != Projectile.whoAmI && p.ai[0] != tickerSync)
+                            {
+                                p.ai[0] = tickerSync;
+                                p.ai[1] = rotationSpeed;
+                                p.netUpdate = true;
+                            }
+                        }
+
+                        IsMaster = true;
+                    }
+
+                    i = Main.maxProjectiles + 1;
+                }
+                else if (Main.projectile[i].type == ProjectileType<SandAegis>() && Main.projectile[i].owner == Projectile.owner)
+                    numShield++;
+            }
+
+            tickerSync += rotationSpeed;
+            Vector2 towardsTarget = (targetCenter - player.Center);
+            towardsTarget.Normalize();
+            anchorPointTarget += towardsTarget * Math.Max(distanceFromTarget - RotationRadius, 0);
 
             if (foundTarget)
+                anchorPoint = Vector2.Lerp(anchorPoint, anchorPointTarget, 0.06f * (350 / distanceFromTarget));
+            else
+                anchorPoint = Vector2.Lerp(anchorPoint, anchorPointTarget, 0.1f);
+
+            Vector2 rotationPoint = anchorPoint + (Vector2.UnitX * RotationRadius).RotatedBy(MathHelper.TwoPi / player.ownedProjectileCounts[ProjectileType<SandAegis>()] * numShield + MathHelper.ToRadians(tickerSync * 3));
+            Projectile.Center = rotationPoint;
+
+            //Vector2 idlePosition = player.Center;
+
+            //// Teleport to player if distance is too big
+            //Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
+            //float distanceToIdlePosition = vectorToIdlePosition.Length();
+            //if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > 2000f)
+            //{
+            //    // Whenever you deal with non-regular events that change the behavior or position drastically, make sure to only run the code on the owner of the projectile,
+            //    // and then set netUpdate to true
+            //    Projectile.position = idlePosition;
+            //    Projectile.velocity *= 0.1f;
+            //    Projectile.netUpdate = true;
+            //}
+            #endregion
+
+            #region Movement & Actions
+            if (foundTarget)
             {
-                // Minion has a target: attack (here, fly towards the enemy)
-                if (distanceFromTarget > 60f)
-                {
-                    // The immediate range around the target (so it doesn't latch onto it when close)
-                    Vector2 direction = targetCenter - Projectile.Center;
-                    direction.Normalize();
-                    direction *= speed;
-                    Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
-                }
+                if (rotationSpeed < 1.5f)
+                    rotationSpeed += 0.01f;
+                else
+                    rotationSpeed = 1.5f;
             }
             else
             {
-                // Minion doesn't have a target: return to player and idle
-                if (distanceToIdlePosition > 600f)
-                {
-                    // Speed up the minion if it's away from the player
-                    speed = 12f;
-                    inertia = 60f;
-                }
+                if (rotationSpeed > 0.5f)
+                    rotationSpeed -= 0.01f;
                 else
-                {
-                    // Slow down the minion if closer to the player
-                    speed = 4f;
-                    inertia = 80f;
-                }
-                vectorToIdlePosition.Normalize();
-                vectorToIdlePosition *= speed;
-                Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
+                    rotationSpeed = 0.5f;
             }
             #endregion
 
@@ -207,6 +230,12 @@ namespace ExoriumMod.Content.Projectiles.Minions
             // So it will lean slightly towards the direction it's moving
             Projectile.rotation = Projectile.velocity.X * 0.05f;
             #endregion
+        }
+
+        public void RenderPixelatedPrimitives(SpriteBatch spriteBatch)
+        {
+            if (IsMaster)
+                PrimitiveRenderer.RenderCircleEdge(anchorPoint, new(_ => 2, _ => Color.SandyBrown, _ => RotationRadius, true));
         }
     }
 }

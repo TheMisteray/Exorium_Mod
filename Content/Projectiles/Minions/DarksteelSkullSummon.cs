@@ -135,8 +135,9 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 }
             }
             #endregion
-            Vector2 delta = targetCenter - Projectile.Center;
+
             #region Movement
+            Vector2 delta = targetCenter - Projectile.Center;
             if (foundTarget)
             {
                 shotTimer--;
@@ -150,8 +151,9 @@ namespace ExoriumMod.Content.Projectiles.Minions
                     else
                         delta = new Vector2(0f, 30f);
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, delta.X, delta.Y, ProjectileType<SkullShot>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
-                    SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
                 }
+                else if (shotTimer <= 0)
+                    SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
             }
             #endregion
 

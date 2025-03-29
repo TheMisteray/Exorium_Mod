@@ -5,6 +5,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System;
+using Terraria.Audio;
+using ReLogic.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExoriumMod.Content.Projectiles.Minions
 {
@@ -32,8 +35,8 @@ namespace ExoriumMod.Content.Projectiles.Minions
         public sealed override void SetDefaults()
         {
             Projectile.width = 64;
-            Projectile.height = 84;
-            Projectile.scale = .4f;
+            Projectile.height = 64;
+            Projectile.scale = .6f;
             // Makes the minion go through tiles freely
             Projectile.tileCollide = false;
 
@@ -57,7 +60,25 @@ namespace ExoriumMod.Content.Projectiles.Minions
         // This is mandatory if your minion deals contact damage (further related stuff in AI() in the Movement region)
         public override bool MinionContactDamage()
         {
-            return true;
+            return action == 0;
+        }
+
+        public float attackTimer
+        {
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
+        }
+
+        public float action
+        {
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
+        }
+
+        public float waitTimer
+        {
+            get => Projectile.ai[2];
+            set => Projectile.ai[2] = value;
         }
 
         public override void AI()
@@ -167,22 +188,66 @@ namespace ExoriumMod.Content.Projectiles.Minions
             Projectile.friendly = foundTarget;
             #endregion
 
-            #region Movement
+            #region Movement & Attacks
 
             // Default movement parameters (here for attacking)
-            float speed = 8f;
+            float speed = 12f;
             float inertia = 20f;
 
             if (foundTarget)
             {
-                // Minion has a target: attack (here, fly towards the enemy)
-                if (distanceFromTarget > 80f)
+                //Tick timer
+                attackTimer--;
+
+                //action == 2 ethis logic should happen reguardless of target, so it is elsewhere
+                if (action == 1) //Stop and shoot sand
                 {
-                    // The immediate range around the target (so it doesn't latch onto it when close)
-                    Vector2 direction = targetCenter - Projectile.Center;
-                    direction.Normalize();
-                    direction *= speed;
-                    Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
+                    Projectile.velocity *= 0.85f;
+                    waitTimer++;
+                    if (waitTimer > 45 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        //ATTACK
+                        Vector2 toTarget = targetCenter - Projectile.Center;
+                        toTarget.Normalize();
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, toTarget * 12f, ProjectileType<SandSpray>(), Projectile.damage * 3, 5, Projectile.owner);
+                        action = 2;
+                        attackTimer = Main.rand.Next(360, 600);
+                        waitTimer = 0;
+                        Projectile.scale = 0.15f;
+                        Projectile.velocity = toTarget * -16f;
+                        Projectile.netUpdate = true;
+                    }
+                    SoundEngine.PlaySound(SoundID.DoubleJump, Projectile.Center);
+
+                    Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Sand, 0, 0);
+                    d.noGravity = true;
+                }
+                else if (attackTimer <= 0) //Standard bash attacking
+                {
+                    if (Projectile.velocity.LengthSquared() < 400)
+                        Projectile.velocity *= 1.04f;
+
+                    float adjustedDistance = (targetCenter - Projectile.Center).Length();
+                    if (adjustedDistance > 120)
+                        action = 1;
+
+                    if (Main.rand.NextBool(3))
+                    {
+                        Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Sand, 0, 0);
+                        d.noGravity = true;
+                    }
+                } 
+                else
+                {
+                    // Minion has a target: attack (here, fly towards the enemy)
+                    if (distanceFromTarget > 80f)
+                    {
+                        // The immediate range around the target (so it doesn't latch onto it when close)
+                        Vector2 direction = targetCenter - Projectile.Center;
+                        direction.Normalize();
+                        direction *= speed;
+                        Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
+                    }
                 }
             }
             else
@@ -191,14 +256,14 @@ namespace ExoriumMod.Content.Projectiles.Minions
                 if (distanceToIdlePosition > 600f)
                 {
                     // Speed up the minion if it's away from the player
-                    speed = 12f;
-                    inertia = 60f;
+                    speed = 16f;
+                    inertia = 30f;
                 }
                 else
                 {
                     // Slow down the minion if closer to the player
-                    speed = 4f;
-                    inertia = 80f;
+                    speed = 10f;
+                    inertia = 60f;
                 }
                 if (distanceToIdlePosition > 20f)
                 {
@@ -214,6 +279,27 @@ namespace ExoriumMod.Content.Projectiles.Minions
                     // If there is a case where it's not moving at all, give it a little "poke"
                     Projectile.velocity.X = -0.15f;
                     Projectile.velocity.Y = -0.05f;
+                }
+            }
+
+            if (action == 2)
+            {
+                Projectile.velocity *= 0.99f;
+                if (Projectile.velocity.Length() < 2f)
+                {
+                    Projectile.velocity *= 0;
+                    if (Main.rand.NextBool(3))
+                    {
+                        Vector2 offset = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * 30;
+                        Dust d = Dust.NewDustPerfect(Projectile.Center + offset, DustID.Sand, -offset / 10);
+                        d.noGravity = true;
+                    }
+                }
+                Projectile.scale += 0.003f;
+                if (Projectile.scale >= .6f) //.4f is base scale for this
+                {
+                    Projectile.scale = .6f;
+                    action = 0;
                 }
             }
             #endregion
@@ -238,6 +324,47 @@ namespace ExoriumMod.Content.Projectiles.Minions
             // Some visuals here
             //Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.78f);
             #endregion
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = Request<Texture2D>(Texture).Value;
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, tex.Height/4 * Projectile.frame, tex.Width, tex.Height / 4), lightColor, Projectile.rotation, Projectile.Size/2, Projectile.scale, SpriteEffects.None);
+            return false;
+        }
+    }
+
+    class SandSpray : ModProjectile
+    {
+        public override string Texture => AssetDirectory.Invisible;
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.penetrate = 3;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.timeLeft = 30;
+        }
+
+        public override void AI()
+        {
+            Projectile.position = Projectile.Center;
+            Projectile.scale += 0.15f;
+            Projectile.Center = Projectile.position;
+            for (int i = 0; i < 5; i++)
+            {
+                Dust d = Dust.NewDustDirect(Projectile.position, (int)(Projectile.width * Projectile.scale), (int)(Projectile.height * Projectile.scale), DustID.Sand, 0, 0, 0, default, Main.rand.NextFloat(0.8f, 1.8f));
+                d.noGravity = true;
+            }
+        }
+
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            hitbox.Width = (int)(hitbox.Width * Projectile.scale);
+            hitbox.Height = (int)(hitbox.Height * Projectile.scale);
+            base.ModifyDamageHitbox(ref hitbox);
         }
     }
 }
