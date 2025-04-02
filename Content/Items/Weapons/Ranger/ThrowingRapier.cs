@@ -79,7 +79,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         }
 
         private const int FALL_TIME = 580;
-        private const int MAX_STUCK = 3;
+        private const int MAX_STUCK = 5;
         private readonly Point[] _sticking = new Point[MAX_STUCK];
 
         public float rotationSpeed
@@ -162,11 +162,21 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void OnKill(int timeLeft)
         {
-            for (int k = 0; k < 6; k++)
+            if (IsStickingToTarget)
             {
-                int dust = Dust.NewDust(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustID.Lead, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f);
+                for (int k = 0; k < 6; k++)
+                {
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Lead, 0, 0);
+                }
             }
-            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
+            else
+            {
+                for (int k = 0; k < 6; k++)
+                {
+                    int dust = Dust.NewDust(Projectile.position - Projectile.velocity, Projectile.width, Projectile.height, DustID.Lead, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f);
+                }
+                SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
+            }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

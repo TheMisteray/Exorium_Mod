@@ -247,7 +247,7 @@ namespace ExoriumMod.Content.Items.Weapons.Magic
         {
             if (Projectile.ai[0] < 2)
                 return;
-            ManagedShader shader = ShaderManager.GetShader("ExoriumMod.ExamplePrimShader");
+            ManagedShader shader = ShaderManager.GetShader("ExoriumMod.BasicTailTrail");
             shader.TrySetParameter("trailColor", Color.SandyBrown);
 
             Vector2 positionToCenter = Projectile.Size / 2;

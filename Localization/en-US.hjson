@@ -653,8 +653,8 @@ Mods: {
 			}
 
 			FrostedBoomerang: {
-				DisplayName: Frosted Chackram
-				Tooltip: Inflicts Frostburn
+				DisplayName: Fragile Chackram
+				Tooltip: Fractures after being midair for too long
 			}
 
 			InfernalSledge: {
@@ -857,11 +857,16 @@ Mods: {
 
 			SandAegisStaff: {
 				DisplayName: Sand Shield Staff
-				Tooltip: 
+				Tooltip:
 					'''
 					Summons sand shields to defend you
 					Each shield grants 1 defense
 					'''
+			}
+
+			FrostSacArrows: {
+				DisplayName: Frost Sac Arrows
+				Tooltip: Arrowheads filled with freezing mist
 			}
 		}
 
@@ -926,7 +931,7 @@ Mods: {
 			HeldInfernalSledge.DisplayName: Infernal Sledge
 			InfernalTrails.DisplayName: Infernal Sledge
 			RimeBladeProj.DisplayName: Rime Blade
-			RimeBoomerang.DisplayName: Frosted Chackram
+			RimeBoomerang.DisplayName: Fragile Chackram
 			SwungBlightedSword.DisplayName: Blighted Sword
 			AcidOrbProj.DisplayName: Acid Orb
 			DarksteelArrow.DisplayName: Darksteel Arrow
@@ -964,6 +969,10 @@ Mods: {
 			RiftIndicator.DisplayName: Rift Indicator
 			SandRing.DisplayName: Sand Ring
 			SandSpray.DisplayName: Sand Spray
+			RimeBoomerangShrapnel.DisplayName: Rime Boomerang Shrapnel
+			FrostCloud.DisplayName: Frost Cloud
+			FrostSacArrow.DisplayName: Frost Sac Arrow
+			RimeIcicle.DisplayName: Rime Icicle
 		}
 
 		Buffs: {
@@ -1082,6 +1091,11 @@ Mods: {
 			NoGraves: {
 				DisplayName: Grave Buster
 				Description: A strange force is erasing your gravestones
+			}
+
+			RimeIcicleDamage: {
+				DisplayName: Rime Icicle Damage
+				Description: Mods.ExoriumMod.Buffs.RimeIcicleDamage.Description
 			}
 		}
 

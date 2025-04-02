@@ -15,6 +15,7 @@ namespace ExoriumMod.Core
         public bool stuckByNeedles;
         public bool stuckByRapier;
         public bool infernoFire;
+        public bool stuckByIcicle;
 
         public override void ResetEffects(NPC npc)
         {
@@ -23,6 +24,7 @@ namespace ExoriumMod.Core
             stuckByNeedles = false;
             stuckByRapier = false;
             infernoFire = false;
+            stuckByIcicle = false;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)
@@ -85,7 +87,7 @@ namespace ExoriumMod.Core
                     npc.lifeRegen = 0;
                 }
                 int stuckCount = 0;
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < Main.projectile.Length; i++)
                 {
                     Projectile p = Main.projectile[i];
                     if (p.active && p.type == ProjectileType<Content.Items.Weapons.Ranger.ThrowingRapierProj>() && p.ai[1] == npc.whoAmI)
@@ -99,6 +101,30 @@ namespace ExoriumMod.Core
                 {
                     damage = stuckCount * 5;
                 }
+            }
+            if (stuckByIcicle)
+            {
+                if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                int stuckCount = 0;
+                for (int i = 0; i < Main.projectile.Length; i++)
+                {
+                    Projectile p = Main.projectile[i];
+                    if (p.active && p.type == ProjectileType<Content.Items.Weapons.Ranger.RimeIcicle>() && p.ai[1] == npc.whoAmI)
+                    {
+                        if (p.ModProjectile is Content.Items.Weapons.Ranger.RimeIcicle proj && proj.isStickingToTarget)
+                            stuckCount++;
+                    }
+                }
+                npc.lifeRegen -= stuckCount * 5;
+                if (damage < stuckCount * 2)
+                {
+                    damage = stuckCount * 2;
+                }
+
+                npc.AddBuff(BuffID.Frostburn, 10);
             }
         }
     }

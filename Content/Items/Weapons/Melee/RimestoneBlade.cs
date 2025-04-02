@@ -8,6 +8,8 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using ExoriumMod.Content.Dusts;
+using ReLogic.Content;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -17,10 +19,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            /* Tooltip.SetDefault("Inflicts Frostburn \n" +
-                "Striking targets has a chance to build up energy up to 5 times \n" +
-                "Right click to release the built up energy"); */
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.staff[Item.type] = true;
         }
 
         public override void SetDefaults()
@@ -37,7 +37,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Item.rare = 1;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.scale = 2f;
+            Item.scale = 1.5f;
             Item.useTurn = true;
             Item.shoot = ProjectileType<RimeBladeProj>();
             Item.shootSpeed = 10;
@@ -53,25 +53,30 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
+            {
+                if (frost < 3)
+                    return false;
                 Item.noMelee = true;
+                Item.useStyle = ItemUseStyleID.Shoot;
+            }
             else
+            {
                 Item.noMelee = false;
+                Item.useStyle = ItemUseStyleID.Swing;
+            }
             return true;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.altFunctionUse == 2 && frost/5 > 0)
+            if (player.altFunctionUse == 2 && frost/3 > 0)
             {
-                int proj1 = Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, Mod.Find<ModProjectile>("RimeBladeProj").Type, damage *= (frost/5) * 3, knockback, player.whoAmI, frost/5);
+                int proj1 = Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, Mod.Find<ModProjectile>("RimeBladeProj").Type, (int)(damage * (frost/3) * 1.5), knockback, player.whoAmI, frost/3);
                 Main.projectile[proj1].position = Main.projectile[proj1].Center;
-                Main.projectile[proj1].width *= (frost / 5);
-                Main.projectile[proj1].height *= (frost / 5);
+                Main.projectile[proj1].width *= (frost / 3);
+                Main.projectile[proj1].height *= (frost / 3);
                 Main.projectile[proj1].Center = Main.projectile[proj1].position;
-                if ((frost/5) > 2)
-                    Main.projectile[proj1].penetrate = 2;
-                else if ((frost/5) == 5)
-                    Main.projectile[proj1].penetrate = 3;
+                Main.projectile[proj1].penetrate = frost / 3;
                 frost = 0;
             }
             return false;
@@ -80,13 +85,14 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.Frostburn, 200, true);
-            if (frost <= 26)
+
+            if (frost <= 15 && target.type != NPCID.TargetDummy) //exclude target dummies
             {
                 frost++;
             }
-            if(frost % 5 == 0)
+            if(frost % 3 == 0)
             {
-                switch (frost / 5)
+                switch (frost / 3)
                 {
                     case 1:
                         CombatText.NewText(player.Hitbox, Color.LightBlue, "1", true);
@@ -104,6 +110,8 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                         CombatText.NewText(player.Hitbox, Color.LightBlue, "5", true);
                         break;
                 }
+
+                DustHelper.DustLine(player.Center, target.Center, DustType<Rainbow>(), 20, 1, 0, 0, 0, Color.LightBlue);
             }
         }
 
@@ -148,24 +156,13 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.Frostburn, 200 * (int)Projectile.ai[0], true);
+            base.OnHitNPC(target, hit, damageDone);
         }
 
         public override void OnKill(int timeLeft)
         {
             for (int i = 0; i <= Projectile.ai[0] * 10; i++)
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, 0, 0);
-        }
-
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
-        {
-            //Make hitbox smaller than dust
-            //pythagorean
-            float radius = (float)Math.Pow(width/2 * Projectile.scale, 2);
-            radius /= 2;
-            radius = (float)Math.Sqrt(radius);
-            width = (int)radius;
-            height = (int)radius;
-            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
         }
     }
 }

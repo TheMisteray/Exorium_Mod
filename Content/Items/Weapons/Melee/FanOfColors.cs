@@ -210,7 +210,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
                     break;
             }
 
-            ManagedShader shader = ShaderManager.GetShader("ExoriumMod.ExamplePrimShader");
+            ManagedShader shader = ShaderManager.GetShader("ExoriumMod.BasicTailTrail");
             shader.TrySetParameter("trailColor", trailColor);
 
             Vector2 positionToCenter = Projectile.Size/ 2;

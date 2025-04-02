@@ -8,15 +8,19 @@ namespace ExoriumMod.Content.Buffs
     {
         public override string Texture => AssetDirectory.Invisible;
 
-		public override void SetStaticDefaults()
-		{
-			// DisplayName.SetDefault("20!!!");
-			// Description.SetDefault("");
-		}
-
 		public override void Update(NPC npc, ref int buffIndex)
 		{
 			npc.GetGlobalNPC<ExoriumGlobalNPC>().stuckByRapier = true;
 		}
 	}
+
+    class RimeIcicleDamage : ModBuff
+    {
+        public override string Texture => AssetDirectory.Invisible;
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            npc.GetGlobalNPC<ExoriumGlobalNPC>().stuckByIcicle = true;
+        }
+    }
 }

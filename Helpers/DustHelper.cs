@@ -61,6 +61,18 @@ namespace ExoriumMod.Helpers
             }
         }
 
+        public static void DustLine(Vector2 start, Vector2 end, int dustType, float density = 20, float dustSize = 1, float sizeVariance = 0, int alpha = 0, int alphaVariance = 0, Color color = default, bool noGravity = false)
+        {
+            Vector2 diff = end - start;
+            Vector2 segment = diff / density;
+            for (int i = 0; i < density; i++)
+            {
+                Dust d = Dust.NewDustPerfect(start + segment * i, dustType, null, alpha + Main.rand.Next(-alphaVariance, alphaVariance + 1), color, dustSize + Main.rand.NextFloat(-sizeVariance, sizeVariance));
+                if (noGravity)
+                    d.noGravity = true;
+            }
+        }
+
         public static void FireDust(Projectile Projectile)
         {
             //These were moved in from outside

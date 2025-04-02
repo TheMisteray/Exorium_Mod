@@ -24,7 +24,7 @@ namespace ExoriumMod.Content.Items.Ammo
             Item.height = 12;
             Item.rare = 1;
             Item.maxStack = 999;
-            Item.damage = 5;
+            Item.damage = 6;
             Item.consumable = true;
             Item.shoot = ProjectileType<RimeBullet>();
             Item.shootSpeed = 14;
@@ -47,11 +47,6 @@ namespace ExoriumMod.Content.Items.Ammo
     {
         public override string Texture => AssetDirectory.Projectile + Name;
 
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("Rimestone Bullet");
-        }
-
         public override void SetDefaults()
         {
             Projectile.width = 8;
@@ -62,7 +57,6 @@ namespace ExoriumMod.Content.Items.Ammo
             Projectile.penetrate = 1;
             Projectile.timeLeft = 2600;
             Projectile.alpha = 0;
-            Projectile.light = 0.2f;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = true;
             AIType = ProjectileID.Bullet;
@@ -74,13 +68,13 @@ namespace ExoriumMod.Content.Items.Ammo
         {
             if (Main.rand.NextBool(10))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust d = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, 67, 0, 0);
+                d.noGravity = true;
             }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            hit.Damage -= 1;
             if (Main.rand.Next(0, 3) == 1)
             {
                 target.AddBuff((BuffID.Frostburn), 200, false);
