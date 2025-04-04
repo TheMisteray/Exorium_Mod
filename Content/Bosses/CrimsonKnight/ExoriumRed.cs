@@ -1784,7 +1784,13 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 if (exitTicker > 60 && exitTicker < 120 && exitPortalSize < 1)
                     exitPortalSize += .02f;
                 else if (exitTicker > 130 && exitPortalSize > 0)
+                {
+                    if (NPC.alpha < 255) //make invisible for stuff like fire aura effect
+                        NPC.alpha += 10;
+                    else
+                        NPC.alpha = 255;
                     exitPortalSize -= .02f;
+                }
 
                 if (exitPortalSize > 0)
                     spriteBatch.Draw(texPortal, NPC.Center - screenPos, null, new Color(255, 255, 255, 0), Main.GameUpdateCount * .01f, texPortal.Size() / 2, 3f * exitPortalSize, SpriteEffects.None, 0);

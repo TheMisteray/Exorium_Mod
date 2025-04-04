@@ -58,7 +58,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void SetDefaults()
         {
             NPC.aiStyle = -1;
-            NPC.lifeMax = 200;
+            NPC.lifeMax = 6666;
             NPC.damage = 29;
             NPC.defense = 11;
             NPC.knockBackResist = 0f;
@@ -78,8 +78,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)/* tModPorter Note: bossLifeScale -> balance (bossAdjustment is different, see the docs for details) */
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.75 * balance);
-            NPC.damage = (int)(NPC.damage * 0.7);
+            //Manual bosslifescale
+            if (Main.expertMode)
+                NPC.lifeMax = (int)(NPC.lifeMax * 1.5f);
+            if (Main.masterMode)
+                NPC.lifeMax = (int)(NPC.lifeMax * 1.5f);
         }
 
         public bool left
@@ -146,8 +149,11 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
                 invulnerableTime--;
                 NPC.dontTakeDamage = true;
             }
-            else
+            else if (NPC.dontTakeDamage)
+            {
+                NPC.life = 200;
                 NPC.dontTakeDamage = false;
+            }
 
             counter++; //For animations
             if (counter >= 60)
@@ -210,6 +216,7 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
 
         public override string GetChat()
         {
+            interactedWith = true;
             if (!Despawn)
             {
                 if (Core.Systems.DownedBossSystem.killedCrimsonKnight)
@@ -280,6 +287,12 @@ namespace ExoriumMod.Content.Bosses.CrimsonKnight
         public override void FindFrame(int frameHeight)
         {
             base.FindFrame(frameHeight);
+        }
+
+        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
+        {
+            scale = 1.5f + .2f * (float)Math.Sin(bubbleAnimationTimer / 20);
+            return !NPC.dontTakeDamage;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
