@@ -183,6 +183,26 @@ namespace ExoriumMod.Core
             }
         }
 
+        public override void MeleeEffects(Item item, Rectangle hitbox)
+        {
+            if (frostStone && Main.rand.NextBool())
+            {
+                Dust d = Dust.NewDustDirect(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.IceTorch, Main.rand.NextFloat(2, 8) * Player.direction, Main.rand.NextFloat(-8, 8), 0, default, Main.rand.NextFloat(3, 3.6f));
+                d.noGravity = true;
+            }
+            base.MeleeEffects(item, hitbox);
+        }
+
+        public override void EmitEnchantmentVisualsAt(Projectile projectile, Vector2 boxPosition, int boxWidth, int boxHeight)
+        {
+            if (projectile.DamageType == DamageClass.Melee && frostStone && Main.rand.NextBool())
+            {
+                Dust d = Dust.NewDustDirect(boxPosition, boxWidth, boxHeight, DustID.IceTorch, Main.rand.NextFloat(-14, 14), Main.rand.NextFloat(-14, 14), 0, default, 2);
+                d.noGravity = true;
+            }
+            base.EmitEnchantmentVisualsAt(projectile, boxPosition, boxWidth, boxHeight);
+        }
+
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
             if (item.useAmmo == AmmoID.Arrow && wightQuiver)

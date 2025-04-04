@@ -120,6 +120,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.timeLeft = 20;
             Projectile.penetrate = 3;
             Projectile.tileCollide = true;
+            Projectile.DamageType = DamageClass.Melee;
         }
 
         public override void AI()
@@ -163,6 +164,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.friendly = true;
             Projectile.timeLeft = 25;
             Projectile.penetrate = 1;
+            Projectile.DamageType = DamageClass.Melee;
         }
 
         public override void AI()

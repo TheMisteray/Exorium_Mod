@@ -66,6 +66,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.width = 38;
             Projectile.friendly = true;
             Projectile.hostile = false;
+            Projectile.DamageType = DamageClass.Melee;
         }
 
         public override void AI()
@@ -136,6 +137,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.width = 18;
             Projectile.friendly = true;
             Projectile.hostile = false;
+            Projectile.DamageType = DamageClass.Melee;
         }
 
         public override void AI()

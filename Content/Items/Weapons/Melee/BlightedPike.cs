@@ -49,7 +49,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(source, position.X, position.Y, velocity.X * 3, velocity.Y * 3, Mod.Find<ModProjectile>("BlightHail").Type, damage, knockback, player.whoAmI); //fires additional projectile
+            Projectile.NewProjectile(source, position.X, position.Y, velocity.X * 3, velocity.Y * 3, ProjectileType<BlightHailMelee>(), damage, knockback, player.whoAmI); //fires additional projectile
             return true;
         }
 

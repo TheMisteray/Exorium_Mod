@@ -78,6 +78,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Projectile.timeLeft = 216089;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
+            Projectile.noEnchantmentVisuals = true;
         }
 
         public float state

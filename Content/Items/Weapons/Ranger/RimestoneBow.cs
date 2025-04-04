@@ -80,8 +80,8 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Projectile.width = 12;
-            Projectile.height = 12;
+            Projectile.width = 8;
+            Projectile.height = 8;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 3;
@@ -199,6 +199,7 @@ namespace ExoriumMod.Content.Items.Weapons.Ranger
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Projectile.tileCollide = false;
+            Projectile.position += Projectile.velocity;
             Projectile.velocity = Vector2.Zero;
             Projectile.friendly = false;
             tilehit = true;
