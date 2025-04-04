@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using ExoriumMod.Helpers;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.Audio;
 
 namespace ExoriumMod.Content.Items.Weapons.Melee
 {
@@ -16,9 +17,9 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Mildew");
-            // Tooltip.SetDefault("Launches specks of blight");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            ItemID.Sets.SkipsInitialUseSound[Item.type] = true; // This skips use animation-tied sound playback, so that we're able to make it be tied to use time instead in the UseItem() hook.
+            ItemID.Sets.Spears[Item.type] = true; // This allows the game to recognize our new item as a spear.
         }
 
         public override void SetDefaults()
@@ -27,7 +28,7 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
             Item.DamageType = DamageClass.Melee;
             Item.width = 80;
             Item.height = 80;
-            Item.useTime = 36;
+            Item.useTime = 20;
             Item.shootSpeed = 3.7f;
             Item.useAnimation = 20;
             Item.useStyle = 5;
@@ -45,6 +46,16 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
         public override bool CanUseItem(Player player)
         {
             return player.ownedProjectileCounts[Item.shoot] < 1;
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            if (!Main.dedServ && Item.UseSound.HasValue)
+            {
+                SoundEngine.PlaySound(Item.UseSound.Value, player.Center);
+            }
+
+            return null;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -68,23 +79,75 @@ namespace ExoriumMod.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            Projectile.width = 18;
-            Projectile.height = 18;
-            Projectile.aiStyle = 19;
-            Projectile.penetrate = -1;
+            Projectile.CloneDefaults(ProjectileID.Spear);
             Projectile.scale = 1.3f;
-            Projectile.alpha = 0;
-            Projectile.hide = true;
-            Projectile.ownerHitCheck = true;
-            Projectile.DamageType = DamageClass.Melee;
-            Projectile.tileCollide = false;
-            Projectile.friendly = true;
         }
+
+        // Define the range of the Spear Projectile. These are overridable properties, in case you'll want to make a class inheriting from this one.
+        protected virtual float HoldoutRangeMin => 24f;
+        protected virtual float HoldoutRangeMax => 96f;
 
         public float movementFactor //Speed of attack
         {
             get => Projectile.ai[0];
             set => Projectile.ai[0] = value;
+        }
+
+        public override bool PreAI()
+        {
+            Player player = Main.player[Projectile.owner]; // Since we access the owner player instance so much, it's useful to create a helper local variable for this
+            int duration = player.itemAnimationMax; // Define the duration the projectile will exist in frames
+
+            player.heldProj = Projectile.whoAmI; // Update the player's held projectile id
+
+            // Reset projectile time left if necessary
+            if (Projectile.timeLeft > duration)
+            {
+                Projectile.timeLeft = duration;
+            }
+
+            Projectile.velocity = Vector2.Normalize(Projectile.velocity); // Velocity isn't used in this spear implementation, but we use the field to store the spear's attack direction.
+
+            float halfDuration = duration * 0.5f;
+            float progress;
+
+            // Here 'progress' is set to a value that goes from 0.0 to 1.0 and back during the item use animation.
+            if (Projectile.timeLeft < halfDuration)
+            {
+                progress = Projectile.timeLeft / halfDuration;
+            }
+            else
+            {
+                progress = (duration - Projectile.timeLeft) / halfDuration;
+            }
+
+            // Move the projectile from the HoldoutRangeMin to the HoldoutRangeMax and back, using SmoothStep for easing the movement
+            Projectile.Center = player.MountedCenter + Vector2.SmoothStep(Projectile.velocity * HoldoutRangeMin, Projectile.velocity * HoldoutRangeMax, progress);
+
+            // Apply proper rotation to the sprite.
+            if (Projectile.spriteDirection == -1)
+            {
+                // If sprite is facing left, rotate 45 degrees
+                Projectile.rotation += MathHelper.ToRadians(45f);
+            }
+            else
+            {
+                // If sprite is facing right, rotate 135 degrees
+                Projectile.rotation += MathHelper.ToRadians(135f);
+            }
+
+            // Avoid spawning dusts on dedicated servers
+            if (!Main.dedServ)
+            {
+                if (Main.rand.NextBool(3))
+                {
+                    Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.height, Projectile.width, DustType<Dusts.BlightDust>(), Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 200, Scale: 1.1f);
+                    dust.velocity += Projectile.velocity * 0.2f;
+                    dust.velocity *= 0.2f;
+                }
+            }
+
+            return false; // Don't execute vanilla AI.
         }
 
         public override void AI()
